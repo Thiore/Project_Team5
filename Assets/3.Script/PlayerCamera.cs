@@ -11,7 +11,7 @@ public class PlayerCamera : MonoBehaviour
         Debug.Log("카메라 로직 실행");
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         float pos_x = Input.GetAxisRaw("Horizontal");
         float pos_y = Input.GetAxisRaw("Vertical");
