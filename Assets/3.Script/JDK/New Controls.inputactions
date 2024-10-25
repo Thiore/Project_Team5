@@ -3,21 +3,12 @@
     "maps": [
         {
             "name": "Player",
-            "id": "25023f4f-65ed-4f98-ae45-cef01dbbb9e8",
+            "id": "5816a6db-9551-46c3-ab63-8054dd488e98",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "Touch",
                     "type": "Value",
-                    "id": "a106b859-611c-468b-b424-632adb0bb41f",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "2ca47ab7-a987-4d0e-8972-9f0bfa04ac1b",
+                    "id": "e56934f8-ca9f-44e6-ad03-02cb6c843226",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -27,23 +18,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "b219cec0-b9db-4d06-932d-7ae27d652e21",
-                    "path": "<Gamepad>/leftStick",
+                    "id": "1ecad9fa-b4f8-46bd-ad7f-d5a8eb9c65f6",
+                    "path": "<Touchscreen>/primaryTouch/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4cae4c3a-ab3e-436b-aaf7-97221ac01698",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
+                    "action": "Touch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
