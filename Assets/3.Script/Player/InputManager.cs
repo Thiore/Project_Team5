@@ -72,7 +72,6 @@ public class InputManager : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableLayer))
         {
-            Debug.Log($"hit.collider.name = {hit.collider.name}");
             // "Touchable Object" 태그를 가진 오브젝트가 있는지 확인
             if (hit.collider.CompareTag("touchableobject"))
             {
@@ -91,7 +90,6 @@ public class InputManager : MonoBehaviour
         // 터치 시작 위치와 현재 위치의 차이 반환
         Vector2 touchDelta = GetTouchDelta();
         MoveInput = touchDelta.normalized;
-        Debug.Log("Touch Delta: " + touchDelta);
     }
 
     // touchCurPos - touchStartPos 값을 반환하는 메서드
