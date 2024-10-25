@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class MoveRotation : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class MoveRotation : MonoBehaviour
                 // deltaX를 사용해 회전 값 계산
                 rotationAmount = touchDelta.x * rotationSpeed;
             }
-            
+
         }
     }
 

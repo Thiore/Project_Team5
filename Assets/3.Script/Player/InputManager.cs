@@ -14,6 +14,8 @@ public class InputManager : MonoBehaviour
 
     public Vector2 MoveInput;
 
+    int touchid;
+
     private void Update()
     {
         // 터치스크린이 존재하는지 확인
@@ -38,7 +40,7 @@ public class InputManager : MonoBehaviour
         if (Touchscreen.current != null && Touchscreen.current.primaryTouch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended)
         {
             MoveInput = new Vector2(0, 0);
-            isTouching = false; // 터치가 끝나면 false로 설정
+            isTouching = false; // 터치가 끝나면 false로 설정    
         }
     }
 
