@@ -1,0 +1,54 @@
+{
+    "name": "UI_",
+    "maps": [
+        {
+            "name": "UI",
+            "id": "7a2bd351-9f47-41af-b14a-3aff3f7119e7",
+            "actions": [
+                {
+                    "name": "Press",
+                    "type": "Button",
+                    "id": "e9b6c563-69af-4796-84aa-65fb8e50d900",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Screen Position",
+                    "type": "Value",
+                    "id": "e8d6bfda-9885-413d-87fa-7ca5691c16be",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9cd1e083-135a-4cee-aac2-cca66a9c2fef",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Screen Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4ab1cd7-427a-43cd-8e5a-53f6ffca783a",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
