@@ -36,7 +36,7 @@ public class UI_Press : MonoBehaviour
                 return hit.transform == transform; 
             }
             return false; //아니라면 false 반환
-            Debug.Log(hit);
+            
         }
     }
 
@@ -54,6 +54,7 @@ public class UI_Press : MonoBehaviour
         //화면 위치 변경될 때 마다 콜백(performed)context로 얻은 정보를 체크
         //                                   ┌> 현재 화면 위치를 터치의 위치로 Vector2 값으로 Update
         screenPos.performed += context_Screen => { curScreenPos = context_Screen.ReadValue<Vector2>(); };
+
         //Drag_co 시작
         press.performed += _ => { if(isTouchedOn) StartCoroutine(Drag_co()); };
         press.canceled += _ => { isDragging = false; }; //Touch 멈추면 false 반환????
