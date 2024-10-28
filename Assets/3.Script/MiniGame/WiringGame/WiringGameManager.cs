@@ -36,7 +36,9 @@ public class WiringGameManager : MonoBehaviour
         for (int i = 0; i < startPoints.Length; i++) 
         {
             startPoints[i].GetComponent<WiringPoint>().SetWiringColor(i);
+            startPoints[i].GetComponent<WiringPoint>().IsConncet = true;
             endPoints[i].GetComponent<WiringPoint>().SetWiringColor(i);
+            endPoints[i].GetComponent<WiringPoint>().IsConncet = false;
             wirings[i].GetComponent<Wiring>().SetWiringColor(i);
         }
 
@@ -79,6 +81,15 @@ public class WiringGameManager : MonoBehaviour
         }
 
 
+    }
+
+
+    private void CheckWiring()
+    {
+        for(int i = 0; i < wirings.Length; i++)
+        {
+            
+        }
     }
 }
 

@@ -6,7 +6,9 @@ using UnityEngine.EventSystems;
 
 public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    eColor color;
+    private eColor color;
+    private bool isSameColor;
+    public bool IsSameColor { get => isSameColor; set => isSameColor = value; }
 
     public eColor GetWiringColor()
     {
@@ -30,6 +32,7 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             if(this.color == points.GetWiringColor())
             {
                 Debug.Log("»ö±ò °°À½");
+                isSameColor = true;
             }
             else
             {
@@ -37,4 +40,7 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             }
         }
     }
+
+
+
 }
