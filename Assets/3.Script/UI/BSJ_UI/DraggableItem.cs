@@ -26,6 +26,7 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         if (combineImage != null)
         {
+            CheckForDrop(eventData);
             combineImage.SetActive(false);
         }
     }
@@ -54,21 +55,37 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             yield return null;
         }
     }
-    //public void OnBeginDrag(PointerEventData eventData)
-    //{
-    //    //originalPosition = rectTransform.anchoredPosition;
-    //    quickSlot.alpha = 0.6f; //드래그 중 반투명
-    //    quickSlot.blocksRaycasts = false; //다른 UI 클릭 방지
-    //}
 
-    //public void OnDrag(PointerEventData eventData)
-    //{
-    //    rectTransform.anchoredPosition += eventData.delta; //드래그 위치 업데이트
-    //}
+    private void CheckForDrop(PointerEventData eventData)
+    {
+        // Raycast로 충돌한 UI 체크
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = eventData.position
+        };
 
-    //public void OnEndDrag(PointerEventData eventData)
-    //{
-    //    quickSlot.alpha = 1f; //드래드 종료 시 불투명
-    //    quickSlot.blocksRaycasts = true; //다시 클릭 가능
-    //}
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        foreach (var result in results)
+        {
+            //레이어 검사
+            if (result.gameObject.layer == LayerMask.NameToLayer("QuickSlot"))
+            {
+                Image tartgetImage = result.gameObject.GetComponent<Image>();
+                if (tartgetImage != null)
+                {
+                    //Sprite 이름으로 확인
+                    if (tartgetImage.sprite.name == "2")
+                    {
+                        sourceImage.sprite = Resources.Load<Sprite>("3");
+                        
+                        
+                        tartgetImage.sprite = null;
+                        tartgetImage.gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+    }
 }
