@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
-public class InputManager : MonoBehaviour
+public class _InputManager : MonoBehaviour
 {
     public RectTransform leftArea; // UI ¿µ¿ªÀÎ LeftArea
     public RectTransform joystickArea; // Joystick Area

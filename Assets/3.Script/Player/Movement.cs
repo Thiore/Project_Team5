@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private InputManager input;
+    private _InputManager input;
     private Rigidbody rb;
 
     public float speed;
@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour
 
     private void Awake()
     {
-        input = GetComponent<InputManager>();
+        input = GetComponent<_InputManager>();
         rb = GetComponent<Rigidbody>();
     }
 
