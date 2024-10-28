@@ -2,45 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class DraggableItemTest : MonoBehaviour
 {
     private Image sourceImage;
     public GameObject combineImage;
     private Vector3 originalPosition;
-
+    private PlayerInput playerInput;
+    private bool isHolding = false;
 
     private void Awake()
     {
         sourceImage = GetComponent<Image>();
+        playerInput = GetComponent<PlayerInput>();
+
+        //Hold Action 구독
+        playerInput.actions["Hold"].started += OnHoldStarted;
+        playerInput.actions["Hold"].canceled += OnHoldCanceled;
     }
-    public void OnPointerDown(PointerEventData eventData)
+
+    private void OnHoldStarted(InputAction.CallbackContext context)
     {
-        originalPosition = eventData.position; //초기 터치 위치 저장
-
-        StartCoroutine(LongPress_co(eventData));
+        StartCoroutine(LongPress_co());
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    private void OnHoldCanceled(InputAction.CallbackContext context)
     {
-
-        StopCoroutine(LongPress_co(eventData));
-
-
-
-        if (combineImage != null)
-        {
-            CheckForDrop(eventData);
-            combineImage.SetActive(false);
-        }
+        StopAllCoroutines();
+        combineImage.SetActive(false);
     }
 
-    private IEnumerator LongPress_co(PointerEventData eventData)
+    private IEnumerator LongPress_co()
     {
         yield return new WaitForSeconds(1f);
+        isHolding = true;
 
-        //CombineImage 활성화 및 SourceImage 설정
+        //CombineImage 활성화 및 SourceImage설정
         if (combineImage != null)
         {
             combineImage.SetActive(true);
@@ -48,22 +47,22 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             combineImageComponet.sprite = sourceImage.sprite; //터치된 UI의 Sprite로 설정
 
             Color color = combineImageComponet.color;
-            color.a = 0.7f;
+            color.a = 0.7f; // 약간 투명하게
             combineImageComponet.color = color;
 
             combineImage.transform.position = originalPosition; //터치 위치로 이동
         }
 
-        while (true)
+        while (isHolding)
         {
-            combineImage.transform.position = eventData.position;
+            combineImage.transform.position = Mouse.current.position.ReadValue();
             yield return null;
         }
     }
 
     private void CheckForDrop(PointerEventData eventData)
     {
-        // Raycast로 충돌한 UI 체크
+        //Raycast로 UI체크
         PointerEventData pointerData = new PointerEventData(EventSystem.current)
         {
             position = eventData.position
@@ -77,20 +76,24 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             //레이어 검사
             if (result.gameObject.layer == LayerMask.NameToLayer("QuickSlot"))
             {
-                Image tartgetImage = result.gameObject.GetComponent<Image>();
-                if (tartgetImage != null)
+                Image targetImage = result.gameObject.GetComponent<Image>();
+                if (targetImage != null)
                 {
                     //Sprite 이름으로 확인
-                    if (tartgetImage.sprite.name == "2")
+                    if (targetImage.sprite.name == "2")
                     {
                         sourceImage.sprite = Resources.Load<Sprite>("3");
-
-
-                        tartgetImage.sprite = null;
-                        tartgetImage.gameObject.SetActive(false);
+                        targetImage.sprite = null;
+                        targetImage.gameObject.SetActive(false);
                     }
                 }
             }
         }
+
     }
+
+    
+    
+
+
 }
