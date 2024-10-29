@@ -6,6 +6,8 @@ public class LocalManager : MonoBehaviour
 {
     private bool isChanging;
     public DialogueManager dia;
+
+    //언어 변경
     public void ChangeLocale(int index)
     {
         if (isChanging)
@@ -25,6 +27,6 @@ public class LocalManager : MonoBehaviour
 
         isChanging = false;
 
-        dia.SetDialogue("B1", 2);
+        dia.SetDialogue("B1", 48);
     }
 }
