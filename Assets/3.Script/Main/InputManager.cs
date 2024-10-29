@@ -1,30 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
+    
+
     private InputManager instance = null;
     public static InputManager Instance { get; private set; }
 
-    [SerializeField] private RectTransform leftArea; //// UI 영역인 LeftArea
-    [SerializeField] private RectTransform rightArea; //// UI 영역인 RightArea
     [SerializeField] private RectTransform joystickArea; // Joystick Area
     [SerializeField] private LayerMask touchableLayer; // 터치 가능한 레이어
+    private enum etouchState
+    {
 
-    private bool isPlayer = false;
-    private bool isUI = false;
-    private bool isPuzzle = false;
+        Player = 0,
+        UI,
+        Object
+    }
+    private etouchState touchState;
 
-    [SerializeField] private InputActionMap playerInput;
+    [SerializeField] private InputActionAsset playerInput;
 
+    private Dictionary<int, InputAction> activeActionDic;
 
     private InputAction moveAction;
     public Vector2 startMoveValue;
     public Vector2 moveValue;
     public bool isMove = false;
-    private int moveIndex = default;
 
     private InputAction lookAction;
     public Vector2 startLookValue;
@@ -47,97 +53,139 @@ public class InputManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void OnEnable()
+    {
+        // 모든 입력 이벤트가 발생할 때마다 OnTouchEvent를 호출
+        InputSystem.onEvent += OnTouchEvent;
+    }
 
+    private void OnDisable()
+    {
+        // 스크립트가 비활성화될 때 이벤트 핸들러 해제
+        InputSystem.onEvent -= OnTouchEvent;
+    }
     private void Start()
     {
+        InputActionMap playerMap = playerInput.FindActionMap("Player");
         moveAction = playerInput.FindAction("Move");
         lookAction = playerInput.FindAction("Look");
 
-        moveAction.started += OnMove;
+        InputActionMap UIMap = playerInput.FindActionMap("UI");
+
+        InputActionMap ObjMap = playerInput.FindActionMap("Object");
+       
+        
         moveAction.performed += OnMove;
-        moveAction.canceled += OnMove;
 
-        lookAction.started += OnLook;
         lookAction.performed += OnLook;
-        lookAction.canceled += OnLook;
 
+        ActionDisable();
         
-        
-        isPlayer = true;
+        activeActionDic = new Dictionary<int, InputAction>();
     }
 
-
-
-    private void Update()
+    private void OnTouchEvent(InputEventPtr eventPtr, InputDevice device)
     {
-        //if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
-        //{
-        //    Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
-
-
-        //    if (IsTouchOnJoystickArea(touchPosition))
-        //    {
-                
-        //    }
-            
-                
-            
-        //}
-       
-        if(isPlayer)
+        if(device is Touchscreen touchscreen)
         {
-            foreach (var touch in Touchscreen.current.touches)
+            foreach(var touch in touchscreen.touches)
             {
-                if (touch.isInProgress)
-                {
-                    Vector2 touchPosition = touch.position.ReadValue();
+                int touchId = touch.touchId.ReadValue();
 
-                    if (IsTouchOnLeftScreen(touchPosition))
+                if(touch.phase.value == UnityEngine.InputSystem.TouchPhase.Began && !activeActionDic.ContainsKey(touchId))
+                {
+                    Vector2 touchPos = touch.position.ReadValue();
+                    if (IsTouchOnUI(touch.position.ReadValue()))
                     {
-                        moveAction.Enable();
+                        // UI 액션 실행
+                        touchState = etouchState.UI;
+
                     }
-                    else if (IsTouchOnRightScreen(touchPosition))
+                    else if (IsTouchOnJoystickArea(touchPos))
                     {
-                        if(!lookAction.enabled)
-                        lookAction.Enable();
+                        touchState = etouchState.Player;
+                        isMove = true;
+                        startMoveValue = touchPos;
+                        BindAction(touchId, moveAction);
+                        
                     }
+                    else if (IsTouchableObjectAtPosition(touchPos))
+                    {
+                        
+                    }
+                    else
+                    {
+                        
+                    }
+
+                    
+
                 }
             }
         }
-            
-
-
-
-        //if (Touchscreen.current != null && Touchscreen.current.touches.Count > 0 && Touchscreen.current.touches.Count <= 2)
-        //{
-
-        //    Vector2 touchPosition = Touchscreen.current.touches[Touchscreen.current.touches.Count - 1].position.value;
-
-        //    //// UI 영역을 터치했는지 확인
-        //    //if (IsTouchOnUI(touchPosition))
-        //    //{
-        //    //    // UI 액션 실행
-
-        //    //}
-        //    if (IsTouchOnJoystickArea(touchPosition))
-        //    {
-        //        //input
-        //    }
-        //    else if (IsTouchOnLeftScreen(touchPosition))
-        //    {
-        //        if (!moveAction.enabled) moveAction.Enable();
-
-        //    }
-        //    else if (IsTouchOnRightScreen(touchPosition))
-        //    {
-
-        //        // 오른쪽 화면 터치 시 카메라 회전 액션 실행
-        //        if (!lookAction.enabled) lookAction.Enable();
-
-        //    }
-        //}
-
     }
+
+    //private void Update()
+    //{
+
+    //    if (Touchscreen.current != null)
+    //    {
+    //        Debug.Log(1);
+    //        foreach (var touch in Touchscreen.current.touches)
+    //        {
+    //            Debug.Log(touch.path);
+              
+    //            if (touch.isInProgress)
+    //            {
+    //                Vector2 touchPosition = touch.position.ReadValue();
+    //                if (actionDic.Count.Equals(0))
+    //                {
+    //                    if (IsTouchOnUI(touchPosition))
+    //                    {
+    //                        // UI 액션 실행
+    //                        isUI = true;
+
+    //                    }
+    //                    else if (IsTouchOnJoystickArea(touchPosition))
+    //                    {
+    //                        isPlayer = true;
+    //                        //Debug.Log(Touchscreen.current.primaryTouch.touchId.ToString());
+    //                        BindAction(Touchscreen.current.primaryTouch.touchId, moveAction);
+    //                    }
+    //                    else if (IsTouchableObjectAtPosition(touchPosition))
+    //                    {
+    //                        isObject = true;
+    //                    }
+    //                    else
+    //                    {
+    //                        isPlayer = true;
+    //                    }
+    //                }
+                    
+    //                if (!actionDic.TryGetValue(touch.touchId, out InputAction Value))
+    //                {
+    //                    if (IsTouchOnLeftScreen(touchPosition))
+    //                    {
+    //                        //Debug.Log($"OnMove called with touch position: {touchPosition}");
+    //                        BindAction(touch.touchId, moveAction);
+    //                        isMove = true;
+    //                    }
+    //                    else if (IsTouchOnRightScreen(touchPosition))
+    //                    {
+    //                        //Debug.Log($"OnMove called with touch position: {touchPosition}");
+    //                        BindAction(touch.touchId, lookAction);
+    //                        isLook = true;
+    //                    }
+    //                }
+                    
+                        
+    //            }
+
+    //        }
+    //    }
+        
+
+    //}
 
     private bool IsTouchOnUI(Vector2 touchPosition)
     {
@@ -149,6 +197,22 @@ public class InputManager : MonoBehaviour
     {
         // JoystickArea 터치 검사
         return RectTransformUtility.RectangleContainsScreenPoint(joystickArea, touchPosition);
+    }
+
+    // 터치한 곳에 "Touchable Object"가 있는지 확인하는 메서드
+    private bool IsTouchableObjectAtPosition(Vector2 touchPosition)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(touchPosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableLayer))
+        {
+            // "Touchable Object" 태그를 가진 오브젝트가 있는지 확인
+            if (hit.collider.CompareTag("touchableobject"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool IsTouchOnLeftScreen(Vector2 touchPosition)
@@ -165,49 +229,74 @@ public class InputManager : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext context)
     {
+        // Touch 입력을 사용하여 값과 상태를 얻음
+        Touch touch = context.ReadValue<Touch>();
+
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                Debug.Log("start");
-                startMoveValue = context.ReadValue<Vector2>();
-                moveValue = context.ReadValue<Vector2>();
-                isMove = true;
+                
+                startMoveValue = touch.position;
+                moveValue = touch.position;
                 break;
             case InputActionPhase.Performed:
+                
                 Debug.Log("performed");
-                moveValue = context.ReadValue<Vector2>();
+                moveValue = touch.position;
                 break;
             case InputActionPhase.Canceled:
-                Debug.Log("performed");
+                Debug.Log("Canceled");
                 startMoveValue = Vector2.zero;
                 moveValue = Vector2.zero;
-                isMove = false;
-                moveAction.Disable();
+                //RomoveBindAction(moveAction);
                 break;
         }
     }
 
     private void OnLook(InputAction.CallbackContext context)
     {
+        // Touch 입력을 사용하여 값과 상태를 얻음
+        Touch touch = context.ReadValue<Touch>();
+
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                Debug.Log("lstart");
-                startLookValue = context.ReadValue<Vector2>();
-                lookValue = context.ReadValue<Vector2>();
-                isLook = true;
+                
+                startLookValue = touch.position;
+                lookValue = touch.position;
                 break;
             case InputActionPhase.Performed:
-                Debug.Log("lperformed");
-                lookValue = context.ReadValue<Vector2>();
+                
+                lookValue = touch.position;
                 break;
             case InputActionPhase.Canceled:
-                Debug.Log("lperformed");
+                Debug.Log("lCanceled");
                 startLookValue = Vector2.zero;
                 lookValue = Vector2.zero;
-                isLook = false;
-                lookAction.Disable();
+                //RomoveBindAction(lookAction);
                 break;
         }
+    }
+
+    private void BindAction(int id, InputAction action)
+    {
+        activeActionDic[id] = action;
+        action.AddBinding($"<Touchscreen>/position");
+        action.Enable();
+    }
+    private void RomoveBindAction(int id)
+    {
+        
+        if(activeActionDic.TryGetValue(id, out var action))
+        {
+            action.Disable();
+            activeActionDic.Remove(id); 
+        }
+    }
+
+    private void ActionDisable()
+    {
+        moveAction.Disable();
+        lookAction.Disable();
     }
 }
