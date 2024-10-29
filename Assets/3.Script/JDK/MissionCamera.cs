@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionManager : MonoBehaviour
+public class MissionCamera : MonoBehaviour
 {
     [Header("미션 어태치")]
     [SerializeField] private GameObject[] mission = null; // 미션을 담고 있는 게임 오브젝트 배열
