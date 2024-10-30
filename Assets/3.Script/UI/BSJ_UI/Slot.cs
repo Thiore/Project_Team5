@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [System.Serializable]
-public class Item
+public class ItemDatatest
 {
     public string itemName;
     public Sprite itemIcon;
@@ -13,8 +13,8 @@ public class Item
 
 public class Slot : MonoBehaviour, IDropHandler
 {
-    public Item currentItem; //슬롯에 담긴 아이템
-    public Item[] possibleCombines; //조합 가능한 아이템
+    public ItemDatatest currentItem; //슬롯에 담긴 아이템
+    public ItemDatatest[] possibleCombines; //조합 가능한 아이템
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -33,17 +33,17 @@ public class Slot : MonoBehaviour, IDropHandler
         if (currentItem == null)
         {
             //슬롯에 아이템 추가
-            currentItem = draggableItem.GetComponent<Item>();
+            currentItem = draggableItem.GetComponent<ItemDatatest>();
             //드래그한 아이템 제거
             Destroy(draggableItem.gameObject);
             return;
         }
-        Item draggedItem = draggableItem.GetComponent<Item>();
+        ItemDatatest draggedItem = draggableItem.GetComponent<ItemDatatest>();
 
         //조합
         if (IsCombine(currentItem, draggedItem))
         {
-            Item comibnedItem = CombineItems(currentItem, draggedItem);
+            ItemDatatest comibnedItem = CombineItems(currentItem, draggedItem);
 
             if (comibnedItem != null)
             {
@@ -60,16 +60,16 @@ public class Slot : MonoBehaviour, IDropHandler
             }
         }
     }
-    private bool IsCombine(Item item1, Item item2)
+    private bool IsCombine(ItemDatatest item1, ItemDatatest item2)
     {
         return (item1.itemName == "1" && item2.itemName == "2") ||
                 (item1.itemName == "2" && item2.itemName == "1");
     }
 
-    private Item CombineItems(Item item1, Item item2)
+    private ItemDatatest CombineItems(ItemDatatest item1, ItemDatatest item2)
     {
         //조합 결과 아이템 생성
-        return new Item { itemName = "3", itemIcon = null };
+        return new ItemDatatest { itemName = "3", itemIcon = null };
     }
 
     //private void UpdaSlotUI()
