@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     private _InputManager input;
     private Rigidbody rb;
 
-    public float speed;
+    [SerializeField] private float speed;
 
     Vector3 moveDir;
 
