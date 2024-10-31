@@ -27,6 +27,6 @@ public class LocalManager : MonoBehaviour
 
         isChanging = false;
 
-        dia.SetDialogue("B1", 48);
+        //dia.SetDialogue("B1", 22);
     }
 }
