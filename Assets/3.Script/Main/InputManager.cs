@@ -5,13 +5,47 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.EventSystems;
 
+public class InputData
+{
+    public InputAction action { get; private set; } // 터치된 위치에서 발생 할 액션
+    public Vector2 startValue { get; private set; } // 터치가 시작된 위치
+    public Vector2 value { get; private set; } // 터치 중 현재 위치
+    public bool isTouch { get; private set; } // 터치 중인지 확인
+    public bool isUsed { get; private set; }
+
+    public InputData(InputAction action)
+    {
+        this.action = action;
+        this.startValue = Vector2.zero;
+        this.value = Vector2.zero;
+        this.isTouch = false;
+        this.isUsed = false;
+    }
+
+    
+    public void SetStartTouchPos(int touchId, Vector2 touchPos)
+    {
+        startValue = touchPos;
+        isTouch = true;
+        isUsed = true;
+    }
+    public void SetCurrentPos(Vector2 touchPos)
+    {
+        value = touchPos;
+    }
+    public void ResetData()
+    {
+        startValue = Vector2.zero;
+        value = Vector2.zero;
+        isTouch = false;
+        isUsed = false;
+    }
+}
 public class InputManager : MonoBehaviour
 {
     private InputManager instance = null;
     public static InputManager Instance { get; private set; }
 
-    [SerializeField] private RectTransform joystickArea; // Joystick Area
-    [SerializeField] private LayerMask touchableLayer; // 터치 가능한 레이어
     private enum etouchState
     {
         Normal = 0,
@@ -21,38 +55,22 @@ public class InputManager : MonoBehaviour
     }
     private etouchState touchState;
 
+    [SerializeField] private RectTransform joystickArea; // Joystick Area
+    [SerializeField] private LayerMask touchableLayer; // 터치 가능한 레이어
+    
+
     [SerializeField] private InputActionAsset playerInput;
 
-    private Dictionary<int, InputAction> activeActionDic;
+    public Dictionary<int, InputData> activeActionDic { get; private set; }
 
-    #region Action 추가
-    private InputAction moveAction;
-    public Vector2 startMoveValue { get; private set; }
-    public Vector2 moveValue { get; private set; }
-    public bool isMove { get; private set; }
-
-    private InputAction lookAction;
-    public Vector2 startLookValue { get; private set; }
-    public Vector2 lookValue { get; private set; }
-    public bool isLook { get; private set; }
-
-    private InputAction UI0Action;
-    public Vector2 UI0TouchValue { get; private set; }
-    public bool isUI0 { get; private set; }
-    private InputAction UI1Action;
-    public Vector2 UI1TouchValue { get; private set; }
-    public bool isUI1 { get; private set; }
-    private InputAction UI2Action;
-    public Vector2 UI2TouchValue { get; private set; }
-    public bool isUI2 { get; private set; }
-    private InputAction UI3Action;
-    public Vector2 UI3TouchValue { get; private set; }
-    public bool isUI3 { get; private set; }
-
-    private InputAction objectAction;
-    public Vector2 objectTouchValue { get; private set; }
-    public bool isObject { get; private set; }
-    #endregion
+    //데이터 클래스 정의
+    public InputData moveData { get; private set; }
+    public InputData lookData { get; private set; }
+    public InputData UI0Data{ get; private set; }
+    public InputData UI1Data{ get; private set; }
+    public InputData UI2Data{ get; private set; }
+    public InputData UI3Data { get; private set; }
+    public InputData objectData { get; private set; }
 
     private void Awake()
     {
@@ -72,13 +90,11 @@ public class InputManager : MonoBehaviour
     {
         FindAction();
         
-
         AddEventPerformedAction();
         
-
-        ActionDisable(); // 모든 액션 Disable
+        SetActionDisable(); // 모든 액션 Disable
         
-        activeActionDic = new Dictionary<int, InputAction>();
+        activeActionDic = new Dictionary<int, InputData>();
     }
     
     private void Update()
@@ -92,57 +108,58 @@ public class InputManager : MonoBehaviour
 
             if(touch.press.isPressed && !activeActionDic.ContainsKey(touchId))
             {
-                
-                if (IsTouchOnUI(touch.position.ReadValue(),touchId))
+                if (IsTouchOnUI(touch.position.ReadValue(),touchId) && touchId<4)
                 {
                     // UI 액션 실행
                     touchState = etouchState.UI;
-                    foreach(InputAction activeUIAction in activeActionDic.Values)
+                    
+                    switch(touchId)
                     {
-                        if(!activeActionDic.ContainsValue(activeUIAction))
-                        {
-                    //BindAction(touchId, activeUIAction);
-                    //수정필요
-                        }
+                        case 0:
+                            BindAction(touchId, UI0Data, touchPos);
+                            break;
+                        case 1:
+                            BindAction(touchId, UI1Data, touchPos);
+                            break;
+                        case 2:
+                            BindAction(touchId, UI2Data, touchPos);
+                            break;
+                        case 3:
+                            BindAction(touchId, UI3Data, touchPos);
+                            break;
                     }
+                       
+                    
+                    
                 }
                 else if (IsTouchOnJoystickArea(touchPos))
                 {
                     touchState = etouchState.Player;
 
-                    startMoveValue = touchPos;
+                    BindAction(touchId, moveData, touchPos);
 
-                    BindAction(touchId, moveAction);
-
-                    isMove = true;
 
                 }
                 else if (IsTouchableObjectAtPosition(touchPos))
                 {
                     touchState = etouchState.Object;
-                    Debug.Log("Good");
+                    BindAction(touchId, objectData, touchPos);
                 }
                 else
                 {
-                    if (IsTouchOnLeftScreen(touchPos) && !isMove)
+                    if (IsTouchOnLeftScreen(touchPos) && !moveData.isTouch)
                     {
                         if (touchState.Equals(etouchState.Normal))
                             touchState = etouchState.Player;
 
-                        startMoveValue = touchPos;
-                        
-                        BindAction(touchId, moveAction);
-
-                        isMove = true;
+                        BindAction(touchId, moveData, touchPos);
                     }
                     else if (IsTouchOnRightScreen(touchPos))
                     {
                         if (touchState.Equals(etouchState.Normal))
                             touchState = etouchState.Player;
 
-                        BindAction(touchId, lookAction);
-
-                        isLook = true;
+                        BindAction(touchId, lookData, touchPos);
                     }
                 }
             }
@@ -205,99 +222,114 @@ public class InputManager : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext context)
     {
-        moveValue = context.ReadValue<Vector2>();
+        moveData.SetCurrentPos(context.ReadValue<Vector2>());
     }
 
     private void OnLook(InputAction.CallbackContext context)
     {
-        lookValue = context.ReadValue<Vector2>();
+        lookData.SetCurrentPos(context.ReadValue<Vector2>());
     }
     private void OnUI0(InputAction.CallbackContext context)
     {
-        UI0TouchValue = context.ReadValue<Vector2>();
+        UI0Data.SetCurrentPos(context.ReadValue<Vector2>());
     }
     private void OnUI1(InputAction.CallbackContext context)
     {
-        UI1TouchValue = context.ReadValue<Vector2>();
+        UI1Data.SetCurrentPos(context.ReadValue<Vector2>());
     }
     private void OnUI2(InputAction.CallbackContext context)
     {
-        UI2TouchValue = context.ReadValue<Vector2>();
+        UI2Data.SetCurrentPos(context.ReadValue<Vector2>());
     }
     private void OnUI3(InputAction.CallbackContext context)
     {
-        UI3TouchValue = context.ReadValue<Vector2>();
+        UI3Data.SetCurrentPos(context.ReadValue<Vector2>());
     }
     private void OnObject(InputAction.CallbackContext context)
     {
-        objectTouchValue = context.ReadValue<Vector2>();
+        objectData.SetCurrentPos(context.ReadValue<Vector2>());
     }
 
-    private void BindAction(int id, InputAction action)
+    private void BindAction(int id, InputData data, Vector2 touchPos)
     {
-        if(!activeActionDic.ContainsValue(action))
+        if(!activeActionDic.ContainsValue(data))
         {
-            activeActionDic[id] = action;
-            action.AddBinding($"<Touchscreen>/touch{id}/position");
-            action.Enable();
+            activeActionDic[id] = data;
+            if(data.action == lookData.action)
+            {
+                data.action.AddBinding($"<Touchscreen>/touch{id}/delta");
+            }
+            else
+            {
+                data.action.AddBinding($"<Touchscreen>/touch{id}/position");
+                data.SetStartTouchPos(id, touchPos);
+            }
+            
+            data.action.Enable();            
         }
         
     }
     private void RomoveBindAction(int id)
     {
-        if(activeActionDic.TryGetValue(id, out var action))
+        if(activeActionDic.TryGetValue(id, out var data))
         {
             activeActionDic.Remove(id);
             //resetAction[id] = false;
-            action.Disable();
-            action.RemoveAllBindingOverrides();
+            data.ResetData();
+            data.action.Disable();
+            data.action.RemoveAllBindingOverrides();
+
             
-            if (isMove)
-            {
-                startMoveValue = Vector2.zero;
-                moveValue = Vector2.zero;
-                isMove = false;
-            }
-            if (isLook)
-            {
-                lookValue = Vector2.zero;
-                isLook = false;
-            }
-            
+
+
         }
         if(activeActionDic.Count.Equals(0))
         {
             touchState = etouchState.Normal;
         }
     }
+    /// <summary>
+    /// Action 초기화
+    /// </summary>
     private void FindAction()
     {
         InputActionMap playerMap = playerInput.FindActionMap("Player");
-        moveAction = playerMap.FindAction("Move");
-        lookAction = playerMap.FindAction("Look");
+        moveData = new InputData(playerMap.FindAction("Move"));
+        lookData = new InputData(playerMap.FindAction("Look"));
 
         InputActionMap UIMap = playerInput.FindActionMap("UI");
-        UI0Action = UIMap.FindAction("UI0");
-        UI1Action = UIMap.FindAction("UI1");
-        UI2Action = UIMap.FindAction("UI2");
-        UI3Action = UIMap.FindAction("UI3");
+        UI0Data = new InputData(UIMap.FindAction("UI0"));
+        UI1Data = new InputData(UIMap.FindAction("UI1"));
+        UI2Data = new InputData(UIMap.FindAction("UI2"));
+        UI3Data = new InputData(UIMap.FindAction("UI3"));
 
         InputActionMap ObjMap = playerInput.FindActionMap("Interaction");
-        objectAction = ObjMap.FindAction("Object");
+        objectData = new InputData(ObjMap.FindAction("Object"));
     }
+    /// <summary>
+    /// 각 데이터의 Action에 이벤트 추가
+    /// </summary>
     private void AddEventPerformedAction()
     {
-        moveAction.performed += OnMove;
-        lookAction.performed += OnLook;
-        UI0Action.performed += OnUI0;
-        UI1Action.performed += OnUI1;
-        UI2Action.performed += OnUI2;
-        UI3Action.performed += OnUI3;
-        objectAction.performed += OnObject;
+        moveData.action.performed += OnMove;
+        lookData.action.performed += OnLook;
+        UI0Data.action.performed += OnUI0;
+        UI1Data.action.performed += OnUI1;
+        UI2Data.action.performed += OnUI2;
+        UI3Data.action.performed += OnUI3;
+        objectData.action.performed += OnObject;
     }
-    private void ActionDisable()
+    /// <summary>
+    /// 초기화 후 액션 비활성화
+    /// </summary>
+    private void SetActionDisable()
     {
-        moveAction.Disable();
-        lookAction.Disable();
+        moveData.action.Disable();
+        lookData.action.Disable();
+        UI0Data.action.Disable();
+        UI1Data.action.Disable();
+        UI2Data.action.Disable();
+        UI3Data.action.Disable();
+        objectData.action.Disable();
     }
 }
