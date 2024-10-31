@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Linq;
-using static UnityEditor.Progress;
 
 public class DataManager : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (instance  = null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -39,7 +38,6 @@ public class DataManager : MonoBehaviour
     {
         LoadItemData();
 
-        ShowMyInfoTest();
     }
 
 
@@ -51,25 +49,18 @@ public class DataManager : MonoBehaviour
 
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-          
+                                                                                  z 
         }
     }
 
 
 
 
-    public Item GetItemById(int id)
+    public Item GetItemInfoById(int id)
     {
         return dicItem[id];
     }
 
 
-    public void ShowMyInfoTest()
-    {
-        foreach (KeyValuePair<int, Item> item in dicItem)
-        {
-            Debug.Log(item.Value.name);
-        }
-    }
 
 }
