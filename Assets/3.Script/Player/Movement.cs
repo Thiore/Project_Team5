@@ -6,7 +6,7 @@ public class Movement : MonoBehaviour
 {
     private InputManager input; // input값을 참조할 매니저
     
-    [SerializeField] private Camera playerCamera; //플레이어가 방향을 참조할 카메라
+    [SerializeField] private Transform playerCamera; //플레이어가 방향을 참조할 카메라
 
     
     [SerializeField] private float speed; //플레이어의 속도
@@ -21,13 +21,20 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        //플레이어오브젝트가 바라볼 방향 설정
-        //Vector3 cameraRot = new Vector3(0, playerCamera.transform.localEulerAngles.y, 0);
-        //transform.eulerAngles = cameraRot;
+
+        Vector3 cameraFoward = playerCamera.transform.forward;
+        cameraFoward.y = 0f;
+        cameraFoward.Normalize();
+
+        Vector3 cameraRight = playerCamera.transform.right;
+        cameraRight.y = 0f;
+        cameraRight.Normalize();
+
         // 이동 방향을 초기 터치 좌표와 현재 입력 좌표로 계산
         Vector2 joystickInput = input.moveData.value - input.moveData.startValue;
         //계산된 좌표로 이동해야할 방향벡터 설정
-        moveDir = new Vector3(joystickInput.x, 0, joystickInput.y).normalized;
+        moveDir = (cameraFoward * joystickInput.x + cameraFoward * joystickInput.y).normalized;
+
 
         
     }

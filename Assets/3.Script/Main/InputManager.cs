@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class InputData
 {
@@ -11,7 +10,6 @@ public class InputData
     public Vector2 startValue { get; private set; } // 터치가 시작된 위치
     public Vector2 value { get; private set; } // 터치 중 현재 위치
     public bool isTouch { get; private set; } // 터치 중인지 확인
-    public bool isUsed { get; private set; }
 
     public InputData(InputAction action)
     {
@@ -19,7 +17,6 @@ public class InputData
         this.startValue = Vector2.zero;
         this.value = Vector2.zero;
         this.isTouch = false;
-        this.isUsed = false;
     }
 
     
@@ -27,7 +24,6 @@ public class InputData
     {
         startValue = touchPos;
         isTouch = true;
-        isUsed = true;
     }
     public void SetCurrentPos(Vector2 touchPos)
     {
@@ -38,7 +34,6 @@ public class InputData
         startValue = Vector2.zero;
         value = Vector2.zero;
         isTouch = false;
-        isUsed = false;
     }
 }
 public class InputManager : MonoBehaviour
@@ -53,23 +48,21 @@ public class InputManager : MonoBehaviour
         UI,
         Object
     }
-    private etouchState touchState;
-
-    [SerializeField] private RectTransform joystickArea; // Joystick Area
-    [SerializeField] private LayerMask touchableLayer; // 터치 가능한 레이어
     
-
+    [SerializeField] private RectTransform joystickArea; // Joystick Area
+    [SerializeField] private LayerMask touchableUILayer; // 터치 가능한 UI 레이어
+    [SerializeField] private LayerMask touchableObjectLayer; // 터치 가능한 오브젝트 레이어
+    
     [SerializeField] private InputActionAsset playerInput;
 
     public Dictionary<int, InputData> activeActionDic { get; private set; }
-
+    private GraphicRaycaster graphicRaycast;
+    private etouchState touchState;
     //데이터 클래스 정의
     public InputData moveData { get; private set; }
     public InputData lookData { get; private set; }
     public InputData UI0Data{ get; private set; }
     public InputData UI1Data{ get; private set; }
-    public InputData UI2Data{ get; private set; }
-    public InputData UI3Data { get; private set; }
     public InputData objectData { get; private set; }
 
     private void Awake()
@@ -95,12 +88,13 @@ public class InputManager : MonoBehaviour
         SetActionDisable(); // 모든 액션 Disable
         
         activeActionDic = new Dictionary<int, InputData>();
+        touchState = etouchState.Normal;
     }
     
     private void Update()
     {
         //if (Touchscreen.current == null) return;
-
+        Debug.Log(activeActionDic.Count);
         foreach (var touch in Touchscreen.current.touches)
         {
             int touchId = touch.touchId.ReadValue() - 1;
@@ -108,7 +102,9 @@ public class InputManager : MonoBehaviour
 
             if(touch.press.isPressed && !activeActionDic.ContainsKey(touchId))
             {
-                if (IsTouchOnUI(touch.position.ReadValue(),touchId) && touchId<4)
+                if (IsTouchOnUI(touchPos, touchId)
+                    && touchId<2
+                    && (touchState.Equals(etouchState.Normal)||touchState.Equals(etouchState.UI)))
                 {
                     // UI 액션 실행
                     touchState = etouchState.UI;
@@ -121,18 +117,11 @@ public class InputManager : MonoBehaviour
                         case 1:
                             BindAction(touchId, UI1Data, touchPos);
                             break;
-                        case 2:
-                            BindAction(touchId, UI2Data, touchPos);
-                            break;
-                        case 3:
-                            BindAction(touchId, UI3Data, touchPos);
-                            break;
                     }
-                       
-                    
-                    
                 }
-                else if (IsTouchOnJoystickArea(touchPos))
+                else if (IsTouchOnJoystickArea(touchPos)
+                        && (touchState.Equals(etouchState.Normal) 
+                        || touchState.Equals(etouchState.Player)))
                 {
                     touchState = etouchState.Player;
 
@@ -140,12 +129,12 @@ public class InputManager : MonoBehaviour
 
 
                 }
-                else if (IsTouchableObjectAtPosition(touchPos))
+                else if (IsTouchableObjectAtPosition(touchPos)&&touchState.Equals(etouchState.Normal))
                 {
                     touchState = etouchState.Object;
                     BindAction(touchId, objectData, touchPos);
                 }
-                else
+                else if(touchState.Equals(etouchState.Normal)|| touchState.Equals(etouchState.Player))
                 {
                     if (IsTouchOnLeftScreen(touchPos) && !moveData.isTouch)
                     {
@@ -177,6 +166,8 @@ public class InputManager : MonoBehaviour
     private bool IsTouchOnUI(Vector2 touchPosition, int touchId)
     {
         // UI 터치 검사
+
+
         return EventSystem.current.IsPointerOverGameObject(touchId);
     }
 
@@ -193,7 +184,7 @@ public class InputManager : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(touchPosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableLayer))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableObjectLayer))
         {
             // "Touchable Object" 태그를 가진 오브젝트가 있는지 확인
             if (hit.collider.CompareTag("touchableobject"))
@@ -237,14 +228,6 @@ public class InputManager : MonoBehaviour
     {
         UI1Data.SetCurrentPos(context.ReadValue<Vector2>());
     }
-    private void OnUI2(InputAction.CallbackContext context)
-    {
-        UI2Data.SetCurrentPos(context.ReadValue<Vector2>());
-    }
-    private void OnUI3(InputAction.CallbackContext context)
-    {
-        UI3Data.SetCurrentPos(context.ReadValue<Vector2>());
-    }
     private void OnObject(InputAction.CallbackContext context)
     {
         objectData.SetCurrentPos(context.ReadValue<Vector2>());
@@ -255,15 +238,8 @@ public class InputManager : MonoBehaviour
         if(!activeActionDic.ContainsValue(data))
         {
             activeActionDic[id] = data;
-            if(data.action == lookData.action)
-            {
-                data.action.AddBinding($"<Touchscreen>/touch{id}/delta");
-            }
-            else
-            {
                 data.action.AddBinding($"<Touchscreen>/touch{id}/position");
                 data.SetStartTouchPos(id, touchPos);
-            }
             
             data.action.Enable();            
         }
@@ -275,9 +251,9 @@ public class InputManager : MonoBehaviour
         {
             activeActionDic.Remove(id);
             //resetAction[id] = false;
-            data.ResetData();
             data.action.Disable();
             data.action.RemoveAllBindingOverrides();
+            data.ResetData();
 
             
 
@@ -300,8 +276,6 @@ public class InputManager : MonoBehaviour
         InputActionMap UIMap = playerInput.FindActionMap("UI");
         UI0Data = new InputData(UIMap.FindAction("UI0"));
         UI1Data = new InputData(UIMap.FindAction("UI1"));
-        UI2Data = new InputData(UIMap.FindAction("UI2"));
-        UI3Data = new InputData(UIMap.FindAction("UI3"));
 
         InputActionMap ObjMap = playerInput.FindActionMap("Interaction");
         objectData = new InputData(ObjMap.FindAction("Object"));
@@ -315,8 +289,6 @@ public class InputManager : MonoBehaviour
         lookData.action.performed += OnLook;
         UI0Data.action.performed += OnUI0;
         UI1Data.action.performed += OnUI1;
-        UI2Data.action.performed += OnUI2;
-        UI3Data.action.performed += OnUI3;
         objectData.action.performed += OnObject;
     }
     /// <summary>
@@ -328,8 +300,6 @@ public class InputManager : MonoBehaviour
         lookData.action.Disable();
         UI0Data.action.Disable();
         UI1Data.action.Disable();
-        UI2Data.action.Disable();
-        UI3Data.action.Disable();
         objectData.action.Disable();
     }
 }
