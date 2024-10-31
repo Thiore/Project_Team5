@@ -34,7 +34,7 @@ public class StoryTrigger : MonoBehaviour
         //대사 출력
         if (dialogueManager != null)
         {
-            dialogueManager.SetDialogue("B1", storyIndex);
+            dialogueManager.SetDialogue("Table_StoryB1", storyIndex);
         }
     }
 }
