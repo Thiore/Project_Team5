@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class SlideObject : MonoBehaviour
 {
+    private Vector3 initPosition;
     private Outline outLine;
     private Collider objectCollider; // 현재 오브젝트의 Collider
     public LayerMask overlapLayer;   // 충돌을 확인할 레이어 설정
 
     private void Awake()
     {
+        initPosition = transform.position;
         outLine = GetComponent<Outline>();
         outLine.enabled = false;
 
@@ -49,5 +51,10 @@ public class SlideObject : MonoBehaviour
             }
         }
         return false; // 겹친 오브젝트가 없음
+    }
+
+    public void InitPosition()
+    {
+        transform.position = initPosition;
     }
 }

@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class CorrectCheck : MonoBehaviour
 {
+    public GameObject image;
     public string targetTag = "TargetObject"; // 지정할 태그 이름
     public float rayDistance = 1f;             // Ray의 길이
+
+    private void Awake()
+    {
+        image.SetActive(false);
+    }
 
     [SerializeField]
     private Vector3[] rayOffsets = new Vector3[4]  // Ray 시작 위치의 오프셋 배열을 인스펙터에서 설정 가능하게 함
@@ -44,6 +50,7 @@ public class CorrectCheck : MonoBehaviour
         // 모든 Ray가 지정된 태그의 오브젝트와 충돌하면 true 반환
         Debug.Log("All rays hit the correct target.");
         Debug.Log("Game Win");
+        image.SetActive(true);
         return true;
     }
 
