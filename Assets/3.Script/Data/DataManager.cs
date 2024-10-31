@@ -51,7 +51,7 @@ public class DataManager : MonoBehaviour
 
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-            Debug.Log(itemdata.Value.name);
+          
         }
     }
 
