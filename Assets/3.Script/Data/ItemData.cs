@@ -13,25 +13,12 @@ public enum eItemType
 public class ItemData
 {
     public int id;
-    public int nametableid; 
+    public string name; 
     public eItemType type;
     public int elementindex;
     public int combineindex;
+    public string tableName;
     public bool isfix;
-    public string imgname;
-}
 
 
-// 로컬제이션 전환할 변수하나 
-// 스프라이트로 저장해둘 string 변수하나
-
-public class Item : MonoBehaviour
-{
-    public int id;
-    public int nametableid;
-    public eItemType type;
-    public int elementindex;
-    public int combineindex;
-    public bool isfix;
-    public Sprite imgname;
 }

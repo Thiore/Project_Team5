@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Linq;
+using static UnityEditor.Progress;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
-    private Dictionary<int, ItemData> dicItem; 
+    private Dictionary<int, ItemData> dicItemData;
+    private Dictionary<int, Item> dicItem;
 
     private void Awake()
     {
@@ -21,40 +23,53 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        InitDic();
+        LoadAllData();
     }
 
 
     private void InitDic()
     {
-        dicItem = new Dictionary<int, ItemData>();
+        dicItemData = new Dictionary<int, ItemData>();
+        dicItem = new Dictionary<int, Item>();
     }
 
     private void LoadAllData()
     {
-        
+        LoadItemData();
+
+        ShowMyInfoTest();
     }
 
 
 
     private void LoadItemData()
     {
-        string itemJson = Resources.Load<TextAsset>("Data/Item_Data").text;
-        dicItem = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
+        string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
+        dicItemData = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
 
-        foreach (KeyValuePair<int, ItemData> item in dicItem)
+        foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-
-
+            Debug.Log(itemdata.Value.name);
         }
     }
 
 
-    public ItemData GetItembyID(int id)
+
+
+    public Item GetItemById(int id)
     {
         return dicItem[id];
     }
 
-    
 
+    public void ShowMyInfoTest()
+    {
+        foreach (KeyValuePair<int, Item> item in dicItem)
+        {
+            Debug.Log(item.Value.name);
+        }
+    }
 
 }
