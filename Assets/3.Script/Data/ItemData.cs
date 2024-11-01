@@ -15,6 +15,6 @@ public class ItemData
     public int combineindex;
     public string tableName;
     public bool isfix;
-
+    public string spritename;
 
 }

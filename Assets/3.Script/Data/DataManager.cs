@@ -13,7 +13,7 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance  = null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -49,16 +49,16 @@ public class DataManager : MonoBehaviour
 
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-                                                                                  z 
+                        
         }
     }
 
 
 
 
-    public Item GetItemInfoById(int id)
+    public ItemData GetItemDataInfoById(int id)
     {
-        return dicItem[id];
+        return dicItemData[id];
     }
 
 
