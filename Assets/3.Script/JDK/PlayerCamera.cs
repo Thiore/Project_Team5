@@ -7,25 +7,19 @@ public class PlayerCamera : MonoBehaviour
     private InputManager input;
 
     [Header("카메라 감도 조절 프로퍼티")]
-    [Range(1,10)]
+    [Range(0,10)]
     [SerializeField] private float cameraSpeedX; // 수평 카메라 감도
-    [Range(1, 10)]
+    [Range(0, 10)]
     [SerializeField] private float cameraSpeedY; // 수직 카메라 감도
 
     private Vector2 lastTouchPosition; // 마지막으로 터치한 위치
 
     private Vector3 deltaRot;
-    //private CinemachinePOV pov; // Cinemachine POV 컴포넌트 참조
-    //private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera 컴포넌트 참조
-    //private CinemachineInputProvider inputProvider;
 
     private void Awake()
     {
         input = InputManager.Instance;
 
-        // 컴포넌트를 초기화
-        //TryGetComponent(out virtualCamera);
-        //pov = virtualCamera.GetCinemachineComponent<CinemachinePOV>();
        
     }
     private void Start()
@@ -33,10 +27,9 @@ public class PlayerCamera : MonoBehaviour
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
         if (cameraSpeedX.Equals(0f))
-            cameraSpeedX = 50f;
+            cameraSpeedX = 5f;
         if (cameraSpeedY.Equals(0f))
-            cameraSpeedY = 50f;
-        //TryGetComponent(out inputProvider);
+            cameraSpeedY = 5f;
     }
 
     private void Update()
@@ -66,7 +59,7 @@ public class PlayerCamera : MonoBehaviour
     private void FixedUpdate()
     {
         
-        transform.Rotate(deltaRot*Time.fixedDeltaTime*10f);
+        transform.Rotate(deltaRot*Time.fixedDeltaTime*5f);
         deltaRot = Vector3.zero;
     }
 }

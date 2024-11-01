@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class InputData
 {
@@ -10,6 +11,7 @@ public class InputData
     public Vector2 startValue { get; private set; } // 터치가 시작된 위치
     public Vector2 value { get; private set; } // 터치 중 현재 위치
     public bool isTouch { get; private set; } // 터치 중인지 확인
+    public GameObject touchObject { get; private set; } //터치 중인 오브젝트
 
     public InputData(InputAction action)
     {
@@ -17,13 +19,15 @@ public class InputData
         this.startValue = Vector2.zero;
         this.value = Vector2.zero;
         this.isTouch = false;
+        this.touchObject = null;
     }
 
     
-    public void SetStartTouchPos(int touchId, Vector2 touchPos)
+    public void SetStartTouchPos(Vector2 touchPos, GameObject touchObject = null)
     {
         startValue = touchPos;
         isTouch = true;
+        this.touchObject = touchObject;
     }
     public void SetCurrentPos(Vector2 touchPos)
     {
@@ -34,8 +38,10 @@ public class InputData
         startValue = Vector2.zero;
         value = Vector2.zero;
         isTouch = false;
+        touchObject = null;
     }
 }
+
 public class InputManager : MonoBehaviour
 {
     private InputManager instance = null;
@@ -48,21 +54,24 @@ public class InputManager : MonoBehaviour
         UI,
         Object
     }
-    
-    [SerializeField] private RectTransform joystickArea; // Joystick Area
-    [SerializeField] private LayerMask touchableUILayer; // 터치 가능한 UI 레이어
     [SerializeField] private LayerMask touchableObjectLayer; // 터치 가능한 오브젝트 레이어
     
     [SerializeField] private InputActionAsset playerInput;
 
-    public Dictionary<int, InputData> activeActionDic { get; private set; }
-    private GraphicRaycaster graphicRaycast;
+    public Dictionary<int, InputData> activeActionDic { get; private set; } = new Dictionary<int, InputData>();
+
+    private PointerEventData pointData;
+    private List<RaycastResult> results = new List<RaycastResult>();
+    private LayerMask systemUILayer;
+    private LayerMask puzzleUILayer;
+
     private etouchState touchState;
+
     //데이터 클래스 정의
     public InputData moveData { get; private set; }
     public InputData lookData { get; private set; }
-    public InputData UI0Data{ get; private set; }
-    public InputData UI1Data{ get; private set; }
+    public InputData systemUIData{ get; private set; }
+    public InputData puzzleUIData{ get; private set; }
     public InputData objectData { get; private set; }
 
     private void Awake()
@@ -81,77 +90,118 @@ public class InputManager : MonoBehaviour
     
     private void Start()
     {
+        systemUILayer = LayerMask.GetMask("SystemUI");
+        puzzleUILayer = LayerMask.GetMask("PuzzleUI");
+
+       
+
         FindAction();
         
         AddEventPerformedAction();
         
         SetActionDisable(); // 모든 액션 Disable
         
-        activeActionDic = new Dictionary<int, InputData>();
+        
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+
+        foreach (int id in activeActionDic.Keys)
+        {
+            RomoveBindAction(id);
+        }
         touchState = etouchState.Normal;
     }
-    
+
     private void Update()
     {
-        //if (Touchscreen.current == null) return;
-        Debug.Log(activeActionDic.Count);
         foreach (var touch in Touchscreen.current.touches)
         {
             int touchId = touch.touchId.ReadValue() - 1;
             Vector2 touchPos = touch.position.ReadValue();
 
-            if(touch.press.isPressed && !activeActionDic.ContainsKey(touchId))
+            if(touch.press.isPressed)
             {
-                if (IsTouchOnUI(touchPos, touchId)
-                    && touchId<2
-                    && (touchState.Equals(etouchState.Normal)||touchState.Equals(etouchState.UI)))
+                if (!activeActionDic.ContainsKey(touchId))
                 {
-                    // UI 액션 실행
-                    touchState = etouchState.UI;
-                    
-                    switch(touchId)
+                    if ((touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI))
+                        && activeActionDic.Count < 3
+                        && IsTouchOnUI(touchId))
                     {
-                        case 0:
-                            BindAction(touchId, UI0Data, touchPos);
-                            break;
-                        case 1:
-                            BindAction(touchId, UI1Data, touchPos);
-                            break;
+                        // UI 액션 실행
+                        GameObject UIObj = EventSystem.current.currentSelectedGameObject;
+                        if(UIObj.layer == systemUILayer)
+                        {
+                            Debug.Log("System");
+                            BindAction(touchId, systemUIData, touchPos, UIObj);
+                        }
+                        else
+                        {
+                            Debug.Log("Puzzle");
+                            BindAction(touchId, puzzleUIData, touchPos, UIObj);
+                        }
+                        touchState = etouchState.UI;
+
                     }
-                }
-                else if (IsTouchOnJoystickArea(touchPos)
-                        && (touchState.Equals(etouchState.Normal) 
-                        || touchState.Equals(etouchState.Player)))
-                {
-                    touchState = etouchState.Player;
-
-                    BindAction(touchId, moveData, touchPos);
-
-
-                }
-                else if (IsTouchableObjectAtPosition(touchPos)&&touchState.Equals(etouchState.Normal))
-                {
-                    touchState = etouchState.Object;
-                    BindAction(touchId, objectData, touchPos);
-                }
-                else if(touchState.Equals(etouchState.Normal)|| touchState.Equals(etouchState.Player))
-                {
-                    if (IsTouchOnLeftScreen(touchPos) && !moveData.isTouch)
+                    else if (IsTouchOnJoystickArea(touchPos)
+                            && (touchState.Equals(etouchState.Normal)
+                            || touchState.Equals(etouchState.Player)))
                     {
-                        if (touchState.Equals(etouchState.Normal))
-                            touchState = etouchState.Player;
+                        touchState = etouchState.Player;
 
                         BindAction(touchId, moveData, touchPos);
-                    }
-                    else if (IsTouchOnRightScreen(touchPos))
-                    {
-                        if (touchState.Equals(etouchState.Normal))
-                            touchState = etouchState.Player;
+                        Debug.Log("Joystick");
 
-                        BindAction(touchId, lookData, touchPos);
+
+                    }
+                    else if (touchState.Equals(etouchState.Normal) && IsTouchableObjectAtPosition(touchId, touchPos))
+                    {
+                        touchState = etouchState.Object;
+                        
+                        Debug.Log("Object");
+                    }
+                    else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
+                    {
+                        if (IsTouchOnLeftScreen(touchPos) && !moveData.isTouch)
+                        {
+                            if (touchState.Equals(etouchState.Normal))
+                                touchState = etouchState.Player;
+
+                            BindAction(touchId, moveData, touchPos);
+                        }
+                        else if (IsTouchOnRightScreen(touchPos))
+                        {
+                            if (touchState.Equals(etouchState.Normal))
+                                touchState = etouchState.Player;
+
+                            BindAction(touchId, lookData, touchPos);
+                        }
                     }
                 }
+                if(touchState.Equals(etouchState.Object)||touchState.Equals(etouchState.UI))
+                {
+                    if (activeActionDic.TryGetValue(touchId, out InputData value))
+                    {
+                        value.touchObject.TryGetComponent(out ReadInputData getData);
+                        if(!getData.isTouch)
+                        {
+                            RomoveBindAction(touchId);
+                        }
+                    }
+                }
+                
             }
+                
             
 
             if (!touch.press.isPressed && activeActionDic.ContainsKey(touchId))
@@ -160,25 +210,27 @@ public class InputManager : MonoBehaviour
             }
 
         }
-        
+       
     }
 
-    private bool IsTouchOnUI(Vector2 touchPosition, int touchId)
+    private bool IsTouchOnUI(int touchId)
     {
         // UI 터치 검사
-
-
-        return EventSystem.current.IsPointerOverGameObject(touchId);
+        
+        return EventSystem.current.IsPointerOverGameObject(touchId+1);
     }
 
     private bool IsTouchOnJoystickArea(Vector2 touchPosition)
     {
-        // JoystickArea 터치 검사
-        return RectTransformUtility.RectangleContainsScreenPoint(joystickArea, touchPosition);
+        if (touchPosition.x < Screen.width / 4f &&touchPosition.y < Screen.height /2f)
+        {
+            return true;
+        }
+        return false;
     }
 
     // 터치한 곳에 "Touchable Object"가 있는지 확인하는 메서드
-    private bool IsTouchableObjectAtPosition(Vector2 touchPosition)
+    private bool IsTouchableObjectAtPosition(int touchId, Vector2 touchPosition)
     {
         if (touchPosition.Equals(Vector2.zero)) return false;
 
@@ -189,6 +241,7 @@ public class InputManager : MonoBehaviour
             // "Touchable Object" 태그를 가진 오브젝트가 있는지 확인
             if (hit.collider.CompareTag("touchableobject"))
             {
+                BindAction(touchId, objectData, touchPosition, hit.collider.gameObject);
                 return true;
             }
         }
@@ -220,28 +273,41 @@ public class InputManager : MonoBehaviour
     {
         lookData.SetCurrentPos(context.ReadValue<Vector2>());
     }
-    private void OnUI0(InputAction.CallbackContext context)
+    private void OnSystemUI(InputAction.CallbackContext context)
     {
-        UI0Data.SetCurrentPos(context.ReadValue<Vector2>());
+        systemUIData.SetCurrentPos(context.ReadValue<Vector2>());
     }
-    private void OnUI1(InputAction.CallbackContext context)
+    private void OnPuzzleUI(InputAction.CallbackContext context)
     {
-        UI1Data.SetCurrentPos(context.ReadValue<Vector2>());
+        puzzleUIData.SetCurrentPos(context.ReadValue<Vector2>());
     }
     private void OnObject(InputAction.CallbackContext context)
     {
         objectData.SetCurrentPos(context.ReadValue<Vector2>());
     }
 
-    private void BindAction(int id, InputData data, Vector2 touchPos)
+    private void BindAction(int id, InputData data, Vector2 touchPos, GameObject Obj= null)
     {
         if(!activeActionDic.ContainsValue(data))
         {
             activeActionDic[id] = data;
-                data.action.AddBinding($"<Touchscreen>/touch{id}/position");
-                data.SetStartTouchPos(id, touchPos);
+
+            data.action.AddBinding($"<Touchscreen>/touch{id}/position");
+            if (data == systemUIData||data == puzzleUIData||data == objectData)
+            {
+                data.SetStartTouchPos(touchPos,Obj);
+            }
+            else
+            {
+                data.SetStartTouchPos(touchPos);
+            }
             
-            data.action.Enable();            
+            data.action.Enable();
+            if (Obj != null&&Obj.TryGetComponent(out ReadInputData setData))
+            {
+                setData.data = data;
+                setData.Started();
+            }
         }
         
     }
@@ -250,14 +316,18 @@ public class InputManager : MonoBehaviour
         if(activeActionDic.TryGetValue(id, out var data))
         {
             activeActionDic.Remove(id);
-            //resetAction[id] = false;
+            if(data==systemUIData||data == puzzleUIData||data ==objectData)
+            {
+                if (data.touchObject != null && data.touchObject.TryGetComponent(out ReadInputData setData))
+                {
+                    setData.data = null;
+                    setData.Ended();
+                }
+            }
             data.action.Disable();
             data.action.RemoveAllBindingOverrides();
+
             data.ResetData();
-
-            
-
-
         }
         if(activeActionDic.Count.Equals(0))
         {
@@ -274,8 +344,8 @@ public class InputManager : MonoBehaviour
         lookData = new InputData(playerMap.FindAction("Look"));
 
         InputActionMap UIMap = playerInput.FindActionMap("UI");
-        UI0Data = new InputData(UIMap.FindAction("UI0"));
-        UI1Data = new InputData(UIMap.FindAction("UI1"));
+        systemUIData = new InputData(UIMap.FindAction("SystemUI"));
+        puzzleUIData = new InputData(UIMap.FindAction("PuzzleUI"));
 
         InputActionMap ObjMap = playerInput.FindActionMap("Interaction");
         objectData = new InputData(ObjMap.FindAction("Object"));
@@ -287,8 +357,8 @@ public class InputManager : MonoBehaviour
     {
         moveData.action.performed += OnMove;
         lookData.action.performed += OnLook;
-        UI0Data.action.performed += OnUI0;
-        UI1Data.action.performed += OnUI1;
+        systemUIData.action.performed += OnSystemUI;
+        puzzleUIData.action.performed += OnPuzzleUI;
         objectData.action.performed += OnObject;
     }
     /// <summary>
@@ -298,8 +368,9 @@ public class InputManager : MonoBehaviour
     {
         moveData.action.Disable();
         lookData.action.Disable();
-        UI0Data.action.Disable();
-        UI1Data.action.Disable();
+        systemUIData.action.Disable();
+        puzzleUIData.action.Disable();
         objectData.action.Disable();
     }
+
 }
