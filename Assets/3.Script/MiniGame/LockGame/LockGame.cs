@@ -14,7 +14,7 @@ public class LockGame : MonoBehaviour
     public Animator ani;
 
     //회전 각도 설정
-    private float rotationAngle = 36f;
+    private float rotationAngle = -36f;
 
     //회전 속도
     private float rotationSpeed = 5f;
@@ -48,7 +48,7 @@ public class LockGame : MonoBehaviour
         for (int i = 0; i < currentNumber.Length; i++)
         {
             currentNumber[i] = 0;
-            numberWheels[i].localRotation = Quaternion.Euler(0, 0, 0);
+            numberWheels[i].localRotation = Quaternion.Euler(0, 0, -180);
         }
     }
 
@@ -61,7 +61,7 @@ public class LockGame : MonoBehaviour
 
         //각 번호 휠을 해당 숫자에 맞게 회전
         float newRotation = currentNumber[wheelIndext] * rotationAngle;
-        targetRotations[wheelIndext] = Quaternion.Euler(0, newRotation, 0);
+        targetRotations[wheelIndext] = Quaternion.Euler(0, newRotation, -180);
 
         //정답확인
         CheckNumber();
@@ -75,7 +75,7 @@ public class LockGame : MonoBehaviour
 
         //각 번호 휠을 해당 숫자에 맞게 회전
         float newRotation = currentNumber[wheelIndex] * rotationAngle;
-        targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, 0);
+        targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, -180);
 
         //정답 확인
         CheckNumber();
