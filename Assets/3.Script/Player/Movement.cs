@@ -4,34 +4,45 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private InputManager input;
-    private Rigidbody rb;
+    private InputManager input; // input값을 참조할 매니저
+    
+    [SerializeField] private Transform playerCamera; //플레이어가 방향을 참조할 카메라
 
-    public float speed;
+    
+    [SerializeField] private float speed; //플레이어의 속도
 
-    Vector3 moveDir;
+    
+    Vector3 moveDir; //플레이어가 이동할 방향벡터
 
     private void Awake()
     {
-        input = GetComponent<InputManager>();
-        rb = GetComponent<Rigidbody>();
+        input = InputManager.Instance;
     }
 
     private void Update()
     {
-        // 이동 방향을 입력 값으로 설정 (로컬 기준으로 변환하기 전)
-        moveDir = new Vector3(input.MoveInput.x, 0, input.MoveInput.y).normalized;
+
+        Vector3 cameraFoward = playerCamera.transform.forward;
+        cameraFoward.y = 0f;
+        cameraFoward.Normalize();
+
+        Vector3 cameraRight = playerCamera.transform.right;
+        cameraRight.y = 0f;
+        cameraRight.Normalize();
+
+        // 이동 방향을 초기 터치 좌표와 현재 입력 좌표로 계산
+        Vector2 joystickInput = input.moveData.value - input.moveData.startValue;
+        //계산된 좌표로 이동해야할 방향벡터 설정
+        moveDir = (cameraRight * joystickInput.x + cameraFoward * joystickInput.y).normalized;
+
+
+        
     }
 
     private void FixedUpdate()
     {
-        if (rb != null)
-        {
-            // 이동 방향을 로컬 좌표계로 변환
-            Vector3 localMoveDir = transform.TransformDirection(moveDir);
-
-            // 로컬 좌표계 기준으로 이동 적용
-            rb.MovePosition(rb.position + localMoveDir * speed * Time.fixedDeltaTime);
-        }
+        //미리 구해놓은 방향벡터로 플레이어 이동
+        transform.Translate(moveDir * speed * Time.fixedDeltaTime);
+        
     }
 }

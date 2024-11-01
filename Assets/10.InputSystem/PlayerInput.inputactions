@@ -1,0 +1,89 @@
+{
+    "name": "PlayerInput",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "b4c9f13b-71b6-43e2-b9eb-ee800a4b8fbf",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "02619d6f-0803-4319-90c1-10045b2c1a04",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "d0c37771-ee7e-4027-83b7-631c3b031694",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": []
+        },
+        {
+            "name": "UI",
+            "id": "a1617031-7f37-4095-8add-8a48c64b99e5",
+            "actions": [
+                {
+                    "name": "SystemUI",
+                    "type": "Value",
+                    "id": "0577f094-8a95-40fd-9cbc-1bab5ec55b71",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "PuzzleUI",
+                    "type": "Value",
+                    "id": "527fb07d-910c-42a8-8411-d599bcc9c7b0",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": []
+        },
+        {
+            "name": "Interaction",
+            "id": "e72d5f85-9c54-4484-b651-147deb2df446",
+            "actions": [
+                {
+                    "name": "Object",
+                    "type": "Value",
+                    "id": "01d72e5b-a653-408f-b9ff-de52fe5a9cac",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": []
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Android",
+            "bindingGroup": "Android",
+            "devices": [
+                {
+                    "devicePath": "<Touchscreen>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Accelerometer>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
