@@ -60,6 +60,9 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log(color);
+        // 위치를 옮긴다기보다는 늘이니까, 위치는 움직이지 않음 
+        // onenter 되면 터치를 false 하는 식으로 
+        // 라인렌더라
     }
 
     public void OnPointerUp(PointerEventData eventData)

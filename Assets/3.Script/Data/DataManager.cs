@@ -49,7 +49,20 @@ public class DataManager : MonoBehaviour
 
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-                        
+            //FindObjectsOfType<Item>();
+
+           
+            if (GameObject.Find(itemdata.Value.name) != null)
+            {
+                if(GameObject.Find(itemdata.Value.name).TryGetComponent(out Item item))
+                {
+                    item.InputItemInfomationByID(itemdata.Key, itemdata.Value);
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 
