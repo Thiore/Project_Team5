@@ -22,8 +22,6 @@ public class JoystickManager : MonoBehaviour
         // 캔버스 참조 가져오기
         TryGetComponent(out canvas);
         joystickActive = false;
-        // 조이스틱을 초기에는 비활성화
-        joystick.SetActive(false);
     }
 
     private void Update()

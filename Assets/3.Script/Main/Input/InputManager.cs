@@ -58,6 +58,8 @@ public class InputManager : MonoBehaviour
     
     [SerializeField] private InputActionAsset playerInput;
 
+    [SerializeField] private Camera playerCamera;
+
     public Dictionary<int, InputData> activeActionDic { get; private set; } = new Dictionary<int, InputData>();
 
     private PointerEventData pointData;
@@ -140,7 +142,6 @@ public class InputManager : MonoBehaviour
                     {
                         // UI 액션 실행
                         GameObject UIObj = EventSystem.current.currentSelectedGameObject;
-                        Debug.Log(UIObj.name);
                         if(UIObj.layer == systemUILayer)
                         {
                             Debug.Log("System");
@@ -193,11 +194,11 @@ public class InputManager : MonoBehaviour
                 {
                     if (activeActionDic.TryGetValue(touchId, out InputData value))
                     {
-                        value.touchObject.TryGetComponent(out ReadInputData getData);
-                        if(!getData.isTouch)
-                        {
-                            RomoveBindAction(touchId);
-                        }
+                        //value.touchObject.TryGetComponent(out ReadInputData getData);
+                        //if(!getData.isTouch)
+                        //{
+                        //    RomoveBindAction(touchId);
+                        //}
                     }
                 }
                 
@@ -235,7 +236,7 @@ public class InputManager : MonoBehaviour
     {
         if (touchPosition.Equals(Vector2.zero)) return false;
 
-        Ray ray = Camera.main.ScreenPointToRay(touchPosition);
+        Ray ray = playerCamera.ScreenPointToRay(touchPosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableObjectLayer))
         {
