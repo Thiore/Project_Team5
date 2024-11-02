@@ -18,6 +18,8 @@ public class WiringGameManager : MonoBehaviour
     [SerializeField] private GameObject[] endPoints;
     [SerializeField] private GameObject[] wirings;
 
+    private WiringPoint[] endWiringPoints;
+
     private void Start()
     {
         InitGame();
@@ -33,13 +35,29 @@ public class WiringGameManager : MonoBehaviour
     //배선 시작 끝 위치 섞기
     private void InitPoints()
     {
+        endWiringPoints = new WiringPoint[4];
+
+        //각 시작지점/끝지점/배전 색상 및 boolean 초기화 
         for (int i = 0; i < startPoints.Length; i++) 
         {
-            startPoints[i].GetComponent<WiringPoint>().SetWiringColor(i);
-            startPoints[i].GetComponent<WiringPoint>().IsConncet = true;
-            endPoints[i].GetComponent<WiringPoint>().SetWiringColor(i);
-            endPoints[i].GetComponent<WiringPoint>().IsConncet = false;
-            wirings[i].GetComponent<Wiring>().SetWiringColor(i);
+            if(startPoints[i].TryGetComponent(out WiringPoint startwiringpoint))
+            {
+                startwiringpoint.SetWiringColor(i);
+                startwiringpoint.SetboolConnect(true);
+            }
+
+            if (endPoints[i].TryGetComponent(out WiringPoint endwiringpoint))
+            {
+                endwiringpoint.SetWiringColor(i);
+                endwiringpoint.SetboolConnect(false);
+                endWiringPoints[i] = endwiringpoint;
+                
+            }
+
+            if (wirings[i].TryGetComponent(out Wiring wiring))
+            {
+                wiring.SetWiringColor(i);
+            }
         }
 
         int shufflecount = Random.Range(1, 10);
@@ -84,11 +102,24 @@ public class WiringGameManager : MonoBehaviour
     }
 
 
-    private void CheckWiring()
+    private void CheckWiringBool()
     {
-        for(int i = 0; i < wirings.Length; i++)
+        int check = 0;
+        for(int i = 0; i < endWiringPoints.Length; i++)
         {
-            
+            if (endWiringPoints[i].IsConncet)
+            {
+                check++;
+            }
+        }
+
+        if(check >= 4)
+        {
+            // 이거 게임 끝 
+        }
+        else
+        {
+            check = 0;
         }
     }
 }

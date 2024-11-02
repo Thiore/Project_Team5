@@ -140,6 +140,7 @@ public class InputManager : MonoBehaviour
                     {
                         // UI 액션 실행
                         GameObject UIObj = EventSystem.current.currentSelectedGameObject;
+                        Debug.Log(UIObj.name);
                         if(UIObj.layer == systemUILayer)
                         {
                             Debug.Log("System");

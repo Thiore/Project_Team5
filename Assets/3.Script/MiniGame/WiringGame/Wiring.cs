@@ -6,8 +6,46 @@ using UnityEngine.EventSystems;
 public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private eColor color;
-    private bool isSameColor;
-    public bool IsSameColor { get => isSameColor; set => isSameColor = value; }
+    private bool isCheckColor;
+    public bool IsCheckColor { get => isCheckColor; }
+    public void SetBoolCheckColor(bool checkcolor)
+    {
+        isCheckColor = checkcolor;
+    }
+
+    private ReadInputData input;
+
+    private void Start()
+    {
+        TryGetComponent(out input);
+    }
+
+    private void Update()
+    {
+        if (input.isTouch)
+        {
+            DragConnectWiring();
+        }
+    }
+
+    public bool WiringSameColorCheck(eColor color)
+    {
+        if(this.color == color)
+        {
+            isCheckColor = true;
+        }
+        else
+        {
+            isCheckColor = false;
+        }
+
+        return isCheckColor;
+    }
+
+    public void SetColor(eColor color)
+    {
+        this.color = color;
+    }
 
     public eColor GetWiringColor()
     {
@@ -31,7 +69,7 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             if(this.color == points.GetWiringColor())
             {
                 Debug.Log("색깔 같음");
-                isSameColor = true;
+                isCheckColor = true;
             }
             else
             {
@@ -41,5 +79,16 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     }
 
 
+    // 
+    public void DragConnectWiring()
+    {
+        //if (inputdata.isTouch)
+        //{
+        //    //터치가 들어온거임 
+        //    //inputdata.value 손가락 따라다니는 밸류   
+        //}
 
+        Debug.Log("호출");
+
+    }
 }
