@@ -23,10 +23,10 @@ RenderSettings:
   m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 2.39
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -285,13 +285,69 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8532545737531227403}
     m_Modifications:
+    - target: {fileID: 314381743972460486, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_Layer
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 314381743972460486, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876526112178277614, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876526112178277614, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_Range
+      value: 5.69
+      objectReference: {fileID: 0}
     - target: {fileID: 2876526112178277614, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
       propertyPath: m_Intensity
-      value: 0.2
+      value: 1.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876526112178277614, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_SpotAngle
+      value: 179
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876526112178277614, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 60.300865
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876526112178277614, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256570278943173015, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256570278943173015, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256570278943173015, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256570278943173015, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256570278943173015, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 7749523603184974046, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
       propertyPath: m_Name
       value: ExitLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749523603184974046, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_Layer
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749523603184974046, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8340579901105550741, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -303,7 +359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8340579901105550741, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.139
+      value: -0.259
       objectReference: {fileID: 0}
     - target: {fileID: 8340579901105550741, guid: 5d2f58d4c7b7ca548a75c818e9bb74e2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -370,6 +426,37 @@ Transform:
   - {fileID: 1592259970801123709}
   m_Father: {fileID: 2931808895525930730}
   m_LocalEulerAnglesHint: {x: 0, y: -39.31, z: 0}
+--- !u!1 &1664808301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1664808302}
+  m_Layer: 0
+  m_Name: DialogueManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1664808302
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664808301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.099383, y: -0.69084513, z: 2.4823306}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2054831675
 GameObject:
   m_ObjectHideFlags: 0
@@ -22047,7 +22134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6084714243219332026}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23712,7 +23799,7 @@ GameObject:
   - component: {fileID: 1380072972038519069}
   - component: {fileID: 5082516244304120483}
   - component: {fileID: 184379500349258132}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: SM_Bld_Bunker_Wall_Metal_Door_x1_Opening_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31135,7 +31222,7 @@ GameObject:
   - component: {fileID: 4522888501903847143}
   - component: {fileID: 869745355887809355}
   - component: {fileID: 4591253379075012348}
-  m_Layer: 0
+  m_Layer: 28
   m_Name: SM_Bld_Bunker_Wall_Concrete_x1_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33037,7 +33124,7 @@ GameObject:
   - component: {fileID: 3479087753095937980}
   - component: {fileID: 602878988607873967}
   - component: {fileID: 2616327506649305615}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: SM_Bld_Bunker_Wall_Metal_Door_x1_Handle_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33865,7 +33952,7 @@ Transform:
   m_GameObject: {fileID: 1051949149871915275}
   serializedVersion: 2
   m_LocalRotation: {x: -0.17736524, y: -0.48063555, z: 0.100057766, w: -0.85294753}
-  m_LocalPosition: {x: 2.5, y: 1.35, z: 2.09}
+  m_LocalPosition: {x: 4.598999, y: 1.539, z: 3.157}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34611,10 +34698,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.58416677
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 9.825981e-11, y: -2.6587876e-10, z: -0.08416678}
 --- !u!23 &3468031498247691564
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -43034,7 +43121,7 @@ Transform:
   m_GameObject: {fileID: 3113000724177383896}
   serializedVersion: 2
   m_LocalRotation: {x: -0.17736524, y: -0.48063555, z: 0.100057766, w: -0.85294753}
-  m_LocalPosition: {x: 205.94, y: 0.35000002, z: 5.83}
+  m_LocalPosition: {x: 208.039, y: 0.53900003, z: 6.8970003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -54506,7 +54593,7 @@ GameObject:
   - component: {fileID: 5710169256152893732}
   - component: {fileID: 3703991422817632429}
   - component: {fileID: 580560056578031075}
-  m_Layer: 0
+  m_Layer: 28
   m_Name: SM_Bld_Bunker_Wall_Concrete_x1_02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57799,8 +57886,8 @@ Transform:
   m_GameObject: {fileID: 8136404859503812656}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0330013, y: -0.6955843, z: 0.031748794, w: 0.71698356}
-  m_LocalPosition: {x: 202.5, y: 0.85, z: 2.09}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 204.599, y: 1.039, z: 3.157}
+  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8772098858859093566}
@@ -90227,3 +90314,4 @@ SceneRoots:
   - {fileID: 8772098858859093566}
   - {fileID: 2135912834}
   - {fileID: 2054831677}
+  - {fileID: 1664808302}

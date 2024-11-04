@@ -194,11 +194,11 @@ public class InputManager : MonoBehaviour
                 {
                     if (activeActionDic.TryGetValue(touchId, out InputData value))
                     {
-                        //value.touchObject.TryGetComponent(out ReadInputData getData);
-                        //if(!getData.isTouch)
-                        //{
-                        //    RomoveBindAction(touchId);
-                        //}
+                        value.touchObject.TryGetComponent(out ReadInputData getData);
+                        if (!getData.isTouch)
+                        {
+                            RomoveBindAction(touchId);
+                        }
                     }
                 }
                 
