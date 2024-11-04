@@ -147,7 +147,7 @@ public class InputManager : MonoBehaviour
                             Debug.Log("System");
                             BindAction(touchId, systemUIData, touchPos, UIObj);
                         }
-                        else
+                        else if(UIObj.layer == puzzleUILayer)
                         {
                             Debug.Log("Puzzle");
                             BindAction(touchId, puzzleUIData, touchPos, UIObj);
