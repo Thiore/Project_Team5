@@ -49,20 +49,31 @@ public class DataManager : MonoBehaviour
 
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-            //FindObjectsOfType<Item>();
+             Item[] listarr = FindObjectsOfType<Item>();
 
-           
-            if (GameObject.Find(itemdata.Value.name) != null)
+            if (listarr.Length > 0)
             {
-                if(GameObject.Find(itemdata.Value.name).TryGetComponent(out Item item))
+                for (int i = 0; i < listarr.Length; i++)
                 {
-                    item.InputItemInfomationByID(itemdata.Key, itemdata.Value);
+                    if(itemdata.Value.name == listarr[i].gameObject.name)
+                    {
+                        listarr[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
+                    }
                 }
             }
-            else
-            {
 
-            }
+
+            //if (GameObject.Find(itemdata.Value.name) != null)
+            //{
+            //    if(GameObject.Find(itemdata.Value.name).TryGetComponent(out Item item))
+            //    {
+            //        item.InputItemInfomationByID(itemdata.Key, itemdata.Value);
+            //    }
+            //}
+            //else
+            //{
+
+            //}
         }
     }
 
