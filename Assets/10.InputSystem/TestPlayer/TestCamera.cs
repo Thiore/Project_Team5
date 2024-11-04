@@ -17,6 +17,7 @@ public class TestCamera : MonoBehaviour
     {
         Vector3 lookDir = new Vector3(-lookInput.y,lookInput.x,0f);
         transform.Rotate(lookDir*cameraSpeed*Time.deltaTime);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0f);
     }
 
     private void OnLook(InputValue value)
