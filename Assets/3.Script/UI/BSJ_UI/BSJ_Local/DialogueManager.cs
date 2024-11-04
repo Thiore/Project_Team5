@@ -81,14 +81,14 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    //임시로 만들어 뒀습니다, 나중에 그냥 크기 고정 시키는 방향??이면 삭제
-    private IEnumerator DialogueSize_co()
-    {
-        yield return null; //프레임 대기
+    ////임시로 만들어 뒀습니다, 나중에 그냥 크기 고정 시키는 방향??이면 삭제
+    //private IEnumerator DialogueSize_co()
+    //{
+    //    yield return null; //프레임 대기
 
-        RectTransform rectTransform = dialogueText.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(dialogueText.preferredWidth, dialogueText.preferredHeight);
-    }
+    //    RectTransform rectTransform = dialogueText.GetComponent<RectTransform>();
+    //    rectTransform.sizeDelta = new Vector2(dialogueText.preferredWidth, dialogueText.preferredHeight);
+    //}
 
     //private void TextFinish()
     //{
