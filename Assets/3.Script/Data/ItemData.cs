@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public enum eItemType
 {
     element = 0,
@@ -19,6 +15,6 @@ public class ItemData
     public int combineindex;
     public string tableName;
     public bool isfix;
-
+    public string spritename;
 
 }
