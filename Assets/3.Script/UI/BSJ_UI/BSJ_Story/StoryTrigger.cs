@@ -7,15 +7,25 @@ public class StoryTrigger : MonoBehaviour
     [SerializeField] private int storyIndex; // 자신의 인덱스를 가지게
     private bool isStory = false; // 스토리 독백 상호작용 상태
     private DialogueManager dialogueManager;
-
+    private ReadInputData input;
     private void Start()
     {
         //DialougeManager 찾기
         dialogueManager = FindObjectOfType<DialogueManager>();
 
+        //ReadInputData 찾기
+        TryGetComponent(out input);
         if (dialogueManager == null)
         {
             Debug.Log("존재 하지 않아요");
+        }
+    }
+
+    private void Update()
+    {
+        if (input.isTouch)
+        {
+            StoryStart();
         }
     }
     private void OnTriggerEnter(Collider other)
