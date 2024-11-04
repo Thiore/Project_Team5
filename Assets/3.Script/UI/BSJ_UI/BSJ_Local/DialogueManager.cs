@@ -2,14 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
+    private DialogueManager instance = null;
+    public static DialogueManager Instance { get; private set; }
+
     public Button dialogueButton; //대사 버튼 (터치 시, 사라지게 하기 위함)
     public TMP_Text dialogueText; //대사 표시할 TextMeshPro
     private LocalizedString localizedString = new LocalizedString();
+
+    private bool isChanging; //언어 변경
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            Instance = instance;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // 테이블 이름과 키값을 통해 대사 출력
     public void SetDialogue(string tableName, int key)
@@ -74,4 +94,29 @@ public class DialogueManager : MonoBehaviour
     //{
     //    dialogueText.gameObject.SetActive(false);
     //}
+
+    //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    
+    //언어 변경
+    public void ChangeLocale(int index)
+    {
+        if (isChanging)
+            return;
+
+        StartCoroutine(ChangeRoutine_co(index));
+    }
+
+    private IEnumerator ChangeRoutine_co(int index)
+    {
+        isChanging = true;
+
+        yield return LocalizationSettings.InitializationOperation; //초기화
+
+        // 언어 바꿔주기 SelectedLocale에 있는 언어로
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+
+        isChanging = false;
+
+        //dia.SetDialogue("B1", 22);
+    }
 }
