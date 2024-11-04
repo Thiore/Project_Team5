@@ -94,7 +94,7 @@ public class WiringGameManager : MonoBehaviour
         // 다 섞고 배선 위치 정렬
         for (int i = 0; i < startPoints.Length; i++)
         {
-            Vector2 wiringspos = new Vector2(startPoints[i].transform.position.x + 66f, startPoints[i].transform.position.y);
+            Vector2 wiringspos = new Vector2(startPoints[i].transform.localPosition.x + 66f, startPoints[i].transform.localPosition.y);
             wirings[i].transform.position = wiringspos;
         }
 

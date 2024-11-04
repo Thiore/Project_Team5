@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    private int id;
-    private eItemType type;
-    private int elementindex;
-    private int combineindex;
-    private string tableName;
-    private bool isfix;
-    private string spritename;
+    
+    [SerializeField] private int id;
+    [SerializeField] private eItemType type;
+    [SerializeField] private int elementindex;
+    [SerializeField] private int combineindex;
+    [SerializeField] private string tableName;
+    [SerializeField] private bool isfix;
+    [SerializeField] private string spritename;
 
 
 
 
     
-    public void InputItemInfomationByID(int id)
+    public void InputItemInfomationByID(int id, ItemData data)
     {
-        ItemData data = DataManager.instance.GetItemDataInfoById(id);
-
-        id = data.id;
+        this.id = id;
         type = data.type;
         elementindex = data.elementindex;
         combineindex = data.combineindex;
