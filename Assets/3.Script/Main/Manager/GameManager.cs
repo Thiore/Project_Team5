@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     private GameManager instance = null;
     public static GameManager Instance { get; private set; }
-
+    [HideInInspector]
     public bool isInput;
 
     private void Awake()
@@ -24,4 +24,5 @@ public class GameManager : MonoBehaviour
     }
 
 
+    
 }

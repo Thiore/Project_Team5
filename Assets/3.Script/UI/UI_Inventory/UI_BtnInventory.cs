@@ -8,15 +8,33 @@ public class UI_BtnInventory : MonoBehaviour
     [SerializeField] private GameObject btn;
     [SerializeField] private GameObject inventory;
     [SerializeField] private Toggle quickSlot;
+    [Header("3D UI")]
+    [SerializeField] private Camera UICam_3D; // 확대 후 단서고정 캡처 위한 Camera
+    [SerializeField] private RenderTexture renderTexture; // 확대 한 오브젝트 중 Pin고정 이미지를 출력하기 위한 Render Texture
+    [SerializeField] private GameObject pinObj;
+    [SerializeField] private GameObject pinExit;
+    [SerializeField] private GameObject keyClue;
+    
     private Animator quickSlotAnim;
+
+    private Toggle pinToggle = null; // 3D UI에서 Pin을 위해 사용
+
+    //inspector창에서 확인하기 위해 public사용 아래 내용 구현 이후 private으로 변경
+    public bool isPinItem = false; // 오브젝트가 단서 아이템인지 아닌지 구분
+
+
 
     private void Start()
     {
         quickSlot.TryGetComponent(out quickSlotAnim);
+        pinObj.TryGetComponent(out pinToggle);
+
+        //임시
+        isPinItem = true;
     }
     public void OpenInventory()
     {
-        
+        GameManager.Instance.isInput = true;
             btn.SetActive(false);        
         
         inventory.SetActive(true);
@@ -24,8 +42,8 @@ public class UI_BtnInventory : MonoBehaviour
 
     public void CloseInventory()
     {
-        
-            btn.SetActive(true);
+        GameManager.Instance.isInput = false;
+        btn.SetActive(true);
         
         inventory.SetActive(false);
     }
@@ -40,5 +58,51 @@ public class UI_BtnInventory : MonoBehaviour
         {
             quickSlotAnim.SetTrigger("Open");
         }
+    }
+
+    public void OnScaleItem(/*인벤토리에 열려있는 아이템 넣어주세요*/)
+    {
+        //현재는 Scale버튼의 OnClick에 넣어놨습니다.
+        if (isPinItem/*아이템이 단서아이템이라면 true반환되게하고 isPin은 임시*/)
+        {
+            isPinItem = true;
+            pinObj.SetActive(true);
+            if (pinToggle.isOn)
+            {
+                keyClue.SetActive(true);
+            }
+            else
+            {
+                keyClue.SetActive(false);
+            }
+        }
+        else
+        {
+            isPinItem = false;
+            pinToggle.isOn = false;
+            pinObj.SetActive(false);
+            keyClue.SetActive(false);
+        }
+
+        if (keyClue.activeSelf)
+        {
+            //단서고정이 켜져있을 때 다른 단서 오브젝트를 켜는 경우를 위해 사용
+            PinCapture();
+        }
+    }
+
+    public void PinCapture()
+    {
+        if(keyClue.activeSelf&&isPinItem)
+        {
+            pinObj.SetActive(false);
+            pinExit.SetActive(false);
+            UICam_3D.targetTexture = renderTexture; // 3D UI카메라의 Output Texture 추가
+            UICam_3D.Render(); // OutputTexture에 UICam 장면 출력
+            UICam_3D.targetTexture = null; // OutputTexture 제거
+            pinObj.SetActive(true);
+            pinExit.SetActive(true);
+        }
+        
     }
 }

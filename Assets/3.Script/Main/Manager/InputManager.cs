@@ -62,8 +62,6 @@ public class InputManager : MonoBehaviour
 
     public Dictionary<int, InputData> activeActionDic { get; private set; } = new Dictionary<int, InputData>();
 
-    private PointerEventData pointData;
-    private List<RaycastResult> results = new List<RaycastResult>();
     private LayerMask systemUILayer;
     private LayerMask puzzleUILayer;
 
@@ -127,6 +125,8 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.isInput) return;
+
         foreach (var touch in Touchscreen.current.touches)
         {
             int touchId = touch.touchId.ReadValue() - 1;
