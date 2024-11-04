@@ -61,5 +61,6 @@ public class PlayerCamera : MonoBehaviour
         
         transform.Rotate(deltaRot*Time.fixedDeltaTime*5f);
         deltaRot = Vector3.zero;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0f);
     }
 }

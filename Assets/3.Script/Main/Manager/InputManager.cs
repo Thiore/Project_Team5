@@ -235,7 +235,7 @@ public class InputManager : MonoBehaviour
     private bool IsTouchableObjectAtPosition(int touchId, Vector2 touchPosition)
     {
         if (touchPosition.Equals(Vector2.zero)) return false;
-
+        Debug.Log("여기안옴?");
         Ray ray = playerCamera.ScreenPointToRay(touchPosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableObjectLayer))
@@ -243,6 +243,7 @@ public class InputManager : MonoBehaviour
             // "Touchable Object" 태그를 가진 오브젝트가 있는지 확인
             if (hit.collider.CompareTag("touchableobject"))
             {
+                Debug.Log("여기안옴?");
                 BindAction(touchId, objectData, touchPosition, hit.collider.gameObject);
                 return true;
             }
