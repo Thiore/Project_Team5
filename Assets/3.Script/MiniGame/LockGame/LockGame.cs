@@ -24,10 +24,12 @@ public class LockGame : MonoBehaviour
 
     public Camera mainCamera;
 
+    //정답여부
+    public bool isanswer;
+
 
     private void Start()
     {
-        Debug.Log("이거 들어오니?");
         ani.GetComponent<Animator>();
 
         //번호 리셋
@@ -96,6 +98,7 @@ public class LockGame : MonoBehaviour
 
     private void LockOpenAnimation()
     {
+        isanswer = true;
         ani.SetTrigger("Open");
         Debug.Log("정답");
     }

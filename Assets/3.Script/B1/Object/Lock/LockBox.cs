@@ -6,26 +6,50 @@ public class LockBox : MonoBehaviour
 {
     private ReadInputData input;
     public GameObject[] cinemachine;
+    [SerializeField] GameObject canvas;
+    [SerializeField] private LockGame lockGame;
 
     private void Start()
     {
         TryGetComponent(out input);
         if (input == null)
         {
-            Debug.LogError("ReadInputData 컴포넌트가 할당되지 않았습니다.");
-            return;
+            Debug.Log("아무것도 없슈");
         }
-
-        Debug.Log(input);
     }
+   
 
     private void Update()
+    {
+
+        TouchBox();
+    }
+
+    private void TouchBox()
     {
         if (input.isTouch)
         {
             Debug.Log("상자 디버그");
             cinemachine[0].gameObject.SetActive(true);
+            Invoke("CanvasOn", 2f);
+            if (lockGame.isanswer)
+            {
+                CanvasOff();
+                cinemachine[1].gameObject.SetActive(true);
+                cinemachine[0].gameObject.SetActive(false);
+                Debug.Log("dd");
+            }
         }
+    }
+
+    private void CanvasOn()
+    {
+        canvas.gameObject.SetActive(true);
+    }
+
+    private void CanvasOff()
+    {
+        canvas.gameObject.SetActive(false);
     }
 
     
