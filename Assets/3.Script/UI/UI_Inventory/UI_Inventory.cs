@@ -2,25 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UI_Inventory : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryslots;
+    [SerializeField] private GameObject itemInformation;
+
+    [SerializeField] private TMP_Text itemName;
+    [SerializeField] private TMP_Text itemInfomation;
 
     private List<Item> items;
 
     private void Awake()
     {
         items = new List<Item>();
-
-
-
-
     }
-
-
-
-    //ITem 말고 정보만 담고 있는 Ui 전용 스크립트 따로 
 
     public void GetItemTouch(Item item)
     {
@@ -38,6 +35,16 @@ public class UI_Inventory : MonoBehaviour
                 {
                     sprite.sprite = itemUI.sprite;
                 }
+
+                Destroy(item.gameObject);
+                DialogueManager.Instance.SetDialogue("Table_ItemName", itemUI.ID);
+                itemName = DialogueManager.Instance.dialogueText;
+                Debug.Log(itemName);
+                DialogueManager.Instance.SetDialogue("Table_ItemExplanation", itemUI.ID);
+                itemInfomation = DialogueManager.Instance.dialogueText;
+                Debug.Log(itemInfomation);
+
+
             }
             break;
         }

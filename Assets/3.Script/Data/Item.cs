@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Item : MonoBehaviour
 {
@@ -13,12 +14,15 @@ public class Item : MonoBehaviour
     [SerializeField] private bool isfix;
     [SerializeField] private string spritename;
 
+    public int ID { get; }
+
 
     [SerializeField] private UI_Inventory inven;
 
     private bool isUI;
 
     public Sprite sprite { get; private set; }
+
     private ReadInputData inputdata = null;
 
 
@@ -30,7 +34,7 @@ public class Item : MonoBehaviour
         }
 
         inven = FindObjectOfType<UI_Inventory>();
-            Debug.Log(inven.name);
+        Debug.Log(inven.name);
     }
 
 
@@ -62,7 +66,7 @@ public class Item : MonoBehaviour
 
     public void PutInInvenItem(Item item)
     {
-        this.id = item.id; 
+        this.id = item.id;
         type = item.type;
         elementindex = item.elementindex;
         combineindex = item.combineindex;
@@ -71,5 +75,7 @@ public class Item : MonoBehaviour
         spritename = item.spritename;
         sprite = item.sprite;
     }
+
+
 
 }
