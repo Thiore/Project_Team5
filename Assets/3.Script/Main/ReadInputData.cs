@@ -40,16 +40,16 @@ public class ReadInputData : MonoBehaviour
         value = data.value;
         isTouch = data.isTouch;
         touchTime = 0f;
-        Debug.Log("Started" + gameObject.name);
-        Debug.Log(data.action);
+        //Debug.Log("Started" + gameObject.name);
+        //Debug.Log(data.action);
     }
     /// <summary>
     /// Drag&Hold
     /// </summary>
     private void Performed()
     {
-        Debug.Log("Performed" + gameObject.name);
-        Debug.Log(gameObject.name+" : "+touchTime);
+        //Debug.Log("Performed" + gameObject.name);
+        //Debug.Log(gameObject.name+" : "+touchTime);
         value = data.value;
         touchTime += Time.unscaledDeltaTime;
         
@@ -60,7 +60,7 @@ public class ReadInputData : MonoBehaviour
     /// </summary>
     public void Ended()
     {
-        Debug.Log("End" + gameObject.name);
+        //Debug.Log("End" + gameObject.name);
         isTouch = false;
         touchTime = 0f;
     }

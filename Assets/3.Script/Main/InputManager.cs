@@ -142,12 +142,12 @@ public class InputManager : MonoBehaviour
                         GameObject UIObj = EventSystem.current.currentSelectedGameObject;
                         if(UIObj.layer == systemUILayer)
                         {
-                            Debug.Log("System");
+                            //Debug.Log("System");
                             BindAction(touchId, systemUIData, touchPos, UIObj);
                         }
                         else
                         {
-                            Debug.Log("Puzzle");
+                            //Debug.Log("Puzzle");
                             BindAction(touchId, puzzleUIData, touchPos, UIObj);
                         }
                         touchState = etouchState.UI;
@@ -160,7 +160,7 @@ public class InputManager : MonoBehaviour
                         touchState = etouchState.Player;
 
                         BindAction(touchId, moveData, touchPos);
-                        Debug.Log("Joystick");
+                        //Debug.Log("Joystick");
 
 
                     }
@@ -168,7 +168,7 @@ public class InputManager : MonoBehaviour
                     {
                         touchState = etouchState.Object;
                         
-                        Debug.Log("Object");
+                        //Debug.Log("Object");
                     }
                     else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
                     {
