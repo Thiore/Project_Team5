@@ -6,7 +6,7 @@ public class BoxTestdd : MonoBehaviour
 {
     public LockGame lockgame;
     private Animator ani;
-    public GameObject camera;
+    public GameObject cam;
 
     private void Start()
     {
@@ -20,11 +20,15 @@ public class BoxTestdd : MonoBehaviour
         {
             ani.SetTrigger("Open");
             Invoke("sdjf", 3f);
+            Invoke("LoadSlide",5f);
         }
     }
-
+    private void LoadSlide()
+    {
+        GameManager.Instance.LoadSlide();
+    }
     private void sdjf()
     {
-        camera.gameObject.SetActive(false);
+        cam.gameObject.SetActive(false);
     }
 }

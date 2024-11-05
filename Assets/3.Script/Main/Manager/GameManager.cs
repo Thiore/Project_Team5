@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private GameManager instance = null;
+    private GameManager instance = new GameManager();
     public static GameManager Instance { get; private set; }
     [HideInInspector]
     public bool isInput;
@@ -14,23 +15,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject lanternLight;
 
     //임시
-    private bool isEmptyLantern;
-    private bool isBattery;
-    public bool isLantern { get; private set; }
+    [SerializeField] private bool isEmptyLantern;
+    [SerializeField] private bool isBattery;
+    [SerializeField] public bool isLantern { get; private set; }
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            Instance = instance;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    //private void Awake()
+    //{
+    //    if (instance == null)
+    //    {
+    //        instance = this;
+    //        Instance = instance;
+    //        DontDestroyOnLoad(gameObject);
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
     //임시
     private void Start()
     {
@@ -73,7 +74,14 @@ public class GameManager : MonoBehaviour
             lanternLight.SetActive(false);
         }
     }
-
+    public void LoadSlide()
+    {
+        SceneManager.LoadScene("Slide");
+    }
+    public void LoadB1F()
+    {
+        SceneManager.LoadScene("B1F");
+    }
 
 
 

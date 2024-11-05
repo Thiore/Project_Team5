@@ -247,13 +247,17 @@ public class InputManager : MonoBehaviour
             if(hit.collider.CompareTag("EmptyLantern"))
             {
                 GameManager.Instance.GetEmptyLantern();
-                Destroy(hit.collider.gameObject);
+                hit.collider.TryGetComponent(out ReadInputData lantern);
+                lantern.isTouch = true;
+                hit.collider.gameObject.SetActive(false);
             }
 
             if(hit.collider.CompareTag("Battery"))
             {
                 GameManager.Instance.GetBattery();
-                Destroy(hit.collider.gameObject);
+                hit.collider.TryGetComponent(out ReadInputData lantern);
+                lantern.isTouch = true;
+                hit.collider.gameObject.SetActive(false);
             }
         }
         return false;

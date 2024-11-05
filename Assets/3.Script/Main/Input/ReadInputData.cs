@@ -9,7 +9,7 @@ public class ReadInputData : MonoBehaviour
 
     public Vector2 startValue { get; private set; }
     public Vector2 value { get; private set; }
-    public bool isTouch { get; private set; }
+    public bool isTouch;
     public float touchTime { get; private set; }
 
     
@@ -29,6 +29,7 @@ public class ReadInputData : MonoBehaviour
         {
             Performed();
         }
+        
     }
 
     /// <summary>
