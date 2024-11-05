@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Linq;
 
@@ -58,6 +59,9 @@ public class DataManager : MonoBehaviour
                     if(itemdata.Value.name == listarr[i].gameObject.name)
                     {
                         listarr[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
+                        Sprite sprite = Resources.Load<Sprite>($"UI/Item/{itemdata.Value.spritename}");
+                        Debug.Log(sprite);
+                        listarr[i].SetSprite(sprite);
                     }
                 }
             }

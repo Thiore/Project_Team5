@@ -14,14 +14,17 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     }
 
     private ReadInputData input;
+    [SerializeField] LineRenderer linerender;
 
-    private void Start()
+    private void Awake()
     {
+        TryGetComponent(out linerender);
         TryGetComponent(out input);
     }
 
     private void Update()
     {
+
         if (input.isTouch)
         {
             DragConnectWiring();
@@ -30,7 +33,7 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public bool WiringSameColorCheck(eColor color)
     {
-        if(this.color == color)
+        if (this.color == color)
         {
             isCheckColor = true;
         }
@@ -67,9 +70,9 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if(eventData.pointerEnter.gameObject.name == "EndPoint" && eventData.pointerEnter.gameObject.TryGetComponent(out WiringPoint points))
+        if (eventData.pointerEnter.gameObject.name == "EndPoint" && eventData.pointerEnter.gameObject.TryGetComponent(out WiringPoint points))
         {
-            if(this.color == points.GetWiringColor())
+            if (this.color == points.GetWiringColor())
             {
                 Debug.Log("»ö±ò °°À½");
                 isCheckColor = true;
