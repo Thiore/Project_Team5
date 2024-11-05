@@ -31,7 +31,11 @@ public class Plane : MonoBehaviour
             RayCheck rayCheck = ray.GetComponent<RayCheck>();
             rayCheck.CheckConnections();
 
-            if (rayCheck.isComplete) lampMaterial.EnableKeyword("_EMISSION");
+            if (rayCheck.isComplete)
+            {
+                lampMaterial.EnableKeyword("_EMISSION");
+                //gamecomplete
+            }
         }
     }
 }
