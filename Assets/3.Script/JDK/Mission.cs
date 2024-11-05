@@ -2,9 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
-public enum Colors
+public enum ConnectionColor
 {
     Red,
     Blue,
@@ -15,20 +14,14 @@ public enum Colors
     Sky_Blue,
 }
 
-public class Mission : MonoBehaviour, IPointerDownHandler, IPointerMoveHandler, IPointerUpHandler
+public class Mission : MonoBehaviour
 {
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("드래그 시작!");
-    }
+    [Header("Line 어태치")]
+    [SerializeField] private LineRenderer lr = null;
 
-    public void OnPointerMove(PointerEventData eventData)
+    // [SerializeField] private ConnectionColor color;
+    public void ChangeColor(Material color)
     {
-        Debug.Log("드래그 중!");
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log("드래그 종료!");
+        lr.material = color;
     }
 }
