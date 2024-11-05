@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class UI_BtnInventory : MonoBehaviour
 {
-    [SerializeField] GameObject btnList;
+    [SerializeField] GameObject btn;
     [SerializeField] GameObject inventory;
 
     public void OpenInventory()
     {
-        for (int i = 0; i < btnList.transform.childCount; i++) 
-        {
-            btnList.transform.GetChild(i).gameObject.SetActive(false);        
-        }
+        
+            btn.SetActive(false);        
+        
         inventory.SetActive(true);
     }
 
     public void CloseInventory()
     {
-        for (int i = 0; i < btnList.transform.childCount; i++)
-        {
-            btnList.transform.GetChild(i).gameObject.SetActive(true);
-        }
+        
+            btn.SetActive(true);
+        
         inventory.SetActive(false);
     }
 }

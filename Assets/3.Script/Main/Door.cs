@@ -20,21 +20,13 @@ public class Door : MonoBehaviour
     {
         if(input.isTouch)
         {
-                isOpen = !isOpen;
+                isOpen = true;
                 if (isOpen)
                 {
                     anim.SetTrigger("Open");
                     input.TouchTap();
 
                 }
-                else
-                {
-                    anim.SetTrigger("Close");
-                    input.TouchTap();
-
-                }
-            
-            Debug.Log(isOpen);
         }
     }
 }
