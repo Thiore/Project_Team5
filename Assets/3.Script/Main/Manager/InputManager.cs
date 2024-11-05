@@ -212,7 +212,10 @@ public class InputManager : MonoBehaviour
             }
 
         }
-       
+        if (activeActionDic.Count.Equals(0))
+        {
+            touchState = etouchState.Normal;
+        }
     }
 
     private bool IsTouchOnUI(int touchId)
@@ -332,10 +335,7 @@ public class InputManager : MonoBehaviour
 
             data.ResetData();
         }
-        if(activeActionDic.Count.Equals(0))
-        {
-            touchState = etouchState.Normal;
-        }
+       
     }
     /// <summary>
     /// Action √ ±‚»≠

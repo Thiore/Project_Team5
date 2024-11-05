@@ -7,9 +7,9 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "02619d6f-0803-4319-90c1-10045b2c1a04",
-                    "expectedControlType": "Delta",
+                    "expectedControlType": "Touch",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -24,19 +24,7 @@
                     "initialStateCheck": true
                 }
             ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "dd5c847c-9f3e-4dc4-9a4a-34e0767ee113",
-                    "path": "<Touchscreen>/touch*/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Android",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
+            "bindings": []
         },
         {
             "name": "UI",
