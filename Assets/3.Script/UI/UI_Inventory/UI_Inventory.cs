@@ -39,7 +39,8 @@ public class UI_Inventory : MonoBehaviour
                 Destroy(item.gameObject);
                 DialogueManager.Instance.SetDialogue("Table_ItemName", itemUI.ID);
                 itemName = DialogueManager.Instance.dialogueText;
-                Debug.Log(itemName);
+                Debug.Log(itemUI.ID);
+                Debug.Log(item.ID);
                 DialogueManager.Instance.SetDialogue("Table_ItemExplanation", itemUI.ID);
                 itemInfomation = DialogueManager.Instance.dialogueText;
                 Debug.Log(itemInfomation);

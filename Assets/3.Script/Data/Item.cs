@@ -14,7 +14,7 @@ public class Item : MonoBehaviour
     [SerializeField] private bool isfix;
     [SerializeField] private string spritename;
 
-    public int ID { get; }
+    public int ID { get => id; }
 
 
     [SerializeField] private UI_Inventory inven;
