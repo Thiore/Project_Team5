@@ -6,13 +6,13 @@ public class PlayerCamera : MonoBehaviour
 {
     private InputManager input;
 
-    [Header("Ä«¸Þ¶ó °¨µµ Á¶Àý ÇÁ·ÎÆÛÆ¼")]
+    [Header("Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼")]
     [Range(0,10)]
-    [SerializeField] private float cameraSpeedX; // ¼öÆò Ä«¸Þ¶ó °¨µµ
+    [SerializeField] private float cameraSpeedX; // ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½
     [Range(0, 10)]
-    [SerializeField] private float cameraSpeedY; // ¼öÁ÷ Ä«¸Þ¶ó °¨µµ
+    [SerializeField] private float cameraSpeedY; // ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    private Vector2 lastTouchPosition; // ¸¶Áö¸·À¸·Î ÅÍÄ¡ÇÑ À§Ä¡
+    private Vector2 lastTouchPosition; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡
 
     private Vector3 deltaRot;
 
@@ -35,7 +35,7 @@ public class PlayerCamera : MonoBehaviour
             Vector2 currentTouchPosition = input.lookData.value;
             if (lastTouchPosition.Equals(Vector2.zero))
             {
-                lastTouchPosition = currentTouchPosition; // ¸¶Áö¸· ÅÍÄ¡ À§Ä¡ ±â·Ï
+                lastTouchPosition = currentTouchPosition; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
                 return;
             }
             Vector2 delta = currentTouchPosition - lastTouchPosition;
@@ -46,7 +46,7 @@ public class PlayerCamera : MonoBehaviour
         {
             if (!lastTouchPosition.Equals(Vector2.zero))
             {
-                // Ä«¸Þ¶ó È¸Àü °¨µµ¸¦ 0À¸·Î ¼³Á¤ÇÏ¿© È¸ÀüÀ» ¸ØÃã
+                // Ä«ï¿½Þ¶ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 lastTouchPosition = Vector2.zero;
             }
 

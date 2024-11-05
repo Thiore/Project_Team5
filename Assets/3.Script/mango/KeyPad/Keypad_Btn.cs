@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class Keypad_Btn : MonoBehaviour
 {
     [SerializeField] private InputField input;
+    [SerializeField] private int answer;
+    public KeyTestMM keyss;
 
     public void BtnClick(Button clickedBtn)
     {
@@ -26,6 +28,10 @@ public class Keypad_Btn : MonoBehaviour
             if (btnText.text.Equals("Enter"))
             {
                 Debug.Log($"Answer is {input.text}");
+                if (input.text.Equals(answer.ToString()))
+                {
+                    keyss.KeyEnd();
+                }
                 input.text = "";
             }
             else
