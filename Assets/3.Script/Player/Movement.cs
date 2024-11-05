@@ -14,7 +14,7 @@ public class Movement : MonoBehaviour
     
     Vector3 moveDir; //플레이어가 이동할 방향벡터
 
-    private void Awake()
+    private void Start()
     {
         input = InputManager.Instance;
     }
@@ -33,7 +33,7 @@ public class Movement : MonoBehaviour
         // 이동 방향을 초기 터치 좌표와 현재 입력 좌표로 계산
         Vector2 joystickInput = input.moveData.value - input.moveData.startValue;
         //계산된 좌표로 이동해야할 방향벡터 설정
-        moveDir = (cameraRight * joystickInput.y - cameraFoward * joystickInput.x).normalized;
+        moveDir = (cameraRight * joystickInput.x+ cameraFoward * joystickInput.y).normalized;
 
 
         

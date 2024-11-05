@@ -10,26 +10,26 @@ public class AudioMixerController : MonoBehaviour
 	[SerializeField] private Slider m_MusicMasterSlider;
 	[SerializeField] private Slider m_MusicBGMSlider;
 	[SerializeField] private Slider m_MusicSESlider;
+	////싱글턴으로 수정해줘야합니다.
+	//private void Awake()
+	//{
+	//	m_MusicMasterSlider.onValueChanged.AddListener(SetMasterVolume);
+	//	m_MusicBGMSlider.onValueChanged.AddListener(SetMusicVolume);
+	//	m_MusicSESlider.onValueChanged.AddListener(SetSFXVolume);
+	//}
 
-	private void Awake()
-	{
-		m_MusicMasterSlider.onValueChanged.AddListener(SetMasterVolume);
-		m_MusicBGMSlider.onValueChanged.AddListener(SetMusicVolume);
-		m_MusicSESlider.onValueChanged.AddListener(SetSFXVolume);
-	}
+ //   public void SetMasterVolume(float volume)
+	//{
+	//	m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
+	//}
 
-    public void SetMasterVolume(float volume)
-	{
-		m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
-	}
+	//public void SetMusicVolume(float volume)
+	//{
+	//	m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
+	//}
 
-	public void SetMusicVolume(float volume)
-	{
-		m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
-	}
-
-	public void SetSFXVolume(float volume)
-	{
-		m_AudioMixer.SetFloat("SE", Mathf.Log10(volume) * 20);
-	}
+	//public void SetSFXVolume(float volume)
+	//{
+	//	m_AudioMixer.SetFloat("SE", Mathf.Log10(volume) * 20);
+	//}
 }

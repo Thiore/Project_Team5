@@ -126,7 +126,6 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         if (GameManager.Instance.isInput) return;
-
         foreach (var touch in Touchscreen.current.touches)
         {
             int touchId = touch.touchId.ReadValue() - 1;
@@ -144,12 +143,10 @@ public class InputManager : MonoBehaviour
                         GameObject UIObj = EventSystem.current.currentSelectedGameObject;
                         if(UIObj.layer == systemUILayer)
                         {
-                            Debug.Log("System");
                             BindAction(touchId, systemUIData, touchPos, UIObj);
                         }
                         else if(UIObj.layer == puzzleUILayer)
                         {
-                            Debug.Log("Puzzle");
                             BindAction(touchId, puzzleUIData, touchPos, UIObj);
                         }
                         touchState = etouchState.UI;
@@ -162,7 +159,6 @@ public class InputManager : MonoBehaviour
                         touchState = etouchState.Player;
 
                         BindAction(touchId, moveData, touchPos);
-                        Debug.Log("Joystick");
 
 
                     }
@@ -170,7 +166,6 @@ public class InputManager : MonoBehaviour
                     {
                         touchState = etouchState.Object;
                         
-                        Debug.Log("Object");
                     }
                     else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
                     {
@@ -212,7 +207,10 @@ public class InputManager : MonoBehaviour
             }
 
         }
-       
+        if (activeActionDic.Count.Equals(0))
+        {
+            touchState = etouchState.Normal;
+        }
     }
 
     private bool IsTouchOnUI(int touchId)
@@ -235,7 +233,7 @@ public class InputManager : MonoBehaviour
     private bool IsTouchableObjectAtPosition(int touchId, Vector2 touchPosition)
     {
         if (touchPosition.Equals(Vector2.zero)) return false;
-        Debug.Log("여기안옴?");
+        
         Ray ray = playerCamera.ScreenPointToRay(touchPosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableObjectLayer))
@@ -243,9 +241,19 @@ public class InputManager : MonoBehaviour
             // "Touchable Object" 태그를 가진 오브젝트가 있는지 확인
             if (hit.collider.CompareTag("touchableobject"))
             {
-                Debug.Log("여기안옴?");
                 BindAction(touchId, objectData, touchPosition, hit.collider.gameObject);
                 return true;
+            }
+            if(hit.collider.CompareTag("EmptyLantern"))
+            {
+                GameManager.Instance.GetEmptyLantern();
+                Destroy(hit.collider.gameObject);
+            }
+
+            if(hit.collider.CompareTag("Battery"))
+            {
+                GameManager.Instance.GetBattery();
+                Destroy(hit.collider.gameObject);
             }
         }
         return false;
@@ -332,10 +340,7 @@ public class InputManager : MonoBehaviour
 
             data.ResetData();
         }
-        if(activeActionDic.Count.Equals(0))
-        {
-            touchState = etouchState.Normal;
-        }
+        
     }
     /// <summary>
     /// Action 초기화

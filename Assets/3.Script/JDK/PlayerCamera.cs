@@ -16,14 +16,10 @@ public class PlayerCamera : MonoBehaviour
 
     private Vector3 deltaRot;
 
-    private void Awake()
-    {
-        input = InputManager.Instance;
-
-       
-    }
+    
     private void Start()
     {
+        input = InputManager.Instance;
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
         if (cameraSpeedX.Equals(0f))
