@@ -11,6 +11,16 @@ public class UI_Inventory : MonoBehaviour
 
     private List<Item> items;
 
+    // UI_Press >> 드래그하는거 해둠 
+
+    // 1. 이넘 타입에 따라 퀵슬롯 갈지 인벤 갈지 
+    // 2. 추후 SaveManager에 소지 아이템 던질 준비 하기 
+    // 3. 퀵슬롯도 상속 시키기 
+
+    // 1. 다른 오브젝트 클릭 시 화면에 띄우게 하기 
+    // 2. 조합 
+    // 3. 3D렌더링 
+
     private void Awake()
     {
         items = new List<Item>();
@@ -40,5 +50,14 @@ public class UI_Inventory : MonoBehaviour
         items.Add(item);
     }
 
+
+
+    public void CurrentHaveItem()
+    {
+        foreach(Item item in items)
+        {
+            item.ID 
+        }
+    }
 
 }
