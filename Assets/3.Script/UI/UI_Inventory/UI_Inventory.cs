@@ -9,9 +9,6 @@ public class UI_Inventory : MonoBehaviour
     [SerializeField] private GameObject[] inventoryslots;
     [SerializeField] private GameObject itemInformation;
 
-    [SerializeField] private TMP_Text itemName;
-    [SerializeField] private TMP_Text itemInfomation;
-
     private List<Item> items;
 
     private void Awake()
@@ -21,7 +18,6 @@ public class UI_Inventory : MonoBehaviour
 
     public void GetItemTouch(Item item)
     {
-        Debug.Log("½ÇÇà");
         for (int i = 0; i < inventoryslots.Length; i++)
         {
             if (!inventoryslots[i].TryGetComponent(out Item notusethis))
@@ -37,22 +33,11 @@ public class UI_Inventory : MonoBehaviour
                 }
 
                 Destroy(item.gameObject);
-                DialogueManager.Instance.SetDialogue("Table_ItemName", itemUI.ID);
-                itemName = DialogueManager.Instance.dialogueText;
-                Debug.Log(itemUI.ID);
-                Debug.Log(item.ID);
-                DialogueManager.Instance.SetDialogue("Table_ItemExplanation", itemUI.ID);
-                itemInfomation = DialogueManager.Instance.dialogueText;
-                Debug.Log(itemInfomation);
-
-
             }
             break;
         }
 
         items.Add(item);
-
-
     }
 
 

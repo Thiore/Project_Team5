@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
-public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     private eColor color;
     private bool isCheckColor;
@@ -13,23 +12,17 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         isCheckColor = checkcolor;
     }
 
-    private ReadInputData input;
+    private ReadInputData inputdata;
     [SerializeField] LineRenderer linerender;
+    [SerializeField] Camera wiriCamera;
 
     private void Awake()
     {
-        TryGetComponent(out linerender);
-        TryGetComponent(out input);
+        TryGetComponent(out inputdata);
+        linerender.positionCount = 2;
+
     }
 
-    private void Update()
-    {
-
-        if (input.isTouch)
-        {
-            DragConnectWiring();
-        }
-    }
 
     public bool WiringSameColorCheck(eColor color)
     {
@@ -61,17 +54,22 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     }
 
     public void OnPointerDown(PointerEventData eventData)
-    {
+    {     
         Debug.Log(color);
-        // 위치를 옮긴다기보다는 늘이니까, 위치는 움직이지 않음 
-        // onenter 되면 터치를 false 하는 식으로 
-        // 라인렌더라
+        linerender.SetPosition(0, transform.position);
+    }
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector3 test = new Vector3(eventData.position.x, eventData.position.y, -1000f);
+        Vector3 worldpos = wiriCamera.ScreenToWorldPoint(test);
+        linerender.SetPosition(1, eventData.position);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         if (eventData.pointerEnter.gameObject.name == "EndPoint" && eventData.pointerEnter.gameObject.TryGetComponent(out WiringPoint points))
         {
+            linerender.SetPosition(1, eventData.pointerEnter.transform.position);
             if (this.color == points.GetWiringColor())
             {
                 Debug.Log("색깔 같음");
@@ -80,6 +78,8 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             else
             {
                 Debug.Log("색깔 틀림");
+
+                isCheckColor = false;
             }
         }
     }
@@ -88,13 +88,13 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     // 
     public void DragConnectWiring()
     {
-        //if (inputdata.isTouch)
-        //{
-        //    //터치가 들어온거임 
-        //    //inputdata.value 손가락 따라다니는 밸류   
-        //}
-
-        Debug.Log("호출");
+        if (inputdata.isTouch)
+        {
+            Debug.Log("호출");
+            linerender.SetPosition(0, inputdata.startValue);
+            linerender.SetPosition(0, inputdata.value);
+        }
 
     }
+
 }

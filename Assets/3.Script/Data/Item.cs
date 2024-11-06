@@ -34,7 +34,6 @@ public class Item : MonoBehaviour
         }
 
         inven = FindObjectOfType<UI_Inventory>();
-        Debug.Log(inven.name);
     }
 
 
