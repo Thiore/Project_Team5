@@ -5,74 +5,74 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-//public class InputData
-//{
-//    public InputAction action { get; private set; } // ��ġ�� ��ġ���� �߻� �� �׼�
-//    public Vector2 startValue { get; private set; } // ��ġ�� ���۵� ��ġ
-//    public Vector2 value { get; private set; } // ��ġ �� ���� ��ġ
-//    public bool isTouch { get; private set; } // ��ġ ������ Ȯ��
-//    public GameObject touchObject { get; private set; } //��ġ ���� ������Ʈ
+public class InputData
+{
+    public InputAction action { get; private set; } // ��ġ�� ��ġ���� �߻� �� �׼�
+    public Vector2 startValue { get; private set; } // ��ġ�� ���۵� ��ġ
+    public Vector2 value { get; private set; } // ��ġ �� ���� ��ġ
+    public bool isTouch { get; private set; } // ��ġ ������ Ȯ��
+    public GameObject touchObject { get; private set; } //��ġ ���� ������Ʈ
 
-//    public InputData(InputAction action)
-//    {
-//        this.action = action;
-//        this.startValue = Vector2.zero;
-//        this.value = Vector2.zero;
-//        this.isTouch = false;
-//        this.touchObject = null;
-//    }
+    public InputData(InputAction action)
+    {
+        this.action = action;
+        this.startValue = Vector2.zero;
+        this.value = Vector2.zero;
+        this.isTouch = false;
+        this.touchObject = null;
+    }
 
-    
-//    public void SetStartTouchPos(Vector2 touchPos, GameObject touchObject = null)
-//    {
-//        startValue = touchPos;
-//        isTouch = true;
-//        this.touchObject = touchObject;
-//    }
-//    public void SetCurrentPos(Vector2 touchPos)
-//    {
-//        value = touchPos;
-//    }
-//    public void ResetData()
-//    {
-//        startValue = Vector2.zero;
-//        value = Vector2.zero;
-//        isTouch = false;
-//        touchObject = null;
-//    }
-//}
+
+    public void SetStartTouchPos(Vector2 touchPos, GameObject touchObject = null)
+    {
+        startValue = touchPos;
+        isTouch = true;
+        this.touchObject = touchObject;
+    }
+    public void SetCurrentPos(Vector2 touchPos)
+    {
+        value = touchPos;
+    }
+    public void ResetData()
+    {
+        startValue = Vector2.zero;
+        value = Vector2.zero;
+        isTouch = false;
+        touchObject = null;
+    }
+}
 
 public class InputManager : MonoBehaviour
 {
-    //private InputManager instance = null;
-    //public static InputManager Instance { get; private set; }
+    private InputManager instance = null;
+    public static InputManager Instance { get; private set; }
 
-    //private enum etouchState
-    //{
-    //    Normal = 0,
-    //    Player,
-    //    UI,
-    //    Object
-    //}
-    //[SerializeField] private LayerMask touchableObjectLayer; // ��ġ ������ ������Ʈ ���̾�
-    
-    //[SerializeField] private InputActionAsset playerInput;
+    private enum etouchState
+    {
+        Normal = 0,
+        Player,
+        UI,
+        Object
+    }
+    [SerializeField] private LayerMask touchableObjectLayer; // ��ġ ������ ������Ʈ ���̾�
 
-    //[SerializeField] private Camera playerCamera;
+    [SerializeField] private InputActionAsset playerInput;
 
-    //public Dictionary<int, InputData> activeActionDic { get; private set; } = new Dictionary<int, InputData>();
+    [SerializeField] private Camera playerCamera;
 
-    //private LayerMask systemUILayer;
-    //private LayerMask puzzleUILayer;
+    public Dictionary<int, InputData> activeActionDic { get; private set; } = new Dictionary<int, InputData>();
 
-    //private etouchState touchState;
+    private LayerMask systemUILayer;
+    private LayerMask puzzleUILayer;
 
-    ////������ Ŭ���� ����
-    //public InputData moveData { get; private set; }
-    //public InputData lookData { get; private set; }
-    //public InputData systemUIData{ get; private set; }
-    //public InputData puzzleUIData{ get; private set; }
-    //public InputData objectData { get; private set; }
+    private etouchState touchState;
+
+    //������ Ŭ���� ����
+    public InputData moveData { get; private set; }
+    public InputData lookData { get; private set; }
+    public InputData systemUIData { get; private set; }
+    public InputData puzzleUIData { get; private set; }
+    public InputData objectData { get; private set; }
 
     ////private void Awake()
     ////{
@@ -87,7 +87,7 @@ public class InputManager : MonoBehaviour
     ////        Destroy(gameObject);
     ////    }
     ////}
-    
+
     //private void Start()
     //{
     //    systemUILayer = LayerMask.GetMask("SystemUI");
@@ -96,12 +96,12 @@ public class InputManager : MonoBehaviour
     //    playerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
     //    FindAction();
-        
+
     //    AddEventPerformedAction();
-        
+
     //    SetActionDisable(); // ��� �׼� Disable
-        
-        
+
+
     //}
     //private void OnEnable()
     //{
@@ -151,7 +151,7 @@ public class InputManager : MonoBehaviour
     //                        BindAction(touchId, puzzleUIData, touchPos, UIObj);
     //                        touchState = etouchState.UI;
     //                    }
-                        
+
 
     //                }
     //                else if (IsTouchOnJoystickArea(touchPos)
@@ -167,7 +167,7 @@ public class InputManager : MonoBehaviour
     //                else if (touchState.Equals(etouchState.Normal) && IsTouchableObjectAtPosition(touchId, touchPos))
     //                {
     //                    touchState = etouchState.Object;
-                        
+
     //                }
     //                else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
     //                {
@@ -198,10 +198,10 @@ public class InputManager : MonoBehaviour
     //                    }
     //                }
     //            }
-                
+
     //        }
-                
-            
+
+
 
     //        if (!touch.press.isPressed && activeActionDic.ContainsKey(touchId))
     //        {
@@ -209,13 +209,13 @@ public class InputManager : MonoBehaviour
     //        }
 
     //    }
-        
+
     //}
 
     //private bool IsTouchOnUI(int touchId)
     //{
     //    // UI ��ġ �˻�
-        
+
     //    return EventSystem.current.IsPointerOverGameObject(touchId+1);
     //}
 
@@ -232,7 +232,7 @@ public class InputManager : MonoBehaviour
     //private bool IsTouchableObjectAtPosition(int touchId, Vector2 touchPosition)
     //{
     //    if (touchPosition.Equals(Vector2.zero)) return false;
-        
+
     //    Ray ray = playerCamera.ScreenPointToRay(touchPosition);
     //    RaycastHit hit;
     //    if (Physics.Raycast(ray, out hit, 3f, touchableObjectLayer))
@@ -315,7 +315,7 @@ public class InputManager : MonoBehaviour
     //        {
     //            data.SetStartTouchPos(touchPos);
     //        }
-            
+
     //        data.action.Enable();
     //        if (Obj != null&&Obj.TryGetComponent(out ReadInputData setData))
     //        {
@@ -323,7 +323,7 @@ public class InputManager : MonoBehaviour
     //            setData.Started();
     //        }
     //    }
-        
+
     //}
     //private void RomoveBindAction(int id)
     //{
@@ -386,5 +386,5 @@ public class InputManager : MonoBehaviour
     //    puzzleUIData.action.Disable();
     //    objectData.action.Disable();
     //}
-    
+
 }
