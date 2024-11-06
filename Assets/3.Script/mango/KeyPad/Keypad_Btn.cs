@@ -7,12 +7,11 @@ public class Keypad_Btn : MonoBehaviour
 {
     [SerializeField] private InputField input;
     [SerializeField] private int answer;
+
+    //상호작용 관련
     [SerializeField] private int floorIndex; //오브젝트의 현재 층
     [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
-    private SaveManager saveManager;
-
-    // 선원1실 문 열리기 위한 bool
-    public bool isAnswer;
+    private SaveManager saveManager; //상태관리
 
     private void Start()
     {
@@ -24,7 +23,7 @@ public class Keypad_Btn : MonoBehaviour
         string btnName = clickedBtn.name;
         Text btnText = clickedBtn.GetComponentInChildren<Text>();
 
-        if(int.TryParse(btnText.text,out int result))
+        if (int.TryParse(btnText.text, out int result))
         {
             if (input.text.Length >= 3)
             {
@@ -46,7 +45,7 @@ public class Keypad_Btn : MonoBehaviour
             }
             else
             {
-                input.text=input.text.Substring(0, input.text.Length - 1);
+                input.text = input.text.Substring(0, input.text.Length - 1);
             }
         }
     }

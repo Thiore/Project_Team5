@@ -72,7 +72,8 @@ public class DoorController : MonoBehaviour
         {
             if (input.isTouch)
             {
-                ani.SetTrigger("Open");
+                //ani.SetTrigger("Open");
+                ani.SetBool("isOpen", true);
             }
         }
     }
