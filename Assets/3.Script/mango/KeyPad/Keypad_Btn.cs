@@ -7,11 +7,17 @@ public class Keypad_Btn : MonoBehaviour
 {
     [SerializeField] private InputField input;
     [SerializeField] private int answer;
+    [SerializeField] private int floorIndex; //오브젝트의 현재 층
+    [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
+    private SaveManager saveManager;
+
     // 선원1실 문 열리기 위한 bool
     public bool isAnswer;
 
-    //정답 이후 원래 player camera로 돌아가기 위한 virtualCam
-    [SerializeField] private GameObject virtualCam;
+    private void Start()
+    {
+        saveManager = GameObject.FindGameObjectWithTag("SaveManager").GetComponent<SaveManager>();
+    }
 
     public void BtnClick(Button clickedBtn)
     {
@@ -34,8 +40,7 @@ public class Keypad_Btn : MonoBehaviour
                 Debug.Log($"Answer is {input.text}");
                 if (input.text.Equals(answer.ToString()))
                 {
-                    //정답 이후 시네머신 off
-                    virtualCam.gameObject.SetActive(false);
+                    saveManager.UpdateObjectState(floorIndex, objectIndex, true);
                 }
                 input.text = "";
             }

@@ -15,7 +15,7 @@ public class StateData : MonoBehaviour
     [System.Serializable]
     public class FloorState
     {
-        public int[] foorIndex; // 각 층별의 Index
+        public int floorIndex; // 각 층 Index
         public List<InteractableObjectState> interactableObjects; //해당 층의 오브젝트 상태 리스트
     }
 
@@ -23,7 +23,7 @@ public class StateData : MonoBehaviour
     [System.Serializable]
     public class InteractableObjectState
     {
-        public int[] objectIndex; //각 오브젝트의 Index
+        public int[] objectIndex; //각 상호작용 오브젝트의 Index
         public bool isInteracted; // 상호작용 상태
     }
 }

@@ -797,6 +797,52 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &594023779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 594023780}
+  - component: {fileID: 594023781}
+  m_Layer: 0
+  m_Name: SavaManager
+  m_TagString: SaveManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &594023780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594023779}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &594023781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594023779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d79aca0ffd4a4438a0ba90a3d383fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameState:
+    floors: []
 --- !u!1 &737243064
 GameObject:
   m_ObjectHideFlags: 0
@@ -68098,9 +68144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: befcbb4e2b9ddb14486c2f975af07c2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ani: {fileID: 0}
-  input: {fileID: 0}
-  isOpend: 0
 --- !u!4 &6038271115132753233
 Transform:
   m_ObjectHideFlags: 0
@@ -73777,8 +73820,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 3982681085006644389}
   answer: 27
+  floorIndex: 0
+  objectIndex: 0
   isAnswer: 0
-  virtualCam: {fileID: 2980069678640671948}
 --- !u!33 &6539696350049020858
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -90114,7 +90158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec4f5f2e6c4256b4395b3f6c9e6457fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openObj: {fileID: 8844852887278041292}
+  floorIndex: 0
+  objectIndex: 0
 --- !u!4 &7986405920261205005
 Transform:
   m_ObjectHideFlags: 0
@@ -96683,9 +96728,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: befcbb4e2b9ddb14486c2f975af07c2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ani: {fileID: 0}
-  input: {fileID: 0}
-  isOpend: 0
 --- !u!114 &8656834277370523850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103950,3 +103992,4 @@ SceneRoots:
   - {fileID: 3476036128850598484}
   - {fileID: 7856393689037480595}
   - {fileID: 1816116772}
+  - {fileID: 594023780}
