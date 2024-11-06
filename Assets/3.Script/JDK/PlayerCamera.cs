@@ -1,17 +1,17 @@
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour
 {
     private InputManager input;
 
     [Header("ī�޶� ���� ���� ������Ƽ")]
-    [Range(0,10)]
-    [SerializeField] private float cameraSpeedX; // ���� ī�޶� ����
     [Range(0, 10)]
-    [SerializeField] private float cameraSpeedY; // ���� ī�޶� ����
-
+    private float cameraSpeed;
+    
+    [SerializeField] private Slider slideSpeed;
     private Vector2 lastTouchPosition; // ���������� ��ġ�� ��ġ
 
     private Vector3 deltaRot;
@@ -22,10 +22,7 @@ public class PlayerCamera : MonoBehaviour
         input = InputManager.Instance;
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
-        if (cameraSpeedX.Equals(0f))
-            cameraSpeedX = 5f;
-        if (cameraSpeedY.Equals(0f))
-            cameraSpeedY = 5f;
+        cameraSpeed = 2f;
     }
 
     private void Update()
@@ -39,7 +36,7 @@ public class PlayerCamera : MonoBehaviour
                 return;
             }
             Vector2 delta = currentTouchPosition - lastTouchPosition;
-            deltaRot = new Vector3(-delta.y * cameraSpeedY, delta.x * cameraSpeedX);
+            deltaRot = new Vector3(-delta.y * cameraSpeed, delta.x * cameraSpeed);
             lastTouchPosition = currentTouchPosition;
         }
         else
@@ -58,5 +55,9 @@ public class PlayerCamera : MonoBehaviour
         transform.Rotate(deltaRot*Time.fixedDeltaTime*5f);
         deltaRot = Vector3.zero;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0f);
+    }
+    public void CameraSpeed()
+    {
+        cameraSpeed = slideSpeed.value;
     }
 }

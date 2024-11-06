@@ -93,7 +93,7 @@ public class InputManager : MonoBehaviour
         systemUILayer = LayerMask.GetMask("SystemUI");
         puzzleUILayer = LayerMask.GetMask("PuzzleUI");
 
-       
+        playerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
         FindAction();
         
@@ -144,12 +144,14 @@ public class InputManager : MonoBehaviour
                         if(UIObj.layer == systemUILayer)
                         {
                             BindAction(touchId, systemUIData, touchPos, UIObj);
+                            touchState = etouchState.UI;
                         }
                         else if(UIObj.layer == puzzleUILayer)
                         {
                             BindAction(touchId, puzzleUIData, touchPos, UIObj);
+                            touchState = etouchState.UI;
                         }
-                        touchState = etouchState.UI;
+                        
 
                     }
                     else if (IsTouchOnJoystickArea(touchPos)
@@ -207,10 +209,7 @@ public class InputManager : MonoBehaviour
             }
 
         }
-        if (activeActionDic.Count.Equals(0))
-        {
-            touchState = etouchState.Normal;
-        }
+        
     }
 
     private bool IsTouchOnUI(int touchId)
@@ -236,7 +235,7 @@ public class InputManager : MonoBehaviour
         
         Ray ray = playerCamera.ScreenPointToRay(touchPosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchableObjectLayer))
+        if (Physics.Raycast(ray, out hit, 3f, touchableObjectLayer))
         {
             // "Touchable Object" �±׸� ���� ������Ʈ�� �ִ��� Ȯ��
             if (hit.collider.CompareTag("touchableobject"))
@@ -344,7 +343,10 @@ public class InputManager : MonoBehaviour
 
             data.ResetData();
         }
-        
+        if (activeActionDic.Count.Equals(0))
+        {
+            touchState = etouchState.Normal;
+        }
     }
     /// <summary>
     /// Action �ʱ�ȭ
@@ -384,5 +386,5 @@ public class InputManager : MonoBehaviour
         puzzleUIData.action.Disable();
         objectData.action.Disable();
     }
-
+    
 }
