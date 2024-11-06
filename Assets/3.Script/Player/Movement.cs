@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private InputManager input; // input°ªÀ» ÂüÁ¶ÇÒ ¸Å´ÏÀú
+    private InputManager input; // inputï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å´ï¿½ï¿½ï¿½
     
-    [SerializeField] private Transform playerCamera; //ÇÃ·¹ÀÌ¾î°¡ ¹æÇâÀ» ÂüÁ¶ÇÒ Ä«¸Þ¶ó
+    [SerializeField] private Transform playerCamera; //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½
 
     
-    [SerializeField] private float speed; //ÇÃ·¹ÀÌ¾îÀÇ ¼Óµµ
+    [SerializeField] private float speed; //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½Óµï¿½
 
     
-    Vector3 moveDir; //ÇÃ·¹ÀÌ¾î°¡ ÀÌµ¿ÇÒ ¹æÇâº¤ÅÍ
+    Vector3 moveDir; //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½âº¤ï¿½ï¿½
 
-    private void Awake()
+    private void Start()
     {
         input = InputManager.Instance;
     }
@@ -30,10 +30,10 @@ public class Movement : MonoBehaviour
         cameraRight.y = 0f;
         cameraRight.Normalize();
 
-        // ÀÌµ¿ ¹æÇâÀ» ÃÊ±â ÅÍÄ¡ ÁÂÇ¥¿Í ÇöÀç ÀÔ·Â ÁÂÇ¥·Î °è»ê
+        // ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½
         Vector2 joystickInput = input.moveData.value - input.moveData.startValue;
-        //°è»êµÈ ÁÂÇ¥·Î ÀÌµ¿ÇØ¾ßÇÒ ¹æÇâº¤ÅÍ ¼³Á¤
-        moveDir = (cameraRight * joystickInput.y - cameraFoward * joystickInput.x).normalized;
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½âº¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        moveDir = (cameraRight * joystickInput.x + cameraFoward * joystickInput.y).normalized;
 
 
         
@@ -41,7 +41,7 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //¹Ì¸® ±¸ÇØ³õÀº ¹æÇâº¤ÅÍ·Î ÇÃ·¹ÀÌ¾î ÀÌµ¿
+        //ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½âº¤ï¿½Í·ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ìµï¿½
         transform.Translate(moveDir * speed * Time.fixedDeltaTime);
         
     }

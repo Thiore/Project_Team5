@@ -27,9 +27,16 @@ public class LockGame : MonoBehaviour
     //정답여부
     public bool isanswer;
 
+    public GameObject camera1;
+    public GameObject camera2;
+    public GameObject canvas;
+    private ReadInputData input;
+
 
     private void Start()
     {
+        TryGetComponent(out input);
+
         ani.GetComponent<Animator>();
 
         //번호 리셋
@@ -42,8 +49,20 @@ public class LockGame : MonoBehaviour
             targetRotations[i] = numberWheels[i].localRotation;
         }
     }
+    private void Update()
+    {
+        GameSetting();
+        for (int i = 0; i < numberWheels.Length; i++)
+        {
+            //목표 회전 각도까지 부드럽게
+            numberWheels[i].localRotation = Quaternion.Lerp
+                (numberWheels[i].localRotation,
+                targetRotations[i],
+                Time.deltaTime * rotationSpeed);
 
-    
+        }
+    }
+
     //번호 리셋
     public void ResetLock()
     {
@@ -99,20 +118,24 @@ public class LockGame : MonoBehaviour
     private void LockOpenAnimation()
     {
         isanswer = true;
+        EndGame();
         ani.SetTrigger("Open");
         Debug.Log("정답");
     }
 
-    private void Update()
+    private void GameSetting()
     {
-        for (int i = 0; i < numberWheels.Length; i++)
+        if (input.isTouch)
         {
-            //목표 회전 각도까지 부드럽게
-            numberWheels[i].localRotation = Quaternion.Lerp
-                (numberWheels[i].localRotation,
-                targetRotations[i],
-                Time.deltaTime * rotationSpeed);
-                
+            camera1.gameObject.SetActive(true);
+            canvas.gameObject.SetActive(true);
         }
+    }
+
+    private void EndGame()
+    {
+        camera1.gameObject.SetActive(false);
+        canvas.gameObject.SetActive(false);
+        camera2.gameObject.SetActive(true);
     }
 }

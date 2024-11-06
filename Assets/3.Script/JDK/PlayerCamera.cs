@@ -1,35 +1,28 @@
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour
 {
     private InputManager input;
 
-    [Header("Ä«¸Þ¶ó °¨µµ Á¶Àý ÇÁ·ÎÆÛÆ¼")]
-    [Range(0,10)]
-    [SerializeField] private float cameraSpeedX; // ¼öÆò Ä«¸Þ¶ó °¨µµ
+    [Header("Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼")]
     [Range(0, 10)]
-    [SerializeField] private float cameraSpeedY; // ¼öÁ÷ Ä«¸Þ¶ó °¨µµ
-
-    private Vector2 lastTouchPosition; // ¸¶Áö¸·À¸·Î ÅÍÄ¡ÇÑ À§Ä¡
+    private float cameraSpeed;
+    
+    [SerializeField] private Slider slideSpeed;
+    private Vector2 lastTouchPosition; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡
 
     private Vector3 deltaRot;
 
-    private void Awake()
-    {
-        input = InputManager.Instance;
-
-       
-    }
+    
     private void Start()
     {
+        input = InputManager.Instance;
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
-        if (cameraSpeedX.Equals(0f))
-            cameraSpeedX = 5f;
-        if (cameraSpeedY.Equals(0f))
-            cameraSpeedY = 5f;
+        cameraSpeed = 2f;
     }
 
     private void Update()
@@ -39,18 +32,18 @@ public class PlayerCamera : MonoBehaviour
             Vector2 currentTouchPosition = input.lookData.value;
             if (lastTouchPosition.Equals(Vector2.zero))
             {
-                lastTouchPosition = currentTouchPosition; // ¸¶Áö¸· ÅÍÄ¡ À§Ä¡ ±â·Ï
+                lastTouchPosition = currentTouchPosition; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
                 return;
             }
             Vector2 delta = currentTouchPosition - lastTouchPosition;
-            deltaRot = new Vector3(-delta.y * cameraSpeedY, delta.x * cameraSpeedX);
+            deltaRot = new Vector3(-delta.y * cameraSpeed, delta.x * cameraSpeed);
             lastTouchPosition = currentTouchPosition;
         }
         else
         {
             if (!lastTouchPosition.Equals(Vector2.zero))
             {
-                // Ä«¸Þ¶ó È¸Àü °¨µµ¸¦ 0À¸·Î ¼³Á¤ÇÏ¿© È¸ÀüÀ» ¸ØÃã
+                // Ä«ï¿½Þ¶ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 lastTouchPosition = Vector2.zero;
             }
 
@@ -62,5 +55,9 @@ public class PlayerCamera : MonoBehaviour
         transform.Rotate(deltaRot*Time.fixedDeltaTime*5f);
         deltaRot = Vector3.zero;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0f);
+    }
+    public void CameraSpeed()
+    {
+        cameraSpeed = slideSpeed.value;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ClueTrigger : MonoBehaviour
 {
     [SerializeField] private int clueIndex;
+    
 
     private GameObject playInterface;
     private GameObject clue;
@@ -51,6 +52,9 @@ public class ClueTrigger : MonoBehaviour
 
         //기본 UI 활성화
         playInterface.gameObject.SetActive(true);
+        
+        //오브젝트 삭제
+        Destroy(gameObject);
     }
 
     private void FindObjectUI()

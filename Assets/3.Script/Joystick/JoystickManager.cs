@@ -85,7 +85,6 @@ public class JoystickManager : MonoBehaviour
         Vector2 offset = localPoint;
         
         // 핸들이 최대 80f 거리 이상으로 이동하지 않도록 제한
-        float maxDistance = 80f;
         if (offset.magnitude > maxDistance)
         {
             offset = offset.normalized * maxDistance; // 방향은 유지하되, 거리는 80f로 제한
