@@ -17,13 +17,13 @@ public class DoorBasic : MonoBehaviour
     {
         if (input.isTouch && !isOpen)
         {
-            //ani.SetTrigger("Open");
+            
             ani.SetBool("isOpen", true);
             isOpen = true;
         }
         else if(input.isTouch && isOpen)
         {
-            //ani.SetTrigger("Close");
+            
             ani.SetBool("isOpen", false);
             isOpen = false;
         }
