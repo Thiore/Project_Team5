@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour, ITouchable
-{
-    private InputManager input; 
+{ 
     
     [SerializeField] private Transform playerCamera; 
 
@@ -17,14 +16,14 @@ public class Movement : MonoBehaviour, ITouchable
     Vector3 moveDir;
     private void OnEnable()
     {
-        TouchManager.Instance.OnMoveStarted += OnTouchHold;
+        TouchManager.Instance.OnMoveStarted += OnTouchStarted;
         TouchManager.Instance.OnMoveHold += OnTouchHold;
         TouchManager.Instance.OnMoveEnd += OnTouchEnd;
     }
 
     private void OnDisable()
     {
-        TouchManager.Instance.OnMoveStarted -= OnTouchHold;
+        TouchManager.Instance.OnMoveStarted -= OnTouchStarted;
         TouchManager.Instance.OnMoveHold -= OnTouchHold;
         TouchManager.Instance.OnMoveEnd -= OnTouchEnd;
     }

@@ -1,12 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour, ITouchable
 {
-    private InputManager input;
-
+    
     [Header("카메라 회전 스피드")]
     [Range(0, 10)]
     private float cameraSpeed;
@@ -16,35 +14,36 @@ public class PlayerCamera : MonoBehaviour, ITouchable
 
     private Vector3 deltaRot;
 
-    private void OnEnable()
-    {
-        
-    }
+    [SerializeField] private float clampRotX;
 
-    private void OnDisable()
-    {
-        
-    }
+    private float currentRotationX;
 
     private void Start()
     {
-        input = InputManager.Instance;
+        TouchManager.Instance.OnLookStarted += OnTouchStarted;
+        TouchManager.Instance.OnLookHold += OnTouchHold;
+        TouchManager.Instance.OnLookEnd += OnTouchEnd;
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
         cameraSpeed = 2f;
-    }
-
-    private void Update()
-    {
-        
+        currentRotationX = transform.localEulerAngles.x; // 누적 X축 회전값을 추적하는 변수
     }
     private void FixedUpdate()
     {
-        
-        transform.Rotate(deltaRot*Time.fixedDeltaTime*5f);
+        // 터치 delta 값을 기반으로 X축 회전값을 갱신
+        currentRotationX -= deltaRot.y * Time.fixedDeltaTime * 5f;
+        currentRotationX = Mathf.Clamp(currentRotationX, -clampRotX, clampRotX); // X축 회전 제한
+
+        // Y축 회전 적용 (deltaRot.x는 Y축 회전으로 사용)
+        float rotationY = deltaRot.x * Time.fixedDeltaTime * 5f;
+
+        // transform.localEulerAngles에 제한된 회전값을 설정
+        transform.localEulerAngles = new Vector3(currentRotationX, transform.localEulerAngles.y + rotationY, 0f);
+
+        // deltaRot 초기화
         deltaRot = Vector3.zero;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0f);
     }
+    
     public void CameraSpeed()
     {
         //cameraSpeed = slideSpeed.value;
@@ -60,21 +59,16 @@ public class PlayerCamera : MonoBehaviour, ITouchable
         if (!position.Equals(lastTouchPosition))
         {
             Vector2 delta = position - lastTouchPosition;
-            deltaRot = new Vector3(-delta.y * cameraSpeed, delta.x * cameraSpeed);
-            //lastTouchPosition = currentTouchPosition;
-        }
-        else
-        {
-            if (!lastTouchPosition.Equals(Vector2.zero))
-            {
-                lastTouchPosition = Vector2.zero;
-            }
-
+            
+            deltaRot = new Vector3(delta.x * cameraSpeed, delta.y * cameraSpeed);
+                
+            lastTouchPosition = position;
         }
     }
 
     public void OnTouchEnd(Vector2 position)
     {
-        throw new System.NotImplementedException();
+        deltaRot = Vector3.zero;
+        lastTouchPosition = Vector2.zero;
     }
 }
