@@ -3,20 +3,29 @@ using Cinemachine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoBehaviour, ITouchable
 {
     private InputManager input;
 
-    [Header("ī�޶� ���� ���� ������Ƽ")]
+    [Header("카메라 회전 스피드")]
     [Range(0, 10)]
     private float cameraSpeed;
-    
-    [SerializeField] private Slider slideSpeed;
-    private Vector2 lastTouchPosition; // ���������� ��ġ�� ��ġ
+
+    //[SerializeField] private Slider slideSpeed;
+    private Vector2 lastTouchPosition;
 
     private Vector3 deltaRot;
 
-    
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     private void Start()
     {
         input = InputManager.Instance;
@@ -27,27 +36,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        if (!input.lookData.value.Equals(Vector2.zero))
-        {
-            Vector2 currentTouchPosition = input.lookData.value;
-            if (lastTouchPosition.Equals(Vector2.zero))
-            {
-                lastTouchPosition = currentTouchPosition; // ������ ��ġ ��ġ ���
-                return;
-            }
-            Vector2 delta = currentTouchPosition - lastTouchPosition;
-            deltaRot = new Vector3(-delta.y * cameraSpeed, delta.x * cameraSpeed);
-            lastTouchPosition = currentTouchPosition;
-        }
-        else
-        {
-            if (!lastTouchPosition.Equals(Vector2.zero))
-            {
-                // ī�޶� ȸ�� ������ 0���� �����Ͽ� ȸ���� ����
-                lastTouchPosition = Vector2.zero;
-            }
-
-        }
+        
     }
     private void FixedUpdate()
     {
@@ -58,6 +47,34 @@ public class PlayerCamera : MonoBehaviour
     }
     public void CameraSpeed()
     {
-        cameraSpeed = slideSpeed.value;
+        //cameraSpeed = slideSpeed.value;
+    }
+
+    public void OnTouchStarted(Vector2 position)
+    {
+        lastTouchPosition = position;
+    }
+
+    public void OnTouchHold(Vector2 position)
+    {
+        if (!position.Equals(lastTouchPosition))
+        {
+            Vector2 delta = position - lastTouchPosition;
+            deltaRot = new Vector3(-delta.y * cameraSpeed, delta.x * cameraSpeed);
+            //lastTouchPosition = currentTouchPosition;
+        }
+        else
+        {
+            if (!lastTouchPosition.Equals(Vector2.zero))
+            {
+                lastTouchPosition = Vector2.zero;
+            }
+
+        }
+    }
+
+    public void OnTouchEnd(Vector2 position)
+    {
+        throw new System.NotImplementedException();
     }
 }

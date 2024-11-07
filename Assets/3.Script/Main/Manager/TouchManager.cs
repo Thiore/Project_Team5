@@ -13,6 +13,7 @@ public interface ITouchable
     public void OnTouchEnd(Vector2 position);
 }
 
+
 public class TouchManager : MonoBehaviour
 {
     private TouchManager instance = null;
@@ -24,12 +25,17 @@ public class TouchManager : MonoBehaviour
         UI,
         Object
     }
+    
 
     private etouchState touchState;
 
-    public event Action<Vector2> OnTouchStarted;
-    public event Action<Vector2> OnTouchHold;
-    public event Action<Vector2> OnTouchEnd;
+    public event Action<Vector2> OnMoveStarted;
+    public event Action<Vector2> OnMoveHold;
+    public event Action<Vector2> OnMoveEnd;
+
+    public event Action<Vector2> OnLookStarted;
+    public event Action<Vector2> OnLookHold;
+    public event Action<Vector2> OnLookEnd;
 
 
     [SerializeField] private InputActionAsset inputAsset;
@@ -38,9 +44,12 @@ public class TouchManager : MonoBehaviour
 
     [SerializeField] private LayerMask touchableObjectLayer;
 
-    private HashSet<int> activeTouchID = new HashSet<int>();// 활성화된 터치 ID 추적
-    private bool isMove;
-    private bool isLook;
+    private HashSet<int> activeTouchID;// 활성화된 터치 ID 추적
+    private int moveID;
+    private int lookID;
+
+    [SerializeReference] private float touchDistance;
+    
 
     private void Awake()
     {
@@ -72,14 +81,19 @@ public class TouchManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        currentTouchDic = new Dictionary<int, ITouchable>();
+        activeTouchID = new HashSet<int>();
         touchState = etouchState.Normal;
-        isMove = false;
-        isLook = false;
+        moveID = -1;
+        lookID = -1;
     }
 
     private void Start()
     {
-        
+        if(touchDistance>10f||touchDistance<1f)
+        {
+            touchDistance = 3f;
+        }
 
     }
 
@@ -90,30 +104,32 @@ public class TouchManager : MonoBehaviour
         foreach (var touch in Touchscreen.current.touches)
         {
             int touchId = touch.touchId.ReadValue();
-            
+
             Vector2 position = touch.position.ReadValue();
 
             if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                if(IsTouchOnUI(touchId)&&(touchState.Equals(etouchState.Normal)|| touchState.Equals(etouchState.UI)))
+                if (IsTouchOnUI(touchId) && (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
                 {
                     activeTouchID.Add(touchId);
-                    //currentTouchDic.Add(touchId,)
+
                     touchState = etouchState.UI;
                 }
                 else if (IsTouchOnJoystickArea(position) &&
-                         !isMove &&
+                         moveID.Equals(-1) &&
                          (touchState.Equals(etouchState.Normal) ||
                          touchState.Equals(etouchState.Player)))
                 {
                     activeTouchID.Add(touchId);
-                    
+                    moveID = touchId;
+                    OnMoveStarted?.Invoke(position);
+
                     if (touchState.Equals(etouchState.Normal))
                         touchState = etouchState.Player;
 
                 }
-                else if (IsTouchableObjectAtPosition(position) && 
-                         (touchState.Equals(etouchState.Normal) || 
+                else if (IsTouchableObjectAtPosition(touchId, position) &&
+                         (touchState.Equals(etouchState.Normal) ||
                          touchState.Equals(etouchState.Object)))
                 {
                     activeTouchID.Add(touchId);
@@ -123,18 +139,20 @@ public class TouchManager : MonoBehaviour
                 }
                 else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
                 {
-                    if (IsTouchOnLeftScreen(position) && !isMove)
+                    if (IsTouchOnLeftScreen(position) && moveID.Equals(-1))
                     {
                         activeTouchID.Add(touchId);
+                        moveID = touchId;
+                        OnMoveStarted?.Invoke(position);
 
                         if (touchState.Equals(etouchState.Normal))
                             touchState = etouchState.Player;
-
-                        
                     }
-                    else if (IsTouchOnRightScreen(position) && !isLook)
+                    else if (IsTouchOnRightScreen(position) && lookID.Equals(-1))
                     {
                         activeTouchID.Add(touchId);
+                        lookID = touchId;
+                        OnLookStarted?.Invoke(position);
 
                         if (touchState.Equals(etouchState.Normal))
                             touchState = etouchState.Player;
@@ -145,16 +163,75 @@ public class TouchManager : MonoBehaviour
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Stationary)
             {
-                //currentTouchDic
-                //currentTouchObj?.OnTouchStarted(position); // 터치가 이동할 때만 현재 오브젝트에 이벤트 전달
+                if (touchState.Equals(etouchState.UI)) return;
+
+                if (activeTouchID.Contains(touchId))
+                {
+                    switch (touchState)
+                    {
+                        case etouchState.Player:
+                            if (moveID.Equals(touchId))
+                            {
+                                OnMoveHold?.Invoke(position);
+                            }
+                            if (lookID.Equals(touchId))
+                            {
+                                OnLookHold?.Invoke(position);
+                            }
+                            break;
+                        case etouchState.Object:
+                            currentTouchDic[touchId].OnTouchHold(position);
+                            break;
+                    }
+                }
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Canceled)
             {
-                //HandleTouchEnd(position);
+
+                if (activeTouchID.Contains(touchId))
+                {
+                    switch (touchState)
+                    {
+                        case etouchState.Player:
+                            if (moveID.Equals(touchId))
+                            {
+                                OnMoveEnd?.Invoke(position);
+                                activeTouchID.Remove(touchId);
+                                moveID = -1;
+                            }
+                            if (lookID.Equals(touchId))
+                            {
+                                activeTouchID.Remove(touchId);
+                                OnLookEnd?.Invoke(position);
+                                lookID = -1;
+                            }
+                            if (moveID.Equals(-1) && lookID.Equals(-1))
+                            {
+                                touchState = etouchState.Normal;
+                            }
+                            break;
+                        case etouchState.UI:
+                            activeTouchID.Remove(touchId);
+                            if (activeTouchID.Count.Equals(0))
+                            {
+                                touchState = etouchState.Normal;
+                            }
+
+                            break;
+                        case etouchState.Object:
+                            currentTouchDic[touchId].OnTouchEnd(position);
+                            currentTouchDic.Remove(touchId);
+                            activeTouchID.Remove(touchId);
+                            if(currentTouchDic.Count.Equals(0))
+                            {
+                                touchState = etouchState.Normal;
+                            }
+                            break;
+                    }
+                }
             }
         }
-
-    }
+        }
     private bool IsTouchOnUI(int touchId)
     {
         return EventSystem.current.IsPointerOverGameObject(touchId);
@@ -173,20 +250,26 @@ public class TouchManager : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// 
+    /// 터치한 오브젝트가 터치가능한 오브젝트인지 검사합니다.
     /// </summary>
     /// <param name="touchPosition">adfs</param>
     /// <returns></returns>
-    private bool IsTouchableObjectAtPosition(Vector2 touchPosition)
+    private bool IsTouchableObjectAtPosition(int touchId, Vector2 touchPosition)
     {
         Ray ray = Camera.main.ScreenPointToRay(touchPosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 3f, touchableObjectLayer))
         {
-            if (hit.collider.CompareTag("touchableobject"))
+            if(hit.collider.TryGetComponent(out ITouchable touchable))
             {
-                return true;
+                if (hit.collider.CompareTag("touchableobject"))
+                {
+                    currentTouchDic.Add(touchId, touchable);
+                    currentTouchDic[touchId].OnTouchStarted(touchPosition);
+                    return true;
+                }
             }
+            
         }
         return false;
     }
@@ -217,8 +300,6 @@ public class TouchManager : MonoBehaviour
         touchAction.Disable();
     }
 
-    public void TouchStart()
-    {
-
-    }
+    
+    
 }

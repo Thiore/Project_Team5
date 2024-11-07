@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class ReadInputData : MonoBehaviour
+public class ReadInputData : MonoBehaviour, ITouchable
 {
-    public InputData data { private get;  set; }
 
     public Vector2 startValue { get; private set; }
     public Vector2 value { get; private set; }
@@ -16,58 +14,40 @@ public class ReadInputData : MonoBehaviour
 
     private void Start()
     {
-        data = null;
         startValue = transform.position;
         value = transform.position;
         isTouch = false;
         touchTime = 0f;
     }
-
-    private void Update()
+    
+    public void TouchTap()
     {
-        if(isTouch)
-        {
-            Performed();
-        }
-        
+        isTouch = false;
     }
-
     /// <summary>
     /// Click
     /// </summary>
-    public void Started()
+    public void OnTouchStarted(Vector2 position)
     {
-        startValue = data.startValue;
-        value = data.value;
-        isTouch = data.isTouch;
+        startValue = position;
+        value = position;
+        isTouch = true;
         touchTime = 0f;
-        Debug.Log("Started" + gameObject.name);
-        Debug.Log(data.action);
     }
     /// <summary>
     /// Drag&Hold
     /// </summary>
-    private void Performed()
+    public void OnTouchHold(Vector2 position)
     {
-        Debug.Log("Performed" + gameObject.name);
-        Debug.Log(gameObject.name+" : "+touchTime);
-        value = data.value;
+        value = position;
         touchTime += Time.unscaledDeltaTime;
-        
-        
     }
     /// <summary>
     /// Drop
     /// </summary>
-    public void Ended()
+    public void OnTouchEnd(Vector2 position)
     {
-        Debug.Log("End" + gameObject.name);
         isTouch = false;
         touchTime = 0f;
-    }
-
-    public void TouchTap()
-    {
-        isTouch = false;
     }
 }

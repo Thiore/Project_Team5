@@ -8,7 +8,7 @@ public class JoystickManager : MonoBehaviour
     [SerializeField] private GameObject joystick;
     [SerializeField] private GameObject handle;
 
-    private InputManager input;
+    //private InputManager input;
 
     private Canvas canvas;  // 캔버스 참조
     private Vector2 joystickCenter; // 조이스틱 중심 좌표
@@ -18,7 +18,7 @@ public class JoystickManager : MonoBehaviour
     private void Start()
     {
         //Input Data가져오기
-        input = InputManager.Instance;
+        //input = InputManager.Instance;
         // 캔버스 참조 가져오기
         TryGetComponent(out canvas);
         joystickActive = false;
@@ -26,23 +26,23 @@ public class JoystickManager : MonoBehaviour
 
     private void Update()
     {
-        if(input.moveData.isTouch)
-        {
-            // 터치 상태에 따라 처리
-            if (joystickActive)
-            {
-                HandleMove();
-            }
-            else
-            {
-                HandleTouchBegan(input.moveData.startValue);
-            }
-        }
-        else
-        {
-            if(joystickActive)
-                HandleTouchEnded();
-        }
+        //if(input.moveData.isTouch)
+        //{
+        //    // 터치 상태에 따라 처리
+        //    if (joystickActive)
+        //    {
+        //        HandleMove();
+        //    }
+        //    else
+        //    {
+        //        HandleTouchBegan(input.moveData.startValue);
+        //    }
+        //}
+        //else
+        //{
+        //    if(joystickActive)
+        //        HandleTouchEnded();
+        //}
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class JoystickManager : MonoBehaviour
     private void HandleMove()
     {
             // 현재 터치된 위치를 가져와서 조이스틱 중심에서 핸들을 이동시킴
-            MoveHandle(input.moveData.value); // 터치 위치에 따른 핸들 이동
+            //MoveHandle(input.moveData.value); // 터치 위치에 따른 핸들 이동
     }
 
     /// <summary>
