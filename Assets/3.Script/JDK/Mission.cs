@@ -3,29 +3,17 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-/* public enum ConnectionColor
-{
-    Red,
-    Blue,
-    Gray,
-    Pink,
-    Orange,
-    Yellow,
-    Sky_Blue,
-} */
-
 public class Mission : MonoBehaviour
 {
     [Header("Line 어태치")]
-    [SerializeField] private GameObject obj = null;
     [SerializeField] private LineRenderer lr = null;
 
-    // [Header("Box 어태치")]
-    // [SerializeField] private Transform[] box = null;
+    [Header("줄 프로퍼티")]
+    [SerializeField] private float LineValue = 0; // 1.2
 
-    private bool ClickState = false;
-
-    // [SerializeField] private ConnectionColor color;
+    private Vector2 startDragPosition;
+    private bool RightLeftState = false;
+    private bool UpDownState = false;
 
     public void ResetButton()
     {
@@ -37,14 +25,14 @@ public class Mission : MonoBehaviour
         Debug.Log("튜토리얼!");
     }
 
-    public void CloseButton()
-    {
-        Debug.Log("나가기!");
-    }
-
     public void ChangeColor(Material color)
     {
         lr.material = color;
+    }
+
+    public void ResetLine()
+    {
+        EndDrag();
     }
 
     public void StartDrag(GameObject pos)
@@ -54,8 +42,7 @@ public class Mission : MonoBehaviour
             lr.gameObject.transform.SetParent(pos.transform);
 
             lr.gameObject.transform.localPosition = new Vector3(0.6f, 0, 0);
-
-            Debug.Log("활성화!");
+            lr.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
             lr.enabled = true;
         }
@@ -63,17 +50,59 @@ public class Mission : MonoBehaviour
 
     public void EndDrag()
     {
-        Debug.Log("비활성화!");
+        lr.positionCount = 1;
 
         lr.enabled = false;
     }
 
-    public void Box()
+    public void Line(string sentence)
     {
         int count = lr.positionCount;
 
-        count += 1;
+        Vector3 pos = lr.GetPosition(count - 1);
 
-        // 추가 수정 필요...
+        switch (sentence)
+        {
+            case "RL":
+
+                if (!UpDownState)
+                {
+                    lr.positionCount = count + 1;
+
+                    pos.z += LineValue;
+
+                    lr.SetPosition(count, pos);
+
+                    Debug.Log("오른쪽!");
+                }
+                else
+                {
+                    lr.positionCount = count + 1;
+
+                    pos.z -= LineValue;
+
+                    lr.SetPosition(count, pos);
+
+                    Debug.Log("왼쪽!");
+
+                    UpDownState = false;
+                }
+
+                break;
+
+            case "UD":
+
+                UpDownState = true;
+
+                lr.positionCount = count + 1;
+
+                pos.y -= LineValue;
+
+                lr.SetPosition(count, pos);
+
+                Debug.Log("위! 아래!");
+
+                break;
+        }
     }
 }
