@@ -25,7 +25,7 @@ public class GridSpin : MonoBehaviour
         if (!isRotating && readInput.isTouch && couldRotate)
         {
             Rotate();
-            readInput.TouchTap();
+            //readInput.TouchTap();
         }
 
         // 목표 회전으로 부드럽게 회전
@@ -53,4 +53,5 @@ public class GridSpin : MonoBehaviour
         targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + 90, 0);
         isRotating = true; // 회전 시작
     }
-}
+
+    }

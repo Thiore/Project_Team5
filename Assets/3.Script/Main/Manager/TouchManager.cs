@@ -90,10 +90,10 @@ public class TouchManager : MonoBehaviour
 
     private void Start()
     {
-        if(touchDistance>10f||touchDistance<1f)
-        {
-            touchDistance = 3f;
-        }
+        //if(touchDistance>10f||touchDistance<1f)
+        //{
+            touchDistance = 100f;
+        //}
 
     }
 
@@ -109,6 +109,7 @@ public class TouchManager : MonoBehaviour
 
             if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
             {
+                if (activeTouchID.Contains(touchId)) continue;
                 if (IsTouchOnUI(touchId) && (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
                 {
                     activeTouchID.Add(touchId);
@@ -258,7 +259,7 @@ public class TouchManager : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(touchPosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 3f, touchableObjectLayer))
+        if (Physics.Raycast(ray, out hit, touchDistance, touchableObjectLayer))
         {
             if(hit.collider.TryGetComponent(out ITouchable touchable))
             {

@@ -1,47 +1,59 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class VoltBtn : MonoBehaviour
+public class VoltBtn : MonoBehaviour,ITouchable
 {
     public bool isOn;
-    public int[] onValue = new int[2];
-    public int[] offValue = new int[2];
-    private float onRotate = 300;
-    private float offRotate = 240;
+    public float[] onValue;
+    public float[] offValue;
+    private float onRotate = 300f;
+    private float offRotate = 240f;
+    public bool canTouch;
 
+    [SerializeField] private Voltmeter voltMeter;
+    
+    //클릭 시 실행할 이벤트
+    public event Action OnClick;
 
     private void Start()
     {
         isOn = false;
-    }
-    private void Update()
-    {
-        
+
+        canTouch = true;
+
+        OnClick += BtnClick;
     }
 
     public void BtnClick()
     {
-        ChangeState();
+        ChangeBtnState();
         BtnRotate();
+        ChangeTouchState();
+        voltMeter.RotateCylinder(this);
     }
     
-    private void ChangeState()
+    private void ChangeBtnState()
     {
         isOn = !isOn;
+    }
+    public void ChangeTouchState()
+    {
+        canTouch = !canTouch;
     }
     private void BtnRotate()
     {
         if (isOn)
         {
-            transform.Rotate(onRotate, transform.rotation.y, transform.rotation.z);
+            transform.localEulerAngles = new Vector3(onRotate, 90f,-90f);
         }
         else
         {
-            transform.Rotate(offRotate, transform.rotation.y, transform.rotation.z);
+            transform.localEulerAngles = new Vector3(offRotate, 90f, -90f);
         }
     }
-    public int[] GetValue()
+    public float[] GetValue()
     {
         if (isOn)
         {
@@ -53,4 +65,18 @@ public class VoltBtn : MonoBehaviour
         }
     }
 
+    public void OnTouchStarted(Vector2 position)
+    {
+        if (canTouch) OnClick?.Invoke();
+
+    }
+    #region 안봐도됨
+    public void OnTouchHold(Vector2 position)
+    {
+    }
+
+    public void OnTouchEnd(Vector2 position)
+    {
+    }
+    #endregion
 }
