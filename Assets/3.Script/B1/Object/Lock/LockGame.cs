@@ -29,9 +29,6 @@ public class LockGame : MonoBehaviour
 
     public Camera mainCamera;
 
-    //정답여부
-    public bool isanswer;
-
     public GameObject camera1;
     public GameObject camera2;
     public GameObject canvas;
@@ -127,7 +124,6 @@ public class LockGame : MonoBehaviour
 
     private void LockOpenAnimation()
     {
-        isanswer = true;
         EndGame();
         ani.SetTrigger("Open");
         Debug.Log("정답");
