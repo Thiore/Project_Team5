@@ -4,30 +4,29 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     private Image sourceImage;
     public GameObject combineImage;
     private Vector3 originalPosition;
-
+    private Item iteminfo;
 
     private void Awake()
     {
         sourceImage = GetComponent<Image>();
     }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         originalPosition = eventData.position; //초기 터치 위치 저장
+        
 
         StartCoroutine(LongPress_co(eventData));
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-
         StopCoroutine(LongPress_co(eventData));
-
-
 
         if (combineImage != null)
         {
@@ -92,5 +91,10 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 }
             }
         }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
     }
 }

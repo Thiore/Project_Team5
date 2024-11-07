@@ -14,6 +14,8 @@ public class WiringPoint : MonoBehaviour
         isConnect = isconnect;
     }
 
+    [SerializeField] WiringGameManager wiringGameManager;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent(out Wiring wiring))
@@ -25,6 +27,7 @@ public class WiringPoint : MonoBehaviour
             if (isSameColor)
             {
                 Debug.Log("같은 색 연결");
+                wiringGameManager.CheckWiringBool();
             }
             else
             {

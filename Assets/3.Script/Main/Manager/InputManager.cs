@@ -125,7 +125,6 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.isInput) return;
         foreach (var touch in Touchscreen.current.touches)
         {
             int touchId = touch.touchId.ReadValue() - 1;
