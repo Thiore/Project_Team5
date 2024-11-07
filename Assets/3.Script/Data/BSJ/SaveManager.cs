@@ -6,11 +6,25 @@ using Newtonsoft.Json;
 
 public class SaveManager : MonoBehaviour
 {
+    private SaveManager instance = null;
+    public SaveManager Instance { get; private set; }
+
     private string savePath; //저장 파일 경로
     public StateData.GameState gameState; //게임 상태 관리 객체
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            Instance = instance;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         // Json파일 저장 경로
         savePath = Path.Combine(Application.persistentDataPath, "gameState.json");
 
