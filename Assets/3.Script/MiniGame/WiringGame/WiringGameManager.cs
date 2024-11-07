@@ -100,7 +100,7 @@ public class WiringGameManager : MonoBehaviour
     }
 
 
-    private void CheckWiringBool()
+    public void CheckWiringBool()
     {
         int check = 0;
         for(int i = 0; i < endWiringPoints.Length; i++)
@@ -114,6 +114,7 @@ public class WiringGameManager : MonoBehaviour
         if(check >= 4)
         {
             // 이거 게임 끝 
+            Debug.Log("게임 완료");
         }
         else
         {

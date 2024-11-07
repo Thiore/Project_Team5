@@ -48,19 +48,22 @@ public class DataManager : MonoBehaviour
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
         dicItemData = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
 
+
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-             Item[] listarr = FindObjectsOfType<Item>();
+            Item[] listarr = FindObjectsOfType<Item>();
 
             if (listarr.Length > 0)
             {
                 for (int i = 0; i < listarr.Length; i++)
                 {
-                    if(itemdata.Value.name == listarr[i].gameObject.name)
+                    if (itemdata.Value.name == listarr[i].gameObject.name)
                     {
                         listarr[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
                         Sprite sprite = Resources.Load<Sprite>($"UI/Item/{itemdata.Value.spritename}");
-                        Debug.Log(sprite);
+
+                        Debug.Log(sprite.name);
+
                         listarr[i].SetSprite(sprite);
                     }
                 }

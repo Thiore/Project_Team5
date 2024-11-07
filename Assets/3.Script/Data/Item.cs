@@ -15,13 +15,16 @@ public class Item : MonoBehaviour
     [SerializeField] private string spritename;
 
     public int ID { get => id; }
+    public eItemType Type { get => type; }
 
 
     [SerializeField] private UI_Inventory inven;
 
     private bool isUI;
+    private bool isUsed; 
 
-    public Sprite sprite { get; private set; }
+    private Sprite sprite;
+    public Sprite Sprite { get => sprite; private set => sprite = Sprite; }
 
     private ReadInputData inputdata = null;
 
@@ -50,7 +53,7 @@ public class Item : MonoBehaviour
     public void InputItemInfomationByID(int id, ItemData data)
     {
         this.id = id;
-        type = data.type;
+        type = (eItemType)data.eItemType;
         elementindex = data.elementindex;
         combineindex = data.combineindex;
         tableName = data.tableName;

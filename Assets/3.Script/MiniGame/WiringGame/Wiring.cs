@@ -15,6 +15,7 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDr
     private ReadInputData inputdata;
     [SerializeField] LineRenderer linerender;
     [SerializeField] Camera wiriCamera;
+    [SerializeField] WiringGameManager wiringGameManager;
 
     private void Awake()
     {
@@ -74,6 +75,12 @@ public class Wiring : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDr
             {
                 Debug.Log("»ö±ò °°À½");
                 isCheckColor = true;
+                if(eventData.pointerEnter.gameObject.TryGetComponent(out WiringPoint point))
+                {
+                    point.SetboolConnect(true);
+                }
+                wiringGameManager.CheckWiringBool();
+
             }
             else
             {
