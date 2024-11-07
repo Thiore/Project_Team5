@@ -7,12 +7,19 @@ using UnityEngine.UI;
 public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] private Image dragImage;
+    [SerializeField] private Image itemInformation;
     private Item copyItem;
     private Coroutine dragcoroutine;
     private float downTime;
 
+    private void Awake()
+    {
+       TryGetComponent(out copyItem);   
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
+        itemInformation.sprite = copyItem.Sprite;
         dragcoroutine = StartCoroutine(HoldDragStart(eventData));
     }
 

@@ -8,8 +8,6 @@ using static UnityEditor.Progress;
 public class UI_Inventory : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryslots;
-    [SerializeField] private GameObject itemInformation;
-
     [SerializeField] private GameObject[] quickSlots;
 
     private List<Item> myitems;

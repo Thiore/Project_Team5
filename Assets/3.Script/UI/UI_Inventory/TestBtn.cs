@@ -17,6 +17,7 @@ public class TestBtn : MonoBehaviour
         ItemData data = DataManager.instance.GetItemDataInfoById(i);
         i++;
         item.InputItemInfomationByID(data.id, data);
+        obj.name = data.name;
         Sprite sprite = Resources.Load<Sprite>($"UI/Item/{data.spritename}");
         item.SetSprite(sprite);
 

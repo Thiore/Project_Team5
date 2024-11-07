@@ -18,7 +18,6 @@ public class UI_QuickSlot : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("다운호출");
         dragcoroutine = StartCoroutine(HoldDragStart(eventData));
 
     }
@@ -30,6 +29,7 @@ public class UI_QuickSlot : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        // 마우스를 땔때 여기서 상호작용 메소드 넣으면 됨 
         dragImage.gameObject.SetActive(false);
     }
 
