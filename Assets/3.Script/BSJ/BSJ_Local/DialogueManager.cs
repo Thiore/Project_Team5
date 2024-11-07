@@ -11,9 +11,17 @@ public class DialogueManager : MonoBehaviour
     private DialogueManager instance = null;
     public static DialogueManager Instance { get; private set; }
 
+    //스토리 관련 UI Text
     public Button dialogueButton; //대사 버튼 (터치 시, 사라지게 하기 위함)
     public TMP_Text dialogueText; //대사 표시할 TextMeshPro
+
+    //인벤토리 관련 Text
+    public TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
+    public TMP_Text explanation; //인벤토리 아이템 설명 띄울 TextMeshPro
+
     private LocalizedString localizedString = new LocalizedString();
+    private LocalizedString itemNameLocalizedString = new LocalizedString();
+    private LocalizedString itemExplanationLocalizedString = new LocalizedString();
 
     private bool isChanging; //언어 변경
 
@@ -31,7 +39,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // 테이블 이름과 키값을 통해 대사 출력
+    //Story 테이블 이름과 키값을 통해 대사 출력
     public void SetDialogue(string tableName, int key)
     {
         localizedString.TableReference = tableName; //테이블 이름 가져오기
@@ -41,7 +49,6 @@ public class DialogueManager : MonoBehaviour
 
         StartCoroutine(StoryBottonState_co());
     }
-
     private void UpdateDialogueText(string text)
     {
         dialogueText.text = text;
@@ -49,6 +56,8 @@ public class DialogueManager : MonoBehaviour
         //텍스트 내용에 따라 크기 조정
         //StartCoroutine(DialogueSize_co());
     }
+
+
 
     private IEnumerator StoryBottonState_co()
     {
@@ -75,6 +84,33 @@ public class DialogueManager : MonoBehaviour
         dialogueButton.onClick.RemoveListener(OnButtonClicked);
     }
 
+    //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    //인벤토리 Item Id값과 Localization key 값 일치하게 만들어 출력
+    public void SetItemNameText(string tableName, int key)
+    {
+        itemNameLocalizedString.TableReference = tableName; //테이블 이름 가져오기
+        itemNameLocalizedString.TableEntryReference = key.ToString();
+        itemNameLocalizedString.StringChanged += UpdateItemnameText;
+        itemNameLocalizedString.RefreshString(); //번역된 문자열 업데이트
+    }
+    public void SetItemExplanationText(string tableName, int key)
+    {
+        itemExplanationLocalizedString.TableReference = tableName; //테이블 이름 가져오기
+        itemExplanationLocalizedString.TableEntryReference = key.ToString();
+        itemExplanationLocalizedString.StringChanged += UpdateItemExplanationText;
+        itemExplanationLocalizedString.RefreshString(); //번역된 문자열 업데이트
+    }
+    private void UpdateItemnameText(string text)
+    {
+        itemName.text = text;
+    }
+    private void UpdateItemExplanationText(string text)
+    {
+        explanation.text = text;
+    }
+
+    //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     private void OnDestroy()
     {
         localizedString.StringChanged -= UpdateDialogueText; //리스너 해제
@@ -96,7 +132,7 @@ public class DialogueManager : MonoBehaviour
     //}
 
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-    
+
     //언어 변경
     public void ChangeLocale(int index)
     {

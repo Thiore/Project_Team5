@@ -5,6 +5,11 @@ using UnityEngine.InputSystem;
 
 public class LockGame : MonoBehaviour
 {
+    //상호작용 관련
+    [SerializeField] private int floorIndex; //오브젝트의 현재 층
+    [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
+    private SaveManager saveManager; //상태관리
+
     private int[] correctNumber = { 1, 3, 0, 4 }; //정답 번호
     private int[] currentNumber = { 0, 0, 0, 0 }; //현재 번호
 
@@ -35,6 +40,8 @@ public class LockGame : MonoBehaviour
 
     private void Start()
     {
+        saveManager = GameObject.FindGameObjectWithTag("SaveManager").GetComponent<SaveManager>();
+
         TryGetComponent(out input);
 
         ani.GetComponent<Animator>();
@@ -110,6 +117,9 @@ public class LockGame : MonoBehaviour
             if (currentNumber[i] != correctNumber[i])
                 return; //하나라도 틀리면 반환
         }
+
+        //번호가 맞으면 상태(true) 저장
+        saveManager.UpdateObjectState(floorIndex, objectIndex, true);
 
         //번호가 맞으면 자물쇠 열리는 애니메이션 실행
         LockOpenAnimation();
