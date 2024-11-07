@@ -33,7 +33,7 @@ public class LockBoxController : MonoBehaviour
         if (floor != null)
         {
             //해당 오브젝트의 상태를 확인
-            StateData.InteractableObjectState boxState = floor.interactableObjects.Find(obj => obj.objectIndex[1] == objectIndex);
+            StateData.InteractableObjectState boxState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
 
             if (boxState != null)
             {

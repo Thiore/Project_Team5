@@ -41,7 +41,7 @@ public class DoorController : MonoBehaviour
         if (floor != null)
         {
             //해당 오브젝트의 상태를 확인
-            StateData.InteractableObjectState doorState = floor.interactableObjects.Find(obj => obj.objectIndex[0] == objectIndex);
+            StateData.InteractableObjectState doorState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
 
             if (doorState != null)
             {

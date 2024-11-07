@@ -23,7 +23,7 @@ public class StateData : MonoBehaviour
     [System.Serializable]
     public class InteractableObjectState
     {
-        public int[] objectIndex; //각 상호작용 오브젝트의 Index
+        public int objectIndex; //각 상호작용 오브젝트의 Index
         public bool isInteracted; // 상호작용 상태
     }
 }

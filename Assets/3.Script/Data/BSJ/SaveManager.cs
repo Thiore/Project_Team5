@@ -60,7 +60,7 @@ public class SaveManager : MonoBehaviour
                 StateData.InteractableObjectState objState = new StateData.InteractableObjectState
                 {
                     //오브젝트 인덱스 설정
-                    objectIndex = new int[] { objectIndex },
+                    objectIndex = objectIndex,
                     //상호작용되지 않은 상태
                     isInteracted = false
                 };
@@ -113,7 +113,7 @@ public class SaveManager : MonoBehaviour
         }
 
         //해당 오브젝트를 찾거나 새로 생성하여 상태 업데이트
-        StateData.InteractableObjectState objState = floor.interactableObjects.Find(obj => obj.objectIndex[0] == objectIndex);
+        StateData.InteractableObjectState objState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
         
         //오브젝트가 존재하지 않을 경우 새로운 로브젝트 추가
         if (objState == null)
@@ -121,7 +121,7 @@ public class SaveManager : MonoBehaviour
             objState = new StateData.InteractableObjectState
             {
                 //오브젝트 인덱스 설정
-                objectIndex = new int[] { objectIndex },
+                objectIndex = objectIndex,
                 //전달된 상호작용 상태 설정
                 isInteracted = isInteracted
             };
