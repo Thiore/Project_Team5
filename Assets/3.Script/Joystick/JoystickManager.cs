@@ -7,7 +7,9 @@ public class JoystickManager : MonoBehaviour, ITouchable
 {
     [SerializeField] private RectTransform joystick;
     [SerializeField] private RectTransform handle;
-    private Canvas canvas;
+
+    private RectTransform panel;
+    //private Canvas canvas;
     
 
     private Vector2 joystickCenter; // 조이스틱 중심 좌표
@@ -16,7 +18,8 @@ public class JoystickManager : MonoBehaviour, ITouchable
 
     private void Start()
     {
-        TryGetComponent(out canvas);
+        TryGetComponent(out panel);
+        //TryGetComponent(out canvas);
         TouchManager.Instance.OnMoveStarted += OnTouchStarted;
         TouchManager.Instance.OnMoveHold += OnTouchHold;
         TouchManager.Instance.OnMoveEnd += OnTouchEnd;
@@ -85,7 +88,7 @@ public class JoystickManager : MonoBehaviour, ITouchable
             // 터치된 위치를 캔버스 좌표로 변환
             Vector2 localPoint;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
+                panel,
                 touchPosition,
                 null,
                 out localPoint
