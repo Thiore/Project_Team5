@@ -48,14 +48,11 @@ public class UI_QuickSlot : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     private void DragStart(PointerEventData eventData)
     {
         //그 위치에서 활성화 
-        dragImage.transform.position = eventData.position;
+        dragImage.transform.position = transform.position;
         if (TryGetComponent(out copyItem))
         {
-            Sprite sprite = Resources.Load<Sprite>($"UI/Item/battery");
-            dragImage.sprite = sprite;
-
-           // dragImage.sprite = copyItem.Sprite;           
             dragImage.gameObject.SetActive(true);
+            dragImage.sprite = copyItem.Sprite;           
         }
     }
 }
