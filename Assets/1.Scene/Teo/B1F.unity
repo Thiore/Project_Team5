@@ -18543,7 +18543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50558604e98fb424193cd91740b1d55c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clampRotX: 0
+  clampRotX: 40
 --- !u!23 &1239810626832936226
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -31241,10 +31241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db46a3094be24b143afc63e4687fd6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueButton: {fileID: 5185305493004574940}
-  dialogueText: {fileID: 8130438475716778809}
-  itemName: {fileID: 0}
-  explanation: {fileID: 0}
 --- !u!23 &2289432137094739208
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -43218,8 +43214,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1051949149871915275}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5408809, y: 0.43466333, z: -0.37649634, w: 0.6138128}
-  m_LocalPosition: {x: 10.176, y: 0.576, z: -20.829}
+  m_LocalRotation: {x: -0.17736524, y: -0.48063555, z: 0.100057766, w: -0.85294753}
+  m_LocalPosition: {x: 4.1041107, y: 1.5, z: 2.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46220,7 +46216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3621179828753409013
 RectTransform:
   m_ObjectHideFlags: 0
@@ -50369,7 +50365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4043942534954662267
 Transform:
   m_ObjectHideFlags: 0
@@ -56336,7 +56332,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &4650305860954666895
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -72688,11 +72684,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
-  far clip plane: 5000
+  near clip plane: 0.3
+  far clip plane: 150
   field of view: 40
   orthographic: 0
-  orthographic size: 10
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -78300,7 +78296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &6698876299091464073
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -86503,7 +86499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &7442914354851839480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90087,7 +90083,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   joystick: {fileID: 5173887412089013118}
   handle: {fileID: 1824207549625213316}
-  canvas: {fileID: 0}
   maxDistance: 70
 --- !u!4 &7756141899452548988
 Transform:

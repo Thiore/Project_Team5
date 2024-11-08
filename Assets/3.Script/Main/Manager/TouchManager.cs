@@ -28,8 +28,8 @@ public interface ITouchable
 
 public class TouchManager : MonoBehaviour
 {
-    public static TouchManager Instance { get; private set; }
-    
+    public static TouchManager Instance { get; private set; } = null;
+
     private enum etouchState
     {
         Normal = 0,
@@ -121,8 +121,6 @@ public class TouchManager : MonoBehaviour
             
             if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                Debug.Log(touchState);
-                if (activeTouchID.Contains(touchId)) continue;
                 Vector2 position = touch.position.ReadValue();
                 if (IsTouchOnUI(touchId) &&
                     (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
