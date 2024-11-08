@@ -28,8 +28,8 @@ public interface ITouchable
 
 public class TouchManager : MonoBehaviour
 {
-    public static TouchManager Instance { get; private set; }
-    
+    public static TouchManager Instance { get; private set; } = null;
+
     private enum etouchState
     {
         Normal = 0,
@@ -121,8 +121,6 @@ public class TouchManager : MonoBehaviour
             
             if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                Debug.Log(touchState);
-                if (activeTouchID.Contains(touchId)) continue;
                 Vector2 position = touch.position.ReadValue();
                 if (IsTouchOnUI(touchId) &&
                     (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
@@ -179,8 +177,6 @@ public class TouchManager : MonoBehaviour
             {
                 if (touchState.Equals(etouchState.UI)) return;
 
-                if (activeTouchID.Contains(touchId))
-                {
                     Vector2 position = touch.position.ReadValue();
                     switch (touchState)
                     {
@@ -195,10 +191,9 @@ public class TouchManager : MonoBehaviour
                             }
                             break;
                         case etouchState.Object:
-                            currentTouchDic[touchId].OnTouchHold(position);
+                            currentTouchDic[touchId]?.OnTouchHold(position);
                             break;
                     }
-                }
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Canceled)
             {
@@ -235,7 +230,7 @@ public class TouchManager : MonoBehaviour
 
                             break;
                         case etouchState.Object:
-                            currentTouchDic[touchId].OnTouchEnd(position);
+                            currentTouchDic[touchId]?.OnTouchEnd(position);
                             currentTouchDic.Remove(touchId);
                             activeTouchID.Remove(touchId);
                             if (currentTouchDic.Count.Equals(0))

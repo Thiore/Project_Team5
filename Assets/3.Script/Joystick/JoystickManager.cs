@@ -7,9 +7,8 @@ public class JoystickManager : MonoBehaviour, ITouchable
 {
     [SerializeField] private RectTransform joystick;
     [SerializeField] private RectTransform handle;
-    [SerializeField] private Canvas canvas;
+    private Canvas canvas;
     
-    private RectTransform panel;
 
     private Vector2 joystickCenter; // 조이스틱 중심 좌표
     public float maxDistance = 70f; // 핸들이 움직일 수 있는 최대 거리
@@ -17,7 +16,7 @@ public class JoystickManager : MonoBehaviour, ITouchable
 
     private void Start()
     {
-        TryGetComponent(out panel);
+        TryGetComponent(out canvas);
         TouchManager.Instance.OnMoveStarted += OnTouchStarted;
         TouchManager.Instance.OnMoveHold += OnTouchHold;
         TouchManager.Instance.OnMoveEnd += OnTouchEnd;
@@ -118,7 +117,7 @@ public class JoystickManager : MonoBehaviour, ITouchable
 
     public void OnTouchEnd(Vector2 position)
     {
-        handle.anchoredPosition = Vector2.zero; // 핸들을 중앙으로 복귀
+        handle.anchoredPosition = joystickCenter; // 핸들을 중앙으로 복귀
         ActivateJoystick(Vector2.zero, false); // 조이스틱 비활성화
     }
 }
