@@ -101,14 +101,14 @@ public class TouchManager : MonoBehaviour
         lookID = -1;
     }
 
-    private void Start()
-    {
-        if(touchDistance>100f||touchDistance<1f)
-        {
-            touchDistance = 5f;
-        }
+    //private void Start()
+    //{
+    //    if(touchDistance>100f||touchDistance<1f)
+    //    {
+    //        touchDistance = 5f;
+    //    }
 
-    }
+    //}
 
     private void Update()
     {

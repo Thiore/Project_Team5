@@ -14,22 +14,13 @@ public class Movement : MonoBehaviour, ITouchable
     private Vector2 value;
     
     Vector3 moveDir;
-    private void OnEnable()
+    
+
+    private void Start()
     {
         TouchManager.Instance.OnMoveStarted += OnTouchStarted;
         TouchManager.Instance.OnMoveHold += OnTouchHold;
         TouchManager.Instance.OnMoveEnd += OnTouchEnd;
-    }
-
-    private void OnDisable()
-    {
-        TouchManager.Instance.OnMoveStarted -= OnTouchStarted;
-        TouchManager.Instance.OnMoveHold -= OnTouchHold;
-        TouchManager.Instance.OnMoveEnd -= OnTouchEnd;
-    }
-
-    private void Start()
-    {
         moveDir = Vector3.zero;
         startValue = Vector2.zero;
         value = Vector2.zero;

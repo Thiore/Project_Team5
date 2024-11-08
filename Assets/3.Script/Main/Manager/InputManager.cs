@@ -318,8 +318,8 @@ public class InputManager : MonoBehaviour
             data.action.Enable();
             if (Obj != null&&Obj.TryGetComponent(out ReadInputData setData))
             {
-                setData.data = data;
-                setData.Started();
+                //setData.data = data;
+                //setData.Started();
             }
         }
         
@@ -333,8 +333,8 @@ public class InputManager : MonoBehaviour
             {
                 if (data.touchObject != null && data.touchObject.TryGetComponent(out ReadInputData setData))
                 {
-                    setData.data = null;
-                    setData.Ended();
+                    //setData.data = null;
+                    //setData.Ended();
                 }
             }
             data.action.Disable();
