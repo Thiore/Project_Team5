@@ -10,7 +10,7 @@ public class ItemData
 {
     public int id;
     public string name; 
-    public eItemType type;
+    public int eItemType;
     public int elementindex;
     public int combineindex;
     public string tableName;

@@ -27,7 +27,7 @@ public class VirtualController : MonoBehaviour
             virtualCam.gameObject.SetActive(false);
             isvirtualOff = true;
         }
-        
+
 
     }
 }

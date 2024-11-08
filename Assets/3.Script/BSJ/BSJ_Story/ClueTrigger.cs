@@ -44,7 +44,8 @@ public class ClueTrigger : MonoBehaviour
 
     }
 
-    public void Exit3D_UI()
+    //스토리 오브젝트 => 해당 위치에서 반복적으로 터치할 수 있게 / 삭제 (x)
+    public void ExitStoryObj()
     {
         //3D_UI 비활성화
         exit.gameObject.SetActive(false);
@@ -53,6 +54,18 @@ public class ClueTrigger : MonoBehaviour
         //기본 UI 활성화
         playInterface.gameObject.SetActive(true);
         
+    }
+
+    //단서 오브젝트 => 인벤토리로 들어가기 때문에 / 삭제(O)
+    public void ExitClueObj()
+    {
+        //3D_UI 비활성화
+        exit.gameObject.SetActive(false);
+        clueItem.gameObject.SetActive(false);
+
+        //기본 UI 활성화
+        playInterface.gameObject.SetActive(true);
+
         //오브젝트 삭제
         Destroy(gameObject);
     }
@@ -66,7 +79,7 @@ public class ClueTrigger : MonoBehaviour
             Transform clueItem_ = clue.transform.GetChild(clueIndex);
             clueItem = clueItem_.gameObject;
 
-            Transform exit_ = clue.transform.GetChild(6);
+            Transform exit_ = clue.transform.GetChild(3);
             exit = exit_.gameObject;
         }
     }
