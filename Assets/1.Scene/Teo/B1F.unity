@@ -24512,6 +24512,9 @@ GameObject:
   - component: {fileID: 1827678419793146530}
   - component: {fileID: 7152577637441584119}
   - component: {fileID: 2230447328609927322}
+  - component: {fileID: 7152577637441584122}
+  - component: {fileID: 7152577637441584121}
+  - component: {fileID: 7152577637441584120}
   m_Layer: 0
   m_Name: box-equipment-padded-big-bottom
   m_TagString: Untagged
@@ -25160,7 +25163,6 @@ Transform:
   m_Children:
   - {fileID: 2098053350491614348}
   - {fileID: 4409902822652410759}
-  - {fileID: 7338352922881718509}
   - {fileID: 1739405466934940244}
   - {fileID: 1600041433}
   m_Father: {fileID: 0}
@@ -27540,7 +27542,6 @@ GameObject:
   - component: {fileID: 6920527359895679819}
   - component: {fileID: 5473260414786299496}
   - component: {fileID: 6920527359895679821}
-  - component: {fileID: 6920527359895679822}
   - component: {fileID: 6920527359895679823}
   m_Layer: 6
   m_Name: padlock 1
@@ -50237,6 +50238,7 @@ RectTransform:
   - {fileID: 801684996970915674}
   - {fileID: 1168727913205863492}
   - {fileID: 3329275000882970917}
+  - {fileID: 7338352922881718509}
   m_Father: {fileID: 1739405466934940244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -50360,7 +50362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd1a2e70d62a9a2488d228d7ff272f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
+  playerCamera: {fileID: 3389698790146016589}
   speed: 2
 --- !u!4 &4073109981471464559
 Transform:
@@ -55451,7 +55453,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8796983191433221120}
         m_TargetAssemblyTypeName: ClueTrigger, Assembly-CSharp
         m_MethodName: ExitClueObj
         m_Mode: 1
@@ -55463,7 +55465,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5952157930851782396}
         m_TargetAssemblyTypeName: ClueTrigger, Assembly-CSharp
         m_MethodName: ExitStoryObj
         m_Mode: 1
@@ -55475,7 +55477,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 9116027518304679592}
         m_TargetAssemblyTypeName: ClueTrigger, Assembly-CSharp
         m_MethodName: ExitClueObj
         m_Mode: 1
@@ -58754,7 +58756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4851166704372698565
 Transform:
   m_ObjectHideFlags: 0
@@ -61879,7 +61881,7 @@ MonoBehaviour:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 1
+  m_CameraType: 0
   m_Cameras: []
   m_RendererIndex: -1
   m_VolumeLayerMask:
@@ -64706,14 +64708,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4851135177329976993}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f3b8561fe37e554ebc6378999993617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 0}
   handle: {fileID: 0}
-  canvas: {fileID: 0}
   maxDistance: 70
 --- !u!64 &5450635333483886424
 MeshCollider:
@@ -76899,7 +76900,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &6560119964986204325
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -80576,10 +80577,8 @@ MonoBehaviour:
   - {fileID: 6498895215575635168}
   - {fileID: 1964580566515611862}
   ani: {fileID: 5473260414786299496}
-  mainCamera: {fileID: 6172181561338597367}
-  camera1: {fileID: 7990703632966058355}
-  camera2: {fileID: 2385748330115651099}
   canvas: {fileID: 293329466272623468}
+  isAnswer: 0
 --- !u!114 &6920527359895679821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80593,27 +80592,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTouch: 0
---- !u!65 &6920527359895679822
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2022166904486770627}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 15, y: 8, z: 10}
-  m_Center: {x: 1.14, y: 0, z: -4.68}
 --- !u!114 &6920527359895679823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83308,6 +83286,49 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7152577637441584120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802824408257321855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e816a5b79d790d4f9daf7b5c424e0a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockgame: {fileID: 6920527359895679819}
+  top: {fileID: 2737411575507675286}
+  cam: {fileID: 7990703632966058355}
+  cam2: {fileID: 2385748330115651099}
+--- !u!114 &7152577637441584121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802824408257321855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec4f5f2e6c4256b4395b3f6c9e6457fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorIndex: 0
+  objectIndex: 0
+--- !u!114 &7152577637441584122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802824408257321855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTouch: 0
 --- !u!108 &7152792852442739764
 Light:
   m_ObjectHideFlags: 0
@@ -85172,11 +85193,11 @@ Transform:
   m_GameObject: {fileID: 2678502246894930186}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2259.99, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -2459.99, y: 0, z: 2.4}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1841186310494912635}
+  m_Father: {fileID: 4045674159505087351}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7341003589429213415
 MeshFilter:
