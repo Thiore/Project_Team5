@@ -27,12 +27,12 @@ public class LockGame : MonoBehaviour
     //각 휠의 목표 회전 각도
     private Quaternion[] targetRotations;
 
-    public Camera mainCamera;
+    
 
-    public GameObject camera1;
-    public GameObject camera2;
+    
     public GameObject canvas;
     private ReadInputData input;
+    public bool isAnswer;
 
 
     private void Start()
@@ -55,7 +55,7 @@ public class LockGame : MonoBehaviour
     }
     private void Update()
     {
-        GameSetting();
+        //GameSetting();
         for (int i = 0; i < numberWheels.Length; i++)
         {
             //목표 회전 각도까지 부드럽게
@@ -118,30 +118,32 @@ public class LockGame : MonoBehaviour
         //번호가 맞으면 상태(true) 저장
         saveManager.UpdateObjectState(floorIndex, objectIndex, true);
 
+        isAnswer = true;
+
         //번호가 맞으면 자물쇠 열리는 애니메이션 실행
         LockOpenAnimation();
     }
 
     private void LockOpenAnimation()
     {
-        EndGame();
+        //EndGame();
         ani.SetTrigger("Open");
         Debug.Log("정답");
     }
 
-    private void GameSetting()
-    {
-        if (input.isTouch)
-        {
-            camera1.gameObject.SetActive(true);
-            canvas.gameObject.SetActive(true);
-        }
-    }
+    //private void GameSetting()
+    //{
+    //    if (input.isTouch)
+    //    {
+    //        camera1.gameObject.SetActive(true);
+    //        canvas.gameObject.SetActive(true);
+    //    }
+    //}
 
-    private void EndGame()
-    {
-        camera1.gameObject.SetActive(false);
-        canvas.gameObject.SetActive(false);
-        camera2.gameObject.SetActive(true);
-    }
+    //private void EndGame()
+    //{
+    //    camera1.gameObject.SetActive(false);
+    //    canvas.gameObject.SetActive(false);
+    //    camera2.gameObject.SetActive(true);
+    //}
 }
