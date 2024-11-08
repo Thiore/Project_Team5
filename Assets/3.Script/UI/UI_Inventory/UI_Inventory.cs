@@ -29,21 +29,26 @@ public class UI_Inventory : MonoBehaviour
 
     public void GetItemTouch(Item item)
     {
+        Debug.Log("겟터치발동");
         switch (item.Type)
         {
             case eItemType.quick:
+                Debug.Log("퀵발동");
                 AddItemQuick(item);
                 break;
 
             case eItemType.element:
+                Debug.Log("인벤발동");
                 AddItemInventory(item);
                 break;
 
             case eItemType.trigger:
+                Debug.Log("xmflrj발동");
                 AddItemQuick(item);
                 break;
 
             case eItemType.clue:
+                Debug.Log("clue 발동");
                 AddItemInventory(item);
                 break;
 
@@ -56,14 +61,14 @@ public class UI_Inventory : MonoBehaviour
     {
         for (int i = 0; i < inventoryslots.Length; i++)
         {
-            if (!inventoryslots[i].activeSelf)
+            if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
             {
                 Debug.Log("인벤 " + inventoryslots[i].name);
                 inventoryslots[i].SetActive(true);
                 Item itemUI = inventoryslots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
 
-                if (itemUI.gameObject.transform.GetChild(0).TryGetComponent(out Image sprite))
+                if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
                     sprite.sprite = itemUI.Sprite;
                     Debug.Log(sprite.sprite.name);
@@ -72,24 +77,6 @@ public class UI_Inventory : MonoBehaviour
                 Destroy(item.gameObject);
                 break;
             }
-            
-            ////빈 오브젝트 찾기 
-            //if (!inventoryslots[i].TryGetComponent(out Item notusethis))
-            //{
-            //    Debug.Log("인벤 " + inventoryslots[i].name);
-            //    inventoryslots[i].SetActive(true);
-            //    Item itemUI = inventoryslots[i].AddComponent<Item>();
-            //    itemUI.PutInInvenItem(item);
-
-            //    if (itemUI.gameObject.transform.GetChild(0).TryGetComponent(out Image sprite))
-            //    {
-            //        sprite.sprite = itemUI.Sprite;
-            //        Debug.Log(sprite.sprite.name);
-            //    }
-
-            //    Destroy(item.gameObject);
-            //    break;
-            //}
         }
     }
 
@@ -97,7 +84,7 @@ public class UI_Inventory : MonoBehaviour
     {
         for (int i = 0; i < quickSlots.Length; i++)
         {
-            if (!quickSlots[i].activeSelf)
+            if (!quickSlots[i].TryGetComponent(out Item notusethis))
             {
                 Debug.Log("퀵 " + quickSlots[i].name);
                 quickSlots[i].SetActive(true);
@@ -105,7 +92,7 @@ public class UI_Inventory : MonoBehaviour
                 Item itemUI = quickSlots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
 
-                if (itemUI.gameObject.transform.GetChild(0).TryGetComponent(out Image sprite))
+                if (itemUI.transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
                     sprite.sprite = itemUI.Sprite;
                 }
@@ -113,24 +100,6 @@ public class UI_Inventory : MonoBehaviour
                 Destroy(item.gameObject);
                 break;
             }
-
-            //빈 오브젝트 찾기 
-            //if (!quickSlots[i].TryGetComponent(out Item notusethis))
-            //{
-            //    Debug.Log("퀵 " + quickSlots[i].name);
-            //    quickSlots[i].SetActive(true);
-            //    quickSlots[i].transform.GetChild(0).gameObject.SetActive(true);
-            //    Item itemUI = quickSlots[i].AddComponent<Item>();
-            //    itemUI.PutInInvenItem(item);
-
-            //    if (itemUI.gameObject.transform.GetChild(0).TryGetComponent(out Image sprite))
-            //    {
-            //        sprite.sprite = itemUI.Sprite;
-            //    }
-
-            //    Destroy(item.gameObject);
-            //    break;
-            //}
         }
     }
 

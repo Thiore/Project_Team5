@@ -12,15 +12,16 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private Coroutine dragcoroutine;
     private float downTime;
 
-    private void Awake()
-    {
-       TryGetComponent(out copyItem);   
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
-        itemInformation.sprite = copyItem.Sprite;
+        if(TryGetComponent(out copyItem))
+        {
+            itemInformation.sprite = copyItem.Sprite;           
+        }
+
         dragcoroutine = StartCoroutine(HoldDragStart(eventData));
+
+        
     }
 
     public void OnDrag(PointerEventData eventData)
