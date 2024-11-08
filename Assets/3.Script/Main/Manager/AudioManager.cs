@@ -28,6 +28,13 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        master = 1f;
+        audioMixer.GetFloat("Master", out float masterValue);
+        master = masterValue;
+
+        audioMixer.GetFloat("BGM", out float BGMValue);
+        BGM = BGMValue;
+
+        audioMixer.GetFloat("SFX", out float SFXValue);
+        SFX = SFXValue;
     }
 }

@@ -197,49 +197,42 @@ public class TouchManager : MonoBehaviour
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Canceled)
             {
-
-                if (activeTouchID.Contains(touchId))
-                {
                     Vector2 position = touch.position.ReadValue();
-                    switch (touchState)
-                    {
-                        case etouchState.Player:
-                            if (moveID.Equals(touchId))
-                            {
-                                OnMoveEnd?.Invoke(position);
-                                activeTouchID.Remove(touchId);
-                                moveID = -1;
-                            }
-                            if (lookID.Equals(touchId))
-                            {
-                                activeTouchID.Remove(touchId);
-                                OnLookEnd?.Invoke(position);
-                                lookID = -1;
-                            }
-                            if (moveID.Equals(-1) && lookID.Equals(-1))
-                            {
-                                touchState = etouchState.Normal;
-                            }
-                            break;
-                        case etouchState.UI:
-                            activeTouchID.Remove(touchId);
-                            if (activeTouchID.Count.Equals(0))
-                            {
-                                touchState = etouchState.Normal;
-                            }
+                switch (touchState)
+                {
+                    case etouchState.Player:
+                        if (moveID.Equals(touchId))
+                        {
+                            OnMoveEnd?.Invoke(position);
+                            moveID = -1;
+                        }
+                        if (lookID.Equals(touchId))
+                        {
+                            OnLookEnd?.Invoke(position);
+                            lookID = -1;
+                        }
+                        if (moveID.Equals(-1) && lookID.Equals(-1))
+                        {
+                            touchState = etouchState.Normal;
+                        }
+                        break;
+                    case etouchState.UI:
+                        if (activeTouchID.Count.Equals(0))
+                        {
+                            touchState = etouchState.Normal;
+                        }
 
-                            break;
-                        case etouchState.Object:
-                            currentTouchDic[touchId]?.OnTouchEnd(position);
-                            currentTouchDic.Remove(touchId);
-                            activeTouchID.Remove(touchId);
-                            if (currentTouchDic.Count.Equals(0))
-                            {
-                                touchState = etouchState.Normal;
-                            }
-                            break;
-                    }
+                        break;
+                    case etouchState.Object:
+                        currentTouchDic[touchId]?.OnTouchEnd(position);
+                        currentTouchDic.Remove(touchId);
+                        if (currentTouchDic.Count.Equals(0))
+                        {
+                            touchState = etouchState.Normal;
+                        }
+                        break;
                 }
+                activeTouchID.Remove(touchId);
             }
         }
     }
