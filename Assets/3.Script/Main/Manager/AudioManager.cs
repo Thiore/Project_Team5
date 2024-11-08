@@ -7,7 +7,11 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; } = null;
 
-    [SerializeField] private AudioMixer m_AudioMixer;
+    [SerializeField] private AudioMixer audioMixer;
+
+    public float master;
+    public float BGM;
+    public float SFX;
 
 
     private void Awake()
@@ -24,8 +28,6 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        //m_MusicMasterSlider.onValueChanged.AddListener(SetMasterVolume);
-        //m_MusicBGMSlider.onValueChanged.AddListener(SetMusicVolume);
-        //m_MusicSESlider.onValueChanged.AddListener(SetSFXVolume);
+        master = 1f;
     }
 }

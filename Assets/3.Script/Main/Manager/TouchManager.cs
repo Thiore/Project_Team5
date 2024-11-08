@@ -177,8 +177,6 @@ public class TouchManager : MonoBehaviour
             {
                 if (touchState.Equals(etouchState.UI)) return;
 
-                if (activeTouchID.Contains(touchId))
-                {
                     Vector2 position = touch.position.ReadValue();
                     switch (touchState)
                     {
@@ -193,10 +191,9 @@ public class TouchManager : MonoBehaviour
                             }
                             break;
                         case etouchState.Object:
-                            currentTouchDic[touchId].OnTouchHold(position);
+                            currentTouchDic[touchId]?.OnTouchHold(position);
                             break;
                     }
-                }
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Canceled)
             {
@@ -233,7 +230,7 @@ public class TouchManager : MonoBehaviour
 
                             break;
                         case etouchState.Object:
-                            currentTouchDic[touchId].OnTouchEnd(position);
+                            currentTouchDic[touchId]?.OnTouchEnd(position);
                             currentTouchDic.Remove(touchId);
                             activeTouchID.Remove(touchId);
                             if (currentTouchDic.Count.Equals(0))
