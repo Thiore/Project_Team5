@@ -25,25 +25,11 @@ public class BoxVirtual : MonoBehaviour
         {
             if (!lockgame.isAnswer)
             { 
-            cam.gameObject.SetActive(true);
+                cam.gameObject.SetActive(true);
                 canvas.gameObject.SetActive(true);
 
 
-                if (lockgame.isAnswer)
-                    {
-                        cam.gameObject.SetActive(false);
-                        cam2.gameObject.SetActive(true);
-                    istouching = true;
-                    top.SetBool("isOpen", true);
-                    Invoke("test", 3f);
-                    if (istouching && cam2.activeSelf && input.isTouch)
-                    {
-                        cam2.gameObject.SetActive(false);
-                        istouching = false;
-                        top.SetBool("isOpen", false);
-                    }
-
-                    }
+                
             }
             else if (lockgame.isAnswer)
             {
@@ -58,6 +44,21 @@ public class BoxVirtual : MonoBehaviour
                     top.SetBool("isOpen", false);
                 }
             }
+        }
+        if (lockgame.isAnswer)
+        {
+            cam.gameObject.SetActive(false);
+            cam2.gameObject.SetActive(true);
+            istouching = true;
+            top.SetBool("isOpen", true);
+            Invoke("test", 3f);
+            if (istouching && cam2.activeSelf && input.isTouch)
+            {
+                cam2.gameObject.SetActive(false);
+                istouching = false;
+                top.SetBool("isOpen", false);
+            }
+
         }
     }
 
