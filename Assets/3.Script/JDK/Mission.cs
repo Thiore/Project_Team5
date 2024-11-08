@@ -11,9 +11,10 @@ public class Mission : MonoBehaviour
     [Header("줄 프로퍼티")]
     [SerializeField] private float LineValue = 0; // 1.2
 
-    private Vector2 startDragPosition;
-    private bool RightLeftState = false;
-    private bool UpDownState = false;
+    private bool RightState = false;
+    private bool LeftState = false;
+    private bool UpState = false;
+    private bool DownState = false;
 
     public void ResetButton()
     {
@@ -61,46 +62,39 @@ public class Mission : MonoBehaviour
 
         Vector3 pos = lr.GetPosition(count - 1);
 
+        lr.positionCount = count + 1;
+
         switch (sentence)
         {
-            case "RL":
+            case "Right":
 
-                if (!UpDownState)
-                {
-                    lr.positionCount = count + 1;
+                RightState = true;
 
-                    pos.z += LineValue;
+                pos.z += LineValue;
 
-                    lr.SetPosition(count, pos);
-
-                    Debug.Log("오른쪽!");
-                }
-                else
-                {
-                    lr.positionCount = count + 1;
-
-                    pos.z -= LineValue;
-
-                    lr.SetPosition(count, pos);
-
-                    Debug.Log("왼쪽!");
-
-                    UpDownState = false;
-                }
+                lr.SetPosition(count, pos);
 
                 break;
 
-            case "UD":
+            case "Left":
 
-                UpDownState = true;
+                if (RightState) return;
 
-                lr.positionCount = count + 1;
+                LeftState = true;
+
+                pos.z -= LineValue;
+
+                lr.SetPosition(count, pos);
+
+                break;
+
+            case "Down":
+
+                DownState = true;
 
                 pos.y -= LineValue;
 
                 lr.SetPosition(count, pos);
-
-                Debug.Log("위! 아래!");
 
                 break;
         }
