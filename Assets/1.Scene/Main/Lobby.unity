@@ -1735,7 +1735,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1852624938}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3989635594388749368}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &1892438493
 GameObject:
   m_ObjectHideFlags: 0
@@ -2032,7 +2044,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2018659479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2263,6 +2275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7092208418421194548}
   - component: {fileID: 7776657046702419296}
+  - component: {fileID: 7776657046702419297}
   m_Layer: 5
   m_Name: Slider UI
   m_TagString: Untagged
@@ -2324,6 +2337,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2497481028801450759}
   - component: {fileID: 8860784854393690541}
+  - component: {fileID: 8860784854393690542}
   m_Layer: 5
   m_Name: Slider UI
   m_TagString: Untagged
@@ -2579,10 +2593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db46a3094be24b143afc63e4687fd6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueButton: {fileID: 0}
-  dialogueText: {fileID: 0}
-  itemName: {fileID: 0}
-  explanation: {fileID: 0}
 --- !u!224 &391501068476756326
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4474,7 +4484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &4014023983423867718
 GameObject:
   m_ObjectHideFlags: 0
@@ -5849,6 +5859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6233212466474356688}
   - component: {fileID: 845659292187831253}
+  - component: {fileID: 6541753090309221183}
   m_Layer: 5
   m_Name: Slider UI
   m_TagString: Untagged
@@ -5856,6 +5867,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6541753090309221183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6541753090309221182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c13114414c41d94ca4a85a7817cdb75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: f569c935f74a5d14e8c23b63377bc832, type: 2}
+  audioType: 0
 --- !u!224 &6651710079169062529
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6585,6 +6610,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7776657046702419297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894441985773943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c13114414c41d94ca4a85a7817cdb75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: f569c935f74a5d14e8c23b63377bc832, type: 2}
+  audioType: 1
 --- !u!224 &7843254449326467969
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7247,6 +7286,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8860784854393690542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45307418860634169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c13114414c41d94ca4a85a7817cdb75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: f569c935f74a5d14e8c23b63377bc832, type: 2}
+  audioType: 2
 --- !u!222 &8889462202281936054
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7299,7 +7352,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &9025572593998690966
 GameObject:
   m_ObjectHideFlags: 0

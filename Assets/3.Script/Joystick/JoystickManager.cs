@@ -57,7 +57,7 @@ public class JoystickManager : MonoBehaviour, ITouchable
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             joystick,
             touchPosition,
-            Camera.main,
+            null,
             out localPoint
         );
 
@@ -85,9 +85,9 @@ public class JoystickManager : MonoBehaviour, ITouchable
             // 터치된 위치를 캔버스 좌표로 변환
             Vector2 localPoint;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
+                canvas.transform as RectTransform,
                 touchPosition,
-                Camera.main,
+                null,
                 out localPoint
             );
 
@@ -117,7 +117,7 @@ public class JoystickManager : MonoBehaviour, ITouchable
 
     public void OnTouchEnd(Vector2 position)
     {
-        handle.anchoredPosition = joystickCenter; // 핸들을 중앙으로 복귀
+        handle.anchoredPosition = Vector2.zero; // 핸들을 중앙으로 복귀
         ActivateJoystick(Vector2.zero, false); // 조이스틱 비활성화
     }
 }
