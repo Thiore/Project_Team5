@@ -9,6 +9,7 @@ public class VirtualController : MonoBehaviour
 
     // 시네머신 버추얼 카메라
     [SerializeField] private GameObject virtualCam;
+    
 
     private void Start()
     {
