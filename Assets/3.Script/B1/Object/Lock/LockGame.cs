@@ -119,7 +119,7 @@ public class LockGame : MonoBehaviour
         saveManager.UpdateObjectState(floorIndex, objectIndex, true);
 
         isAnswer = true;
-
+        canvas.gameObject.SetActive(false);
         //번호가 맞으면 자물쇠 열리는 애니메이션 실행
         LockOpenAnimation();
     }

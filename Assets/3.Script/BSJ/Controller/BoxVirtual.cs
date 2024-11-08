@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BoxVirtual : MonoBehaviour
 {
@@ -10,10 +11,11 @@ public class BoxVirtual : MonoBehaviour
     [SerializeField] private Animator top;
     [SerializeField] private GameObject cam;
     [SerializeField] private GameObject cam2;
+    public GameObject canvas;
 
     private void Start()
     {
-        top = GetComponent<Animator>();
+        
         TryGetComponent(out input);
     }
 
@@ -24,14 +26,16 @@ public class BoxVirtual : MonoBehaviour
             if (!lockgame.isAnswer)
             { 
             cam.gameObject.SetActive(true);
-                
+                canvas.gameObject.SetActive(true);
+
+
                 if (lockgame.isAnswer)
                     {
                         cam.gameObject.SetActive(false);
                         cam2.gameObject.SetActive(true);
                     istouching = true;
                     top.SetBool("isOpen", true);
-
+                    Invoke("test", 3f);
                     if (istouching && cam2.activeSelf && input.isTouch)
                     {
                         cam2.gameObject.SetActive(false);
@@ -55,5 +59,10 @@ public class BoxVirtual : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void test()
+    {
+        GameManager.Instance.LoadSlide();
     }
 }
