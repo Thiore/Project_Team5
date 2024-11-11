@@ -27,18 +27,19 @@ public class SaveManager : MonoBehaviour
 
         // Json파일 저장 경로
         savePath = Path.Combine(Application.persistentDataPath, "gameState.json");
-        Debug.Log(savePath);
+
         //게임 상태 초기화 (층 리스트 초기화)
-        //gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
+        gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
     }
 
     //새게임
     public void NewGame()
     {
         //gameState 초기화 (층 리스트)
-        gameState = new StateData.GameState(new List<StateData.FloorState>(), 
-                                            new Vector3(204f,1f,2.91f), 
-                                            new Quaternion(-0.1633126f, -0.5620617f, 0.1143527f, -0.8027074f));
+        gameState = new StateData.GameState
+        {
+            floors = new List<StateData.FloorState>()
+        };
 
         // 각 층과 상호작용 오브젝트 초기화 및 기본 상태 설정 (임시로 4 해놨음)
         for (int floorIndex = 0; floorIndex < 4; floorIndex++)
@@ -49,7 +50,7 @@ public class SaveManager : MonoBehaviour
                 //현재 층 인덱스 설정
                 floorIndex = floorIndex,
                 //층 내 오브젝트 리스트 초기화
-                interactableObjects = new List<StateData.InteractableObjectState>() 
+                interactableObjects = new List<StateData.InteractableObjectState>()
             };
 
             // 각 층 상호작용 오브젝트 초기화 (임시로 5 해놨음)
@@ -83,13 +84,12 @@ public class SaveManager : MonoBehaviour
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
         }
     }
-    
+
     // 게임 상태 저장
     public void SaveGameState()
     {
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
-        Debug.Log("저장 완료");
     }
 
     // 상태 업데이트 (층 및 오브젝트 상태 업데이트)
@@ -97,7 +97,7 @@ public class SaveManager : MonoBehaviour
     {
         //해당 층을 찾거나 새로 생성(새게임)
         StateData.FloorState floor = gameState.floors.Find(f => f.floorIndex == floorIndex);
-        
+
         //해당 층이 없을 경우 새로운 층 추가
         if (floor == null)
         {
@@ -114,7 +114,7 @@ public class SaveManager : MonoBehaviour
 
         //해당 오브젝트를 찾거나 새로 생성하여 상태 업데이트
         StateData.InteractableObjectState objState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
-        
+
         //오브젝트가 존재하지 않을 경우 새로운 로브젝트 추가
         if (objState == null)
         {
