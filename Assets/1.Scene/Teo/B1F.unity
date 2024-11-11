@@ -2878,7 +2878,7 @@ GameObject:
   - component: {fileID: 1600041436}
   - component: {fileID: 1600041435}
   - component: {fileID: 1600041434}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4138,7 +4138,7 @@ GameObject:
   - component: {fileID: 2058856691}
   m_Layer: 6
   m_Name: Cube
-  m_TagString: touchableobject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4311,7 +4311,7 @@ GameObject:
   - component: {fileID: 2067388081}
   - component: {fileID: 2067388080}
   - component: {fileID: 2067388079}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: JoystickPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5242,7 +5242,7 @@ GameObject:
   - component: {fileID: 7645533603227891612}
   - component: {fileID: 5554122188294459442}
   - component: {fileID: 7543699348381849830}
-  m_Layer: 30
+  m_Layer: 5
   m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27345,7 +27345,7 @@ GameObject:
   - component: {fileID: 8796983191433221122}
   m_Layer: 6
   m_Name: note_1
-  m_TagString: touchableobject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27898,7 +27898,6 @@ GameObject:
   - component: {fileID: 1906075264000552034}
   - component: {fileID: 6920527359895679819}
   - component: {fileID: 5473260414786299496}
-  - component: {fileID: 6920527359895679821}
   - component: {fileID: 6920527359895679823}
   m_Layer: 6
   m_Name: padlock 1
@@ -33585,7 +33584,7 @@ GameObject:
   - component: {fileID: 1750390147681919071}
   - component: {fileID: 1948511655756574733}
   - component: {fileID: 4188940497951758871}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33761,7 +33760,7 @@ GameObject:
   - component: {fileID: 8383304387884257159}
   - component: {fileID: 8383304387884257160}
   m_Layer: 0
-  m_Name: InputManager
+  m_Name: TouchManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36388,7 +36387,7 @@ GameObject:
   - component: {fileID: 3586933748230248214}
   - component: {fileID: 7248320522771418662}
   - component: {fileID: 4563886234890258854}
-  m_Layer: 30
+  m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37840,9 +37839,10 @@ GameObject:
   - component: {fileID: 7996499657067679145}
   - component: {fileID: 8287985434609326768}
   - component: {fileID: 8955485963222125896}
+  - component: {fileID: 8955485963222125897}
   m_Layer: 0
   m_Name: PlayerMain
-  m_TagString: Untagged
+  m_TagString: PlayerCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38876,9 +38876,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState:
     floors: []
-    audioSound: []
-    playerPos: []
-    playerRot: []
 --- !u!23 &3019761022506865997
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -53933,7 +53930,7 @@ GameObject:
   - component: {fileID: 2660257788904234548}
   - component: {fileID: 5514388862894546975}
   - component: {fileID: 7705278147063250140}
-  m_Layer: 30
+  m_Layer: 5
   m_Name: Btn_Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56675,7 +56672,7 @@ GameObject:
   - component: {fileID: 3019664626545100583}
   m_Layer: 0
   m_Name: SaveManager
-  m_TagString: SaveManager
+  m_TagString: Connect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -59100,7 +59097,7 @@ GameObject:
   - component: {fileID: 7029947589856606680}
   m_Layer: 5
   m_Name: UI_Canvas
-  m_TagString: UI_Canvas
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62515,7 +62512,7 @@ GameObject:
   - component: {fileID: 9072031432597958719}
   - component: {fileID: 529709335701079534}
   - component: {fileID: 6197974875865952220}
-  m_Layer: 31
+  m_Layer: 5
   m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73741,7 +73738,7 @@ GameObject:
   - component: {fileID: 9188680202420336346}
   m_Layer: 6
   m_Name: battery
-  m_TagString: Battery
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78123,7 +78120,7 @@ GameObject:
   - component: {fileID: 8603628521373655935}
   m_Layer: 6
   m_Name: empty_flashlight
-  m_TagString: EmptyLantern
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81259,19 +81256,6 @@ MonoBehaviour:
   ani: {fileID: 5473260414786299496}
   canvas: {fileID: 293329466272623468}
   isAnswer: 0
---- !u!114 &6920527359895679821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2022166904486770627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!114 &6920527359895679823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81580,7 +81564,7 @@ GameObject:
   - component: {fileID: 6221296888937573730}
   - component: {fileID: 1446612696542318651}
   - component: {fileID: 2885512561588668568}
-  m_Layer: 30
+  m_Layer: 5
   m_Name: Pin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84121,7 +84105,7 @@ GameObject:
   - component: {fileID: 387666241414259404}
   - component: {fileID: 1201390679169710887}
   - component: {fileID: 2200103415786084637}
-  m_Layer: 30
+  m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87559,6 +87543,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &7487350051086953918
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -91638,6 +91623,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &7809837572670353212
 GameObject:
   m_ObjectHideFlags: 0
@@ -97860,7 +97846,7 @@ MonoBehaviour:
   touchableObjectLayer:
     serializedVersion: 2
     m_Bits: 64
-  touchDistance: 3
+  touchDistance: 2
 --- !u!4 &8384828106376944600
 Transform:
   m_ObjectHideFlags: 0
@@ -97911,6 +97897,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &8386930038341895935
 GameObject:
   m_ObjectHideFlags: 0
@@ -98047,6 +98034,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &8396312154016624741
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -98403,6 +98391,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!33 &8436535761259825534
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -100225,6 +100214,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &8605178904602363875
 GameObject:
   m_ObjectHideFlags: 0
@@ -102445,6 +102435,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!222 &8798708186913024274
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -102697,6 +102688,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!4 &8811516625816449968
 Transform:
   m_ObjectHideFlags: 0
@@ -104344,6 +104336,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clampRotX: 50
+--- !u!135 &8955485963222125897
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2922431353476733489}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &8956571597401372098
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -106372,6 +106385,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &9110964536252130690
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -106603,6 +106617,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &9116729658832752122
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -107806,6 +107821,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &9193338573514904443
 GameObject:
   m_ObjectHideFlags: 0

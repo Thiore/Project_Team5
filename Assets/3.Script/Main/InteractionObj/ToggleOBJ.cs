@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleOBJ : InteractionOBJ
+public class ToggleOBJ : InteractionOBJ, ITouchable
 {
     [SerializeField] private GameObject cinemachine;
     private Animator anim;
@@ -12,21 +12,20 @@ public class ToggleOBJ : InteractionOBJ
         TryGetComponent(out anim);
     }
 
-    public override void OnTouchStarted(Vector2 position)
+    public void OnTouchStarted(Vector2 position)
     {
-        base.OnTouchStarted(position);
         isTouching = !isTouching;
 
         cinemachine.SetActive(isTouching);
         anim.SetBool(openAnim, isTouching);
 
     }
-    public override void OnTouchHold(Vector2 position)
+    public void OnTouchHold(Vector2 position)
     {
-        base.OnTouchHold(position);
+
     }
-    public override void OnTouchEnd(Vector2 position)
+    public void OnTouchEnd(Vector2 position)
     {
-        base.OnTouchEnd(position);
+
     }
 }
