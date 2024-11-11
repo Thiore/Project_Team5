@@ -456,6 +456,7 @@ public class TouchManager : MonoBehaviour
                         return false;
                     currentTouchDic.Add(touchId, touchable);
                     currentTouchDic[touchId].OnTouchStarted(touchPosition);
+                    Debug.Log("이거");
                     return true;
                 }
 

@@ -19,6 +19,7 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
     public TMP_Text explanation; //인벤토리 아이템 설명 띄울 TextMeshPro
 
+
     private LocalizedString localizedString = new LocalizedString();
     private LocalizedString itemNameLocalizedString = new LocalizedString();
     private LocalizedString itemExplanationLocalizedString = new LocalizedString();
@@ -140,6 +141,8 @@ public class DialogueManager : MonoBehaviour
             return;
 
         StartCoroutine(ChangeRoutine_co(index));
+
+        
     }
 
     private IEnumerator ChangeRoutine_co(int index)
@@ -155,4 +158,6 @@ public class DialogueManager : MonoBehaviour
 
         //dia.SetDialogue("B1", 22);
     }
+
+    
 }
