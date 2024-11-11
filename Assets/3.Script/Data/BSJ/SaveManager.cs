@@ -137,4 +137,21 @@ public class SaveManager : MonoBehaviour
         SaveGameState();
 
     }
+
+    //puzzle과 상호작용하는 door에 상태 알리기
+    public bool PuzzleState(int floorIndex, int objectIndex)
+    {
+        StateData.FloorState floor = gameState.floors.Find(f => f.floorIndex == floorIndex);
+
+        if (floor != null)
+        {
+            StateData.InteractableObjectState objState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
+            if (objState != null)
+            {
+                return objState.isInteracted;
+            }
+        }
+
+        return false;
+    }
 }
