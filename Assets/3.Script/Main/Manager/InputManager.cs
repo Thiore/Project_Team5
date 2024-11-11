@@ -242,21 +242,6 @@ public class InputManager : MonoBehaviour
                 BindAction(touchId, objectData, touchPosition, hit.collider.gameObject);
                 return true;
             }
-            if(hit.collider.CompareTag("EmptyLantern"))
-            {
-                GameManager.Instance.GetEmptyLantern();
-                hit.collider.TryGetComponent(out ReadInputData lantern);
-                lantern.isTouch = true;
-                hit.collider.gameObject.SetActive(false);
-            }
-
-            if(hit.collider.CompareTag("Battery"))
-            {
-                GameManager.Instance.GetBattery();
-                hit.collider.TryGetComponent(out ReadInputData lantern);
-                lantern.isTouch = true;
-                hit.collider.gameObject.SetActive(false);
-            }
         }
         return false;
     }

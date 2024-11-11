@@ -11,13 +11,15 @@ public class ClueTrigger : MonoBehaviour
     private GameObject clue;
     private GameObject clueItem;
     private GameObject exit;
+    private GameObject uiCamera;
+    private GameObject uiCanvas;
 
     private ReadInputData input;
 
     private void Start()
     {
 
-        FindObjectUI();
+        
 
         //ReadInputData 가져오기
         TryGetComponent(out input);
@@ -37,6 +39,7 @@ public class ClueTrigger : MonoBehaviour
     {
         //기본 UI 비활성화
         playInterface.gameObject.SetActive(false);
+        uiCamera.gameObject.SetActive(true);
 
         //3D_UI 활성화
         exit.gameObject.SetActive(true);
@@ -53,7 +56,8 @@ public class ClueTrigger : MonoBehaviour
 
         //기본 UI 활성화
         playInterface.gameObject.SetActive(true);
-        
+        uiCamera.gameObject.SetActive(false);
+
     }
 
     //단서 오브젝트 => 인벤토리로 들어가기 때문에 / 삭제(O)
@@ -65,9 +69,9 @@ public class ClueTrigger : MonoBehaviour
 
         //기본 UI 활성화
         playInterface.gameObject.SetActive(true);
+        uiCamera.gameObject.SetActive(false);
 
-        //오브젝트 삭제
-        Destroy(gameObject);
+
     }
 
     private void FindObjectUI()
@@ -79,14 +83,24 @@ public class ClueTrigger : MonoBehaviour
             Transform clueItem_ = clue.transform.GetChild(clueIndex);
             clueItem = clueItem_.gameObject;
 
-            Transform exit_ = clue.transform.GetChild(3);
+            Transform exit_ = uiCanvas.transform.GetChild(0);
             exit = exit_.gameObject;
+
+            //임시로 5번 째에서 찾기, 테스트 끝나면 카메라 상단으로 올리고 clueIndex + 1 로
+            Transform camera_ = clue.transform.GetChild(4);
+            uiCamera = camera_.gameObject;
+
+            
         }
+
     }
 
     private void OnEnable()
     {
+        uiCamera = GameObject.FindGameObjectWithTag("UI_Camera");
+        uiCanvas = GameObject.FindGameObjectWithTag("UI_Canvas");
         playInterface = GameObject.FindGameObjectWithTag("PlayInterface");
         clue = GameObject.FindGameObjectWithTag("Clue");
+        FindObjectUI();
     }
 }

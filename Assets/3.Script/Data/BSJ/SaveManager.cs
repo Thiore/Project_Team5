@@ -29,17 +29,16 @@ public class SaveManager : MonoBehaviour
         savePath = Path.Combine(Application.persistentDataPath, "gameState.json");
 
         //게임 상태 초기화 (층 리스트 초기화)
-        gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
+        //gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
     }
 
     //새게임
     public void NewGame()
     {
         //gameState 초기화 (층 리스트)
-        gameState = new StateData.GameState
-        {
-            floors = new List<StateData.FloorState>()
-        };
+        gameState = new StateData.GameState(new List<StateData.FloorState>(), 
+                                            new Vector3(204f,1f,2.91f), 
+                                            new Quaternion(-0.1633126f, -0.5620617f, 0.1143527f, -0.8027074f));
 
         // 각 층과 상호작용 오브젝트 초기화 및 기본 상태 설정 (임시로 4 해놨음)
         for (int floorIndex = 0; floorIndex < 4; floorIndex++)

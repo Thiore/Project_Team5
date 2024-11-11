@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 21443226}
   - component: {fileID: 21443225}
   - component: {fileID: 21443224}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!114 &21443225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -691,7 +691,7 @@ GameObject:
   - component: {fileID: 357667138}
   - component: {fileID: 357667137}
   - component: {fileID: 357667136}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -727,7 +727,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!114 &357667137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -956,10 +956,7 @@ GameObject:
   - component: {fileID: 429926386}
   - component: {fileID: 429926389}
   - component: {fileID: 429926388}
-  - component: {fileID: 429926387}
-  - component: {fileID: 429926391}
-  - component: {fileID: 429926392}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: big__object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -975,33 +972,12 @@ Transform:
   m_GameObject: {fileID: 429926385}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0.15000004, z: 0}
+  m_LocalPosition: {x: 0.012, y: 0.02, z: -3.49}
   m_LocalScale: {x: 2, y: 0.3, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1688944227}
+  m_Father: {fileID: 4268044156008304468}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &429926387
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429926385}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &429926388
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1052,39 +1028,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429926385}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &429926391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429926385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 0.051449895, g: 1, b: 0, a: 1}
-  outlineWidth: 10
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!114 &429926392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429926385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af82e528eacebc24e9d2392767ccc80d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overlapLayer:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &558825791
 GameObject:
   m_ObjectHideFlags: 0
@@ -1339,7 +1282,7 @@ GameObject:
   - component: {fileID: 768123117}
   - component: {fileID: 768123120}
   - component: {fileID: 768123121}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1465,7 +1408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!1 &779810622
 GameObject:
   m_ObjectHideFlags: 0
@@ -2540,7 +2483,7 @@ GameObject:
   - component: {fileID: 1255723935}
   - component: {fileID: 1255723938}
   - component: {fileID: 1255723939}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2666,7 +2609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!1 &1578624690
 GameObject:
   m_ObjectHideFlags: 0
@@ -2779,7 +2722,6 @@ Transform:
   - {fileID: 942931394}
   - {fileID: 779810623}
   - {fileID: 2073431908}
-  - {fileID: 429926386}
   - {fileID: 1237082055}
   - {fileID: 2119248588}
   - {fileID: 1812954499}
@@ -3829,7 +3771,7 @@ GameObject:
   - component: {fileID: 1245240273630726694}
   - component: {fileID: 7503643332054747554}
   - component: {fileID: 7503643332054747555}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3858,7 +3800,7 @@ GameObject:
   - component: {fileID: 3895926635907370838}
   - component: {fileID: 3895926635907370839}
   - component: {fileID: 3895926635907370840}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4001,7 +3943,7 @@ GameObject:
   - component: {fileID: 206498789336794702}
   - component: {fileID: 8914894405893670346}
   - component: {fileID: 8914894405893670347}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4128,7 +4070,7 @@ GameObject:
   - component: {fileID: 757632488279082049}
   - component: {fileID: 3428057453489129807}
   - component: {fileID: 4273615769284265101}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4271,7 +4213,7 @@ GameObject:
   - component: {fileID: 2337453153369650655}
   - component: {fileID: 7966382115072373563}
   - component: {fileID: 7966382115072373564}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_3
   m_TagString: TargetObject
   m_Icon: {fileID: 0}
@@ -4319,7 +4261,7 @@ GameObject:
   - component: {fileID: 1684970404776331088}
   - component: {fileID: 7916640441655664001}
   - component: {fileID: 7916640441655664002}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4399,7 +4341,7 @@ GameObject:
   - component: {fileID: 198856532813611372}
   - component: {fileID: 4322864534486626453}
   - component: {fileID: 4322864534486626454}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4428,7 +4370,7 @@ GameObject:
   - component: {fileID: 130822462019739172}
   - component: {fileID: 4102597581018673117}
   - component: {fileID: 4102597581018673118}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4548,7 +4490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!23 &4102597581018673116
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4623,7 +4565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!4 &4268044156008304468
 Transform:
   m_ObjectHideFlags: 0
@@ -4650,6 +4592,7 @@ Transform:
   - {fileID: 2334436274239891575}
   - {fileID: 1255723934}
   - {fileID: 21443223}
+  - {fileID: 429926386}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4273615769284265100
@@ -4761,7 +4704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!65 &4567271724795166993
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4797,7 +4740,7 @@ GameObject:
   - component: {fileID: 8203177336604076515}
   - component: {fileID: 8368876036125823756}
   - component: {fileID: 8368876036125823757}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: metal_cube_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5040,7 +4983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!4 &7588437907417090357
 Transform:
   m_ObjectHideFlags: 0
@@ -5195,7 +5138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!64 &8203177336604076515
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5231,7 +5174,7 @@ GameObject:
   - component: {fileID: 1689307506893453592}
   - component: {fileID: 4567271724795166993}
   - component: {fileID: 8229442363358087092}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5278,7 +5221,7 @@ GameObject:
   - component: {fileID: 8785592030585064608}
   - component: {fileID: 1978680134223374797}
   - component: {fileID: 8785592030585064609}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5325,7 +5268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!23 &8785592030585064608
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5469,7 +5412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlapLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 3072
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

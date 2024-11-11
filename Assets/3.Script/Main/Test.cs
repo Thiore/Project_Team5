@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void started(Vector2 position)
     {
-        
+        Debug.Log("Start");
     }
-
-    // Update is called once per frame
-    void Update()
+    public void upd(Vector2 position)
     {
-        
+        Debug.Log(position);
+    }
+    public void end(Vector2 position)
+    {
+        Debug.Log("end");
     }
 }
