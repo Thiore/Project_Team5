@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.EventSystems;
 
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHandler
 {
 
     [SerializeField] private int id;
@@ -79,6 +79,42 @@ public class Item : MonoBehaviour
         sprite = item.sprite;
     }
 
+    public void SetInventoryInfomation()
+    {
+        DialogueManager.Instance.SetItemNameText("Table_ItemName", id);
+        DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", id);
+    }
 
 
+    public void OnTouchStarted(Vector2 position)
+    {
+        if (gameObject.CompareTag("Item3D"))
+        {
+            inven.GetItemTouch(this);
+        }
+    }
+
+    public void OnTouchHold(Vector2 position)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnTouchEnd(Vector2 position)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (gameObject.CompareTag("Item2D"))
+        {
+            Debug.Log("§≈§¡ º≠≈√");
+            SetInventoryInfomation();
+        }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        //throw new System.NotImplementedException();
+    }
 }
