@@ -1,43 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Voltmeter : MonoBehaviour
 {
-    [SerializeField] private GameObject[] cylinderArray = new GameObject[2];
-    [SerializeField] private GameObject[] btnArray = new GameObject[4];
-    private VoltBtn[] btnComponentArray = new VoltBtn[4];
-    private ReadInputData[] inputArray=new ReadInputData[4];
-    public float correctAnswer;
+    [SerializeField] private Cylinder[] cylinderArray;
+    [SerializeField] private VoltBtn[] btnArray;
+    private float tolerance = 0.01f;
 
-    private bool isRotating;
+    public event Action Wrong;
 
     private void Start()
     {
-        for(int i=0; i < 4; i++)
+        foreach (var cylinder in cylinderArray)
         {
-            inputArray[i] = btnArray[i].GetComponent<ReadInputData>();
-            btnComponentArray[i] = btnArray[i].GetComponent<VoltBtn>();
+            cylinder.AfterRotate += CheckAnswer;
         }
 
-    }
-    private void Update()
-    {
-        foreach(var input in inputArray)
-        {
-            if (input.isTouch&&!isRotating)
-            {
-                int index = System.Array.IndexOf(inputArray, input);
-                btnComponentArray[index].BtnClick();
-                isRotating = true;
+        Wrong += ChangeBtnTouchState;
 
+    }
+
+    public void RotateCylinder(VoltBtn btn)
+    {
+        for(int i = 0; i < 2; i ++)
+        {
+            cylinderArray[i].Rotate(btn.GetValue()[i]);
+        }
+    }
+
+    private void CheckAnswer()
+    {
+        foreach(var cylinder in cylinderArray)
+        {
+            if (Mathf.Abs(cylinder.transform.eulerAngles.z - cylinder.correctValue) > tolerance)
+            {
+                Wrong?.Invoke();
+                return; // `Wrong`이 호출되면 `Correct`를 호출하지 않음
+            }
+        }
+
+        CompleteGame();
+    }
+    private void ChangeBtnTouchState()
+    {
+        foreach (var btn in btnArray)
+        {
+            if (btn.canTouch.Equals(false))
+            {
+                btn.canTouch = true;
+                break;
             }
         }
     }
 
-    private void RotateStateChange()
+    private void CompleteGame()
     {
-        isRotating = false;
+        Debug.Log("게임 종료");
+        foreach(var btn in btnArray)
+        {
+            btn.canTouch = false;
+        }
     }
     
 }

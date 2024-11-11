@@ -1,64 +1,59 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Cylinder : MonoBehaviour
 {
-    public bool isRotating = false;
-    private int minValue=0;
+    private int minValue = 0;
     private int maxValue = 180;
-    public int correctValue;
+    public float rotateSpeed;
+    public float correctValue;
 
-    private void Update()
-    {
-        
-    }
+    public event Action AfterRotate; // 회전 완료 시 실행할 이벤트
 
-    private Quaternion SetRotateValue(float rotateValue, float rotateSpeed)
+    private Quaternion targetRotation; // 목표 회전값
+    private bool isRotating = false; // 회전 중 여부 확인
+
+    private Quaternion SetRotateValue(float rotateValue)
     {
         float targetRotationZ;
-        if (transform.rotation.z + rotateValue > maxValue)
+
+        // 목표 회전값 설정 (minValue와 maxValue 사이로 제한)
+        if (transform.eulerAngles.z + rotateValue > maxValue)
         {
             targetRotationZ = maxValue;
         }
-        else if (transform.rotation.z + rotateValue < minValue)
+        else if (transform.eulerAngles.z + rotateValue < minValue)
         {
             targetRotationZ = minValue;
         }
         else
         {
-            targetRotationZ = transform.rotation.z + rotateValue;
+            targetRotationZ = transform.eulerAngles.z + rotateValue;
         }
-        Quaternion targetRotation = 
-            new Quaternion(transform.rotation.x, transform.rotation.y, targetRotationZ, transform.rotation.w);
 
-        return targetRotation;
+        return Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, targetRotationZ);
     }
 
-    public void Rotate(float rotateValue,float rotateSpeed)
+    public void Rotate(float rotateValue)
     {
-        float targetRotationZ;
-        if (transform.rotation.z + rotateValue > 180)
-        {
-            targetRotationZ = 180;
-        }
-        else if(transform.rotation.z+rotateValue<0)
-        {
-            targetRotationZ = 0;
-        }
-        else
-        {
-            targetRotationZ = transform.rotation.z + rotateValue;
-        }
+        targetRotation = SetRotateValue(rotateValue); // 목표 회전값 설정
+        isRotating = true; // 회전 시작
+    }
 
-        Quaternion targetRotation = new Quaternion(transform.rotation.x, transform.rotation.y, 
-            targetRotationZ, transform.rotation.w);
-        transform.rotation = Quaternion.Lerp(transform.rotation,targetRotation,rotateSpeed);
-
-        if (Quaternion.Angle(transform.rotation, targetRotation) < 0.1f)
+    private void Update()
+    {
+        if (isRotating)
         {
-            transform.rotation = targetRotation;
-            isRotating = false;
+            // 목표 회전으로 부드럽게 회전
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+
+            // 목표 회전에 근사하면 회전 종료
+            if (Quaternion.Angle(transform.rotation, targetRotation) < 0.1f)
+            {
+                transform.rotation = targetRotation;
+                isRotating = false;
+                AfterRotate?.Invoke(); // 회전 완료 이벤트 호출
+            }
         }
     }
 }
