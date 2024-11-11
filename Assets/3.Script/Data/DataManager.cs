@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Linq;
@@ -26,6 +27,7 @@ public class DataManager : MonoBehaviour
 
         InitDic();
         LoadAllData();
+        SceneManager.sceneLoaded += LoadSceanData;
     }
 
 
@@ -48,11 +50,15 @@ public class DataManager : MonoBehaviour
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
         dicItemData = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
 
+    }
+
+
+    private void LoadSceanData(Scene scene, LoadSceneMode mode)
+    {
+        Item[] listarr = FindObjectsOfType<Item>();
 
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-            Item[] listarr = FindObjectsOfType<Item>();
-
             if (listarr.Length > 0)
             {
                 for (int i = 0; i < listarr.Length; i++)
@@ -61,33 +67,18 @@ public class DataManager : MonoBehaviour
                     {
                         listarr[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
                         Sprite sprite = Resources.Load<Sprite>($"UI/Item/{itemdata.Value.spritename}");
+                        Debug.Log(sprite.name);
 
-                        if(sprite != null)
+                        if (sprite != null)
                         {
-                            Debug.Log(sprite.name);
 
                             listarr[i].SetSprite(sprite);
                         }
                     }
                 }
             }
-
-
-            //if (GameObject.Find(itemdata.Value.name) != null)
-            //{
-            //    if(GameObject.Find(itemdata.Value.name).TryGetComponent(out Item item))
-            //    {
-            //        item.InputItemInfomationByID(itemdata.Key, itemdata.Value);
-            //    }
-            //}
-            //else
-            //{
-
-            //}
         }
     }
-
-
 
 
     public ItemData GetItemDataInfoById(int id)

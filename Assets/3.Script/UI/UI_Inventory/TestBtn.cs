@@ -1,29 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using static UnityEditor.Progress;
 
 public class TestBtn : MonoBehaviour
 {
     [SerializeField] UI_Inventory inven;
 
+    List<Item> list;
+
     int i = 0;
+
+    private void Start()
+    {
+        list = FindObjectsOfType<Item>().ToList();
+        Debug.Log(list.Count);
+    }
 
     public void CreateItem()
     {
-        GameObject obj = new GameObject();
-        Item item = obj.AddComponent<Item>();
 
-        Debug.Log(i);
-        ItemData data = DataManager.instance.GetItemDataInfoById(i);
+        inven.GetItemTouch(list[i]);
+        Debug.Log(list[i].name);
         i++;
-        item.InputItemInfomationByID(data.id, data);
-        obj.name = data.name;
-        Sprite sprite = Resources.Load<Sprite>($"UI/Item/{data.spritename}");
-        item.SetSprite(sprite);
 
-        inven.GetItemTouch(item);
 
-        
+
+
     }
 
 }
