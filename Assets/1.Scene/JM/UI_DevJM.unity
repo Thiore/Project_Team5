@@ -820,31 +820,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 195989983}
-  - component: {fileID: 195989982}
+  - component: {fileID: 195989984}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &195989982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195989981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29ab52c4293d284419a21aa4127dfbf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  touchableObjectLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  playerInput: {fileID: -944628639613478452, guid: d0fa07e34403ee9408680bc6a609cef8, type: 3}
-  playerCamera: {fileID: 532270463}
+  m_IsActive: 1
 --- !u!4 &195989983
 Transform:
   m_ObjectHideFlags: 0
@@ -860,6 +843,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &195989984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195989981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04131b179f9b9ae4a9cf828c7467ee89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputAsset: {fileID: -944628639613478452, guid: 59635ca0e21d78e409d5461498e7670d, type: 3}
+  touchableObjectLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  touchDistance: 10
 --- !u!1 &230774438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1037,6 @@ GameObject:
   - component: {fileID: 250502444}
   - component: {fileID: 250502443}
   - component: {fileID: 250502442}
-  - component: {fileID: 250502441}
   - component: {fileID: 250502440}
   - component: {fileID: 250502439}
   m_Layer: 6
@@ -1080,19 +1079,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTouch: 0
---- !u!114 &250502441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 250502438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 163ab7272b40d0845b2aab99a34e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemExplanationIndex: 0
 --- !u!64 &250502442
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3254,7 +3240,6 @@ GameObject:
   - component: {fileID: 684241851}
   - component: {fileID: 684241850}
   - component: {fileID: 684241849}
-  - component: {fileID: 684241848}
   - component: {fileID: 684241847}
   m_Layer: 6
   m_Name: note_2
@@ -3283,19 +3268,6 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
---- !u!114 &684241848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684241846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!114 &684241849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5439,7 +5411,6 @@ GameObject:
   - component: {fileID: 1229060896}
   - component: {fileID: 1229060895}
   - component: {fileID: 1229060894}
-  - component: {fileID: 1229060893}
   - component: {fileID: 1229060892}
   m_Layer: 0
   m_Name: medical_record
@@ -5468,19 +5439,6 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
---- !u!114 &1229060893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1229060891}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b09702d1307ebf4db0145a38a65d625, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clueIndex: 2
 --- !u!114 &1229060894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6063,7 +6021,7 @@ GameObject:
   - component: {fileID: 1313165733}
   - component: {fileID: 1313165732}
   m_Layer: 0
-  m_Name: bundle_of_keys
+  m_Name: bunch_of_keys
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9601,6 +9559,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db46a3094be24b143afc63e4687fd6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueButton: {fileID: 0}
+  dialogueText: {fileID: 0}
+  itemName: {fileID: 0}
+  explanation: {fileID: 0}
 --- !u!4 &1915711226
 Transform:
   m_ObjectHideFlags: 0
@@ -10734,7 +10696,6 @@ GameObject:
   - component: {fileID: 1422502914233652134}
   - component: {fileID: 7714558730638048903}
   - component: {fileID: 8082883806497170585}
-  - component: {fileID: 8082883806497170586}
   m_Layer: 6
   m_Name: note_1
   m_TagString: touchableobject
@@ -10991,19 +10952,6 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
---- !u!114 &8082883806497170586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1639070562776867890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!114 &8546097789189662575
 MonoBehaviour:
   m_ObjectHideFlags: 0

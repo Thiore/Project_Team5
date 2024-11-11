@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, ITouchable
 {
 
     [SerializeField] private int id;
@@ -79,6 +79,22 @@ public class Item : MonoBehaviour
         sprite = item.sprite;
     }
 
+
+    public void OnTouchStarted(Vector2 position)
+    {
+        Debug.Log("ÅÍÄ¡");
+        inven.GetItemTouch(this);
+    }
+
+    public void OnTouchHold(Vector2 position)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnTouchEnd(Vector2 position)
+    {
+        throw new System.NotImplementedException();
+    }
 
 
 }
