@@ -67,7 +67,6 @@ public class DataManager : MonoBehaviour
                     {
                         listarr[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
                         Sprite sprite = Resources.Load<Sprite>($"UI/Item/{itemdata.Value.spritename}");
-                        Debug.Log(sprite.name);
 
                         if (sprite != null)
                         {

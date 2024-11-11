@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class UI_Inventory : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryslots;
     [SerializeField] private GameObject[] quickSlots;
+
+    [SerializeField] private GameObject invenBtnPos;
+    [SerializeField] private GameObject quickBtnPos;
+    [SerializeField] private Image lerpImage;
 
     private List<Item> myitems;
 
@@ -26,38 +29,51 @@ public class UI_Inventory : MonoBehaviour
         myitems = new List<Item>();
     }
 
+
+    //아이템 Type에 따라 
     public void GetItemTouch(Item item)
     {
-        Debug.Log("겟터치발동");
+        lerpImage.sprite = item.Sprite;
+        lerpImage.transform.position = item.transform.position;
+        if (!lerpImage.gameObject.activeSelf)
+        {
+            lerpImage.gameObject.SetActive(true);
+        }
+        Vector3.Lerp(lerpImage.transform.position, invenBtnPos.transform.position, 10f);
+
+
         switch (item.Type)
         {
-            case eItemType.quick:
-                Debug.Log("퀵발동");
+            case eItemType.Quick:
                 AddItemQuick(item);
                 break;
 
-            case eItemType.element:
-                Debug.Log("인벤발동");
+            case eItemType.Element:
                 AddItemInventory(item);
                 break;
 
-            case eItemType.trigger:
-                Debug.Log("xmflrj발동");
+            case eItemType.Trigger:
                 AddItemQuick(item);
                 break;
 
-            case eItemType.clue:
-                Debug.Log("clue 발동");
+            case eItemType.Clue:
                 AddItemInventory(item);
+                break;
+
+            default:
+                Debug.Log("아무것도 아닌감?");
                 break;
 
         }
+
         myitems.Add(item);
+        lerpImage.gameObject.SetActive(false);
     }
 
 
     public void AddItemInventory(Item item)
     {
+
         for (int i = 0; i < inventoryslots.Length; i++)
         {
             if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
@@ -68,7 +84,6 @@ public class UI_Inventory : MonoBehaviour
                 if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
                     sprite.sprite = itemUI.Sprite;
-                    Debug.Log(sprite.sprite.name);
                 }
 
                 Destroy(item.gameObject);
@@ -83,7 +98,6 @@ public class UI_Inventory : MonoBehaviour
         {
             if (!quickSlots[i].TryGetComponent(out Item notusethis))
             {
-                Debug.Log("퀵 " + quickSlots[i].name);
                 quickSlots[i].SetActive(true);
                 quickSlots[i].transform.GetChild(0).gameObject.SetActive(true);
                 Item itemUI = quickSlots[i].AddComponent<Item>();
