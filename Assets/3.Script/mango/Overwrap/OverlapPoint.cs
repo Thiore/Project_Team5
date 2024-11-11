@@ -15,7 +15,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
 
     public List<OverlapObj> connectedObject;
 
-    public event Action<bool> Check;
+    public event Action Check;
 
 
     private void Start()
