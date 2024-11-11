@@ -1066,6 +1066,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!114 &250502440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2751,9 +2752,10 @@ GameObject:
   - component: {fileID: 616400382}
   - component: {fileID: 616400384}
   - component: {fileID: 616400383}
+  - component: {fileID: 616400385}
   m_Layer: 5
   m_Name: ItemInformation
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2818,6 +2820,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 616400381}
   m_CullTransparentMesh: 1
+--- !u!114 &616400385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616400381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc977cf99af6d144eb98ce3b57ea9a37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &630447202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2870,7 +2884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.47058824}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3212,6 +3226,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!4 &680185059
 Transform:
   m_ObjectHideFlags: 0
@@ -3268,6 +3283,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!114 &684241849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3478,6 +3494,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!23 &771669431
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5439,6 +5456,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!114 &1229060894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6047,6 +6065,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!23 &1313165733
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6346,8 +6365,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Item Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 19cbc0a9804268646843d3c73dc3d970, type: 2}
+  m_sharedMaterial: {fileID: 7567733333173173586, guid: 19cbc0a9804268646843d3c73dc3d970, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6600,6 +6619,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!64 &1361626960
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6727,6 +6747,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &1367727568
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8778,6 +8799,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!64 &1791155475
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -10424,6 +10446,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2073097910}
   m_CullTransparentMesh: 1
+--- !u!1 &2127642204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2127642206}
+  - component: {fileID: 2127642205}
+  m_Layer: 0
+  m_Name: flashlight
+  m_TagString: Item3D
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2127642205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127642204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f96dad555c6d4c0488f4d65072608bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  type: 0
+  elementindex: 0
+  combineindex: 0
+  tableName: 
+  isfix: 0
+  spritename: 
+  inven: {fileID: 0}
+  iteminfo: {fileID: 0}
+--- !u!4 &2127642206
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127642204}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
+  m_LocalPosition: {x: 10.234, y: 0.0739, z: -20.859}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2141526377
 GameObject:
   m_ObjectHideFlags: 0
@@ -10952,6 +11027,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!114 &8546097789189662575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11118,6 +11194,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!114 &9051381074691639620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11154,4 +11231,5 @@ SceneRoots:
   - {fileID: 1791155478}
   - {fileID: 1361626963}
   - {fileID: 1915711226}
+  - {fileID: 2127642206}
   - {fileID: 771669433}
