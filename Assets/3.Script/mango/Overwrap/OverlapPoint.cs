@@ -15,7 +15,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
 
     public List<OverlapObj> connectedObject;
 
-    public event Action Check;
+    public event Action<bool> Check;
 
 
     private void Start()
@@ -144,7 +144,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
         {
             foreach (var obj in connectedObject)
             {
-                if (obj.GetComponent<OverlapPoint>() != null) obj.GetComponent<OverlapPoint>().connectedObject.Clear();
+                if (obj.GetComponent<OverlapPoint>() != null&&!obj.Equals(overlapObj)) obj.GetComponent<OverlapPoint>().connectedObject.Clear();
 
                 obj.isConnected = false;
                 obj.line.enabled = false;
