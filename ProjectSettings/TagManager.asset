@@ -8,6 +8,15 @@ TagManager:
   - Mission
   - TargetObject
   - Area
+  - MainPlayer
+  - PlayInterface
+  - Clue
+  - Battery
+  - EmptyLantern
+  - SaveManager
+  - Connect
+  - UI_Canvas
+  - UI_Camera
   layers:
   - Default
   - TransparentFX
@@ -21,7 +30,7 @@ TagManager:
   - 
   - SlideObject
   - SlideWall
-  - 
+  - Down
   - 
   - 
   - 
@@ -44,4 +53,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Button
+    uniqueID: 3037454975
     locked: 0

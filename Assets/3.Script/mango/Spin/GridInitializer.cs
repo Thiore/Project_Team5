@@ -10,7 +10,7 @@ public class GridInitializer : MonoBehaviour
 
     private void Start()
     {
-        InitializeGrid();
+        //InitializeGrid();
     }
 
     private void InitializeGrid()
@@ -31,11 +31,11 @@ public class GridInitializer : MonoBehaviour
                 // 타일 생성 및 배치
                 GameObject tile = Instantiate(tilePrefab, startPosition + new Vector3(
                     x * (tileSize + tileSpacing),
-                    0,
+                    0.25f,
                     z * (tileSize + tileSpacing)
                 ), Quaternion.identity, gridParent);
 
-                tile.name = $"Tile_{x}_{z}"; // 타일 이름 지정
+                tile.name = $"{x+1},{z+1}"; // 타일 이름 지정
             }
         }
     }

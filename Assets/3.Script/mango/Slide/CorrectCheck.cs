@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CorrectCheck : MonoBehaviour
 {
@@ -51,6 +52,7 @@ public class CorrectCheck : MonoBehaviour
         Debug.Log("All rays hit the correct target.");
         Debug.Log("Game Win");
         image.SetActive(true);
+        Invoke("GameEnd", 3f);
         return true;
     }
 
@@ -64,4 +66,13 @@ public class CorrectCheck : MonoBehaviour
             Gizmos.DrawRay(rayOrigin, transform.up * rayDistance);
         }
     }
+    private void GameEnd()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
+
 }

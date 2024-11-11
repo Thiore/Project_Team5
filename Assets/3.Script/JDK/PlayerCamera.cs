@@ -1,65 +1,74 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
-using UnityEngine.InputSystem;
 
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoBehaviour, ITouchable
 {
-    private InputManager input;
-
-    [Header("Ä«¸Ş¶ó °¨µµ Á¶Àı ÇÁ·ÎÆÛÆ¼")]
-    [Range(0,10)]
-    [SerializeField] private float cameraSpeedX; // ¼öÆò Ä«¸Ş¶ó °¨µµ
+    
+    [Header("ì¹´ë©”ë¼ íšŒì „ ìŠ¤í”¼ë“œ")]
     [Range(0, 10)]
-    [SerializeField] private float cameraSpeedY; // ¼öÁ÷ Ä«¸Ş¶ó °¨µµ
+    private float cameraSpeed;
 
-    private Vector2 lastTouchPosition; // ¸¶Áö¸·À¸·Î ÅÍÄ¡ÇÑ À§Ä¡
+    //[SerializeField] private Slider slideSpeed;
+    private Vector2 lastTouchPosition;
 
     private Vector3 deltaRot;
 
-    private void Awake()
-    {
-        input = InputManager.Instance;
+    [SerializeField] private float clampRotX;
 
-       
-    }
+    private float currentRotationX;
+
     private void Start()
     {
+        TouchManager.Instance.OnLookStarted += OnTouchStarted;
+        TouchManager.Instance.OnLookHold += OnTouchHold;
+        TouchManager.Instance.OnLookEnd += OnTouchEnd;
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
-        if (cameraSpeedX.Equals(0f))
-            cameraSpeedX = 5f;
-        if (cameraSpeedY.Equals(0f))
-            cameraSpeedY = 5f;
-    }
-
-    private void Update()
-    {
-        if (!input.lookData.value.Equals(Vector2.zero))
-        {
-            Vector2 currentTouchPosition = input.lookData.value;
-            if (lastTouchPosition.Equals(Vector2.zero))
-            {
-                lastTouchPosition = currentTouchPosition; // ¸¶Áö¸· ÅÍÄ¡ À§Ä¡ ±â·Ï
-                return;
-            }
-            Vector2 delta = currentTouchPosition - lastTouchPosition;
-            deltaRot = new Vector3(-delta.y * cameraSpeedY, delta.x * cameraSpeedX);
-            lastTouchPosition = currentTouchPosition;
-        }
-        else
-        {
-            if (!lastTouchPosition.Equals(Vector2.zero))
-            {
-                // Ä«¸Ş¶ó È¸Àü °¨µµ¸¦ 0À¸·Î ¼³Á¤ÇÏ¿© È¸ÀüÀ» ¸ØÃã
-                lastTouchPosition = Vector2.zero;
-            }
-
-        }
+        cameraSpeed = 2f;
+        currentRotationX = transform.localEulerAngles.x; // ëˆ„ì  Xì¶• íšŒì „ê°’ì„ ì¶”ì í•˜ëŠ” ë³€ìˆ˜
     }
     private void FixedUpdate()
     {
-        
-        transform.Rotate(deltaRot*Time.fixedDeltaTime*5f);
+        // í„°ì¹˜ delta ê°’ì„ ê¸°ë°˜ìœ¼ë¡œ Xì¶• íšŒì „ê°’ì„ ê°±ì‹ 
+        currentRotationX -= deltaRot.y * Time.fixedDeltaTime * 5f;
+        currentRotationX = Mathf.Clamp(currentRotationX, -clampRotX, clampRotX); // Xì¶• íšŒì „ ì œí•œ
+
+        // Yì¶• íšŒì „ ì ìš© (deltaRot.xëŠ” Yì¶• íšŒì „ìœ¼ë¡œ ì‚¬ìš©)
+        float rotationY = deltaRot.x * Time.fixedDeltaTime * 5f;
+
+        // transform.localEulerAnglesì— ì œí•œëœ íšŒì „ê°’ì„ ì„¤ì •
+        transform.localEulerAngles = new Vector3(currentRotationX, transform.localEulerAngles.y + rotationY, 0f);
+
+        // deltaRot ì´ˆê¸°í™”
         deltaRot = Vector3.zero;
+    }
+    
+    public void CameraSpeed()
+    {
+        //cameraSpeed = slideSpeed.value;
+    }
+
+    public void OnTouchStarted(Vector2 position)
+    {
+        lastTouchPosition = position;
+    }
+
+    public void OnTouchHold(Vector2 position)
+    {
+        if (!position.Equals(lastTouchPosition))
+        {
+            Vector2 delta = position - lastTouchPosition;
+            
+            deltaRot = new Vector3(delta.x * cameraSpeed, delta.y * cameraSpeed);
+                
+            lastTouchPosition = position;
+        }
+    }
+
+    public void OnTouchEnd(Vector2 position)
+    {
+        deltaRot = Vector3.zero;
+        lastTouchPosition = Vector2.zero;
     }
 }

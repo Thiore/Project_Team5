@@ -71,9 +71,14 @@ public class WiringGameManager : MonoBehaviour
                 nextindex = Random.Range(0, 4);
             }
 
+            //스타트랑 배선 똑같이 섞어 정렬
             Vector3 emptypos = startPoints[index].transform.position;
             startPoints[index].transform.position = startPoints[nextindex].transform.position;
             startPoints[nextindex].transform.position = emptypos;
+
+            Vector3 emptyWiripos = wirings[index].transform.position;
+            wirings[index].transform.position = wirings[nextindex].transform.position;
+            wirings[nextindex].transform.position = emptyWiripos;
         }
 
         for (int i = 0; i < shufflecount; i++)
@@ -91,18 +96,11 @@ public class WiringGameManager : MonoBehaviour
             endPoints[nextindex].transform.position = emptypos;
         }
 
-        // 다 섞고 배선 위치 정렬
-        for (int i = 0; i < startPoints.Length; i++)
-        {
-            Vector2 wiringspos = new Vector2(startPoints[i].transform.position.x + 66f, startPoints[i].transform.position.y);
-            wirings[i].transform.position = wiringspos;
-        }
-
 
     }
 
 
-    private void CheckWiringBool()
+    public void CheckWiringBool()
     {
         int check = 0;
         for(int i = 0; i < endWiringPoints.Length; i++)
@@ -116,6 +114,7 @@ public class WiringGameManager : MonoBehaviour
         if(check >= 4)
         {
             // 이거 게임 끝 
+            Debug.Log("게임 완료");
         }
         else
         {
