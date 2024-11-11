@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClueTrigger : MonoBehaviour
+public class ClueTrigger : MonoBehaviour, ITouchable
 {
     [SerializeField] private int clueIndex;
-    
 
+    private GameObject mainPlayer;
     private GameObject playInterface;
     private GameObject clue;
     private GameObject clueItem;
@@ -14,29 +14,11 @@ public class ClueTrigger : MonoBehaviour
     private GameObject uiCamera;
     private GameObject uiCanvas;
 
-    private ReadInputData input;
-
-    private void Start()
-    {
-
-        
-
-        //ReadInputData 가져오기
-        TryGetComponent(out input);
-
-    }
-
-    private void Update()
-    {
-        if (input.isTouch)
-        {
-            GetClue();
-        }
-    }
 
     //단서 오브젝트 얻었을 때, 3D_UI 활성화
     private void GetClue()
     {
+        Debug.Log("여기");
         //기본 UI 비활성화
         playInterface.gameObject.SetActive(false);
         uiCamera.gameObject.SetActive(true);
@@ -76,31 +58,54 @@ public class ClueTrigger : MonoBehaviour
 
     private void FindObjectUI()
     {
-
-
-        if (clue != null)
+        mainPlayer = GameObject.FindGameObjectWithTag("Player");
+        if (mainPlayer != null)
         {
-            Transform clueItem_ = clue.transform.GetChild(clueIndex);
-            clueItem = clueItem_.gameObject;
+            //UI_Camera 찾기
+            Transform UI_Camera = mainPlayer.transform.GetChild(2);
+            uiCamera = UI_Camera.gameObject;
 
-            Transform exit_ = uiCanvas.transform.GetChild(0);
-            exit = exit_.gameObject;
+            //Clue 찾기
+            Transform Clue_ = mainPlayer.transform.GetChild(3);
+            clue = Clue_.gameObject;
 
-            //임시로 5번 째에서 찾기, 테스트 끝나면 카메라 상단으로 올리고 clueIndex + 1 로
-            Transform camera_ = clue.transform.GetChild(4);
-            uiCamera = camera_.gameObject;
+            //UI_Canvas의 Exit 찾기
+            Transform UI_Canvas = mainPlayer.transform.GetChild(4);
+            uiCanvas = UI_Canvas.gameObject;
 
-            
+            //Canvas의 PlayInterface찾기
+            Transform PlayInterface_ = mainPlayer.transform.GetChild(5);
+            playInterface = PlayInterface_.gameObject;
+
+            if (clue != null)
+            {
+                Transform clueItem_ = clue.transform.GetChild(clueIndex);
+                clueItem = clueItem_.gameObject;
+
+                Transform exit_ = uiCanvas.transform.GetChild(0);
+                exit = exit_.gameObject;
+            }
         }
+
 
     }
 
     private void OnEnable()
     {
-        uiCamera = GameObject.FindGameObjectWithTag("UI_Camera");
-        uiCanvas = GameObject.FindGameObjectWithTag("UI_Canvas");
-        playInterface = GameObject.FindGameObjectWithTag("PlayInterface");
-        clue = GameObject.FindGameObjectWithTag("Clue");
         FindObjectUI();
+    }
+
+    public void OnTouchStarted(Vector2 position)
+    {
+        GetClue();
+    }
+
+    public void OnTouchHold(Vector2 position)
+    {
+    }
+
+    public void OnTouchEnd(Vector2 position)
+    {
+        
     }
 }

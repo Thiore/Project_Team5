@@ -13616,19 +13616,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &886925407240260308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6223943621415297879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!4 &890994542926235644
 Transform:
   m_ObjectHideFlags: 0
@@ -27087,7 +27074,6 @@ GameObject:
   - component: {fileID: 1530772090936435298}
   - component: {fileID: 8796983191433221119}
   - component: {fileID: 1764919367639167445}
-  - component: {fileID: 8796983191433221121}
   - component: {fileID: 8796983191433221120}
   - component: {fileID: 8796983191433221122}
   m_Layer: 6
@@ -40983,7 +40969,6 @@ GameObject:
   - component: {fileID: 2384256095950473685}
   - component: {fileID: 6165435050663476683}
   - component: {fileID: 948101708960119750}
-  - component: {fileID: 7851853767300286809}
   - component: {fileID: 7930972534814219232}
   - component: {fileID: 7930972534814219231}
   m_Layer: 6
@@ -73464,7 +73449,6 @@ GameObject:
   - component: {fileID: 129293581922820090}
   - component: {fileID: 9188680202420336345}
   - component: {fileID: 201516291384111580}
-  - component: {fileID: 886925407240260308}
   - component: {fileID: 9188680202420336346}
   m_Layer: 6
   m_Name: battery
@@ -91130,19 +91114,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6086116586539327643}
   m_Mesh: {fileID: 3920911135281066006, guid: 7b82c45b5d77d48488f6d3c192405ee4, type: 3}
---- !u!114 &7851853767300286809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3232089626222627111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!65 &7852192790095611707
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -98126,7 +98097,7 @@ GameObject:
   - component: {fileID: 1841186310494912635}
   m_Layer: 0
   m_Name: MainPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101532,19 +101503,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clueIndex: 0
---- !u!114 &8796983191433221121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983459065203442422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!114 &8796983191433221122
 MonoBehaviour:
   m_ObjectHideFlags: 0
