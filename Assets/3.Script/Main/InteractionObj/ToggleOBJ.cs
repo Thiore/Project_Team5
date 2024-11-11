@@ -7,9 +7,14 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
     [SerializeField] private GameObject cinemachine;
     private Animator anim;
     private readonly int openAnim = Animator.StringToHash("Open");
-    protected override void OnEnable()
+    protected override void Start()
     {
-        TryGetComponent(out anim);
+        base.Start();
+        if(!TryGetComponent(out anim))
+        {
+            transform.parent.TryGetComponent(out anim);
+        }
+        Debug.Log("¾Ö´Ô");
     }
 
     public void OnTouchStarted(Vector2 position)

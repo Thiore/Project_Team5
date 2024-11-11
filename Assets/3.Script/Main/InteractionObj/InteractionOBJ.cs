@@ -6,23 +6,21 @@ public class InteractionOBJ : MonoBehaviour
 {
     private Outline outline;
 
-    protected bool isTouching;
+    protected bool isTouching = false;
 
 
     
-    protected virtual void OnEnable()
+    protected virtual void Start()
     {
-        TryGetComponent(out outline);
-
-        if(outline.enabled)
+        if(TryGetComponent(out outline))
             outline.enabled = false;
 
-        isTouching = false;
+        Debug.Log("outline");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag("PlayerCam"))
         {
             outline.enabled = true;
         }
@@ -30,7 +28,7 @@ public class InteractionOBJ : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag("PlayerCam"))
         {
             outline.enabled = false;
         }
