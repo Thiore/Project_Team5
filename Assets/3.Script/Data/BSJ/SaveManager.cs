@@ -27,7 +27,7 @@ public class SaveManager : MonoBehaviour
 
         // Json파일 저장 경로
         savePath = Path.Combine(Application.persistentDataPath, "gameState.json");
-
+        Debug.Log(savePath);
         //게임 상태 초기화 (층 리스트 초기화)
         //gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
     }
@@ -89,6 +89,7 @@ public class SaveManager : MonoBehaviour
     {
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
+        Debug.Log("저장 완료");
     }
 
     // 상태 업데이트 (층 및 오브젝트 상태 업데이트)
