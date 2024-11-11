@@ -14,11 +14,6 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(TryGetComponent(out copyItem))
-        {
-            itemInformation.sprite = copyItem.Sprite;           
-        }
-
         dragcoroutine = StartCoroutine(HoldDragStart(eventData));
 
         
@@ -31,6 +26,10 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        //if (TryGetComponent(out copyItem))
+        //{
+        //    itemInformation.sprite = copyItem.Sprite;
+        //}
         dragImage.gameObject.SetActive(false);
     }
 

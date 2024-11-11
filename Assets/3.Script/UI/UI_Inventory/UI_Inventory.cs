@@ -24,6 +24,9 @@ public class UI_Inventory : MonoBehaviour
     // 2. 조합 
     // 3. 3D렌더링 
 
+
+    // 퀵슬롯 만약 0~3 있는데 2 쓰면 한칸씩 땡겨지게 
+
     private void Awake()
     {
         myitems = new List<Item>();
@@ -114,6 +117,35 @@ public class UI_Inventory : MonoBehaviour
         }
     }
 
+    public void GetCombineItem(Item item)
+    {
+        switch (item.Type)
+        {
+            case eItemType.Quick:
+                AddItemQuick(item);
+                break;
+
+            case eItemType.Element:
+                AddItemInventory(item);
+                break;
+
+            case eItemType.Trigger:
+                AddItemQuick(item);
+                break;
+
+            case eItemType.Clue:
+                AddItemInventory(item);
+                break;
+
+            default:
+                Debug.Log("아무것도 아닌감?");
+                break;
+
+        }
+
+        myitems.Add(item);
+    }
+
     public void OpenInventory()
     {
         for(int i = 0; i < inventoryslots.Length; i++)
@@ -124,5 +156,7 @@ public class UI_Inventory : MonoBehaviour
             }
         }
     }
+
+    //아이디 검사해서 있는지 없는지 bool return 
 
 }

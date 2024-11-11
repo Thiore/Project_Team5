@@ -12,6 +12,7 @@ public class DataManager : MonoBehaviour
 
     private Dictionary<int, ItemData> dicItemData;
     private Dictionary<int, Item> dicItem;
+    private List<Item> items;
 
     private void Awake()
     {
@@ -35,6 +36,7 @@ public class DataManager : MonoBehaviour
     {
         dicItemData = new Dictionary<int, ItemData>();
         dicItem = new Dictionary<int, Item>();
+        items = new List<Item>();
     }
 
     private void LoadAllData()
@@ -55,23 +57,23 @@ public class DataManager : MonoBehaviour
 
     private void LoadSceanData(Scene scene, LoadSceneMode mode)
     {
-        Item[] listarr = FindObjectsOfType<Item>();
+        items = FindObjectsOfType<Item>().ToList();
 
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
-            if (listarr.Length > 0)
+            if (items.Count > 0)
             {
-                for (int i = 0; i < listarr.Length; i++)
+                for (int i = 0; i < items.Count; i++)
                 {
-                    if (itemdata.Value.name == listarr[i].gameObject.name)
+                    if (itemdata.Value.name == items[i].gameObject.name)
                     {
-                        listarr[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
+                        items[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
                         Sprite sprite = Resources.Load<Sprite>($"UI/Item/{itemdata.Value.spritename}");
 
                         if (sprite != null)
                         {
 
-                            listarr[i].SetSprite(sprite);
+                            items[i].SetSprite(sprite);
                         }
                     }
                 }
@@ -85,6 +87,18 @@ public class DataManager : MonoBehaviour
         return dicItemData[id];
     }
 
+    public Item GetItemCombineIndex(int combineindex)
+    {
+        foreach(Item item in items)
+        {
+            if (item.Combineindex.Equals(combineindex))
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
 
 
 }

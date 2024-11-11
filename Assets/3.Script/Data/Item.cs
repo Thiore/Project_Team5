@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHandler
+public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
 
     [SerializeField] private int id;
@@ -16,9 +16,12 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public int ID { get => id; }
     public eItemType Type { get => type; }
+    public int Elementindex { get => elementindex; }
+    public int Combineindex { get => combineindex; }
 
 
     [SerializeField] private UI_Inventory inven;
+    [SerializeField] private UI_ItemInformation iteminfo;
 
     private bool isUI;
     private bool isUsed; 
@@ -29,6 +32,8 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
     private ReadInputData inputdata = null;
 
 
+    private Vector2 firstpos; 
+
     private void Awake()
     {
         if (TryGetComponent(out inputdata))
@@ -37,6 +42,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         }
 
         inven = FindObjectOfType<UI_Inventory>();
+        iteminfo = FindObjectOfType<UI_ItemInformation>();
     }
 
 
@@ -81,8 +87,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void SetInventoryInfomation()
     {
-        DialogueManager.Instance.SetItemNameText("Table_ItemName", id);
-        DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", id);
+        iteminfo.SetInfoByID(this);
     }
 
 
@@ -106,15 +111,21 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (gameObject.CompareTag("Item2D"))
-        {
-            Debug.Log("§≈§¡ º≠≈√");
-            SetInventoryInfomation();
-        }
+        firstpos = eventData.position;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        if (firstpos.Equals(eventData.position) && gameObject.CompareTag("Item2D"))
+        {
+            SetInventoryInfomation();
+        }
     }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+       
+    }
+
+
 }
