@@ -28,16 +28,18 @@ public class OverlapCheck : MonoBehaviour,ITouchable
             point.connectedObject.Clear();
         }
     }
-    public void CheckComplete()
+    public bool CheckComplete()
     {
         foreach(var point in pointList)
         {
             if (!point.GetComponent<OverlapObj>().isConnected)
             {
                 Debug.Log("아직 게임 안끝남");
+                return false;
             }
         }
         Debug.Log("게임끝남");
+        return true;
     }
 
     public void OnTouchStarted(Vector2 position)
