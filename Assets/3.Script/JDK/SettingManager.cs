@@ -10,23 +10,28 @@ public class SettingManager : MonoBehaviour
 
     [Header("언어 선택 색 프로퍼티")]
     [SerializeField] private Color LanguageChoiceColor;
-
-    public void Language(string sentence)
+    private void Start()
     {
-        switch (sentence)
+        Language(0);
+    }
+
+    public void Language(int languageIndex)
+    {
+        switch (languageIndex)
         {
-            case "Korea":
+            case 1:
 
                 KoreaLanguageText.color = LanguageChoiceColor;
                 EnglishLanguageText.color = Color.white;
+                DialogueManager.Instance.ChangeLocale(languageIndex);
 
                 break;
 
-            case "English":
+            case 0:
 
                 KoreaLanguageText.color = Color.white;
                 EnglishLanguageText.color = LanguageChoiceColor;
-
+                DialogueManager.Instance.ChangeLocale(languageIndex);
                 break;
 
             default:
