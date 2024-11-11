@@ -18,43 +18,73 @@ public class AudioMixerController : MonoBehaviour
 
 	private Slider audioSlider;
 
-    private void Start()
+    private void Awake()
     {
         TryGetComponent(out audioSlider);
+    }
+
+    private void OnEnable()
+    {
         switch (audioType)
         {
             case eAudioType.Master:
+                audioSlider.value = AudioManager.Instance.master;
                 audioSlider.onValueChanged.AddListener(SetMasterVolume);
                 break;
             case eAudioType.BGM:
+                audioSlider.value = AudioManager.Instance.BGM;
                 audioSlider.onValueChanged.AddListener(SetBGMVolume);
                 break;
             case eAudioType.SFX:
+                audioSlider.value = AudioManager.Instance.SFX;
                 audioSlider.onValueChanged.AddListener(SetSFXVolume);
                 break;
         }
     }
 
+    private void OnDisable()
+    {
+        switch (audioType)
+        {
+            case eAudioType.Master:
+                audioSlider.value = AudioManager.Instance.master;
+                audioSlider.onValueChanged.RemoveListener(SetMasterVolume);
+                break;
+            case eAudioType.BGM:
+                audioSlider.value = AudioManager.Instance.BGM;
+                audioSlider.onValueChanged.RemoveListener(SetBGMVolume);
+                break;
+            case eAudioType.SFX:
+                audioSlider.value = AudioManager.Instance.SFX;
+                audioSlider.onValueChanged.RemoveListener(SetSFXVolume);
+                break;
+        }
+    }
+
+
     private void SetMasterVolume(float volume)
     {
-        audioMixer.SetFloat("Master", Mathf.Log10(volume) * 20f);
+        float dBValue = Mathf.Lerp(-60f, 0f, volume);
+        audioMixer.SetFloat("Master", dBValue);
 
-        if (audioMixer.GetFloat("Master", out float value))
-            AudioManager.Instance.master = value;
+        
+            AudioManager.Instance.master = volume;
     }
 
     private void SetBGMVolume(float volume)
     {
-        audioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20f);
-        if (audioMixer.GetFloat("BGM", out float value))
-            AudioManager.Instance.BGM = value;
+        float dBValue = Mathf.Lerp(-60f, 0f, volume);
+        audioMixer.SetFloat("BGM", dBValue);
+        
+            AudioManager.Instance.BGM = volume;
     }
 
     private void SetSFXVolume(float volume)
     {
-        audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20f);
-        if (audioMixer.GetFloat("SFX", out float value))
-            AudioManager.Instance.SFX = value;
+        float dBValue = Mathf.Lerp(-60f, 0f, volume);
+        audioMixer.SetFloat("SFX", dBValue);
+        
+            AudioManager.Instance.SFX = volume;
     }
     
 }
