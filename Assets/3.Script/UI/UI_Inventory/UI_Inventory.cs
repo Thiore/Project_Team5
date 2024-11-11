@@ -63,8 +63,6 @@ public class UI_Inventory : MonoBehaviour
         {
             if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
             {
-                Debug.Log("¿Œ∫• " + inventoryslots[i].name);
-                inventoryslots[i].SetActive(true);
                 Item itemUI = inventoryslots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
 
@@ -103,11 +101,14 @@ public class UI_Inventory : MonoBehaviour
         }
     }
 
-    public void CurrentHaveItem()
+    public void OpenInventory()
     {
-        foreach (Item item in myitems)
+        for(int i = 0; i < inventoryslots.Length; i++)
         {
-
+            if (inventoryslots[i].TryGetComponent<Item>(out Item item))
+            {
+                inventoryslots[i].SetActive(true); 
+            }
         }
     }
 
