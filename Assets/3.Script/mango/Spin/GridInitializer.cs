@@ -10,7 +10,7 @@ public class GridInitializer : MonoBehaviour
 
     private void Start()
     {
-        //InitializeGrid();
+        InitializeGrid();
     }
 
     private void InitializeGrid()

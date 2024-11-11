@@ -47,7 +47,6 @@ public class StartPoint : MonoBehaviour, ITouchable,ISetColor
         line.startWidth=lineWidth;
         line.endWidth = lineWidth;
         line.enabled = false;
-        
     }
 
     public void OnTouchEnd(Vector2 position)
@@ -104,14 +103,6 @@ public class StartPoint : MonoBehaviour, ITouchable,ISetColor
         line.SetPosition(0, lineStartPoint.position);
         line.SetPosition(1, lineStartPoint.position);
         isTouching = true;
-    }
-    private void OnDrawGizmos()
-    {
-        if (isTouching) // 터치 중일 때만 Gizmo를 그립니다.
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(worldPosition, 0.001f); // worldPosition 위치에 빨간색 구를 그림
-        }
     }
 
     public void setColor(WireColor color)
