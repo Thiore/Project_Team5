@@ -1,9 +1,9 @@
 public enum eItemType
 {
-    element = 0,
-    clue,
-    trigger,
-    quick
+    Element = 0,
+    Clue,
+    Trigger,
+    Quick
 }
 
 public class ItemData
