@@ -200,7 +200,11 @@ public class TouchManager : MonoBehaviour
                             }
                             break;
                         case etouchState.Object:
+                        if (currentTouchDic.ContainsKey(touchId))
+                        {
                             currentTouchDic[touchId]?.OnTouchHold(position);
+                        }
+                        
                             break;
                     }
             }
@@ -238,21 +242,27 @@ public class TouchManager : MonoBehaviour
 
                             break;
                         case etouchState.Object:
+
+                        if (currentTouchDic.ContainsKey(touchId))
+                        {
                             currentTouchDic[touchId]?.OnTouchEnd(position);
                             currentTouchDic.Remove(touchId);
-                        
-                        if (currentTouchDic.Count.Equals(0))
-                            {
-                           
-                                touchState = etouchState.Normal;
-                            }
-                            break;
+                        }
+                        if (currentTouchDic.Count == 0)
+                        {
+                            touchState = etouchState.Normal;
+                        }
+                        break;
                     }
                 
                 activeTouchID.Remove(touchId);
-                Debug.Log("DicCount" + currentTouchDic.Count);
-                Debug.Log(activeTouchID.Count);
-                Debug.Log(touchState);
+                if(activeTouchID.Count.Equals(0))
+                {
+                    currentTouchDic.Clear();
+                }
+                //Debug.Log("DicCount" + currentTouchDic.Count);
+                //Debug.Log(activeTouchID.Count);
+                //Debug.Log(touchState);
 
             }
         }

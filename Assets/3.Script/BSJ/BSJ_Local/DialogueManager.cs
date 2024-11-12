@@ -44,8 +44,25 @@ public class DialogueManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        UpdateButtonColorByLocale();
+    }
+
+    private void OnEnable()
+    {
         // 씬 로드 이벤트 등록
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        // 씬 로드 이벤트 등록
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    //새 씬이 로드될 때 호출
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
         UpdateButtonColorByLocale();
     }
 
@@ -186,11 +203,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    //새 씬이 로드될 때 호출
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        UpdateButtonColorByLocale();
-    }
+    
    
     private void UpdateButtonColorByLocale()
     {
