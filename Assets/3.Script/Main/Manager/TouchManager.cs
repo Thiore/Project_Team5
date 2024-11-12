@@ -121,11 +121,12 @@ public class TouchManager : MonoBehaviour
 
         foreach (var touch in Touchscreen.current.touches)
         {
-            int touchId = touch.touchId.ReadValue();
+           
             
             
             if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
             {
+                int touchId = touch.touchId.ReadValue();
                 Vector2 position = touch.position.ReadValue();
                 if (IsTouchOnUI(touchId) &&
                     (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
@@ -180,6 +181,7 @@ public class TouchManager : MonoBehaviour
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Stationary)
             {
+                int touchId = touch.touchId.ReadValue();
                 if (touchState.Equals(etouchState.UI)) return;
 
                 Vector2 position = touch.position.ReadValue();
@@ -204,9 +206,9 @@ public class TouchManager : MonoBehaviour
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Canceled)
             {
+                int touchId = touch.touchId.ReadValue();
 
-                
-                    Vector2 position = touch.position.ReadValue();
+                Vector2 position = touch.position.ReadValue();
                     switch (touchState)
                     {
                         case etouchState.Player:
@@ -238,14 +240,19 @@ public class TouchManager : MonoBehaviour
                         case etouchState.Object:
                             currentTouchDic[touchId]?.OnTouchEnd(position);
                             currentTouchDic.Remove(touchId);
-                            
-                            if (currentTouchDic.Count.Equals(0))
+                        
+                        if (currentTouchDic.Count.Equals(0))
                             {
+                           
                                 touchState = etouchState.Normal;
                             }
                             break;
                     }
+                
                 activeTouchID.Remove(touchId);
+                Debug.Log("DicCount" + currentTouchDic.Count);
+                Debug.Log(activeTouchID.Count);
+                Debug.Log(touchState);
 
             }
         }
@@ -455,24 +462,27 @@ public class TouchManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(touchPosition);
             RaycastHit hit;
             //레이케스트가 터치가능 오브젝트에 충돌했거나 어디에도 충돌되지 않았을 때
-            if (Physics.Raycast(ray, out hit, touchDistance, dontTouchableObjectLayer) || hit.collider == null)
+            if (Physics.Raycast(ray, out hit, touchDistance))
             {
-                if(hit.collider == null)
-                {
-                    if (Physics.Raycast(ray, out hit, touchDistance, touchableObjectLayer))
-                    {
-                        if (hit.collider.TryGetComponent(out ITouchable touchable))
-                        {
-                            if (currentTouchDic.ContainsValue(touchable))
-                                return false;
-                            currentTouchDic.Add(touchId, touchable);
-                            currentTouchDic[touchId].OnTouchStarted(touchPosition);
-                            Debug.Log(touchable);
-                            return true;
-                        }
-                    }
-                }
+                if (hit.collider == null) return false;
 
+                int hitLayer = hit.collider.gameObject.layer;
+
+                // `touchableObjectLayer`에 hit 객체의 레이어가 포함되어 있는지 확인
+                bool isTouchableObject = (touchableObjectLayer.value & (1 << hitLayer)) != 0;
+
+                if(isTouchableObject)
+                {
+                    if (hit.collider.TryGetComponent(out ITouchable touchable))
+                    {
+                        if (currentTouchDic.ContainsValue(touchable))
+                            return false;
+                        currentTouchDic.Add(touchId, touchable);
+                        currentTouchDic[touchId].OnTouchStarted(touchPosition);
+                        Debug.Log(touchable);
+                        return true;
+                    }
+                }     
 
                 return false;
             }
