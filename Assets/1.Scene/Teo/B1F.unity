@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 5241249}
   m_Layer: 5
   m_Name: QuikSlot (4)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 9402653}
   m_Layer: 5
   m_Name: ItemSlot (1)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 64066478}
   m_Layer: 5
   m_Name: ItemSlot (4)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -409,7 +409,7 @@ GameObject:
   - component: {fileID: 107903421}
   m_Layer: 5
   m_Name: ItemSlot (3)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -724,7 +724,7 @@ GameObject:
   - component: {fileID: 224062034}
   m_Layer: 5
   m_Name: ItemSlot (2)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1925,7 +1925,7 @@ GameObject:
   - component: {fileID: 955361490}
   m_Layer: 5
   m_Name: QuikSlot
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2222,7 +2222,7 @@ GameObject:
   - component: {fileID: 1076890434}
   m_Layer: 5
   m_Name: QuikSlot (2)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2989,6 +2989,7 @@ RectTransform:
   - {fileID: 4889000597098135642}
   - {fileID: 6260408328703356125}
   - {fileID: 2067388078}
+  - {fileID: 1947912129}
   m_Father: {fileID: 1841186310494912635}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3073,7 +3074,7 @@ GameObject:
   - component: {fileID: 1620319590}
   m_Layer: 5
   m_Name: QuikSlot (1)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3785,6 +3786,81 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1947912128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1947912129}
+  - component: {fileID: 1947912131}
+  - component: {fileID: 1947912130}
+  m_Layer: 5
+  m_Name: LerpImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1947912129
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947912128}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1600041433}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 250, y: 250}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1947912130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947912128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1947912131
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947912128}
+  m_CullTransparentMesh: 1
 --- !u!1 &1977185722
 GameObject:
   m_ObjectHideFlags: 0
@@ -4493,7 +4569,7 @@ GameObject:
   - component: {fileID: 2099169286}
   m_Layer: 5
   m_Name: QuikSlot (3)
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31302,6 +31378,8 @@ MonoBehaviour:
   dialogueText: {fileID: 8130438475716778809}
   itemName: {fileID: 0}
   explanation: {fileID: 0}
+  koreanButtonText: {fileID: 0}
+  englishButtonText: {fileID: 0}
 --- !u!1 &2288227563718608145
 GameObject:
   m_ObjectHideFlags: 0
@@ -47425,9 +47503,9 @@ MonoBehaviour:
   - {fileID: 1076890429}
   - {fileID: 2099169281}
   - {fileID: 5241244}
-  invenBtnPos: {fileID: 0}
-  quickBtnPos: {fileID: 0}
-  lerpImage: {fileID: 0}
+  invenBtnPos: {fileID: 4362441819129587207}
+  quickBtnPos: {fileID: 5199711293931047169}
+  lerpImage: {fileID: 1947912130}
 --- !u!33 &3695911873911258418
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -66738,6 +66816,7 @@ GameObject:
   - component: {fileID: 6508318144959570295}
   - component: {fileID: 2677692412165041349}
   - component: {fileID: 5052367702586563880}
+  - component: {fileID: 6508318144959570296}
   m_Layer: 5
   m_Name: ItemInformation
   m_TagString: Untagged
@@ -77049,6 +77128,19 @@ RectTransform:
   m_AnchoredPosition: {x: -760, y: -0.000061035156}
   m_SizeDelta: {x: 900, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6508318144959570296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5606788545563665759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc977cf99af6d144eb98ce3b57ea9a37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inven: {fileID: 3694914205221222943}
 --- !u!1 &6510092248437217351
 GameObject:
   m_ObjectHideFlags: 0
@@ -106397,7 +106489,7 @@ GameObject:
   - component: {fileID: 9135732707815318543}
   m_Layer: 5
   m_Name: ItemSlot
-  m_TagString: Untagged
+  m_TagString: Item2D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
