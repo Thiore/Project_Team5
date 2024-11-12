@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class LockGame : MonoBehaviour
     private int[] correctNumber = { 1, 3, 0, 4 }; //정답 번호
     private int[] currentNumber = { 0, 0, 0, 0 }; //현재 번호
 
+    //회전중인 휠 코루틴
+    private Coroutine[] rotation_co;
+
     //각 번호 휠 오브젝트 (4개)
     public Transform[] numberWheels;
 
@@ -27,11 +31,9 @@ public class LockGame : MonoBehaviour
     //각 휠의 목표 회전 각도
     private Quaternion[] targetRotations;
 
-    
 
     
     public GameObject canvas;
-    private ReadInputData input;
     public bool isAnswer;
 
 
@@ -39,12 +41,7 @@ public class LockGame : MonoBehaviour
     {
         saveManager = GameObject.FindGameObjectWithTag("SaveManager").GetComponent<SaveManager>();
 
-        TryGetComponent(out input);
-
         ani.GetComponent<Animator>();
-
-        //번호 리셋
-        ResetLock();
 
         //초기 목표 회전 각도
         targetRotations = new Quaternion[numberWheels.Length];
@@ -52,58 +49,100 @@ public class LockGame : MonoBehaviour
         {
             targetRotations[i] = numberWheels[i].localRotation;
         }
-    }
-    private void Update()
-    {
-        //GameSetting();
-        for (int i = 0; i < numberWheels.Length; i++)
-        {
-            //목표 회전 각도까지 부드럽게
-            numberWheels[i].localRotation = Quaternion.Lerp
-                (numberWheels[i].localRotation,
-                targetRotations[i],
-                Time.deltaTime * rotationSpeed);
 
+        //회전코루틴 초기화
+        rotation_co = new Coroutine[4];
+        for(int i = 0; i < 4;i++)
+        {
+            rotation_co[i] = null;
         }
+
+        //번호 리셋
+        ResetLock();
     }
+    //private void Update()
+    //{
+    //    //GameSetting();
+    //    for (int i = 0; i < numberWheels.Length; i++)
+    //    {
+    //        //목표 회전 각도까지 부드럽게
+    //        numberWheels[i].localRotation = Quaternion.Lerp
+    //            (numberWheels[i].localRotation,
+    //            targetRotations[i],
+    //            Time.deltaTime * rotationSpeed);
+
+    //    }
+    //}
 
     //번호 리셋
     public void ResetLock()
     {
         for (int i = 0; i < currentNumber.Length; i++)
         {
+            if(rotation_co[i] != null)
+            {
+                StopCoroutine(rotation_co[i]);
+                rotation_co[i] = null;
+            }
+            
             currentNumber[i] = 0;
-            numberWheels[i].localRotation = Quaternion.Euler(0, 0, -180);
+            numberWheels[i].localRotation = Quaternion.Euler(0f, 0f, -180f);
         }
     }
 
     
 
     //특정 번호 휠을 오른쪽으로 회전(+36도)
-    public void RotateWheelRight(int wheelIndext)
+    public void RotateWheelRight(int wheelIndex)
     {
-        currentNumber[wheelIndext] = (currentNumber[wheelIndext] + 1) % 10;
+        if(rotation_co[wheelIndex] == null && !isAnswer)
+        {
+            currentNumber[wheelIndex] = (currentNumber[wheelIndex] + 1) % 10;
 
-        //각 번호 휠을 해당 숫자에 맞게 회전
-        float newRotation = currentNumber[wheelIndext] * rotationAngle;
-        targetRotations[wheelIndext] = Quaternion.Euler(0, newRotation, -180);
-
-        //정답확인
-        CheckNumber();
+            //각 번호 휠을 해당 숫자에 맞게 회전
+            float newRotation = currentNumber[wheelIndex] * rotationAngle;
+            targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, -180);
+            rotation_co[wheelIndex] = StartCoroutine(RotateWheel(wheelIndex));
+        }
     }
 
     //특정 번호 휠을 왼쪽으로 회전 (-36도)
     public void RotateWheelLeft(int wheelIndex)
     {
-        //숫자를 감소시키고, 0보다 작으면 9로 설정
-        currentNumber[wheelIndex] = (currentNumber[wheelIndex] - 1 + 10) % 10;
+        if (rotation_co[wheelIndex] == null&&!isAnswer)
+        {
+            //숫자를 감소시키고, 0보다 작으면 9로 설정
+            currentNumber[wheelIndex] = (currentNumber[wheelIndex] - 1 + 10) % 10;
 
-        //각 번호 휠을 해당 숫자에 맞게 회전
-        float newRotation = currentNumber[wheelIndex] * rotationAngle;
-        targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, -180);
+            //각 번호 휠을 해당 숫자에 맞게 회전
+            float newRotation = currentNumber[wheelIndex] * rotationAngle;
+            targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, -180);
+        }
+    }
 
+    /// <summary>
+    /// 코루틴 회전을 위한 변수입니다.
+    /// </summary>
+    /// <param name="wheelIndex">선택된 휠의 index값</param>
+    /// <returns></returns>
+    private IEnumerator RotateWheel(int wheelIndex)
+    {
+        float rotationTime = 0f;
+
+        while(rotationTime<1f)
+        {
+            //목표 회전 각도까지 부드럽게
+            numberWheels[wheelIndex].localRotation =
+                Quaternion.Slerp(numberWheels[wheelIndex].localRotation,
+                                 targetRotations[wheelIndex],
+                                 rotationTime / rotationSpeed);
+            yield return null;
+        }
         //정답 확인
         CheckNumber();
+        rotation_co = null;
+        yield break;
+
     }
 
     //현재 번호와 정답 번호 비교

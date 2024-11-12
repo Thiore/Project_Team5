@@ -55,6 +55,7 @@ public class TouchManager : MonoBehaviour
     private Dictionary<int, ITouchable> currentTouchDic; // 현재 터치된 오브젝트
 
     [SerializeField] private LayerMask touchableObjectLayer;
+    private LayerMask dontTouchableObjectLayer;
 
     private HashSet<int> activeTouchID;// 활성화된 터치 ID 추적
     private int moveID;
@@ -72,6 +73,9 @@ public class TouchManager : MonoBehaviour
 
             InputActionMap actionMap = inputAsset.FindActionMap("Input");
             touchAction = actionMap.FindAction("Touch");
+
+            dontTouchableObjectLayer = ~touchableObjectLayer;
+
             //DontDestroyOnLoad(gameObject);
         }
         else
@@ -122,7 +126,14 @@ public class TouchManager : MonoBehaviour
             if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
             {
                 Vector2 position = touch.position.ReadValue();
-                if (IsTouchOnJoystickArea(position) &&
+                if (IsTouchOnUI(touchId) &&
+                    (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
+                {
+                    activeTouchID.Add(touchId);
+
+                    touchState = etouchState.UI;
+                }
+                else if (IsTouchOnJoystickArea(position) &&
                          moveID.Equals(-1) &&
                          (touchState.Equals(etouchState.Normal) ||
                          touchState.Equals(etouchState.Player)))
@@ -134,15 +145,7 @@ public class TouchManager : MonoBehaviour
                     if (touchState.Equals(etouchState.Normal))
                         touchState = etouchState.Player;
 
-                }
-                else if (IsTouchOnUI(touchId) &&
-                    (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
-                {
-                    activeTouchID.Add(touchId);
-
-                    touchState = etouchState.UI;
-                }
-                
+                }       
                 else if (IsTouchableObjectAtPosition(touchId, position))
                 {
                     activeTouchID.Add(touchId);
@@ -179,7 +182,9 @@ public class TouchManager : MonoBehaviour
                 if (touchState.Equals(etouchState.UI)) return;
 
                     Vector2 position = touch.position.ReadValue();
-                    switch (touchState)
+                Ray ray = Camera.main.ScreenPointToRay(position);
+                Debug.DrawRay(ray.origin, ray.direction * touchDistance, Color.red);
+                switch (touchState)
                     {
                         case etouchState.Player:
                             if (moveID.Equals(touchId))
@@ -448,19 +453,23 @@ public class TouchManager : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(touchPosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, touchDistance, touchableObjectLayer))
+            //레이케스트가 터치가능 오브젝트에 충돌했거나 어디에도 충돌되지 않았을 때
+            if (Physics.Raycast(ray, out hit, touchDistance, dontTouchableObjectLayer) || hit.collider == null)
             {
-                if (hit.collider.TryGetComponent(out ITouchable touchable))
-                {
-                    if (currentTouchDic.ContainsValue(touchable))
-                        return false;
-                    currentTouchDic.Add(touchId, touchable);
-                    currentTouchDic[touchId].OnTouchStarted(touchPosition);
-                    Debug.Log("이거");
-                    return true;
-                }
-
+                return false;
             }
+
+            if (hit.collider.TryGetComponent(out ITouchable touchable))
+            {
+                if (currentTouchDic.ContainsValue(touchable))
+                    return false;
+                currentTouchDic.Add(touchId, touchable);
+                currentTouchDic[touchId].OnTouchStarted(touchPosition);
+                Debug.Log("이거");
+                return true;
+            }
+
+            
         }
         
         return false;

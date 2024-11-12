@@ -8,6 +8,8 @@ public class Keypad_Btn : MonoBehaviour
     [SerializeField] private InputField input;
     [SerializeField] private int answer;
 
+    [SerializeField] private TouchPuzzleCanvas touchablePuzzle;
+
     //상호작용 관련
     [SerializeField] private int floorIndex; //오브젝트의 현재 층
     [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
@@ -40,6 +42,7 @@ public class Keypad_Btn : MonoBehaviour
                 if (input.text.Equals(answer.ToString()))
                 {
                     saveManager.UpdateObjectState(floorIndex, objectIndex, true);
+                    touchablePuzzle.isClear = true;
                 }
                 input.text = "";
             }
