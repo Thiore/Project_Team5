@@ -58,7 +58,6 @@ public class DataManager : MonoBehaviour
     private void LoadSceanData(Scene scene, LoadSceneMode mode)
     {
         items = FindObjectsOfType<Item>().ToList();
-
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
             if (items.Count > 0)
@@ -93,10 +92,12 @@ public class DataManager : MonoBehaviour
         {
             if (item.Combineindex.Equals(combineindex))
             {
+                Debug.Log("여기");
                 return item;
             }
         }
 
+                Debug.Log("널 전");
         return null;
     }
 

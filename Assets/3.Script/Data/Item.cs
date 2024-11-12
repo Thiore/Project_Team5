@@ -60,7 +60,6 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
     {
         this.id = id;
         type = (eItemType)data.eItemType;
-        Debug.Log(type);
         elementindex = data.elementindex;
         combineindex = data.combineindex;
         tableName = data.tableName;
