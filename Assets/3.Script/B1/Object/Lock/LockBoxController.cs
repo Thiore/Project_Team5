@@ -6,7 +6,6 @@ public class LockBoxController : MonoBehaviour
 {
     [SerializeField] private int floorIndex; //오브젝트의 현재 층
     [SerializeField] private int objectIndex; // 상호작용 오브젝트 인덱스
-    private SaveManager saveManager;
     private Animator ani;
     private ReadInputData input;
     private bool isAnswer; //상호작용 오브젝트 정답여부
@@ -14,7 +13,6 @@ public class LockBoxController : MonoBehaviour
 
     private void Start()
     {
-        saveManager = GameObject.FindGameObjectWithTag("SaveManager").GetComponent<SaveManager>();
         ani = GetComponent<Animator>();
         TryGetComponent(out input);
     }
@@ -28,7 +26,7 @@ public class LockBoxController : MonoBehaviour
     private void CheckBoxState()
     {
         //해당 층과 오브젝트 인덱스에 해당하는 isInteracted 상태 확인
-        StateData.FloorState floor = saveManager.gameState.floors.Find(f => f.floorIndex == floorIndex);
+        StateData.FloorState floor = SaveManager.Instance.gameState.floors.Find(f => f.floorIndex == floorIndex);
 
         if (floor != null)
         {

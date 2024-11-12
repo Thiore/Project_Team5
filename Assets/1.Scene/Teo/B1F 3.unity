@@ -25149,7 +25149,6 @@ GameObject:
   - component: {fileID: 1827678419793146530}
   - component: {fileID: 7152577637441584119}
   - component: {fileID: 2230447328609927322}
-  - component: {fileID: 7152577637441584122}
   - component: {fileID: 7152577637441584121}
   - component: {fileID: 7152577637441584120}
   m_Layer: 6
@@ -31511,6 +31510,8 @@ MonoBehaviour:
   dialogueText: {fileID: 8130438475716778809}
   itemName: {fileID: 214782834}
   explanation: {fileID: 72374054}
+  koreanButtonText: {fileID: 2076108128818130071}
+  englishButtonText: {fileID: 6717344097316225909}
 --- !u!1 &2288227563718608145
 GameObject:
   m_ObjectHideFlags: 0
@@ -53571,6 +53572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 2305545055902615134}
   answer: 27
+  touchablePuzzle: {fileID: 0}
   floorIndex: 0
   objectIndex: 0
 --- !u!1 &4329418025972288505
@@ -56053,7 +56055,6 @@ GameObject:
   - component: {fileID: 4889000597098135642}
   - component: {fileID: 4359268703724770967}
   - component: {fileID: 8517878939214622050}
-  - component: {fileID: 7428203105785773672}
   m_Layer: 5
   m_Name: Setting Page
   m_TagString: Untagged
@@ -57571,7 +57572,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7428203105785773672}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: Language
         m_Mode: 5
@@ -57782,7 +57783,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7428203105785773672}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: Language
         m_Mode: 5
@@ -81019,7 +81020,7 @@ Animator:
   m_GameObject: {fileID: 3229201842017336784}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 099655b1640c87848882c077ff755037, type: 2}
+  m_Controller: {fileID: 9100000, guid: 69abf4ce20a1bdf4988ab87a026ae362, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -84076,19 +84077,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorIndex: 0
   objectIndex: 1
---- !u!114 &7152577637441584122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1802824408257321855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!108 &7152792852442739764
 Light:
   m_ObjectHideFlags: 0
@@ -86960,21 +86948,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7428203105785773672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4566731245824186216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 480d2e782a3ece04686c174a04a7f0d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KoreaLanguageText: {fileID: 2076108128818130071}
-  EnglishLanguageText: {fileID: 6717344097316225909}
-  LanguageChoiceColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!4 &7430556412934023647
 Transform:
   m_ObjectHideFlags: 0
@@ -87659,6 +87632,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &7487350051086953918
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -91120,6 +91094,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &7809837572670353212
 GameObject:
   m_ObjectHideFlags: 0
@@ -97383,6 +97358,9 @@ MonoBehaviour:
   touchableObjectLayer:
     serializedVersion: 2
     m_Bits: 64
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
   touchDistance: 3
 --- !u!4 &8384828106376944600
 Transform:
@@ -97434,6 +97412,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &8386930038341895935
 GameObject:
   m_ObjectHideFlags: 0
@@ -97570,6 +97549,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &8396312154016624741
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -97926,6 +97906,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!33 &8436535761259825534
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -99748,6 +99729,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &8605178904602363875
 GameObject:
   m_ObjectHideFlags: 0
@@ -101968,6 +101950,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!222 &8798708186913024274
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -102220,6 +102203,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!4 &8811516625816449968
 Transform:
   m_ObjectHideFlags: 0
@@ -105895,6 +105879,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &9110964536252130690
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -106126,6 +106111,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!65 &9116729658832752122
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -107295,6 +107281,7 @@ MonoBehaviour:
   isfix: 0
   spritename: 
   inven: {fileID: 0}
+  iteminfo: {fileID: 0}
 --- !u!1 &9193338573514904443
 GameObject:
   m_ObjectHideFlags: 0

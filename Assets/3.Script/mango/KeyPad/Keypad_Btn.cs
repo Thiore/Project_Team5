@@ -13,12 +13,9 @@ public class Keypad_Btn : MonoBehaviour
     //상호작용 관련
     [SerializeField] private int floorIndex; //오브젝트의 현재 층
     [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
-    private SaveManager saveManager; //상태관리
+    
 
-    private void Start()
-    {
-        saveManager = GameObject.FindGameObjectWithTag("SaveManager").GetComponent<SaveManager>();
-    }
+    
 
     public void BtnClick(Button clickedBtn)
     {
@@ -41,7 +38,7 @@ public class Keypad_Btn : MonoBehaviour
                 Debug.Log($"Answer is {input.text}");
                 if (input.text.Equals(answer.ToString()))
                 {
-                    saveManager.UpdateObjectState(floorIndex, objectIndex, true);
+                    SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex, true);
                     touchablePuzzle.isClear = true;
                 }
                 input.text = "";

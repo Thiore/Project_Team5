@@ -9,7 +9,6 @@ public class LockGame : MonoBehaviour
     //상호작용 관련
     [SerializeField] private int floorIndex; //오브젝트의 현재 층
     [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
-    private SaveManager saveManager; //상태관리
 
     private int[] correctNumber = { 1, 3, 0, 4 }; //정답 번호
     private int[] currentNumber = { 0, 0, 0, 0 }; //현재 번호
@@ -39,7 +38,6 @@ public class LockGame : MonoBehaviour
 
     private void Start()
     {
-        saveManager = GameObject.FindGameObjectWithTag("SaveManager").GetComponent<SaveManager>();
 
         ani.GetComponent<Animator>();
 
@@ -117,6 +115,7 @@ public class LockGame : MonoBehaviour
             //각 번호 휠을 해당 숫자에 맞게 회전
             float newRotation = currentNumber[wheelIndex] * rotationAngle;
             targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, -180);
+            rotation_co[wheelIndex] = StartCoroutine(RotateWheel(wheelIndex));
         }
     }
 
@@ -129,8 +128,9 @@ public class LockGame : MonoBehaviour
     {
         float rotationTime = 0f;
 
-        while(rotationTime<1f)
+        while(rotationTime/rotationSpeed<1f)
         {
+            rotationSpeed += Time.deltaTime;
             //목표 회전 각도까지 부드럽게
             numberWheels[wheelIndex].localRotation =
                 Quaternion.Slerp(numberWheels[wheelIndex].localRotation,
@@ -155,8 +155,7 @@ public class LockGame : MonoBehaviour
         }
 
         //번호가 맞으면 상태(true) 저장
-        saveManager.UpdateObjectState(floorIndex, objectIndex, true);
-
+        SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex, true);
         isAnswer = true;
         canvas.gameObject.SetActive(false);
         //번호가 맞으면 자물쇠 열리는 애니메이션 실행
