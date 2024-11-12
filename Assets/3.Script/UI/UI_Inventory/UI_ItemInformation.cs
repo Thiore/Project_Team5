@@ -40,8 +40,9 @@ public class UI_ItemInformation : MonoBehaviour, IPointerUpHandler, IDropHandler
             if(!item.ID.Equals(id) && item.Elementindex.Equals(elementindex))
             {
                 Debug.Log("조합가능");
+
                 Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
-              //  inven.GetCombineItem(combineitem);
+                inven.GetCombineItem(combineitem);
 
                 // 애들 비워줘야 됨 
                 
