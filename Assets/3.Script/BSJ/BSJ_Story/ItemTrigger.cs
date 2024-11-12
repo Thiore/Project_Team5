@@ -57,7 +57,7 @@ public class ItemTrigger : MonoBehaviour, ITouchable
     {
         
         ItemText();
-        GetItem();
+        //GetItem();
         //uiInventory.GetItemTouch();
     }
 
