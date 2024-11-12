@@ -12,6 +12,11 @@ public class UI_ItemInformation : MonoBehaviour, IPointerUpHandler, IDropHandler
     private int elementindex;
     public int Elementindex { get => elementindex; }
 
+    private void Start()
+    {
+        inven = PlayerManager.Instance.ui_inventory;
+    }
+
     public void SetInfoByID(Item item)
     {
         this.id = item.ID;
@@ -35,6 +40,7 @@ public class UI_ItemInformation : MonoBehaviour, IPointerUpHandler, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        Debug.Log("柯靛而");
         if (eventData.pointerDrag.gameObject.TryGetComponent(out Item item))
         {
             if(!item.ID.Equals(id) && item.Elementindex.Equals(elementindex))
@@ -43,6 +49,8 @@ public class UI_ItemInformation : MonoBehaviour, IPointerUpHandler, IDropHandler
 
                 Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
                 inven.GetCombineItem(combineitem);
+
+                inven.DestroyElement(item.Elementindex);
 
                 // 局甸 厚况拎具 凳 
                 

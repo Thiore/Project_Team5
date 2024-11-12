@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class UI_InventorySlot : MonoBehaviour/*, IPointerDownHandler, IPointerUpHandler, IDragHandler */
 {
     [SerializeField] private Image dragImage;
     [SerializeField] private Image itemInformation;
@@ -12,49 +12,52 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private Coroutine dragcoroutine;
     private float downTime;
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        dragcoroutine = StartCoroutine(HoldDragStart(eventData));
+    //public void OnPointerDown(PointerEventData eventData)
+    //{
+    //    dragcoroutine = StartCoroutine(HoldDragStart(eventData));
 
         
-    }
+    //}
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        dragImage.transform.position = eventData.position;
-    }
+    //public void OnDrag(PointerEventData eventData)
+    //{
+    //    dragImage.transform.position = eventData.position;
+    //}
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        //if (TryGetComponent(out copyItem))
-        //{
-        //    itemInformation.sprite = copyItem.Sprite;
-        //}
-        dragImage.gameObject.SetActive(false);
-    }
+    //public void OnPointerUp(PointerEventData eventData)
+    //{
+    //    Debug.Log("이건가");
+    //    if (TryGetComponent(out copyItem))
+    //    {
+    //        itemInformation.sprite = copyItem.Sprite;
+    //        copyItem.SetboolDrag();
+    //    }
+    //    dragImage.gameObject.SetActive(false);
+    //}
 
 
 
-    private IEnumerator HoldDragStart(PointerEventData eventData)
-    {
-        while (downTime < 2f)
-        {
-            downTime += Time.fixedDeltaTime;
-            yield return null;
-        }
+    //private IEnumerator HoldDragStart(PointerEventData eventData)
+    //{
+    //    while (downTime < 2f)
+    //    {
+    //        downTime += Time.fixedDeltaTime;
+    //        yield return null;
+    //    }
 
-        DragStart(eventData);
-        downTime = 0f;
-    }
+    //    DragStart(eventData);
+    //    downTime = 0f;
+    //}
 
-    private void DragStart(PointerEventData eventData)
-    {
-        //그 위치에서 활성화 
-        dragImage.transform.position = eventData.position;
-        if (TryGetComponent(out copyItem))
-        {
-            dragImage.sprite = copyItem.Sprite;
-            dragImage.gameObject.SetActive(true);
-        }
-    }
+    //private void DragStart(PointerEventData eventData)
+    //{
+    //    //그 위치에서 활성화 
+    //    dragImage.transform.position = eventData.position;
+    //    if (TryGetComponent(out copyItem))
+    //    {
+    //        dragImage.sprite = copyItem.Sprite;
+    //        copyItem.SetboolDrag();
+    //        dragImage.gameObject.SetActive(true);
+    //    }
+    //}
 }

@@ -4,10 +4,25 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private DialogueManager dialogue;
+    public static PlayerManager Instance { get; private set; } = null;
 
-    private void Start()
+    [SerializeField] private UI_Inventory inventory;
+    public UI_Inventory ui_inventory { get => inventory; }
+
+    [SerializeField] private UI_ItemInformation itemInfo;
+    public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
+
+
+    private void Awake()
     {
-        dialogue.SetDialogue("B1", 2);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
