@@ -260,9 +260,6 @@ public class TouchManager : MonoBehaviour
                 {
                     currentTouchDic.Clear();
                 }
-                //Debug.Log("DicCount" + currentTouchDic.Count);
-                //Debug.Log(activeTouchID.Count);
-                //Debug.Log(touchState);
 
             }
         }

@@ -74,7 +74,7 @@ public class ToggleOBJ : MonoBehaviour, ITouchable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainPlayer"))
+        if (other.CompareTag("MainCamera"))
         {
             outline.enabled = true;
         }
@@ -82,7 +82,7 @@ public class ToggleOBJ : MonoBehaviour, ITouchable
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("MainPlayer"))
+        if (other.CompareTag("MainCamera"))
         {
             outline.enabled = false;
         }
