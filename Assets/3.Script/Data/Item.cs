@@ -104,7 +104,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         //거리의 기준을 잡지못해 50으로 임시로 지정했습니다 추후 수정이 필요합니다.
         if (touchUpDelta<50f&&gameObject.CompareTag("Item3D"))
         {
-            inven.GetItemTouch(this);
+            inven.GetItemTouch(this); 
         }
     }
 

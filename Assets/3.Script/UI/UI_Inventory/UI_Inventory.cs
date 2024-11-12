@@ -69,7 +69,6 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
-        myitems.Add(item);
         lerpImage.gameObject.SetActive(false);
     }
 
@@ -110,7 +109,7 @@ public class UI_Inventory : MonoBehaviour
                 {
                     sprite.sprite = itemUI.Sprite;
                 }
-
+                myitems.Add(item);
                 Destroy(item.gameObject);
                 break;
             }
@@ -143,7 +142,6 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
-        myitems.Add(item);
     }
 
     public void OpenInventory()

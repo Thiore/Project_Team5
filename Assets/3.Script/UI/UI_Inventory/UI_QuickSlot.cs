@@ -11,6 +11,7 @@ public class UI_QuickSlot : MonoBehaviour/*,IPointerDownHandler, IPointerUpHandl
     private Coroutine dragcoroutine;
     private float downTime;
 
+    // 사용하면 떙겨지게 
     private void Awake()
     {
         
