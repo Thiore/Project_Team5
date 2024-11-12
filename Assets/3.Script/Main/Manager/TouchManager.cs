@@ -55,6 +55,7 @@ public class TouchManager : MonoBehaviour
     private Dictionary<int, ITouchable> currentTouchDic; // 현재 터치된 오브젝트
 
     [SerializeField] private LayerMask touchableObjectLayer;
+    [SerializeField] private LayerMask playerLayer;
     private LayerMask dontTouchableObjectLayer;
 
     private HashSet<int> activeTouchID;// 활성화된 터치 ID 추적
@@ -74,7 +75,7 @@ public class TouchManager : MonoBehaviour
             InputActionMap actionMap = inputAsset.FindActionMap("Input");
             touchAction = actionMap.FindAction("Touch");
 
-            dontTouchableObjectLayer = ~touchableObjectLayer;
+            dontTouchableObjectLayer = ~(touchableObjectLayer|playerLayer);
 
             //DontDestroyOnLoad(gameObject);
         }
@@ -181,7 +182,7 @@ public class TouchManager : MonoBehaviour
             {
                 if (touchState.Equals(etouchState.UI)) return;
 
-                    Vector2 position = touch.position.ReadValue();
+                Vector2 position = touch.position.ReadValue();
                 Ray ray = Camera.main.ScreenPointToRay(position);
                 Debug.DrawRay(ray.origin, ray.direction * touchDistance, Color.red);
                 switch (touchState)
@@ -456,18 +457,27 @@ public class TouchManager : MonoBehaviour
             //레이케스트가 터치가능 오브젝트에 충돌했거나 어디에도 충돌되지 않았을 때
             if (Physics.Raycast(ray, out hit, touchDistance, dontTouchableObjectLayer) || hit.collider == null)
             {
+                if(hit.collider == null)
+                {
+                    if (Physics.Raycast(ray, out hit, touchDistance, touchableObjectLayer))
+                    {
+                        if (hit.collider.TryGetComponent(out ITouchable touchable))
+                        {
+                            if (currentTouchDic.ContainsValue(touchable))
+                                return false;
+                            currentTouchDic.Add(touchId, touchable);
+                            currentTouchDic[touchId].OnTouchStarted(touchPosition);
+                            Debug.Log(touchable);
+                            return true;
+                        }
+                    }
+                }
+
+
                 return false;
             }
-
-            if (hit.collider.TryGetComponent(out ITouchable touchable))
-            {
-                if (currentTouchDic.ContainsValue(touchable))
-                    return false;
-                currentTouchDic.Add(touchId, touchable);
-                currentTouchDic[touchId].OnTouchStarted(touchPosition);
-                Debug.Log("이거");
-                return true;
-            }
+            
+            
 
             
         }
