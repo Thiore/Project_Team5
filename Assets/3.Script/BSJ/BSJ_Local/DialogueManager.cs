@@ -5,6 +5,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -19,6 +20,11 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
     public TMP_Text explanation; //인벤토리 아이템 설명 띄울 TextMeshPro
 
+    //옵션 관련 Text
+    public TMP_Text koreanButtonText; //한국어 버튼
+    public TMP_Text englishButtonText; //영어 버튼
+    private Color activeColor = Color.green; //활성화 중인 언어 텍스트의 색상
+    private Color inactiveColor = Color.white; //비활성화 중인 언어 텍스트의 색상
 
     private LocalizedString localizedString = new LocalizedString();
     private LocalizedString itemNameLocalizedString = new LocalizedString();
@@ -38,6 +44,9 @@ public class DialogueManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        // 씬 로드 이벤트 등록
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        UpdateButtonColorByLocale();
     }
 
     //Story 테이블 이름과 키값을 통해 대사 출력
@@ -156,8 +165,38 @@ public class DialogueManager : MonoBehaviour
 
         isChanging = false;
 
+        //현재 언어에 따라 버튼 색상 업데이트
+        UpdateButtonTextColor(index);
+
         //dia.SetDialogue("B1", 22);
     }
 
-    
+    //색상 업데이트
+    private void UpdateButtonTextColor(int index)
+    {
+        if (index == 1)
+        {
+            koreanButtonText.color = activeColor;
+            englishButtonText.color = inactiveColor;
+        }
+        else if (index == 0)
+        {
+            koreanButtonText.color = inactiveColor;
+            englishButtonText.color = activeColor;
+        }
+    }
+
+    //새 씬이 로드될 때 호출
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UpdateButtonColorByLocale();
+    }
+   
+    private void UpdateButtonColorByLocale()
+    {
+        // 현재 Locale의 인덱스를 가져와 버튼 색상 설정
+        int currentLocaleIndex = LocalizationSettings.AvailableLocales.Locales.IndexOf(LocalizationSettings.SelectedLocale);
+        UpdateButtonTextColor(currentLocaleIndex);
+    }
+
 }

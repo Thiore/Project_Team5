@@ -17,14 +17,10 @@ public class DoorController : MonoBehaviour, ITouchable
 
     //문이 열릴 수 있는 상태인지 확인 (퍼즐로 막혀 있는 문 or 격벽 정답 여부)
     private void CheckDoorState()
-    {
-
-        saveManager = GameObject.FindGameObjectWithTag("SaveManager").GetComponent<SaveManager>();
+    {        
         ani = GetComponent<Animator>();
 
-        bool isinteracted = saveManager.PuzzleState(floorIndex, objectIndex);
-        isTouchable = isinteracted;
-
+        isTouchable = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
     }
 
     //터치 가능 상태일 때
@@ -51,13 +47,11 @@ public class DoorController : MonoBehaviour, ITouchable
         CheckDoorState();
         if (isTouchable)
         {
-            Debug.Log("여기");
             EnableDoorInteraction();
         }
         else
         {
             DisableDoorInteraction();
-            Debug.Log("이러면 안된다...");
         }
     }
 
