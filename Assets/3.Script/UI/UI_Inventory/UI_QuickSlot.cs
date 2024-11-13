@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UI_QuickSlot : MonoBehaviour/*, IBeginDragHandler, IDragHandler*/
+public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDragHandler, IPointerUpHandler
 {
     [SerializeField] private Image dragImage;
     private Item copyItem;
@@ -24,32 +24,50 @@ public class UI_QuickSlot : MonoBehaviour/*, IBeginDragHandler, IDragHandler*/
         Debug.Log("퀵 온 드래그");
     }
 
-    private IEnumerator HoldDragStart(PointerEventData eventData)
-    {
-        while (downTime < 1.5f)
-        {
-            downTime += Time.fixedDeltaTime;
-            yield return null;
-        }
-
-        DragStart(eventData);
-        downTime = 0f;
-        Debug.Log("코루틴이 끝난 뒤");
-    }
-
-    private void DragStart(PointerEventData eventData)
-    {
-        //그 위치에서 활성화 
-        dragImage.transform.position = transform.position;
-
-        dragImage.gameObject.SetActive(true);
-        dragImage.sprite = copyItem.Sprite;
-
-    }
-
     public void OnBeginDrag(PointerEventData eventData)
     {
-       // dragcoroutine = StartCoroutine(HoldDragStart(eventData));
         Debug.Log("퀵 포인트 다운");
+
+        if (TryGetComponent(out copyItem))
+        {
+            if (copyItem.ID.Equals(2))
+            {
+                Debug.Log("되ㅣ,냐 ㄴㄻㄴㅇㅁㄹ");
+            }
+            else
+            {
+                dragImage.sprite = copyItem.Sprite;
+                dragImage.transform.position = eventData.position;
+                dragImage.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (copyItem.ID.Equals(2))
+        {
+            // 이걸로 큇슬롯 손전등 키기 끄기 
+        }
+        else
+        {
+
+        }
+
+        if (dragImage.gameObject.activeSelf)
+        {
+            dragImage.gameObject.SetActive(false);
+        }
+        Debug.Log("퀵 드래그엔드");
+        Debug.Log("여기다가 상호작용");
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (copyItem.ID.Equals(2))
+        {
+            // 이걸로 큇슬롯 손전등 키기 끄기 
+        }
+     
     }
 }

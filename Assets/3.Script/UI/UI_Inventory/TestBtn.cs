@@ -21,7 +21,7 @@ public class TestBtn : MonoBehaviour
     public void CreateItem()
     {
 
-        inven.GetItemTouch(list[i]);
+       // inven.GetItemTouch(list[i]);
         Debug.Log(list[i].name);
         i++;
 

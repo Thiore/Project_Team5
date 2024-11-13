@@ -1517,7 +1517,6 @@ GameObject:
   - component: {fileID: 503533061}
   - component: {fileID: 503533060}
   - component: {fileID: 503533059}
-  - component: {fileID: 503533062}
   m_Layer: 5
   m_Name: DragImage
   m_TagString: Untagged
@@ -1539,7 +1538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.50980395}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1582,19 +1581,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &503533062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 503533058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30dcdb1169581c14d948c5654e23a90c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dragImage: {fileID: 503533059}
 --- !u!1 &667850195
 GameObject:
   m_ObjectHideFlags: 0
@@ -3812,13 +3798,14 @@ GameObject:
   - component: {fileID: 1947912129}
   - component: {fileID: 1947912131}
   - component: {fileID: 1947912130}
+  - component: {fileID: 1947912132}
   m_Layer: 5
   m_Name: LerpImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1947912129
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3876,6 +3863,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1947912128}
   m_CullTransparentMesh: 1
+--- !u!114 &1947912132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947912128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52ca709355c475f43be6c1590a0455bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryButton: {fileID: 0}
 --- !u!1 &1977185722
 GameObject:
   m_ObjectHideFlags: 0
@@ -47512,7 +47512,7 @@ MonoBehaviour:
   - {fileID: 5241244}
   invenBtnPos: {fileID: 4362441819129587207}
   quickBtnPos: {fileID: 5199711293931047169}
-  lerpImage: {fileID: 1947912130}
+  lerpImage: {fileID: 1947912132}
 --- !u!33 &3695911873911258418
 MeshFilter:
   m_ObjectHideFlags: 0
