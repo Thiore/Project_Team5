@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
@@ -25,9 +26,11 @@ public class SaveManager : MonoBehaviour
 
         // Json파일 저장 경로
         savePath = Path.Combine(Application.persistentDataPath, "gameState.json");
+        Debug.Log(savePath);
 
         //게임 상태 초기화 (층 리스트 초기화)
         gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
+
     }
     //유저가 백그라운드로 갔을 때, 저장
     private void OnApplicationPause(bool pause)
@@ -51,8 +54,19 @@ public class SaveManager : MonoBehaviour
         //gameState 초기화 (층 리스트)
         gameState = new StateData.GameState
         {
-            floors = new List<StateData.FloorState>()
+            floors = new List<StateData.FloorState>(),
+
+            //플레이어 초기화
+            playerPositionX = 203.672f,
+            playerPositionY = 1f,
+            playerPositionZ = 2.91f,
+            playerRotationX = 0,
+            playerRotationY = 0,
+            playerRotationZ = 0,
+            playerRotationW = 1 // 기본 회전 설정
+
         };
+
 
         // 각 층과 상호작용 오브젝트 초기화 및 기본 상태 설정 (임시로 4 해놨음)
         for (int floorIndex = 0; floorIndex < 4; floorIndex++)
@@ -95,12 +109,15 @@ public class SaveManager : MonoBehaviour
             string json = File.ReadAllText(savePath);
             //Json 문자열을 GameState 객체로 할당
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
+
         }
     }
 
     // 게임 상태 저장
     public void SaveGameState()
     {
+        //플레이어 위치 및 회전 저장
+        
 
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
@@ -148,7 +165,6 @@ public class SaveManager : MonoBehaviour
             objState.isInteracted = isInteracted;
         }
 
-       
 
     }
 
@@ -169,4 +185,81 @@ public class SaveManager : MonoBehaviour
         return false;
     }
 
+    public void LoadPlayerPosition(Transform obj)
+    {
+        
+        if (obj != null)
+        {
+            obj.transform.localPosition = new Vector3(
+                gameState.playerPositionX,
+                gameState.playerPositionY,
+                gameState.playerPositionZ
+                );
+            obj.transform.localRotation = new Quaternion(
+                gameState.playerRotationX,
+                gameState.playerRotationY,
+                gameState.playerRotationZ,
+                gameState.playerRotationW
+                );
+        }
+
+    }
+
+    public void SavePlayerPosition(Transform obj)
+    {
+        
+        if (obj != null)
+        {
+            gameState.playerPositionX = obj.transform.localPosition.x;
+            gameState.playerPositionY = obj.transform.localPosition.y;
+            gameState.playerPositionZ = obj.transform.localPosition.z;
+
+            gameState.playerRotationX = obj.transform.localRotation.x;
+            gameState.playerRotationY = obj.transform.localRotation.y;
+            gameState.playerRotationZ = obj.transform.localRotation.z;
+            gameState.playerRotationW = obj.transform.localRotation.w;
+        }
+
+    }
+
+    //private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    //{
+    //    // 게임 플레이가 진행되는 B1F 씬에서만 LoadGameState 호출
+    //    if (scene.name == "B1F 3") // B1F 씬 이름을 정확하게 사용
+    //    {
+    //        LoadGameState();
+    
+    //    }
+    //}
+
+    //private IEnumerator test_co()
+    //{
+    //    GameObject player = GameObject.FindGameObjectWithTag("RealPlayer");
+    //    if (player != null)
+    //    {
+    //        // 설정된 위치로 반복적으로 적용
+    //        Vector3 targetPosition = new Vector3(
+    //            gameState.playerPositionX,
+    //            gameState.playerPositionY,
+    //            gameState.playerPositionZ
+    //        );
+
+    //        Quaternion targetRotation = new Quaternion(
+    //            gameState.playerRotationX,
+    //            gameState.playerRotationY,
+    //            gameState.playerRotationZ,
+    //            gameState.playerRotationW
+    //        );
+
+    //        // 일정 시간 동안 반복하여 위치 적용
+    //        for (int i = 0; i < 5; i++) // 5회 반복 예시
+    //        {
+    //            player.transform.localPosition = targetPosition;
+    //            player.transform.localRotation = targetRotation;
+    //            Debug.Log($"EnsurePlayerPosition - Reapply Position: {player.transform.position}");
+    //            yield return new WaitForSeconds(0.1f); // 지연
+    //        }
+    //    }
+
+    //}
 }
