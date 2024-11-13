@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class UI_InventorySlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDragHandler
 {
     [SerializeField] private Image dragImage;
     [SerializeField] private Image itemInformation;
@@ -12,28 +12,10 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private Coroutine dragcoroutine;
     private float downTime;
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        dragcoroutine = StartCoroutine(HoldDragStart(eventData));
-
-        
-    }
-
     public void OnDrag(PointerEventData eventData)
     {
         dragImage.transform.position = eventData.position;
     }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        //if (TryGetComponent(out copyItem))
-        //{
-        //    itemInformation.sprite = copyItem.Sprite;
-        //}
-        dragImage.gameObject.SetActive(false);
-    }
-
-
 
     private IEnumerator HoldDragStart(PointerEventData eventData)
     {
@@ -57,4 +39,33 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
             dragImage.gameObject.SetActive(true);
         }
     }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log("아이템슬롯 포인트 다운");
+
+        if (TryGetComponent(out copyItem))
+        {
+            dragImage.sprite = copyItem.Sprite;
+            dragImage.transform.position = eventData.position;
+            dragImage.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        dragImage.gameObject.SetActive(false);
+        Debug.Log("드래그엔드");
+        Debug.Log(eventData.pointerEnter.name);
+
+        if(eventData.pointerEnter.TryGetComponent(out UI_ItemInformation info))
+        {
+            info.Combine(eventData);
+        }
+
+        //좀 개똥 처럼 해둠 
+
+
+    }
+
 }

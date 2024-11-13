@@ -54,8 +54,7 @@ public class ItemTrigger : MonoBehaviour, ITouchable
     }
 
     public void OnTouchStarted(Vector2 position)
-    {
-        
+    {        
         ItemText();
         //GetItem();
         //uiInventory.GetItemTouch();

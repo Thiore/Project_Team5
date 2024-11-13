@@ -4,13 +4,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ItemInformation : MonoBehaviour, IPointerUpHandler, IDropHandler
+public class UI_ItemInformation : MonoBehaviour/*, IDropHandler*/
 {
     [SerializeField] UI_Inventory inven;
     private int id;
     public int ID { get; private set; }
     private int elementindex;
     public int Elementindex { get => elementindex; }
+
+    private void Start()
+    {
+        inven = PlayerManager.Instance.ui_inventory;
+    }
 
     public void SetInfoByID(Item item)
     {
@@ -24,31 +29,45 @@ public class UI_ItemInformation : MonoBehaviour, IPointerUpHandler, IDropHandler
         }
     }
 
-
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log(eventData.pointerEnter.gameObject.name);
-        Debug.Log("실행되나");
-
-    }
-
-    public void OnDrop(PointerEventData eventData)
+    public void Combine(PointerEventData eventData)
     {
         if (eventData.pointerDrag.gameObject.TryGetComponent(out Item item))
         {
-            if(!item.ID.Equals(id) && item.Elementindex.Equals(elementindex))
+            if (!item.ID.Equals(id) && item.Elementindex.Equals(elementindex))
             {
                 Debug.Log("조합가능");
 
                 Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
                 inven.GetCombineItem(combineitem);
 
+                inven.DestroyElement(item.Elementindex);
+
                 // 애들 비워줘야 됨 
-                
+
             }
         }
-    
+    }
+
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        Debug.Log("afsdafsdafsdafsd!!!#!!!!!!!!");
+        if (eventData.pointerDrag.gameObject.TryGetComponent(out Item item))
+        {
+            if (!item.ID.Equals(id) && item.Elementindex.Equals(elementindex))
+            {
+                Debug.Log("조합가능");
+
+                Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
+                inven.GetCombineItem(combineitem);
+
+                inven.DestroyElement(item.Elementindex);
+
+                // 애들 비워줘야 됨 
+
+            }
+        }
+
     }
 
 }

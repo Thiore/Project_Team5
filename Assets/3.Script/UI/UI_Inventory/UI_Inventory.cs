@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UI_Inventory : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryslots;
+    public GameObject[] InvenSolt { get => inventoryslots; }
     [SerializeField] private GameObject[] quickSlots;
 
     [SerializeField] private GameObject invenBtnPos;
@@ -32,18 +33,34 @@ public class UI_Inventory : MonoBehaviour
         myitems = new List<Item>();
     }
 
+    private void OnEnable()
+    {
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if(inventoryslots.Length > 0)
+            {
+                if (inventoryslots[i].TryGetComponent(out Item item))
+                {
+                    inventoryslots[i].gameObject.SetActive(true);
+                }
+            }
+
+        }
+    }
+
 
     //아이템 Type에 따라 
     public void GetItemTouch(Item item)
     {
-        lerpImage.sprite = item.Sprite;
-        lerpImage.transform.position = item.transform.position;
-        if (!lerpImage.gameObject.activeSelf)
-        {
-            lerpImage.gameObject.SetActive(true);
-        }
-        Vector3.Lerp(lerpImage.transform.position, invenBtnPos.transform.position, 10f);
+        //lerpImage.sprite = item.Sprite;
+        //lerpImage.transform.position = item.transform.position;
+        //if (!lerpImage.gameObject.activeSelf)
+        //{
+        //    lerpImage.gameObject.SetActive(true);
+        //}
+        //Vector3.Lerp(lerpImage.transform.position, invenBtnPos.transform.position, 10f);
 
+        OutPutItemText(item);
 
         switch (item.Type)
         {
@@ -69,7 +86,6 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
-        myitems.Add(item);
         lerpImage.gameObject.SetActive(false);
     }
 
@@ -97,6 +113,21 @@ public class UI_Inventory : MonoBehaviour
 
     public void AddItemQuick(Item item)
     {
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
+            {
+                Item itemUI = inventoryslots[i].AddComponent<Item>();
+                itemUI.PutInInvenItem(item);
+
+                if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = itemUI.Sprite;
+                }
+                break;
+            }
+        }
+
         for (int i = 0; i < quickSlots.Length; i++)
         {
             if (!quickSlots[i].TryGetComponent(out Item notusethis))
@@ -110,7 +141,7 @@ public class UI_Inventory : MonoBehaviour
                 {
                     sprite.sprite = itemUI.Sprite;
                 }
-
+                myitems.Add(item);
                 Destroy(item.gameObject);
                 break;
             }
@@ -119,6 +150,8 @@ public class UI_Inventory : MonoBehaviour
 
     public void GetCombineItem(Item item)
     {
+        OutPutItemText(item);
+
         switch (item.Type)
         {
             case eItemType.Quick:
@@ -143,16 +176,22 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
-        myitems.Add(item);
     }
 
     public void OpenInventory()
     {
-        for(int i = 0; i < inventoryslots.Length; i++)
+        for (int i = 0; i <inventoryslots.Length; i++)
         {
             if (inventoryslots[i].TryGetComponent<Item>(out Item item))
             {
-                inventoryslots[i].SetActive(true); 
+                if (!item.gameObject.activeSelf)
+                {
+                    inventoryslots[i].SetActive(true);
+                }
+                if (i.Equals(0) && inventoryslots.Length != 0)
+                {
+                    item.SetInventoryInfomation();
+                }
             }
         }
     }
@@ -167,7 +206,7 @@ public class UI_Inventory : MonoBehaviour
                 if (item.ID.Equals(id))
                 {
                     // 트루 반환하니까 아이템 정리 해야됨 
-                   // Destroy(item);
+                    // Destroy(item);
 
                     return true;
                 }
@@ -178,9 +217,40 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    public void DestroyElement(int elementindex)
     {
-        
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (inventoryslots[i].TryGetComponent(out Item item))
+            {
+                if (elementindex.Equals(item.Elementindex))
+                {
+                    Destroy(item);
+                }
+            }
+        }
+
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (inventoryslots.Length > 0)
+            {
+                if (inventoryslots[i].TryGetComponent(out Item item))
+                {
+                    inventoryslots[i].SetActive(true);
+                }
+                else
+                {
+                    inventoryslots[i].SetActive(false);
+                }
+            }
+
+        }
+    }
+
+
+    private void OutPutItemText(Item item)
+    {
+        DialogueManager.Instance.SetDialogue("Table_ItemExplanation", item.ID);
     }
 
 }

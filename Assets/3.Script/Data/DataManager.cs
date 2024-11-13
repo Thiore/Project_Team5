@@ -92,12 +92,9 @@ public class DataManager : MonoBehaviour
         {
             if (item.Combineindex.Equals(combineindex))
             {
-                Debug.Log("여기");
                 return item;
             }
         }
-
-                Debug.Log("널 전");
         return null;
     }
 
