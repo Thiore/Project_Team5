@@ -44,14 +44,6 @@ public class ItemTrigger : MonoBehaviour, ITouchable
 
     }
 
-    //아이템 넣기
-    private void GetItem()
-    {
-        if (TryGetComponent(out Item item))
-        {
-            uiInventory.GetItemTouch(item);
-        }
-    }
 
     public void OnTouchStarted(Vector2 position)
     {        
