@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UI_Inventory : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryslots;
+    public GameObject[] InvenSolt { get => inventoryslots; }
     [SerializeField] private GameObject[] quickSlots;
 
     [SerializeField] private GameObject invenBtnPos;
@@ -36,10 +37,12 @@ public class UI_Inventory : MonoBehaviour
     {
         for (int i = 0; i < inventoryslots.Length; i++)
         {
-            if (inventoryslots[i].TryGetComponent(out Item item))
+            if(inventoryslots.Length > 0)
             {
-                inventoryslots[i].gameObject.SetActive(true);
-                item.SetInventoryInfomation();
+                if (inventoryslots[i].TryGetComponent(out Item item))
+                {
+                    inventoryslots[i].gameObject.SetActive(true);
+                }
             }
 
         }
@@ -49,13 +52,13 @@ public class UI_Inventory : MonoBehaviour
     //아이템 Type에 따라 
     public void GetItemTouch(Item item)
     {
-        lerpImage.sprite = item.Sprite;
-        lerpImage.transform.position = item.transform.position;
-        if (!lerpImage.gameObject.activeSelf)
-        {
-            lerpImage.gameObject.SetActive(true);
-        }
-        Vector3.Lerp(lerpImage.transform.position, invenBtnPos.transform.position, 10f);
+        //lerpImage.sprite = item.Sprite;
+        //lerpImage.transform.position = item.transform.position;
+        //if (!lerpImage.gameObject.activeSelf)
+        //{
+        //    lerpImage.gameObject.SetActive(true);
+        //}
+        //Vector3.Lerp(lerpImage.transform.position, invenBtnPos.transform.position, 10f);
 
         OutPutItemText(item);
 
@@ -147,6 +150,8 @@ public class UI_Inventory : MonoBehaviour
 
     public void GetCombineItem(Item item)
     {
+        OutPutItemText(item);
+
         switch (item.Type)
         {
             case eItemType.Quick:
@@ -158,7 +163,6 @@ public class UI_Inventory : MonoBehaviour
                 break;
 
             case eItemType.Trigger:
-                OutPutItemText(item);
                 AddItemQuick(item);
                 break;
 
@@ -219,18 +223,28 @@ public class UI_Inventory : MonoBehaviour
         {
             if (inventoryslots[i].TryGetComponent(out Item item))
             {
-                Debug.Log("삭제됫냐");
                 if (elementindex.Equals(item.Elementindex))
                 {
-                    inventoryslots[i].SetActive(false);
                     Destroy(item);
+                }
+            }
+        }
 
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (inventoryslots.Length > 0)
+            {
+                if (inventoryslots[i].TryGetComponent(out Item item))
+                {
+                    inventoryslots[i].SetActive(true);
+                }
+                else
+                {
+                    inventoryslots[i].SetActive(false);
                 }
             }
 
         }
-
-        OpenInventory();
     }
 
 

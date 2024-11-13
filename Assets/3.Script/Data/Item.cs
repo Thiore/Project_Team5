@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHandler
 {
 
     [SerializeField] private int id;
@@ -23,7 +23,6 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
     [SerializeField] private UI_Inventory inven;
     [SerializeField] private UI_ItemInformation iteminfo;
 
-    private bool isUI;
     private bool isUsed;
     private bool isDrag;
     public void SetboolDrag()
@@ -33,34 +32,15 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     private Sprite sprite;
     public Sprite Sprite { get => sprite; private set => sprite = Sprite; }
-
-
-
     private Vector2 firstPos;
 
-    private void Awake()
-    {
-        isUI = true;
-
-
-    }
     private void Start()
     {
+
         inven = PlayerManager.Instance.ui_inventory;
         iteminfo = PlayerManager.Instance.ui_iteminfo;
         // 이거 활성화로 찾아준 다음 해줘야됨 
     }
-
-
-    //private void Update()
-    //{
-    //if (isUI)
-    //{
-    //    inven.GetItemTouch(this);
-
-    //    Debug.Log("아이템 update");
-    //}
-    //}
 
     public void InputItemInfomationByID(int id, ItemData data)
     {
@@ -121,11 +101,9 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        firstPos = eventData.position;
-        Debug.Log("포인터다운");
         if (gameObject.CompareTag("Item2D"))
         {
-            
+            firstPos = eventData.position;
         }
     }
 
@@ -134,7 +112,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         //터치 땔때의 위치가 시작위치에서 일정거리 떨어져있을때 아무일도 안일어나도록 하기위해 사용
         float touchUpDelta = Vector2.Distance(firstPos, eventData.position);
         //거리의 기준을 잡지못해 50으로 임시로 지정했습니다 추후 수정이 필요합니다.
-        if (touchUpDelta < 50f && gameObject.CompareTag("Item2D") && !isDrag)
+        if (touchUpDelta < 50f && gameObject.CompareTag("Item2D"))
         {
             SetInventoryInfomation();
             if (!iteminfo.gameObject.activeSelf)
@@ -142,11 +120,6 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
                 iteminfo.gameObject.SetActive(true);
             }
         }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-       
     }
 
 
