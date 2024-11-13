@@ -91,15 +91,15 @@ public class DialogueManager : MonoBehaviour
         //3초 동안 버튼 비활성화
         dialogueButton.interactable = false;
         dialogueButton.gameObject.SetActive(true); //버튼 활성화
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         //3초 후 버튼 활성화 및 터치 이벤트
         dialogueButton.interactable = true;
         dialogueButton.onClick.AddListener(OnButtonClicked);
 
         //7초 후 자동 비활성화(터치로 비활성화되지 않았을 경우)
-        yield return new WaitForSeconds(4f); //3초 대기 후 4초 더 대기
-        dialogueButton.gameObject.SetActive(false);
+        //yield return new WaitForSeconds(4f); //3초 대기 후 4초 더 대기
+        //dialogueButton.gameObject.SetActive(false);
     }
 
     private void OnButtonClicked()

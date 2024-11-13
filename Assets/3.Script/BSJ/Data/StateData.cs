@@ -9,6 +9,17 @@ public class StateData : MonoBehaviour
     public class GameState
     {
         public List<FloorState> floors; //전체 층의 상태를 담는 리스트
+
+        //플레이어 위치
+        public float playerPositionX;
+        public float playerPositionY;
+        public float playerPositionZ;
+
+        //플레이어 회전
+        public float playerRotationX;
+        public float playerRotationY;
+        public float playerRotationZ;
+        public float playerRotationW;
     }
 
     //층별
