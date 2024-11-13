@@ -29,11 +29,11 @@ public class PlaneTiltController : MonoBehaviour
 
     private void Update()
     {
-        if(startTilt==new Vector3(0, 0, 0))
-        {
-            startTilt= Accelerometer.current.acceleration.ReadValue();
-            return;
-        }
+        //if(startTilt==new Vector3(0, 0, 0))
+        //{
+        //    startTilt= Accelerometer.current.acceleration.ReadValue();
+        //    return;
+        //}
 
         if (Accelerometer.current != null)
         {
@@ -57,8 +57,8 @@ public class PlaneTiltController : MonoBehaviour
     private void SetTargetRotation(Vector3 tiltDelta)
     {
         // X와 Z축에 대해 목표 회전 값 계산
-        float tiltX = Mathf.Clamp(-tiltDelta.x * tiltMultiplier, -45f, 45f);
-        float tiltZ = Mathf.Clamp(-tiltDelta.y * tiltMultiplier, -45f, 45f);
+        float tiltX = Mathf.Clamp(-tiltDelta.x * tiltMultiplier, -5f, 5f);
+        float tiltZ = Mathf.Clamp(-tiltDelta.y * tiltMultiplier, -5f, 5f);
 
         // 목표 회전 값을 설정
         targetRotation = Quaternion.Euler(tiltX, 0, tiltZ);

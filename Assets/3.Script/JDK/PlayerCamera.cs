@@ -13,7 +13,7 @@ public class PlayerCamera : MonoBehaviour, ITouchable
     private Vector2 lastTouchPosition;
 
     private Vector3 deltaRot;
-
+    [SerializeField] private Transform player;
     [SerializeField] private float clampRotX;
 
     private float currentRotationX;
@@ -27,6 +27,10 @@ public class PlayerCamera : MonoBehaviour, ITouchable
         deltaRot = Vector3.zero;
         cameraSpeed = 2f;
         currentRotationX = transform.localEulerAngles.x; // 누적 X축 회전값을 추적하는 변수
+    }
+    private void LateUpdate()
+    {
+        transform.position = player.position + transform.up * 0.5f;
     }
     private void FixedUpdate()
     {

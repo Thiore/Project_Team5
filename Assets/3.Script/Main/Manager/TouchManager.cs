@@ -534,6 +534,13 @@ public class TouchManager : MonoBehaviour
         //touchAction.canceled -= ctx => OnTouchCanceled(ctx);
     }
 
-    
-    
+
+    public void OnDisableMoveHandler()
+    {
+
+    }
+    public void OnEnableMoveHandler()
+    {
+
+    }
 }
