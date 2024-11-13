@@ -1659,6 +1659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInput: 0
+  B1F: B1F
 --- !u!4 &1806452925
 Transform:
   m_ObjectHideFlags: 0
@@ -3578,8 +3579,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState:
     floors: []
-    playerPosition: {x: 0, y: 0, z: 0}
-    playerRotation: {x: 0, y: 0, z: 0, w: 0}
+    playerPositionX: 0
+    playerPositionY: 0
+    playerPositionZ: 0
+    playerRotationX: 0
+    playerRotationY: 0
+    playerRotationZ: 0
+    playerRotationW: 0
 --- !u!4 &2072592083820470635
 Transform:
   m_ObjectHideFlags: 0

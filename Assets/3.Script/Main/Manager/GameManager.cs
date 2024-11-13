@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool isInput;
 
+    [SerializeField] private string B1F;
 
 
     private void Awake()
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
     }
     public void LoadB1F()
     {
-        SceneManager.LoadScene("B1F 3");
+        SceneManager.LoadScene(B1F);
     }
 
     public void GameEnd()

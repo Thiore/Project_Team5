@@ -7,7 +7,7 @@ public class WallCotroller : MonoBehaviour
     [SerializeField] private eBallType ballType;
     [SerializeField] private BallController ball;
 
-    [SerializeField] private WallCotroller[] walls;
+    [SerializeField] private MazeWall[] walls;
 
     public BoxCollider[] col { get; private set; }
     

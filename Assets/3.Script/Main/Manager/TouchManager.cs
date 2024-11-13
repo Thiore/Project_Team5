@@ -63,7 +63,8 @@ public class TouchManager : MonoBehaviour
     private int lookID;
 
     [SerializeReference] private float touchDistance;
-    
+
+    private bool isMoving;
 
     private void Awake()
     {
@@ -89,6 +90,7 @@ public class TouchManager : MonoBehaviour
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         OnEnableTuchAction();
+        isMoving = true;
     }
     private void OnDisable()
     {
@@ -135,7 +137,8 @@ public class TouchManager : MonoBehaviour
 
                     touchState = etouchState.UI;
                 }
-                else if (IsTouchOnJoystickArea(position) &&
+                else if (isMoving &&
+                         IsTouchOnJoystickArea(position) &&
                          moveID.Equals(-1) &&
                          (touchState.Equals(etouchState.Normal) ||
                          touchState.Equals(etouchState.Player)))
@@ -155,7 +158,7 @@ public class TouchManager : MonoBehaviour
                     touchState = etouchState.Object;
 
                 }
-                else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
+                else if ((touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player)))
                 {
                     if (IsTouchOnLeftScreen(position) && moveID.Equals(-1))
                     {
@@ -188,8 +191,10 @@ public class TouchManager : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(position);
                 Debug.DrawRay(ray.origin, ray.direction * touchDistance, Color.red);
                 switch (touchState)
-                    {
-                        case etouchState.Player:
+                {
+                    case etouchState.Player:
+                        if (isMoving)
+                        {
                             if (moveID.Equals(touchId))
                             {
                                 OnMoveHold?.Invoke(position);
@@ -198,15 +203,17 @@ public class TouchManager : MonoBehaviour
                             {
                                 OnLookHold?.Invoke(position);
                             }
-                            break;
-                        case etouchState.Object:
+                        }
+
+                        break;
+                    case etouchState.Object:
                         if (currentTouchDic.ContainsKey(touchId))
                         {
                             currentTouchDic[touchId]?.OnTouchHold(position);
                         }
-                        
-                            break;
-                    }
+
+                        break;
+                }
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended || touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Canceled)
             {
@@ -537,10 +544,10 @@ public class TouchManager : MonoBehaviour
 
     public void OnDisableMoveHandler()
     {
-
+        isMoving = false;
     }
     public void OnEnableMoveHandler()
     {
-
+        isMoving = true;
     }
 }
