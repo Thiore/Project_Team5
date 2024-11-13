@@ -29,6 +29,21 @@ public class SaveManager : MonoBehaviour
         //게임 상태 초기화 (층 리스트 초기화)
         gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
     }
+    //유저가 백그라운드로 갔을 때, 저장
+    private void OnApplicationPause(bool pause)
+    {
+        //어플리케이션이 백그라운드로 가거나, 다시 돌아왔을 때 호출
+        if (pause)
+        {
+            SaveGameState();
+        }
+    }
+
+    //어플리케이션이 종료 되었을 때
+    private void OnApplicationQuit()
+    {
+        SaveGameState();
+    }
 
     //새게임
     public void NewGame()
@@ -86,6 +101,7 @@ public class SaveManager : MonoBehaviour
     // 게임 상태 저장
     public void SaveGameState()
     {
+
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
     }
@@ -132,8 +148,7 @@ public class SaveManager : MonoBehaviour
             objState.isInteracted = isInteracted;
         }
 
-        //변경된 상태 Json 파일에 저장
-        SaveGameState();
+       
 
     }
 
@@ -153,4 +168,5 @@ public class SaveManager : MonoBehaviour
 
         return false;
     }
+
 }
