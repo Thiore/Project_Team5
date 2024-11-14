@@ -11,7 +11,6 @@ public enum eBallType
 }
 public class BallController : MonoBehaviour
 {
-    [SerializeField] private Transform plane;
     [SerializeField] private Transform startValue;
     [SerializeField] private Transform endValue;
 
@@ -19,11 +18,9 @@ public class BallController : MonoBehaviour
 
     private bool isClear;
 
-    private Rigidbody rigid;
 
     private void OnEnable()
     {
-        TryGetComponent(out rigid);
         ballType = eBallType.Normal;
         isClear = false;
         transform.position = startValue.position;

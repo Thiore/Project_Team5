@@ -48,6 +48,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Maze",
+            "id": "cf679eea-a028-434d-8c28-6e63bc0fed87",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "a7afb610-53f2-4368-bf26-09839d30abf1",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3d6beda4-f072-4a9a-83b0-61c94c2d595d",
+                    "path": "<Accelerometer>/acceleration",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Android",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

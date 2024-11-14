@@ -6,21 +6,27 @@ public class InteractionOBJ : MonoBehaviour
 {
     private Outline outline;
 
-    protected bool isTouching = false;
+    [Header("기본 Cinemachine카메라")]
+    [SerializeField] protected GameObject normalCamera;
 
 
-    
+    protected bool isTouching;
+
+    protected readonly int openAnim = Animator.StringToHash("Open");
+
+    protected Animator anim;
+
     protected virtual void Start()
     {
         if(TryGetComponent(out outline))
             outline.enabled = false;
-
-        Debug.Log("outline");
+        Debug.Log("InteractionObj");
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainPlayer"))
+        if (other.CompareTag("MainCamera"))
         {
             outline.enabled = true;
         }
@@ -28,9 +34,10 @@ public class InteractionOBJ : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("MainPlayer"))
+        if (other.CompareTag("MainCamera"))
         {
             outline.enabled = false;
         }
     }
+
 }

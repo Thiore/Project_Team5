@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 public class PlaneTiltController : MonoBehaviour
 {
     [SerializeField] private float tiltMultiplier = 90f; // 기울기 정도를 조절하는 배율
-    [SerializeField] private float smoothSpeed = 0.5f; // 회전의 부드러움을 조절하는 속도
-
+    //[SerializeField] private float smoothSpeed = 0.5f; // 회전의 부드러움을 조절하는 속도
+    [SerializeField] private Camera cam;
     [SerializeField] private GameObject ball;
 
     private Vector3 startTilt; // 초기 기울기 값
@@ -22,12 +22,13 @@ public class PlaneTiltController : MonoBehaviour
     private void OnEnable()
     {
         startTilt = Vector3.zero;
+        Debug.Log("enable" + startTilt);
         planeAction.Enable();
         
         planeAction.started += ctx => OnTiltStarted(ctx);
         planeAction.performed += ctx => OnTiltPerformed(ctx);
+        
 
-       
     }
     private void OnDisable()
     {
@@ -35,7 +36,7 @@ public class PlaneTiltController : MonoBehaviour
 
         planeAction.started -= ctx => OnTiltStarted(ctx);
         planeAction.performed -= ctx => OnTiltPerformed(ctx);
-        ball.SetActive(false);
+        //ball.SetActive(false);
     }
 
     //private void Start()
@@ -53,7 +54,9 @@ public class PlaneTiltController : MonoBehaviour
 
     private void OnTiltStarted(InputAction.CallbackContext context)
     {
+        Debug.Log("start"+startTilt);
         startTilt = context.ReadValue<Vector3>();
+        Debug.Log("start" + startTilt);
         // 현재 가속도계 데이터 가져오기
         Vector3 currentTilt = context.ReadValue<Vector3>();
         Vector3 tiltDelta = currentTilt - startTilt;
@@ -68,7 +71,7 @@ public class PlaneTiltController : MonoBehaviour
 
     private void OnTiltPerformed(InputAction.CallbackContext context)
     {
-        
+        Debug.Log("performed" + startTilt);
         // 현재 가속도계 데이터 가져오기
         Vector3 currentTilt = context.ReadValue<Vector3>();
         Vector3 tiltDelta = currentTilt - startTilt;
@@ -77,8 +80,8 @@ public class PlaneTiltController : MonoBehaviour
         SetTargetRotation(tiltDelta);
 
         // 목표 회전 값으로 부드럽게 회전
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime);
-
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime*0.6f);
+        //cam.Render();
     }
 
     //private void Update()
@@ -111,8 +114,8 @@ public class PlaneTiltController : MonoBehaviour
     private void SetTargetRotation(Vector3 tiltDelta)
     {
         // X와 Z축에 대해 목표 회전 값 계산
-        float tiltX = Mathf.Clamp(-tiltDelta.x * tiltMultiplier, -10f, 10f);
-        float tiltZ = Mathf.Clamp(-tiltDelta.y * tiltMultiplier, -10f, 10f);
+        float tiltX = Mathf.Clamp(-tiltDelta.x * tiltMultiplier, -15f, 15f);
+        float tiltZ = Mathf.Clamp(-tiltDelta.y * tiltMultiplier, -15f, 15f);
 
         // 목표 회전 값을 설정
         targetRotation = Quaternion.Euler(tiltX, 0, tiltZ);

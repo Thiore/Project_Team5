@@ -36,7 +36,7 @@ public class UI_BtnInventory : MonoBehaviour
     }
     public void OpenInventory()
     {
-        GameManager.Instance.isInput = true;
+        //GameManager.Instance.isInput = true;
             btn.SetActive(false);        
         
         inventory.SetActive(true);
@@ -44,7 +44,7 @@ public class UI_BtnInventory : MonoBehaviour
 
     public void CloseInventory()
     {
-        GameManager.Instance.isInput = false;
+        //GameManager.Instance.isInput = false;
         btn.SetActive(true);
         
         inventory.SetActive(false);

@@ -11,7 +11,8 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private UI_ItemInformation itemInfo;
     public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
-
+    [SerializeField] private GameObject playerInterface;
+    public GameObject getInterface { get; private set; }
 
     private void Awake()
     {

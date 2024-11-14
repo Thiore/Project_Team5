@@ -2,37 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleOBJ : MonoBehaviour, ITouchable
+public class ToggleOBJ : InteractionOBJ, ITouchable
 {
-    [Header("isClear가 True일때 사용할 카메라")]
-    [SerializeField] private GameObject clearCamera;
-    [Header("isClear가 false일때 사용할 카메라")]
-    [SerializeField] private GameObject cinemachine;
-
-    private Animator anim;
-    private readonly int openAnim = Animator.StringToHash("Open");
-    private Outline outline;
-
-    private bool isTouching;
+    [Header("SaveManager 참고")]
+    [SerializeField] protected int floorIndex;
+    [SerializeField] protected int objectIndex;
 
     [Header("퍼즐 등 다른오브젝트와 상호작용이 필요하면 False")]
     [SerializeField] private bool isClear;
 
-    //SaveManger 참조
-    [SerializeField] private int floorIndex;
-    [SerializeField] private int objectIndex;
-
-
-    private void Start()
+    protected override void Start()
     {
-        if (TryGetComponent(out outline))
-            outline.enabled = false;
-
-        if (!TryGetComponent(out anim))
-        {
-            transform.parent.TryGetComponent(out anim);
-        }
+        base.Start();
         isTouching = false;
+        TryGetComponent(out anim);
         if (!isClear)
         {
             isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
@@ -42,29 +25,6 @@ public class ToggleOBJ : MonoBehaviour, ITouchable
 
     public void OnTouchStarted(Vector2 position)
     {
-        //SaveManager isinteracted(퍼즐 결과 연동)
-        if(!isClear)
-        {
-            isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
-
-        }
-
-        isTouching = !isTouching;
-        if (isClear)
-        {
-            if(clearCamera != null)
-                clearCamera.SetActive(isTouching);
-
-            anim.SetBool(openAnim, isTouching);
-        }
-        else
-        {
-            if(cinemachine != null)
-                cinemachine.SetActive(isTouching);
-        }
-
-
-
     }
     public void OnTouchHold(Vector2 position)
     {
@@ -72,22 +32,26 @@ public class ToggleOBJ : MonoBehaviour, ITouchable
     }
     public void OnTouchEnd(Vector2 position)
     {
-
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("MainCamera"))
+        Ray ray = Camera.main.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            outline.enabled = true;
+            if (hit.collider.gameObject.Equals(gameObject))
+            {
+                isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
+                if (isClear)
+                {
+                    isTouching = !isTouching;
+                    anim.SetBool(openAnim, isTouching);
+                }
+                else
+                {
+                    //"잠겨있어"라는 독백 대사 출력
+                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                }
+                
+            }
         }
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("MainCamera"))
-        {
-            outline.enabled = false;
-        }
-    }
+    
+    
 }

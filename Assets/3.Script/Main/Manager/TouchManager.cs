@@ -55,14 +55,15 @@ public class TouchManager : MonoBehaviour
     private Dictionary<int, ITouchable> currentTouchDic; // 현재 터치된 오브젝트
 
     [SerializeField] private LayerMask touchableObjectLayer;
+    public LayerMask getTouchableLayer { get; private set; }
     [SerializeField] private LayerMask playerLayer;
-    private LayerMask dontTouchableObjectLayer;
 
     private HashSet<int> activeTouchID;// 활성화된 터치 ID 추적
     private int moveID;
     private int lookID;
 
     [SerializeReference] private float touchDistance;
+    public float getTouchDistance { get; private set; }
 
     private bool isMoving;
 
@@ -76,7 +77,8 @@ public class TouchManager : MonoBehaviour
             InputActionMap actionMap = inputAsset.FindActionMap("Input");
             touchAction = actionMap.FindAction("Touch");
 
-            dontTouchableObjectLayer = ~(touchableObjectLayer|playerLayer);
+            getTouchableLayer = touchableObjectLayer;
+            getTouchDistance = touchDistance;
 
             //DontDestroyOnLoad(gameObject);
         }
@@ -220,51 +222,50 @@ public class TouchManager : MonoBehaviour
                 int touchId = touch.touchId.ReadValue();
 
                 Vector2 position = touch.position.ReadValue();
-                    switch (touchState)
-                    {
-                        case etouchState.Player:
-                            if (moveID.Equals(touchId))
-                            {
-                                OnMoveEnd?.Invoke(position);
-                                
-                                moveID = -1;
-                            }
-                            if (lookID.Equals(touchId))
-                            {
-                                
-                                OnLookEnd?.Invoke(position);
-                                lookID = -1;
-                            }
-                            if (moveID.Equals(-1) && lookID.Equals(-1))
-                            {
-                                touchState = etouchState.Normal;
-                            }
-                            break;
-                        case etouchState.UI:
-                            
-                            if (activeTouchID.Count.Equals(0))
-                            {
-                                touchState = etouchState.Normal;
-                            }
+                switch (touchState)
+                {
+                    case etouchState.Player:
+                        if (moveID.Equals(touchId))
+                        {
+                            OnMoveEnd?.Invoke(position);
 
-                            break;
-                        case etouchState.Object:
+                            moveID = -1;
+                        }
+                        if (lookID.Equals(touchId))
+                        {
+
+                            OnLookEnd?.Invoke(position);
+                            lookID = -1;
+                        }
+                        if (moveID.Equals(-1) && lookID.Equals(-1))
+                        {
+                            touchState = etouchState.Normal;
+                        }
+                        break;
+
+                    case etouchState.Object:
 
                         if (currentTouchDic.ContainsKey(touchId))
                         {
+                            Debug.Log("제발"+touchId);
                             currentTouchDic[touchId]?.OnTouchEnd(position);
+                            Debug.Log("안뺌"+touchId);
                             currentTouchDic.Remove(touchId);
+                            Debug.Log("뺌" + touchId);
                         }
                         if (currentTouchDic.Count == 0)
                         {
                             touchState = etouchState.Normal;
                         }
                         break;
-                    }
+                    default:
+                        break;
+                }
                 
                 activeTouchID.Remove(touchId);
                 if(activeTouchID.Count.Equals(0))
                 {
+                    touchState = etouchState.Normal;
                     currentTouchDic.Clear();
                 }
 

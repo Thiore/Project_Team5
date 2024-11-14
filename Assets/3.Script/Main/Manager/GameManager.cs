@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
 {
     private GameManager instance = null;
     public static GameManager Instance { get; private set; }
-    [HideInInspector]
-    public bool isInput;
+    
+    public bool isInput { get; private set; }
 
     [SerializeField] private string B1F;
 
@@ -34,7 +34,10 @@ public class GameManager : MonoBehaviour
         //    }
         }
 
-
+    public void SetDontMoveInput()
+    {
+        isInput = false;
+    }
  
  
     public void LoadSlide()
