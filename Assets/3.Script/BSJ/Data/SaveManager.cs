@@ -205,19 +205,20 @@ public class SaveManager : MonoBehaviour
 
     }
 
-    public void SavePlayerPosition(Transform obj)
+    //플레이어의 위치 (저장할 땐, SaveManager가 Player의 위치를 알고 저장되어야 해서??)
+    public void SavePlayerPosition()
     {
-        
-        if (obj != null)
+        GameObject player = GameObject.FindGameObjectWithTag("RealPlayer");
+        if (player != null)
         {
-            gameState.playerPositionX = obj.transform.localPosition.x;
-            gameState.playerPositionY = obj.transform.localPosition.y;
-            gameState.playerPositionZ = obj.transform.localPosition.z;
+            gameState.playerPositionX = player.transform.localPosition.x;
+            gameState.playerPositionY = player.transform.localPosition.y;
+            gameState.playerPositionZ = player.transform.localPosition.z;
 
-            gameState.playerRotationX = obj.transform.localRotation.x;
-            gameState.playerRotationY = obj.transform.localRotation.y;
-            gameState.playerRotationZ = obj.transform.localRotation.z;
-            gameState.playerRotationW = obj.transform.localRotation.w;
+            gameState.playerRotationX = player.transform.localRotation.x;
+            gameState.playerRotationY = player.transform.localRotation.y;
+            gameState.playerRotationZ = player.transform.localRotation.z;
+            gameState.playerRotationW = player.transform.localRotation.w;
         }
 
     }
