@@ -5,12 +5,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Linq;
+using System.IO;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
-    private Dictionary<int, ItemData> dicItemData;
+    private Dictionary<int, ItemData> dicItemData; //원본 아이템 데이터
     private Dictionary<int, Item> dicItem;
     private List<Item> items;
 
@@ -41,7 +42,7 @@ public class DataManager : MonoBehaviour
 
     private void LoadAllData()
     {
-        LoadItemData();
+        LoadItemData(); //원본 아이템 데이터 로드
 
     }
 
@@ -98,5 +99,7 @@ public class DataManager : MonoBehaviour
         return null;
     }
 
+
+    
 
 }
