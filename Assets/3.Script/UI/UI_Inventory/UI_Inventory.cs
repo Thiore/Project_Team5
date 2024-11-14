@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
+using static UnityEngine.Rendering.DebugUI;
 
 public class UI_Inventory : MonoBehaviour
 {
@@ -11,7 +14,7 @@ public class UI_Inventory : MonoBehaviour
 
     [SerializeField] private GameObject invenBtnPos;
     [SerializeField] private GameObject quickBtnPos;
-    [SerializeField] private Image lerpImage;
+    [SerializeField] private UI_LerpImage lerpImage;
 
     private List<Item> myitems;
 
@@ -28,6 +31,8 @@ public class UI_Inventory : MonoBehaviour
 
     // 퀵슬롯 만약 0~3 있는데 2 쓰면 한칸씩 땡겨지게 
 
+    // 번들키 2회 사용 해야함 
+
     private void Awake()
     {
         myitems = new List<Item>();
@@ -37,12 +42,14 @@ public class UI_Inventory : MonoBehaviour
     {
         for (int i = 0; i < inventoryslots.Length; i++)
         {
-            if(inventoryslots.Length > 0)
+
+            if (inventoryslots[i].TryGetComponent(out Item item))
             {
-                if (inventoryslots[i].TryGetComponent(out Item item))
-                {
-                    inventoryslots[i].gameObject.SetActive(true);
-                }
+                inventoryslots[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                inventoryslots[i].gameObject.SetActive(false);
             }
 
         }
@@ -50,15 +57,10 @@ public class UI_Inventory : MonoBehaviour
 
 
     //아이템 Type에 따라 
-    public void GetItemTouch(Item item)
+    public void GetItemTouch(Item item, Vector2 position)
     {
-        //lerpImage.sprite = item.Sprite;
-        //lerpImage.transform.position = item.transform.position;
-        //if (!lerpImage.gameObject.activeSelf)
-        //{
-        //    lerpImage.gameObject.SetActive(true);
-        //}
-        //Vector3.Lerp(lerpImage.transform.position, invenBtnPos.transform.position, 10f);
+        //lerpImage.gameObject.SetActive(true);
+        //lerpImage.StartLerp(position);
 
         OutPutItemText(item);
 
@@ -86,7 +88,7 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
-        lerpImage.gameObject.SetActive(false);
+        //lerpImage.gameObject.SetActive(false);
     }
 
 
@@ -180,7 +182,7 @@ public class UI_Inventory : MonoBehaviour
 
     public void OpenInventory()
     {
-        for (int i = 0; i <inventoryslots.Length; i++)
+        for (int i = 0; i < inventoryslots.Length; i++)
         {
             if (inventoryslots[i].TryGetComponent<Item>(out Item item))
             {
@@ -225,6 +227,7 @@ public class UI_Inventory : MonoBehaviour
             {
                 if (elementindex.Equals(item.Elementindex))
                 {
+                    item.enabled = false;
                     Destroy(item);
                 }
             }
@@ -232,9 +235,10 @@ public class UI_Inventory : MonoBehaviour
 
         for (int i = 0; i < inventoryslots.Length; i++)
         {
-            if (inventoryslots.Length > 0)
+
+            if (inventoryslots[i].TryGetComponent(out Item item))
             {
-                if (inventoryslots[i].TryGetComponent(out Item item))
+                if (item.enabled.Equals(true))
                 {
                     inventoryslots[i].SetActive(true);
                 }
@@ -242,6 +246,10 @@ public class UI_Inventory : MonoBehaviour
                 {
                     inventoryslots[i].SetActive(false);
                 }
+            }
+            else
+            {
+                inventoryslots[i].SetActive(false);
             }
 
         }

@@ -17,29 +17,6 @@ public class UI_InventorySlot : MonoBehaviour, IEndDragHandler, IDragHandler, IB
         dragImage.transform.position = eventData.position;
     }
 
-    private IEnumerator HoldDragStart(PointerEventData eventData)
-    {
-        while (downTime < 2f)
-        {
-            downTime += Time.fixedDeltaTime;
-            yield return null;
-        }
-
-        DragStart(eventData);
-        downTime = 0f;
-    }
-
-    private void DragStart(PointerEventData eventData)
-    {
-        //그 위치에서 활성화 
-        dragImage.transform.position = eventData.position;
-        if (TryGetComponent(out copyItem))
-        {
-            dragImage.sprite = copyItem.Sprite;
-            dragImage.gameObject.SetActive(true);
-        }
-    }
-
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("아이템슬롯 포인트 다운");
