@@ -15,6 +15,7 @@ public class DialogueManager : MonoBehaviour
     //스토리 관련 UI Text
     public Button dialogueButton; //대사 버튼 (터치 시, 사라지게 하기 위함)
     public TMP_Text dialogueText; //대사 표시할 TextMeshPro
+    private GameObject playInterface;
 
     //인벤토리 관련 Text
     public TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
@@ -52,6 +53,7 @@ public class DialogueManager : MonoBehaviour
     {
         // 씬 로드 이벤트 등록
         SceneManager.sceneLoaded += OnSceneLoaded;
+        playInterface = GameObject.FindGameObjectWithTag("PlayInterface");
     }
 
     private void OnDisable()
@@ -88,14 +90,24 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator StoryBottonState_co()
     {
-        //3초 동안 버튼 비활성화
-        dialogueButton.interactable = false;
-        dialogueButton.gameObject.SetActive(true); //버튼 활성화
-        yield return new WaitForSeconds(2f);
+        if (playInterface != null)
+        {
+            //2초 동안 버튼 비활성화
+            dialogueButton.interactable = false;
+            dialogueButton.gameObject.SetActive(true); //버튼 활성화
+            playInterface.gameObject.SetActive(false); //인터페이스 비활성화
+            yield return new WaitForSeconds(2f);
 
-        //3초 후 버튼 활성화 및 터치 이벤트
-        dialogueButton.interactable = true;
-        dialogueButton.onClick.AddListener(OnButtonClicked);
+            //2초 후 버튼 활성화 및 터치 이벤트
+            dialogueButton.interactable = true;
+            dialogueButton.onClick.AddListener(OnButtonClicked);
+
+            if (!dialogueButton.gameObject.activeSelf)
+            {
+                playInterface.gameObject.SetActive(true); //인터페이스 활성화
+            }
+        }
+
 
         //7초 후 자동 비활성화(터치로 비활성화되지 않았을 경우)
         //yield return new WaitForSeconds(4f); //3초 대기 후 4초 더 대기

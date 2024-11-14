@@ -39,6 +39,7 @@ public class SaveManager : MonoBehaviour
         if (pause)
         {
             SaveGameState();
+            
         }
     }
 
