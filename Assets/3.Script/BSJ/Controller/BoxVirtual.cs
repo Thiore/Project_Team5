@@ -19,48 +19,48 @@ public class BoxVirtual : MonoBehaviour
         TryGetComponent(out input);
     }
 
-    private void Update()
-    {
-        if (input.isTouch)
-        {
-            if (!lockgame.isAnswer)
-            { 
-                cam.gameObject.SetActive(true);
-                canvas.gameObject.SetActive(true);
+    //private void Update()
+    //{
+    //    if (input.isTouch)
+    //    {
+    //        if (!lockgame.isAnswer)
+    //        { 
+    //            cam.gameObject.SetActive(true);
+    //            canvas.gameObject.SetActive(true);
 
 
                 
-            }
-            else if (lockgame.isAnswer)
-            {
-                cam.gameObject.SetActive(false);
-                cam2.gameObject.SetActive(true);
-                top.SetBool("isOpen", true);
+    //        }
+    //        else if (lockgame.isAnswer)
+    //        {
+    //            cam.gameObject.SetActive(false);
+    //            cam2.gameObject.SetActive(true);
+    //            top.SetBool("isOpen", true);
 
-                if (istouching && cam2.activeSelf && input.isTouch)
-                {
-                    cam2.gameObject.SetActive(false);
-                    istouching = false;
-                    top.SetBool("isOpen", false);
-                }
-            }
-        }
-        if (lockgame.isAnswer)
-        {
-            cam.gameObject.SetActive(false);
-            cam2.gameObject.SetActive(true);
-            istouching = true;
-            top.SetBool("isOpen", true);
-            Invoke("test", 3f);
-            if (istouching && cam2.activeSelf && input.isTouch)
-            {
-                cam2.gameObject.SetActive(false);
-                istouching = false;
-                top.SetBool("isOpen", false);
-            }
+    //            if (istouching && cam2.activeSelf && input.isTouch)
+    //            {
+    //                cam2.gameObject.SetActive(false);
+    //                istouching = false;
+    //                top.SetBool("isOpen", false);
+    //            }
+    //        }
+    //    }
+    //    if (lockgame.isAnswer)
+    //    {
+    //        cam.gameObject.SetActive(false);
+    //        cam2.gameObject.SetActive(true);
+    //        istouching = true;
+    //        top.SetBool("isOpen", true);
+    //        Invoke("test", 3f);
+    //        if (istouching && cam2.activeSelf && input.isTouch)
+    //        {
+    //            cam2.gameObject.SetActive(false);
+    //            istouching = false;
+    //            top.SetBool("isOpen", false);
+    //        }
 
-        }
-    }
+    //    }
+    //}
 
     public void test()
     {

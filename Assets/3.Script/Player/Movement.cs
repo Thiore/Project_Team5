@@ -24,6 +24,8 @@ public class Movement : MonoBehaviour, ITouchable
         moveDir = Vector3.zero;
         startValue = Vector2.zero;
         value = Vector2.zero;
+
+    
     }
 
     private void FixedUpdate()

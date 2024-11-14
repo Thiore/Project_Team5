@@ -260,9 +260,6 @@ public class TouchManager : MonoBehaviour
                 {
                     currentTouchDic.Clear();
                 }
-                //Debug.Log("DicCount" + currentTouchDic.Count);
-                //Debug.Log(activeTouchID.Count);
-                //Debug.Log(touchState);
 
             }
         }
@@ -537,6 +534,13 @@ public class TouchManager : MonoBehaviour
         //touchAction.canceled -= ctx => OnTouchCanceled(ctx);
     }
 
-    
-    
+
+    public void OnDisableMoveHandler()
+    {
+
+    }
+    public void OnEnableMoveHandler()
+    {
+
+    }
 }

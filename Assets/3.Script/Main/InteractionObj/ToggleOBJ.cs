@@ -52,12 +52,15 @@ public class ToggleOBJ : MonoBehaviour, ITouchable
         isTouching = !isTouching;
         if (isClear)
         {
-            clearCamera.SetActive(isTouching);
+            if(clearCamera != null)
+                clearCamera.SetActive(isTouching);
+
             anim.SetBool(openAnim, isTouching);
         }
         else
         {
-            cinemachine.SetActive(isTouching);
+            if(cinemachine != null)
+                cinemachine.SetActive(isTouching);
         }
 
 
@@ -74,7 +77,7 @@ public class ToggleOBJ : MonoBehaviour, ITouchable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainPlayer"))
+        if (other.CompareTag("MainCamera"))
         {
             outline.enabled = true;
         }
@@ -82,7 +85,7 @@ public class ToggleOBJ : MonoBehaviour, ITouchable
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("MainPlayer"))
+        if (other.CompareTag("MainCamera"))
         {
             outline.enabled = false;
         }

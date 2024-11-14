@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     }
     public void LoadB1F()
     {
-        SceneManager.LoadScene("B1F");
+        SceneManager.LoadScene("B1F 3");
     }
 
     public void GameEnd()
