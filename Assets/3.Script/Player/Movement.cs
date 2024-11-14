@@ -26,14 +26,14 @@ public class Movement : MonoBehaviour, ITouchable
         value = Vector2.zero;
 
         SaveManager.Instance.LoadPlayerPosition(transform);
-        SaveManager.Instance.LoadPlayerPosition(playerCamera.transform);
-        playerCamera.position += Vector3.up * 0.5f;
+        SaveManager.Instance.LoadPlayerRotation(playerCamera.transform);
+        playerCamera.localPosition += Vector3.up * 0.5f;
     }
 
     private void FixedUpdate()
     {
         transform.Translate(moveDir * speed * Time.fixedDeltaTime);
-        playerCamera.transform.position = transform.position;
+        playerCamera.transform.localPosition = transform.localPosition + Vector3.up*0.5f;
     }
 
     public void OnTouchStarted(Vector2 position)

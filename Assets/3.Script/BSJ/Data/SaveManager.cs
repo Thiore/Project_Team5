@@ -58,11 +58,11 @@ public class SaveManager : MonoBehaviour
             floors = new List<StateData.FloorState>(),
 
             //플레이어 초기화
-            playerPositionX = 203.672f,
+            playerPositionX = 204.699f,
             playerPositionY = 1f,
             playerPositionZ = 2.91f,
-            playerRotationX = 0,
-            playerRotationY = 0,
+            playerRotationX = 23f,
+            playerRotationY = 408.2f,
             playerRotationZ = 0,
             playerRotationW = 1 // 기본 회전 설정
 
@@ -186,41 +186,44 @@ public class SaveManager : MonoBehaviour
         return false;
     }
 
-    public void LoadPlayerPosition(Transform obj)
+    public void LoadPlayerPosition(Transform player)
     {
         
-        if (obj != null)
+        if (player != null)
         {
-            obj.transform.localPosition = new Vector3(
+            player.transform.localPosition = new Vector3(
                 gameState.playerPositionX,
                 gameState.playerPositionY,
                 gameState.playerPositionZ
                 );
-            obj.transform.localRotation = new Quaternion(
+            
+        }
+    }
+    public void LoadPlayerRotation(Transform camera)
+    {
+        if(camera != null)
+        {
+            camera.transform.localRotation = new Quaternion(
                 gameState.playerRotationX,
                 gameState.playerRotationY,
                 gameState.playerRotationZ,
                 gameState.playerRotationW
                 );
         }
-
     }
 
     //플레이어의 위치 (저장할 땐, SaveManager가 Player의 위치를 알고 저장되어야 해서??)
     public void SavePlayerPosition()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("RealPlayer");
-        if (player != null)
-        {
-            gameState.playerPositionX = player.transform.localPosition.x;
-            gameState.playerPositionY = player.transform.localPosition.y;
-            gameState.playerPositionZ = player.transform.localPosition.z;
+            gameState.playerPositionX = PlayerManager.Instance.getMainPlayer.localPosition.x;
+            gameState.playerPositionY = PlayerManager.Instance.getMainPlayer.localPosition.y;
+            gameState.playerPositionZ = PlayerManager.Instance.getMainPlayer.localPosition.z;
 
-            gameState.playerRotationX = player.transform.localRotation.x;
-            gameState.playerRotationY = player.transform.localRotation.y;
-            gameState.playerRotationZ = player.transform.localRotation.z;
-            gameState.playerRotationW = player.transform.localRotation.w;
-        }
+            gameState.playerRotationX = PlayerManager.Instance.getPlayerCam.localRotation.x;
+            gameState.playerRotationY = PlayerManager.Instance.getPlayerCam.localRotation.y;
+            gameState.playerRotationZ = PlayerManager.Instance.getPlayerCam.localRotation.z;
+            gameState.playerRotationW = PlayerManager.Instance.getPlayerCam.localRotation.w;
+        
 
     }
 

@@ -160,7 +160,8 @@ public class TouchManager : MonoBehaviour
                     touchState = etouchState.Object;
 
                 }
-                else if ((touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player)))
+                else if (isMoving&&
+                        (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player)))
                 {
                     if (IsTouchOnLeftScreen(position) && moveID.Equals(-1))
                     {
@@ -543,12 +544,9 @@ public class TouchManager : MonoBehaviour
     }
 
 
-    public void OnDisableMoveHandler()
+    
+    public void EnableMoveHandler(bool dontTouch)
     {
-        isMoving = false;
-    }
-    public void OnEnableMoveHandler()
-    {
-        isMoving = true;
+        isMoving = dontTouch;
     }
 }

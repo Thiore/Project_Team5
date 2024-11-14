@@ -14,6 +14,12 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject playerInterface;
     public GameObject getInterface { get; private set; }
 
+    [SerializeField] private Transform mainPlayer;
+    public Transform getMainPlayer { get; private set; }
+
+    [SerializeField] private Transform playerCam;
+    public Transform getPlayerCam { get; private set; }
+
     private void Awake()
     {
         if (Instance == null)

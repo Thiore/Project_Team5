@@ -24,10 +24,21 @@ public class DoorBasic : InteractionOBJ, ITouchable
         {
             if(hit.collider.gameObject.layer.Equals(gameObject.layer))
             {
-                Debug.Log("µé¾î°¨?"+isTouching);
+                
                 isTouching = !isTouching;
                 if(normalCamera != null)
+                {
                     normalCamera.SetActive(isTouching);
+                    if(isTouching)
+                    {
+                        TouchManager.Instance.EnableMoveHandler(false);
+                    }
+                    else
+                    {
+                        TouchManager.Instance.EnableMoveHandler(true);
+                    }
+                }
+                    
 
                 anim.SetBool(openAnim, isTouching);
             }

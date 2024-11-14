@@ -13,9 +13,12 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     [SerializeField] protected int floorIndex;
     [SerializeField] protected int objectIndex;
 
+
     private Collider mask;
     [HideInInspector]
     public bool isClear;
+
+    
 
     private Outline outline;
 
@@ -28,22 +31,27 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     }
 
     
-    public void OffKeypad(bool isClearGame)
+    public void OffKeypad()
     {
-        missionStart.SetActive(false);
+        
         mask.enabled = true;
         btnExit.SetActive(false);
 
-        if(isClearGame)
+        if (isClear)
         {
             missionExit.SetActive(true);
             missionStart.SetActive(false);
-            if (isClear)
-                SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex, true);
-            isClear = true;
+            Invoke("ClearEvent", 3f);
         }
-        
-        
+        else
+        {
+            missionStart.SetActive(false);
+            TouchManager.Instance.EnableMoveHandler(true);
+        }
+           
+
+
+
     }
 
     public void OnTouchStarted(Vector2 position)
@@ -62,11 +70,15 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         {
             if (hit.collider.gameObject.Equals(gameObject))
             {
-                missionStart.SetActive(true);
+               
+                    TouchManager.Instance.EnableMoveHandler(false);
+                    missionStart.SetActive(true);
 
-                mask.enabled = false;
+                    mask.enabled = false;
 
-                btnExit.SetActive(true);
+                    btnExit.SetActive(true);
+                
+                
             }
         }
     }
@@ -87,4 +99,11 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             outline.enabled = false;
         }
     }
+
+    private void ClearEvent()
+    {
+        missionExit.SetActive(false);
+        TouchManager.Instance.EnableMoveHandler(true);
+    }
+
 }

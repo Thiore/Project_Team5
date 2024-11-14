@@ -13,6 +13,8 @@ public class Keypad_Btn : MonoBehaviour
     //상호작용 관련
     [SerializeField] private int floorIndex; //오브젝트의 현재 층
     [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
+
+    
     
 
     
@@ -42,6 +44,7 @@ public class Keypad_Btn : MonoBehaviour
                     touchablePuzzle.isClear = true;
                 }
                 input.text = "";
+                touchablePuzzle.OffKeypad();
             }
             else
             {
