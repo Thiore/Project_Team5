@@ -22,6 +22,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     [SerializeField] private UI_Inventory inven;
     [SerializeField] private UI_ItemInformation iteminfo;
+    [SerializeField] private UI_LerpImage lerpimage;
 
     private bool isUsed;
     private bool isDrag;
@@ -39,6 +40,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
         inven = PlayerManager.Instance.ui_inventory;
         iteminfo = PlayerManager.Instance.ui_iteminfo;
+        lerpimage = PlayerManager.Instance.ui_lerpImage;
         // 이거 활성화로 찾아준 다음 해줘야됨 
     }
 
@@ -94,9 +96,10 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         float touchUpDelta = Vector2.Distance(firstPos, position);
         //거리의 기준을 잡지못해 50으로 임시로 지정했습니다 추후 수정이 필요합니다.
         if (touchUpDelta<50f&&gameObject.CompareTag("Item3D"))
-        {
-            
-            inven.GetItemTouch(this, position);
+        {            
+            lerpimage.gameObject.SetActive(true);
+            lerpimage.InputMovementInventory(this, position);
+            inven.GetItemTouch(this);
         }
     }
 

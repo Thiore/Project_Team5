@@ -29,6 +29,9 @@ public class DataManager : MonoBehaviour
         InitDic();
         LoadAllData();
         SceneManager.sceneLoaded += LoadSceanData;
+
+
+      
     }
 
 

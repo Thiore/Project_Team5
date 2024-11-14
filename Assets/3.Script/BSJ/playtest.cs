@@ -11,7 +11,7 @@ public class playtest : MonoBehaviour
     {
         if (SaveManager.Instance != null)
         {
-            SaveManager.Instance.LoadPlayerPosition();
+           // SaveManager.Instance.LoadPlayerPosition();
             Debug.Log("Final Position Applied in Player Start.");
         }
     }

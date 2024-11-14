@@ -12,6 +12,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private UI_ItemInformation itemInfo;
     public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
 
+    [SerializeField] private UI_LerpImage lerpimage;
+    public UI_LerpImage ui_lerpImage { get => lerpimage; }
+
 
     private void Awake()
     {

@@ -17,6 +17,7 @@ public class UI_Inventory : MonoBehaviour
     [SerializeField] private UI_LerpImage lerpImage;
 
     private List<Item> myitems;
+    public List<Item> MyItems { get => myitems; }
 
     // UI_Press >> 드래그하는거 해둠 
 
@@ -57,7 +58,7 @@ public class UI_Inventory : MonoBehaviour
 
 
     //아이템 Type에 따라 
-    public void GetItemTouch(Item item, Vector2 position)
+    public void GetItemTouch(Item item)
     {
         //lerpImage.gameObject.SetActive(true);
         //lerpImage.StartLerp(position);
@@ -89,6 +90,7 @@ public class UI_Inventory : MonoBehaviour
         }
 
         //lerpImage.gameObject.SetActive(false);
+
     }
 
 
@@ -143,7 +145,6 @@ public class UI_Inventory : MonoBehaviour
                 {
                     sprite.sprite = itemUI.Sprite;
                 }
-                myitems.Add(item);
                 Destroy(item.gameObject);
                 break;
             }
@@ -178,6 +179,7 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
+        myitems.Add(item);
     }
 
     public void OpenInventory()
