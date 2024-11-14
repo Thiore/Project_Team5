@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +11,10 @@ public class SaveManager : MonoBehaviour
     public static SaveManager Instance { get; private set; } = null;
 
     private string savePath; //저장 파일 경로
+    private string itemstatepath; //저장 파일 경로
     public StateData.GameState gameState; //게임 상태 관리 객체
+    public Dictionary<int, ItemSaveData> itemsavedata; // 사용 횟수,사용 여부 저장
+
 
     private void Awake()
     {
@@ -24,14 +28,22 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        InitializeSaveManager();
+    }
+
+    public void InitializeSaveManager()
+    {
         // Json파일 저장 경로
         savePath = Path.Combine(Application.persistentDataPath, "gameState.json");
         Debug.Log(savePath);
 
+        itemstatepath = Path.Combine(Application.persistentDataPath, "itemsaveState.json");
+
         //게임 상태 초기화 (층 리스트 초기화)
         gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
-
+        itemsavedata = new Dictionary<int, ItemSaveData>();
     }
+
     //유저가 백그라운드로 갔을 때, 저장
     private void OnApplicationPause(bool pause)
     {
@@ -109,7 +121,12 @@ public class SaveManager : MonoBehaviour
             string json = File.ReadAllText(savePath);
             //Json 문자열을 GameState 객체로 할당
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
+        }
 
+        if (File.Exists(itemstatepath))
+        {
+            string itemjson = File.ReadAllText(itemstatepath);
+            itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
         }
     }
 
@@ -117,11 +134,16 @@ public class SaveManager : MonoBehaviour
     public void SaveGameState()
     {
         //플레이어 위치 및 회전 저장
-        
 
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
+
+        List<ItemSaveData> itemList = itemsavedata.Values.ToList();
+        string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
+        File.WriteAllText(itemstatepath, itemsjson);
+
     }
+
 
     // 상태 업데이트 (층 및 오브젝트 상태 업데이트)
     public void UpdateObjectState(int floorIndex, int objectIndex, bool isInteracted)
@@ -187,7 +209,7 @@ public class SaveManager : MonoBehaviour
 
     public void LoadPlayerPosition(Transform obj)
     {
-        
+
         if (obj != null)
         {
             obj.transform.localPosition = new Vector3(
@@ -207,7 +229,7 @@ public class SaveManager : MonoBehaviour
 
     public void SavePlayerPosition(Transform obj)
     {
-        
+
         if (obj != null)
         {
             gameState.playerPositionX = obj.transform.localPosition.x;
@@ -222,13 +244,52 @@ public class SaveManager : MonoBehaviour
 
     }
 
+
+
+    // 내 아이템 뭐 가지고 있는지 확인해서 Json 직렬화 해주면 되는거 아님 ? 
+    // 직렬화해서 다른 파일로 저장해주면 되잖아 
+
+    // 근데 원본이 왜 필요해 ? 
+    // 로딩 전에 복사본 만들어두고 쭉 가져가면서 쓰자 ?
+
+    public void InputItemSavedata(Item item)
+    {
+
+        if (itemsavedata.ContainsKey(item.ID))
+        {
+            itemsavedata[item.ID].itemgetstate = item.IsGet;
+            itemsavedata[item.ID].itemusecount = item.Usecount;
+            Debug.Log("세이브 데이터 수정");
+        }
+        else
+        {
+            ItemSaveData data = item.SetItemSaveData();
+            itemsavedata.Add(item.ID, data);
+            Debug.Log("세이브 데이터 추가");
+        }
+    }
+
+    // 카운트가 0 이상인것들, 그리고 bool get이 true 라면 가지고 있겠지 
+    // 카운트가 0 이고, bool get false 라면 쓴거겠지 
+    // 카운터가 0 이상이고 get이 false 라면 안먹은거겠지 
+
+
+    // 지금 위에서 추가하고 수정하는게 있는데 
+    // 이게 ID가 없다면 ? 그냥 무시해도 되지 않나 
+
+
+
+
+
+
+
     //private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     //{
     //    // 게임 플레이가 진행되는 B1F 씬에서만 LoadGameState 호출
     //    if (scene.name == "B1F 3") // B1F 씬 이름을 정확하게 사용
     //    {
     //        LoadGameState();
-    
+
     //    }
     //}
 

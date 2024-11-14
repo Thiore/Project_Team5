@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -24,12 +22,12 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
     [SerializeField] private UI_ItemInformation iteminfo;
     [SerializeField] private UI_LerpImage lerpimage;
 
-    private bool isUsed;
-    private bool isDrag;
-    public void SetboolDrag()
-    {
-        isDrag = !isDrag;
-    }
+    private int usecount;
+    public int Usecount {  get => usecount; }
+
+    private bool isget;
+    public bool IsGet {  get => isget; }    
+
 
     private Sprite sprite;
     public Sprite Sprite { get => sprite; private set => sprite = Sprite; }
@@ -53,6 +51,16 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         tableName = data.tableName;
         isfix = data.isfix;
         spritename = data.spritename;
+
+        if (id.Equals(9) || id.Equals(13))
+        {
+            usecount = 2;
+        }
+        else
+        {
+            usecount = 1;
+        }
+
     }
 
     public void SetSprite(Sprite sprite)
@@ -99,6 +107,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         {            
             lerpimage.gameObject.SetActive(true);
             lerpimage.InputMovementInventory(this, position);
+            SwitchGetbool();
             inven.GetItemTouch(this);
         }
     }
@@ -126,5 +135,26 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         }
     }
 
+
+    public void SwitchGetbool()
+    {
+        isget = !isget;
+    }
+
+    public void UseAndDiscount()
+    {
+        usecount--;
+    }
+
+
+    public ItemSaveData SetItemSaveData()
+    {
+        ItemSaveData data = new ItemSaveData();
+        data.id = id;
+        data.itemusecount = usecount;
+        data.itemgetstate = isget;
+
+        return data;
+    }
 
 }

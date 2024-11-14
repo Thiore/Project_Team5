@@ -43,7 +43,6 @@ public class UI_LerpImage : MonoBehaviour
             yield return null;
         }
         gameObject.SetActive(false);
-
     }
 
 
