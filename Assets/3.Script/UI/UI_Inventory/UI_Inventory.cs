@@ -145,6 +145,7 @@ public class UI_Inventory : MonoBehaviour
             {
                 Item itemUI = inventoryslots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
+                itemUI.SwitchGetbool();
 
                 if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
@@ -208,27 +209,6 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
-    //미니게임 / 상호적용 하기전에 아이디 검사해서 있는지 없는지 bool return 
-    public bool CheckInteraction(int id)
-    {
-        for (int i = 0; i < inventoryslots.Length; i++)
-        {
-            if (inventoryslots[i].TryGetComponent<Item>(out Item item))
-            {
-                if (item.ID.Equals(id))
-                {
-                    // 트루 반환하니까 아이템 정리 해야됨 
-                    // Destroy(item);
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-
     public void DestroyElement(int elementindex)
     {
         for (int i = 0; i < inventoryslots.Length; i++)
@@ -269,9 +249,118 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
+
     private void OutPutItemText(Item item)
     {
         DialogueManager.Instance.SetDialogue("Table_ItemExplanation", item.ID);
+    }
+
+
+    public void LoadItem(Item item)
+    {
+
+        item.SetItemSaveData();
+        SaveManager.Instance.InputItemSavedata(item);
+
+        switch (item.Type)
+        {
+            case eItemType.Quick:
+                SetItemQuickLoad(item);
+                break;
+
+            case eItemType.Element:
+                SetItemLoad(item);
+                break;
+
+            case eItemType.Trigger:
+                SetItemQuickLoad(item);
+                break;
+
+            case eItemType.Clue:
+                SetItemLoad(item);
+                break;
+
+            default:
+                Debug.Log("아무것도 아닌감?");
+                break;
+
+        }
+    }
+
+    public void SetItemLoad(Item item)
+    {
+
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
+            {
+                Item itemUI = inventoryslots[i].AddComponent<Item>();
+                itemUI.PutInInvenItem(item);
+
+                if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = itemUI.Sprite;
+                }
+
+                break;
+            }
+        }
+
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+
+            if (inventoryslots[i].TryGetComponent(out Item uiitem))
+            {
+                if (uiitem.enabled.Equals(true))
+                {
+                    inventoryslots[i].SetActive(true);
+                }
+                else
+                {
+                    inventoryslots[i].SetActive(false);
+                }
+            }
+            else
+            {
+                inventoryslots[i].SetActive(false);
+            }
+
+        }
+    }
+
+    public void SetItemQuickLoad(Item item)
+    {
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
+            {
+                Item itemUI = inventoryslots[i].AddComponent<Item>();
+                itemUI.PutInInvenItem(item);
+
+                if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = itemUI.Sprite;
+                }
+                break;
+            }
+        }
+
+        for (int i = 0; i < quickSlots.Length; i++)
+        {
+            if (!quickSlots[i].TryGetComponent(out Item notusethis))
+            {
+                quickSlots[i].SetActive(true);
+                quickSlots[i].transform.GetChild(0).gameObject.SetActive(true);
+                Item itemUI = quickSlots[i].AddComponent<Item>();
+                itemUI.PutInInvenItem(item);
+
+                if (itemUI.transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = itemUI.Sprite;
+                }
+                break;
+            }
+        }
     }
 
 }

@@ -23,10 +23,10 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
     [SerializeField] private UI_LerpImage lerpimage;
 
     private int usecount;
-    public int Usecount {  get => usecount; }
+    public int Usecount { get => usecount; }
 
     private bool isget;
-    public bool IsGet {  get => isget; }    
+    public bool IsGet { get => isget; }
 
 
     private Sprite sprite;
@@ -88,12 +88,12 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void OnTouchStarted(Vector2 position)
     {
-       
+
     }
 
     public void OnTouchHold(Vector2 position)
     {
-        
+
     }
 
     public void OnTouchEnd(Vector2 position)
@@ -101,16 +101,16 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            if (hit.collider.gameObject.Equals(gameObject))
+            if (hit.collider.gameObject.Equals(gameObject) && gameObject.CompareTag("Item3D"))
             {
                 lerpimage.gameObject.SetActive(true);
-            lerpimage.InputMovementInventory(this, position);
-            SwitchGetbool();
-            inven.GetItemTouch(this);
+                lerpimage.InputMovementInventory(this, position);
+                SwitchGetbool();
+                inven.GetItemTouch(this);
             }
         }
     }
-    
+
 
     public void OnPointerDown(PointerEventData eventData)
     {

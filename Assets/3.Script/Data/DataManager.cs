@@ -87,21 +87,27 @@ public class DataManager : MonoBehaviour
                             // 이건 뭔가 얻거나 썼거나 했단거임 
                             if (SaveManager.Instance.itemsavedata.ContainsKey(items[i].ID))
                             {
-                                if(SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(true) &&
+                                if (SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(true) &&
                                     SaveManager.Instance.itemsavedata[items[i].ID].itemusecount > 0)
                                 {
-                                    PlayerManager.Instance.ui_inventory.GetItemTouch(items[i]);
-                                   items[i].gameObject.SetActive(false);
+                                    if (!SaveManager.Instance.itemsavedata[items[i].ID].Equals(2))
+                                    {
+                                        PlayerManager.Instance.ui_inventory.LoadItem(items[i]);
+                                        items[i].gameObject.SetActive(true);
+                                    }
+                                    else
+                                    {
+                                        PlayerManager.Instance.ui_inventory.LoadItem(items[i]);
+                                        items[i].gameObject.SetActive(false);
+                                    }
+                                }
+                                else if(SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(false) &&
+                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount < 0)
+                                {
+                                    items[i].gameObject.SetActive(false);
                                 }
                             }
                         }
-                        if(items[i].ID.Equals(2))
-                        {
-                            items[i].TryGetComponent(out Light flashLight);
-                            if(flashLight.enabled)
-                                flashLight.enabled = false;
-                        }
-
                         
                     }
                 }
