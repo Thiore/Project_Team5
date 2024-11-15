@@ -12,6 +12,8 @@ public class SaveManager : MonoBehaviour
 
     private string savePath; //���� ���� ���
     private string itemstatepath; //���� ���� ���
+    private GameObject loadGameButton; //이어하기 버튼
+    private GameObject mainButton; //Lobby Main Button
     public StateData.GameState gameState; //���� ���� ���� ��ü
     public Dictionary<int, ItemSaveData> itemsavedata; // ��� Ƚ��,��� ���� ����
 
@@ -31,6 +33,19 @@ public class SaveManager : MonoBehaviour
         InitializeSaveManager();
     }
 
+    private void OnEnable()
+    {
+        //LoadGameButton 찾기
+        mainButton = GameObject.FindGameObjectWithTag("GameController");
+        Transform loadGame = mainButton.transform.GetChild(0);
+        loadGameButton = loadGame.gameObject;
+
+        if (loadGameButton != null)
+        {
+            //저장 파일이 있는 경우 버튼 활성화, 없으면 비활성화
+            loadGameButton.SetActive(HasSaveFile());
+        }
+    }
     public void InitializeSaveManager()
     {
         // Json���� ���� ���
@@ -142,6 +157,9 @@ public class SaveManager : MonoBehaviour
         List<ItemSaveData> itemList = itemsavedata.Values.ToList();
         string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
         File.WriteAllText(itemstatepath, itemsjson);
+
+        //저장 후 LoadGameButton 상태 업데이트
+        UpdateLoadGameButton();
 
     }
 
@@ -271,6 +289,21 @@ public class SaveManager : MonoBehaviour
             ItemSaveData data = item.SetItemSaveData();
             itemsavedata.Add(item.ID, data);
             Debug.Log("���̺� ������ �߰�");
+        }
+    }
+
+    //Lobby 씬에서 LoadGameButton 상태 확인
+    private bool HasSaveFile()
+    {
+        return File.Exists(savePath) || File.Exists(itemstatepath);
+    }
+
+    //게임 저장할 때, LoadGameButton 상태 업데이트
+    private void UpdateLoadGameButton()
+    {
+        if (loadGameButton != null)
+        {
+            loadGameButton.SetActive(HasSaveFile());
         }
     }
 
