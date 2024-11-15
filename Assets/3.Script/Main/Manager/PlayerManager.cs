@@ -12,16 +12,19 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private UI_ItemInformation itemInfo;
     public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
     [SerializeField] private GameObject playerInterface;
-    public GameObject getInterface { get; private set; }
+    public GameObject getInterface { get => playerInterface; }
 
     [SerializeField] private UI_LerpImage lerpimage;
     public UI_LerpImage ui_lerpImage { get => lerpimage; }
 
     [SerializeField] private Transform mainPlayer;
-    public Transform getMainPlayer { get; private set; }
+    public Transform getMainPlayer { get => mainPlayer; }
 
     [SerializeField] private Transform playerCam;
-    public Transform getPlayerCam { get; private set; }
+    public Transform getPlayerCam { get => playerCam; }
+
+    [SerializeField] private GameObject flashLight;
+    public GameObject getFlashLight { get => flashLight; }
 
     private void Awake()
     {

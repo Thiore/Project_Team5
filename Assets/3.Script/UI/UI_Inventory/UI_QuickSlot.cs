@@ -42,11 +42,18 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
     {
         if (copyItem.ID.Equals(2))
         {
-            // ¿Ã∞…∑Œ ≈£ΩΩ∑‘ º’¿¸µÓ ≈∞±‚ ≤Ù±‚ 
+            PlayerManager.Instance.getFlashLight.SetActive(true);
         }
         else
         {
-
+            Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+            if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+            {
+                if (hit.collider.TryGetComponent(out TouchPuzzleCanvas toggle))
+                {
+                    
+                }
+            }
         }
 
         if (dragImage.gameObject.activeSelf)
@@ -61,7 +68,7 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
     {
         if (copyItem.ID.Equals(2))
         {
-            // ¿Ã∞…∑Œ ≈£ΩΩ∑‘ º’¿¸µÓ ≈∞±‚ ≤Ù±‚ 
+            PlayerManager.Instance.getFlashLight.SetActive(!PlayerManager.Instance.getFlashLight.activeSelf);
         }
      
     }

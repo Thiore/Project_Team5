@@ -194,6 +194,10 @@ public class SaveManager : MonoBehaviour
     //puzzle�� ��ȣ�ۿ��ϴ� door�� ���� �˸���
     public bool PuzzleState(int floorIndex, int objectIndex)
     {
+        if(objectIndex.Equals(0))
+        {
+            return true;
+        }
         StateData.FloorState floor = gameState.floors.Find(f => f.floorIndex == floorIndex);
 
         if (floor != null)

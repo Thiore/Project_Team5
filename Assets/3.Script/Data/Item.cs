@@ -88,7 +88,6 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void OnTouchStarted(Vector2 position)
     {
-        firstPos = position;//터치 시작위치 저장
        
     }
 
@@ -99,18 +98,19 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void OnTouchEnd(Vector2 position)
     {
-        Debug.Log("터치엔드");
-        //터치 땔때의 위치가 시작위치에서 일정거리 떨어져있을때 아무일도 안일어나도록 하기위해 사용
-        float touchUpDelta = Vector2.Distance(firstPos, position);
-        //거리의 기준을 잡지못해 50으로 임시로 지정했습니다 추후 수정이 필요합니다.
-        if (touchUpDelta<50f&&gameObject.CompareTag("Item3D"))
-        {            
-            lerpimage.gameObject.SetActive(true);
+        Ray ray = Camera.main.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+        {
+            if (hit.collider.gameObject.Equals(gameObject))
+            {
+                lerpimage.gameObject.SetActive(true);
             lerpimage.InputMovementInventory(this, position);
             SwitchGetbool();
             inven.GetItemTouch(this);
+            }
         }
     }
+    
 
     public void OnPointerDown(PointerEventData eventData)
     {
