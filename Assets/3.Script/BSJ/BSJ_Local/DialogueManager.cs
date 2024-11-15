@@ -95,17 +95,17 @@ public class DialogueManager : MonoBehaviour
             //2초 동안 버튼 비활성화
             dialogueButton.interactable = false;
             dialogueButton.gameObject.SetActive(true); //버튼 활성화
-            playInterface.gameObject.SetActive(false); //인터페이스 비활성화
+            //playInterface.gameObject.SetActive(false); //인터페이스 비활성화
             yield return new WaitForSeconds(2f);
 
             //2초 후 버튼 활성화 및 터치 이벤트
             dialogueButton.interactable = true;
             dialogueButton.onClick.AddListener(OnButtonClicked);
 
-            if (!dialogueButton.gameObject.activeSelf)
-            {
-                playInterface.gameObject.SetActive(true); //인터페이스 활성화
-            }
+            //if (!dialogueButton.gameObject.activeSelf)
+            //{
+            //    playInterface.gameObject.SetActive(true); //인터페이스 활성화
+            //}
         }
 
 

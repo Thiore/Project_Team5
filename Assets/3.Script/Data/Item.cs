@@ -101,7 +101,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            if (hit.collider.gameObject.Equals(gameObject))
+            if (hit.collider.gameObject.Equals(gameObject)&&hit.collider.CompareTag("Item3D"))
             {
                 lerpimage.gameObject.SetActive(true);
             lerpimage.InputMovementInventory(this, position);

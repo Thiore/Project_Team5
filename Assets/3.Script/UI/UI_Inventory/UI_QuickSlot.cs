@@ -47,21 +47,26 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
         else
         {
             Ray ray = Camera.main.ScreenPointToRay(eventData.position);
-            if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+            if (Physics.Raycast(ray, out RaycastHit hit, 4f, TouchManager.Instance.getTouchableLayer))
             {
                 if (hit.collider.TryGetComponent(out TouchPuzzleCanvas toggle))
                 {
-                    for(int i = 0; i < toggle.getObjectIndex.Length;i++)
+                    for(int i = 0; i < toggle.getInteractionIndex.Length;i++)
                     {
-                        if (copyItem.ID.Equals(toggle.getObjectIndex[i]))
+                        if (copyItem.ID.Equals(toggle.getInteractionIndex[i]))
                         {
                             toggle.isInteracted = true;
-                            SaveManager.Instance.UpdateObjectState(toggle.getFloorIndex, toggle.getObjectIndex[i],true);
-                        Destroy(copyItem);
+                            SaveManager.Instance.UpdateObjectState(toggle.getFloorIndex, toggle.getInteractionIndex[i],true);
+                            Debug.Log("여기1?");
+                            if (dragImage.gameObject.activeSelf)
+                            {
+                                dragImage.gameObject.SetActive(false);
+                            }
+                            CheckInteraction(toggle.getInteractionIndex[i]);
                         }
                     }
                 }
-                else if(hit.collider.TryGetComponent(out PlayOBJ puzzle))
+                if(hit.collider.TryGetComponent(out PlayOBJ puzzle))
                 {
                     for(int i = 0; i < puzzle.getObjectIndex.Length;i++)
                     {
@@ -69,16 +74,18 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
                         {
                             puzzle.InteractionCount();
                             SaveManager.Instance.UpdateObjectState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
-                            Destroy(copyItem);
+                            Debug.Log("여기2?");
+                            if (dragImage.gameObject.activeSelf)
+                            {
+                                dragImage.gameObject.SetActive(false);
+                            }
+                            CheckInteraction(puzzle.getObjectIndex[i]);
                         }
                     }
                    
                 }
             }
-            if (dragImage.gameObject.activeSelf)
-            {
-                dragImage.gameObject.SetActive(false);
-            }
+           
         }
 
         
@@ -93,6 +100,27 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
             if (copyItem.ID.Equals(2))
             {
                 PlayerManager.Instance.flashLight.enabled = !PlayerManager.Instance.flashLight.enabled;
+            }
+        }
+    }
+
+    //미니게임 / 상호적용 하기전에 아이디 검사해서 있는지 없는지 bool return 
+    public void CheckInteraction(int id)
+    {
+        if (copyItem.ID.Equals(id))
+        {
+            if (copyItem.ID.Equals(id))
+            {
+                if(transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = null;
+                    sprite.gameObject.SetActive(false);
+                    Destroy(copyItem);
+                    return;
+                }
+                
+
+                
             }
         }
     }

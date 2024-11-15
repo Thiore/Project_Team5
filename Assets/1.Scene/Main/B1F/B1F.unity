@@ -978,7 +978,7 @@ MonoBehaviour:
     FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.01
-    FarClipPlane: 1
+    FarClipPlane: 10
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
@@ -4604,7 +4604,7 @@ MonoBehaviour:
     FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.1
-    FarClipPlane: 5
+    FarClipPlane: 15
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
@@ -15338,9 +15338,11 @@ GameObject:
   - component: {fileID: 8395653236148204550}
   - component: {fileID: 4932404024117049860}
   - component: {fileID: 8395653236148204551}
+  - component: {fileID: 8395653236148204553}
+  - component: {fileID: 8395653236148204552}
   m_Layer: 0
   m_Name: piece_of_puzzle_1
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28872,7 +28874,7 @@ GameObject:
   - component: {fileID: 8796983191433221123}
   m_Layer: 6
   m_Name: note_1
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32869,9 +32871,11 @@ GameObject:
   - component: {fileID: 1745343332558076789}
   - component: {fileID: 6099277506620734198}
   - component: {fileID: 8385376472277211619}
+  - component: {fileID: 8385376472277211621}
+  - component: {fileID: 8385376472277211620}
   m_Layer: 0
   m_Name: key_2
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32945,8 +32949,8 @@ MonoBehaviour:
   dialogueText: {fileID: 8281967990863782588}
   itemName: {fileID: 1185496807944470567}
   explanation: {fileID: 2635423731916185003}
-  koreanButtonText: {fileID: 0}
-  englishButtonText: {fileID: 0}
+  koreanButtonText: {fileID: 643749666163008408}
+  englishButtonText: {fileID: 6338663669276097362}
 --- !u!224 &2288192968345485188
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33773,7 +33777,7 @@ GameObject:
   - component: {fileID: 4088161347859619979}
   - component: {fileID: 4088161347859619977}
   - component: {fileID: 4088161347859619978}
-  - component: {fileID: 4088161347859619981}
+  - component: {fileID: 4088161347859619980}
   m_Layer: 6
   m_Name: SM_Prop_Mop_01
   m_TagString: Untagged
@@ -35091,19 +35095,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
-        m_MethodName: Language
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: Korea
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2278918033473544301}
         m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
         m_MethodName: ChangeLocale
         m_Mode: 3
@@ -35112,7 +35104,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Korea
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!4 &2476581970613951199
@@ -44263,6 +44255,7 @@ GameObject:
   - component: {fileID: 7985978287848642737}
   - component: {fileID: 7985978287848642738}
   - component: {fileID: 6905390923999701772}
+  - component: {fileID: 7985978287848642739}
   m_Layer: 6
   m_Name: SM_Bld_Bunker_Wall_Metal_Door_x1_Opening_01
   m_TagString: Untagged
@@ -53499,7 +53492,7 @@ GameObject:
   - component: {fileID: 7486654325905163010}
   m_Layer: 6
   m_Name: note_2
-  m_TagString: touchableobject
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54472,7 +54465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalCamera: {fileID: 0}
---- !u!114 &4088161347859619981
+--- !u!114 &4088161347859619980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54481,9 +54474,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2339541021635090248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!4 &4091297546108309588
 Transform:
   m_ObjectHideFlags: 0
@@ -59030,6 +59029,7 @@ GameObject:
   - component: {fileID: 5903561045803261157}
   - component: {fileID: 3648883763584207011}
   - component: {fileID: 6035639589280174393}
+  - component: {fileID: 6035639589280174394}
   m_Layer: 6
   m_Name: SM_Bld_Bunker_Wall_Metal_Door_x1_Opening_01
   m_TagString: touchableobject
@@ -61043,19 +61043,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
-        m_MethodName: Language
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: English
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2278918033473544301}
         m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
         m_MethodName: ChangeLocale
         m_Mode: 3
@@ -61064,7 +61052,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: English
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &4646670817414983118
@@ -61158,9 +61146,11 @@ GameObject:
   - component: {fileID: 2441876658720400201}
   - component: {fileID: 8809925570148243932}
   - component: {fileID: 8809925570148243933}
+  - component: {fileID: 8809925570148243935}
+  - component: {fileID: 8809925570148243934}
   m_Layer: 0
   m_Name: piece_of_puzzle_2
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68811,9 +68801,9 @@ GameObject:
   - component: {fileID: 7801510246696836501}
   - component: {fileID: 7801510246696836499}
   - component: {fileID: 7801510246696836500}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: key_1
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70772,7 +70762,7 @@ GameObject:
   - component: {fileID: 7871085648074735281}
   m_Layer: 0
   m_Name: flashlight
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76734,8 +76724,8 @@ MonoBehaviour:
   btnExit: {fileID: 1861046611}
   playPuzzle: {fileID: 2479786955450846883}
   floorIndex: 0
-  objectIndex: 65000000
-  InteractionIndex: 2
+  objectIndex: 101
+  InteractionIndex: 02000000
   interactionAnim:
   - {fileID: 7343976977427336683}
   - {fileID: 8472937615781577286}
@@ -76834,6 +76824,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalCamera: {fileID: 0}
+--- !u!114 &6035639589280174394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4477959444640939692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!4 &6038271115132753233
 Transform:
   m_ObjectHideFlags: 0
@@ -79122,7 +79130,7 @@ GameObject:
   - component: {fileID: 9188680202420336347}
   m_Layer: 6
   m_Name: battery
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83749,9 +83757,11 @@ GameObject:
   - component: {fileID: 3230169970266443167}
   - component: {fileID: 6461707460454508969}
   - component: {fileID: 8433495653108117607}
+  - component: {fileID: 8433495653108117609}
+  - component: {fileID: 8433495653108117608}
   m_Layer: 0
   m_Name: piece_of_puzzle_3
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84362,9 +84372,11 @@ GameObject:
   - component: {fileID: 788553886180111056}
   - component: {fileID: 9108671884451542186}
   - component: {fileID: 9108671884451542187}
+  - component: {fileID: 9108671884451542189}
+  - component: {fileID: 9108671884451542188}
   m_Layer: 0
-  m_Name: bundle_of_keys
-  m_TagString: Untagged
+  m_Name: bunch_of_keys
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94421,6 +94433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!65 &7487350051086953918
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -95158,8 +95171,8 @@ MonoBehaviour:
   btnExit: {fileID: 1042691194}
   playPuzzle: {fileID: 0}
   floorIndex: 0
-  objectIndex: 64000000
-  InteractionIndex: -1
+  objectIndex: 100
+  InteractionIndex: 
   interactionAnim: []
   isClear: 0
   isInteracted: 0
@@ -98272,6 +98285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 150535770}
 --- !u!4 &7808914382644752458
 Transform:
   m_ObjectHideFlags: 0
@@ -100303,6 +100317,24 @@ MonoBehaviour:
   floorIndex: 0
   objectIndex: 100
   isClear: 0
+--- !u!114 &7985978287848642739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3229201842017336784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!4 &7986405920261205005
 Transform:
   m_ObjectHideFlags: 0
@@ -103555,12 +103587,13 @@ GameObject:
   - component: {fileID: 9116027518304679591}
   - component: {fileID: 5446815911083317034}
   - component: {fileID: 9116027518304679594}
-  - component: {fileID: 9116027518304679593}
   - component: {fileID: 9116027518304679592}
   - component: {fileID: 9116027518304679595}
+  - component: {fileID: 9116027518304679597}
+  - component: {fileID: 9116027518304679596}
   m_Layer: 0
   m_Name: medical_record
-  m_TagString: Untagged
+  m_TagString: Item3D
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104677,6 +104710,37 @@ MonoBehaviour:
   inven: {fileID: 0}
   iteminfo: {fileID: 0}
   lerpimage: {fileID: 0}
+--- !u!114 &8385376472277211620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2274574512099101974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+--- !u!114 &8385376472277211621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2274574512099101974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!222 &8385922591385933133
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -104865,6 +104929,37 @@ MonoBehaviour:
   inven: {fileID: 0}
   iteminfo: {fileID: 0}
   lerpimage: {fileID: 0}
+--- !u!114 &8395653236148204552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874050136017968178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+--- !u!114 &8395653236148204553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874050136017968178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!65 &8396312154016624741
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -105341,6 +105436,37 @@ MonoBehaviour:
   inven: {fileID: 0}
   iteminfo: {fileID: 0}
   lerpimage: {fileID: 0}
+--- !u!114 &8433495653108117608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6569992282822890336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &8433495653108117609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6569992282822890336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!33 &8436535761259825534
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -107274,6 +107400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 667850195}
 --- !u!1 &8604161267371325035
 GameObject:
   m_ObjectHideFlags: 0
@@ -107383,8 +107510,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6081760575332116951}
         m_TargetAssemblyTypeName: UseButton, Assembly-CSharp
-        m_MethodName: QucikSlotButton
-        m_Mode: 0
+        m_MethodName: QucikSlotEnable
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -109617,6 +109744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 457767893}
 --- !u!33 &8798857865666405469
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -109879,6 +110007,37 @@ MonoBehaviour:
   inven: {fileID: 0}
   iteminfo: {fileID: 0}
   lerpimage: {fileID: 0}
+--- !u!114 &8809925570148243934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4662472092737067216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &8809925570148243935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4662472092737067216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!33 &8810523006632951328
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -113674,6 +113833,37 @@ MonoBehaviour:
   inven: {fileID: 0}
   iteminfo: {fileID: 0}
   lerpimage: {fileID: 0}
+--- !u!114 &9108671884451542188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627228686267351232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+--- !u!114 &9108671884451542189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627228686267351232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!65 &9110964536252130690
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -113888,19 +114078,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clueIndex: 2
---- !u!114 &9116027518304679593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8304242939451176656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b4e249823ca0045bc3a20721f58045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTouch: 0
 --- !u!64 &9116027518304679594
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -113945,6 +114122,37 @@ MonoBehaviour:
   inven: {fileID: 0}
   iteminfo: {fileID: 0}
   lerpimage: {fileID: 0}
+--- !u!114 &9116027518304679596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8304242939451176656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &9116027518304679597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8304242939451176656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!65 &9116729658832752122
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -115126,6 +115334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfff9990d96412d4ea37e2d1b6e95876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!1 &9193338573514904443
 GameObject:
   m_ObjectHideFlags: 0

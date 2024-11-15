@@ -26,7 +26,7 @@ public class InteractionOBJ : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag("MainCamera")&&outline != null)
         {
             outline.enabled = true;
         }
@@ -34,10 +34,9 @@ public class InteractionOBJ : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag("MainCamera") && outline != null)
         {
             outline.enabled = false;
         }
     }
-
 }

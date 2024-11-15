@@ -207,6 +207,18 @@ public class TouchManager : MonoBehaviour
                                 OnLookHold?.Invoke(position);
                             }
                         }
+                        else
+                        {
+                            if (moveID.Equals(touchId))
+                            {
+                                OnMoveEnd?.Invoke(position);
+                            }
+                            if (lookID.Equals(touchId))
+                            {
+                                OnLookEnd?.Invoke(position);
+                            }
+                            touchState = etouchState.Normal;
+                        }
 
                         break;
                     case etouchState.Object:

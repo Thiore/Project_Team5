@@ -14,11 +14,11 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     [Header("SaveManager 참고")]
     [SerializeField] private int floorIndex;
     public int getFloorIndex { get => floorIndex; }
-    [SerializeField] private int[] objectIndex;
-    public int[] getObjectIndex { get => objectIndex; }
+    [SerializeField] private int objectIndex;
 
-    [Header("상호작용 아이템이 없다면 0")]
-    [SerializeField] private int InteractionIndex;
+    [Header("상호작용 아이템이 없다면 -1")]
+    [SerializeField] private int[] InteractionIndex;
+    public int[] getInteractionIndex { get => InteractionIndex; }
 
     private Animator anim;
 
@@ -58,16 +58,35 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
                 defaultObj.Add(playerInterface.GetChild(i).gameObject);
             }
         }
-        for(int i = 0; i < objectIndex.Length;i++)
-        {
-            if(!SaveManager.Instance.PuzzleState(floorIndex, objectIndex[i]))
+        
+            if(!SaveManager.Instance.PuzzleState(floorIndex, objectIndex))
             {
                 isClear = false;
-                break;
+            }
+            else
+        {
+            isClear = true;
+        }
+            
+        
+        if (InteractionIndex.Length.Equals(0))
+        {
+            isInteracted = true;
+        }
+        else
+        {
+            for(int i = 0; i < InteractionIndex.Length;i++)
+            {
+                if(!SaveManager.Instance.PuzzleState(floorIndex, InteractionIndex[i]))
+                {
+                    isInteracted = false;
+                    break;
+                }
+                isInteracted = true;
             }
         }
-
-        isInteracted = SaveManager.Instance.PuzzleState(floorIndex, InteractionIndex);
+            
+       
      
         if (isClear&&interactionAnim.Length>0)
         {
@@ -96,6 +115,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
         if (isClear)
         {
+            SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex, true);
             missionExit.SetActive(true);
             missionStart.SetActive(false);
             if (anim != null)
@@ -138,6 +158,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         if(!isInteracted)
         {
             DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+            return;
         }
         Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
@@ -165,8 +186,8 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
                     {
                         defaultObj[i].SetActive(false);
                     }
-                    quickSlot.QucikSlotButton(false);
                 }
+                    quickSlot.QucikSlotButton(false);
 
                 if(anim != null)
                 {
@@ -181,15 +202,25 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     private void OnTriggerEnter(Collider other)
     {
         if (isClear) return;
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag("MainCamera") && outline != null)
         {
             outline.enabled = true;
         }
     }
+
     private void OnTriggerExit(Collider other)
     {
-        if (isClear) return;
-        if (other.CompareTag("MainCamera"))
+        if (isClear)
+        {
+            if(outline!=null)
+            {
+                outline.enabled = false;
+            }
+            return;
+        }
+
+       
+        if (other.CompareTag("MainCamera") && outline != null)
         {
             outline.enabled = false;
         }
@@ -201,7 +232,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         {
             interactionAnim[i].SetBool(openAnim, true);
         }
-        Invoke("ResetCamera", 2f);
+        Invoke("ResetCamera", 1f);
     }
     private void ResetCamera()
     {
@@ -215,7 +246,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     }
     public void SetQuickSlot()
     {
-        if (playPuzzle.getInteractionCount.Equals(0))
+        if (playPuzzle.getInteractionCount>0)
         {
             quickSlot.QucikSlotButton(true);
         }

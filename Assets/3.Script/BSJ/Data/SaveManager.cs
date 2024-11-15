@@ -62,7 +62,6 @@ public class SaveManager : MonoBehaviour
     //������ ��׶���� ���� ��, ����
     private void OnApplicationPause(bool pause)
     {
-        //���ø����̼��� ��׶���� ���ų�, �ٽ� ���ƿ��� �� ȣ��
         if (pause)
         {
             SaveGameState();

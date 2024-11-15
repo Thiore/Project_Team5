@@ -208,25 +208,7 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
-    //미니게임 / 상호적용 하기전에 아이디 검사해서 있는지 없는지 bool return 
-    public bool CheckInteraction(int id)
-    {
-        for (int i = 0; i < inventoryslots.Length; i++)
-        {
-            if (inventoryslots[i].TryGetComponent<Item>(out Item item))
-            {
-                if (item.ID.Equals(id))
-                {
-                    // 트루 반환하니까 아이템 정리 해야됨 
-                    // Destroy(item);
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
+    
 
 
     public void DestroyElement(int elementindex)

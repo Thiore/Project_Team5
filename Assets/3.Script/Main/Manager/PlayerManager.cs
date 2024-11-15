@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManager Instance { get; private set; } = null;
+    public static PlayerManager Instance { get; private set; }
 
     [SerializeField] private UI_Inventory inventory;
     public UI_Inventory ui_inventory { get => inventory; }
@@ -24,17 +24,18 @@ public class PlayerManager : MonoBehaviour
     public Transform getPlayerCam { get => playerCam; }
 
     public Light flashLight;
-    
+
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
+        //if (Instance == null)
+        //{
+        //    Instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else
+        //{
+        //    Destroy(gameObject);
+        //}
     }
 }

@@ -37,7 +37,9 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
         {
             if (hit.collider.gameObject.Equals(gameObject))
             {
-                isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
+                if(!isClear)
+                    isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
+               
                 if (isClear)
                 {
                     isTouching = !isTouching;
