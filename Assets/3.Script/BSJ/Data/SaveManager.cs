@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
@@ -9,8 +10,11 @@ public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; } = null;
 
-    private string savePath; //ÀúÀå ÆÄÀÏ °æ·Î
-    public StateData.GameState gameState; //°ÔÀÓ »óÅÂ °ü¸® °´Ã¼
+    private string savePath; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    private string itemstatepath; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    public StateData.GameState gameState; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
+    public Dictionary<int, ItemSaveData> itemsavedata; // ï¿½ï¿½ï¿½ È½ï¿½ï¿½,ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+
 
     private void Awake()
     {
@@ -24,18 +28,26 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // JsonÆÄÀÏ ÀúÀå °æ·Î
+        InitializeSaveManager();
+    }
+
+    public void InitializeSaveManager()
+    {
+        // Jsonï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         savePath = Path.Combine(Application.persistentDataPath, "gameState.json");
         Debug.Log(savePath);
 
-        //°ÔÀÓ »óÅÂ ÃÊ±âÈ­ (Ãþ ¸®½ºÆ® ÃÊ±âÈ­)
-        gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
+        itemstatepath = Path.Combine(Application.persistentDataPath, "itemsaveState.json");
 
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­)
+        gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
+        itemsavedata = new Dictionary<int, ItemSaveData>();
     }
-    //À¯Àú°¡ ¹é±×¶ó¿îµå·Î °¬À» ¶§, ÀúÀå
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½×¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½
     private void OnApplicationPause(bool pause)
     {
-        //¾îÇÃ¸®ÄÉÀÌ¼ÇÀÌ ¹é±×¶ó¿îµå·Î °¡°Å³ª, ´Ù½Ã µ¹¾Æ¿ÔÀ» ¶§ È£Ãâ
+        //ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½×¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½, ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
         if (pause)
         {
             SaveGameState();
@@ -43,133 +55,143 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    //¾îÇÃ¸®ÄÉÀÌ¼ÇÀÌ Á¾·á µÇ¾úÀ» ¶§
+    //ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½
     private void OnApplicationQuit()
     {
         SaveGameState();
     }
 
-    //»õ°ÔÀÓ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void NewGame()
     {
-        //gameState ÃÊ±âÈ­ (Ãþ ¸®½ºÆ®)
+        //gameState ï¿½Ê±ï¿½È­ (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®)
         gameState = new StateData.GameState
         {
             floors = new List<StateData.FloorState>(),
 
-            //ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+            //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ê±ï¿½È­
             playerPositionX = 204.699f,
             playerPositionY = 1f,
             playerPositionZ = 2.91f,
             playerRotationX = 23f,
             playerRotationY = 408.2f,
             playerRotationZ = 0,
-            playerRotationW = 1 // ±âº» È¸Àü ¼³Á¤
+            playerRotationW = 1 // ï¿½âº» È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         };
 
 
-        // °¢ Ãþ°ú »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ® ÃÊ±âÈ­ ¹× ±âº» »óÅÂ ¼³Á¤ (ÀÓ½Ã·Î 4 ÇØ³ùÀ½)
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ó½Ã·ï¿½ 4 ï¿½Ø³ï¿½ï¿½ï¿½)
         for (int floorIndex = 0; floorIndex < 4; floorIndex++)
         {
-            // Ãþ Á¤º¸¸¦ ÃÊ±âÈ­ ÈÄ Ãþ ÀÎµ¦½º ¹× ¿ÀºêÁ§Æ® »óÅÂ ¸®½ºÆ® ¼³Á¤
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
             StateData.FloorState floor = new StateData.FloorState
             {
-                //ÇöÀç Ãþ ÀÎµ¦½º ¼³Á¤
+                //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 floorIndex = floorIndex,
-                //Ãþ ³» ¿ÀºêÁ§Æ® ¸®½ºÆ® ÃÊ±âÈ­
+                //ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
                 interactableObjects = new List<StateData.InteractableObjectState>()
             };
 
-            // °¢ Ãþ »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ® ÃÊ±âÈ­ (ÀÓ½Ã·Î 5 ÇØ³ùÀ½)
+            // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­ (ï¿½Ó½Ã·ï¿½ 5 ï¿½Ø³ï¿½ï¿½ï¿½)
             for (int objectIndex = 0; objectIndex < 5; objectIndex++)
             {
-                //¿ÀºêÁ§Æ® »óÅÂ ÃÊ±âÈ­(»óÈ£ÀÛ¿ëµÇÁö ¾ÊÀº »óÅÂ·Î)
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­(ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½)
                 StateData.InteractableObjectState objState = new StateData.InteractableObjectState
                 {
-                    //¿ÀºêÁ§Æ® ÀÎµ¦½º ¼³Á¤
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     objectIndex = objectIndex,
-                    //»óÈ£ÀÛ¿ëµÇÁö ¾ÊÀº »óÅÂ
+                    //ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     isInteracted = false
                 };
-                //ÃÊ±âÈ­µÈ ¿ÀºêÁ§Æ® »óÅÂ¸¦ Ãþ¿¡ Ãß°¡
+                //ï¿½Ê±ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
                 floor.interactableObjects.Add(objState);
             }
-            //ÃÊ±âÈ­ µÈ Ãþ »óÅÂ¸¦ °ÔÀÓ »óÅÂ¿¡ Ãß°¡
+            //ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ß°ï¿½
             gameState.floors.Add(floor);
         }
 
     }
 
-    // °ÔÀÓ ·Îµå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
     public void LoadGameState()
     {
-        //ÀúÀåµÈ JsonÆÄÀÏÀÌ Á¸Àç ÇÏ´Â °æ¿ì ·Îµå
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ Jsonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½Îµï¿½
         if (File.Exists(savePath))
         {
             string json = File.ReadAllText(savePath);
-            //Json ¹®ÀÚ¿­À» GameState °´Ã¼·Î ÇÒ´ç
+            //Json ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ GameState ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ò´ï¿½
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
+        }
 
+        if (File.Exists(itemstatepath))
+        {
+            string itemjson = File.ReadAllText(itemstatepath);
+            itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
         }
     }
 
-    // °ÔÀÓ »óÅÂ ÀúÀå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void SaveGameState()
     {
-        //ÇÃ·¹ÀÌ¾î À§Ä¡ ¹× È¸Àü ÀúÀå
-        
+        //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
+
+        List<ItemSaveData> itemList = itemsavedata.Values.ToList();
+        string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
+        File.WriteAllText(itemstatepath, itemsjson);
+
     }
 
-    // »óÅÂ ¾÷µ¥ÀÌÆ® (Ãþ ¹× ¿ÀºêÁ§Æ® »óÅÂ ¾÷µ¥ÀÌÆ®)
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® (ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®)
     public void UpdateObjectState(int floorIndex, int objectIndex, bool isInteracted)
     {
-        //ÇØ´ç ÃþÀ» Ã£°Å³ª »õ·Î »ý¼º(»õ°ÔÀÓ)
+        //ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         StateData.FloorState floor = gameState.floors.Find(f => f.floorIndex == floorIndex);
 
-        //ÇØ´ç ÃþÀÌ ¾øÀ» °æ¿ì »õ·Î¿î Ãþ Ãß°¡
+        //ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ ï¿½ß°ï¿½
         if (floor == null)
         {
             floor = new StateData.FloorState
             {
-                //Ãþ ÀÎµ¦½º ¼³Á¤
+                //ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 floorIndex = floorIndex,
-                //¿ÀºêÁ§Æ® ¸®½ºÆ® ÃÊ±âÈ­
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
                 interactableObjects = new List<StateData.InteractableObjectState>()
             };
-            //»ý¼ºÇÑ ÃþÀ» floors ¸®½ºÆ®¿¡ Ãß°¡
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ floors ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½
             gameState.floors.Add(floor);
         }
 
-        //ÇØ´ç ¿ÀºêÁ§Æ®¸¦ Ã£°Å³ª »õ·Î »ý¼ºÇÏ¿© »óÅÂ ¾÷µ¥ÀÌÆ®
+        //ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ã£ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         StateData.InteractableObjectState objState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
 
-        //¿ÀºêÁ§Æ®°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì »õ·Î¿î ·ÎºêÁ§Æ® Ãß°¡
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Îºï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
         if (objState == null)
         {
             objState = new StateData.InteractableObjectState
             {
-                //¿ÀºêÁ§Æ® ÀÎµ¦½º ¼³Á¤
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 objectIndex = objectIndex,
-                //Àü´ÞµÈ »óÈ£ÀÛ¿ë »óÅÂ ¼³Á¤
+                //ï¿½ï¿½ï¿½Þµï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 isInteracted = isInteracted
             };
-            //»ý¼ºÇÑ ¿ÀºêÁ§Æ®interactableObjects ¸®½ºÆ®¿¡ Ãß°¡
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®interactableObjects ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½
             floor.interactableObjects.Add(objState);
         }
         else
         {
-            //¿ÀºêÁ§Æ®°¡ ÀÌ¹Ì Á¸ÀçÇÏ´Â °æ¿ì -> »óÈ£ÀÛ¿ë »óÅÂ¸¸ ¾÷µ¥ÀÌÆ®
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ -> ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
             objState.isInteracted = isInteracted;
         }
 
 
     }
 
-    //puzzle°ú »óÈ£ÀÛ¿ëÇÏ´Â door¿¡ »óÅÂ ¾Ë¸®±â
+    //puzzleï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½Ï´ï¿½ doorï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½
     public bool PuzzleState(int floorIndex, int objectIndex)
     {
         StateData.FloorState floor = gameState.floors.Find(f => f.floorIndex == floorIndex);
@@ -212,7 +234,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    //ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡ (ÀúÀåÇÒ ¶©, SaveManager°¡ PlayerÀÇ À§Ä¡¸¦ ¾Ë°í ÀúÀåµÇ¾î¾ß ÇØ¼­??)
+    //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, SaveManagerï¿½ï¿½ Playerï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ë°ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ ï¿½Ø¼ï¿½??)
     public void SavePlayerPosition()
     {
             gameState.playerPositionX = PlayerManager.Instance.getMainPlayer.localPosition.x;
@@ -227,13 +249,52 @@ public class SaveManager : MonoBehaviour
 
     }
 
+
+
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ø¼ï¿½ Json ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½Ö¸ï¿½ ï¿½Ç´Â°ï¿½ ï¿½Æ´ï¿½ ? 
+    // ï¿½ï¿½ï¿½ï¿½È­ï¿½Ø¼ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ ï¿½ï¿½ï¿½Ý¾ï¿½ 
+
+    // ï¿½Ùµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ? 
+    // ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½çº» ï¿½ï¿½ï¿½ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é¼­ ï¿½ï¿½ï¿½ï¿½ ?
+
+    public void InputItemSavedata(Item item)
+    {
+
+        if (itemsavedata.ContainsKey(item.ID))
+        {
+            itemsavedata[item.ID].itemgetstate = item.IsGet;
+            itemsavedata[item.ID].itemusecount = item.Usecount;
+            Debug.Log("ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+        }
+        else
+        {
+            ItemSaveData data = item.SetItemSaveData();
+            itemsavedata.Add(item.ID, data);
+            Debug.Log("ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½");
+        }
+    }
+
+    // Ä«ï¿½ï¿½Æ®ï¿½ï¿½ 0 ï¿½Ì»ï¿½ï¿½Î°Íµï¿½, ï¿½×¸ï¿½ï¿½ï¿½ bool getï¿½ï¿½ true ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½ï¿½ï¿½ 
+    // Ä«ï¿½ï¿½Æ®ï¿½ï¿½ 0 ï¿½Ì°ï¿½, bool get false ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å°ï¿½ï¿½ï¿½ 
+    // Ä«ï¿½ï¿½ï¿½Í°ï¿½ 0 ï¿½Ì»ï¿½ï¿½Ì°ï¿½ getï¿½ï¿½ false ï¿½ï¿½ï¿½ ï¿½È¸ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ï¿½ 
+
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Â°ï¿½ ï¿½Ö´Âµï¿½ 
+    // ï¿½Ì°ï¿½ IDï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ? ï¿½×³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê³ï¿½ 
+
+
+
+
+
+
+
     //private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     //{
-    //    // °ÔÀÓ ÇÃ·¹ÀÌ°¡ ÁøÇàµÇ´Â B1F ¾À¿¡¼­¸¸ LoadGameState È£Ãâ
-    //    if (scene.name == "B1F 3") // B1F ¾À ÀÌ¸§À» Á¤È®ÇÏ°Ô »ç¿ë
+    //    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ B1F ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ LoadGameState È£ï¿½ï¿½
+    //    if (scene.name == "B1F 3") // B1F ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½È®ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½
     //    {
     //        LoadGameState();
-    
+
     //    }
     //}
 
@@ -242,7 +303,7 @@ public class SaveManager : MonoBehaviour
     //    GameObject player = GameObject.FindGameObjectWithTag("RealPlayer");
     //    if (player != null)
     //    {
-    //        // ¼³Á¤µÈ À§Ä¡·Î ¹Ýº¹ÀûÀ¸·Î Àû¿ë
+    //        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ýºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     //        Vector3 targetPosition = new Vector3(
     //            gameState.playerPositionX,
     //            gameState.playerPositionY,
@@ -256,13 +317,13 @@ public class SaveManager : MonoBehaviour
     //            gameState.playerRotationW
     //        );
 
-    //        // ÀÏÁ¤ ½Ã°£ µ¿¾È ¹Ýº¹ÇÏ¿© À§Ä¡ Àû¿ë
-    //        for (int i = 0; i < 5; i++) // 5È¸ ¹Ýº¹ ¿¹½Ã
+    //        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+    //        for (int i = 0; i < 5; i++) // 5È¸ ï¿½Ýºï¿½ ï¿½ï¿½ï¿½ï¿½
     //        {
     //            player.transform.localPosition = targetPosition;
     //            player.transform.localRotation = targetRotation;
     //            Debug.Log($"EnsurePlayerPosition - Reapply Position: {player.transform.position}");
-    //            yield return new WaitForSeconds(0.1f); // Áö¿¬
+    //            yield return new WaitForSeconds(0.1f); // ï¿½ï¿½ï¿½ï¿½
     //        }
     //    }
 

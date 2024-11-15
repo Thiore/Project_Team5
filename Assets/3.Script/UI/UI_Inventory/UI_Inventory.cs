@@ -15,6 +15,7 @@ public class UI_Inventory : MonoBehaviour
     [SerializeField] private UI_LerpImage lerpImage;
 
     private List<Item> myitems;
+    public List<Item> MyItems { get => myitems; }
 
     // UI_Press >> 드래그하는거 해둠 
 
@@ -55,12 +56,15 @@ public class UI_Inventory : MonoBehaviour
 
 
     //아이템 Type에 따라 
-    public void GetItemTouch(Item item, Vector2 position)
+    public void GetItemTouch(Item item)
     {
-        //lerpImage.gameObject.SetActive(true);
-        //lerpImage.StartLerp(position);
+        //if (item.gameObject.CompareTag("Item3D"))
+        //{
+        //    OutPutItemText(item);
+        //}
 
-        OutPutItemText(item);
+        item.SetItemSaveData();
+        SaveManager.Instance.InputItemSavedata(item);
 
         switch (item.Type)
         {
@@ -86,7 +90,8 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
-        //lerpImage.gameObject.SetActive(false);
+
+        Destroy(item.gameObject);
     }
 
 
@@ -99,15 +104,36 @@ public class UI_Inventory : MonoBehaviour
             {
                 Item itemUI = inventoryslots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
+                itemUI.SwitchGetbool();
 
                 if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
                     sprite.sprite = itemUI.Sprite;
                 }
 
-                Destroy(item.gameObject);
                 break;
             }
+        }
+
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+
+            if (inventoryslots[i].TryGetComponent(out Item uiitem))
+            {
+                if (uiitem.enabled.Equals(true))
+                {
+                    inventoryslots[i].SetActive(true);
+                }
+                else
+                {
+                    inventoryslots[i].SetActive(false);
+                }
+            }
+            else
+            {
+                inventoryslots[i].SetActive(false);
+            }
+
         }
     }
 
@@ -141,8 +167,6 @@ public class UI_Inventory : MonoBehaviour
                 {
                     sprite.sprite = itemUI.Sprite;
                 }
-                myitems.Add(item);
-                Destroy(item.gameObject);
                 break;
             }
         }
@@ -150,7 +174,11 @@ public class UI_Inventory : MonoBehaviour
 
     public void GetCombineItem(Item item)
     {
-        OutPutItemText(item);
+        //OutPutItemText(item);
+
+        item.SwitchGetbool();
+        item.SetInventoryInfomation();
+        SaveManager.Instance.InputItemSavedata(item);
 
         switch (item.Type)
         {
@@ -176,25 +204,9 @@ public class UI_Inventory : MonoBehaviour
 
         }
 
+        
     }
 
-    public void OpenInventory()
-    {
-        for (int i = 0; i < inventoryslots.Length; i++)
-        {
-            if (inventoryslots[i].TryGetComponent<Item>(out Item item))
-            {
-                if (!item.gameObject.activeSelf)
-                {
-                    inventoryslots[i].SetActive(true);
-                }
-                if (i.Equals(0) && inventoryslots.Length != 0)
-                {
-                    item.SetInventoryInfomation();
-                }
-            }
-        }
-    }
 
     //미니게임 / 상호적용 하기전에 아이디 검사해서 있는지 없는지 bool return 
     public bool CheckInteraction(int id)
@@ -223,8 +235,11 @@ public class UI_Inventory : MonoBehaviour
         {
             if (inventoryslots[i].TryGetComponent(out Item item))
             {
-                if (elementindex.Equals(item.Elementindex))
+                if (elementindex.Equals(item.Elementindex) && item.Elementindex > 0)
                 {
+                    item.UseAndDiscount();
+                    item.SwitchGetbool();
+                    SaveManager.Instance.InputItemSavedata(item);
                     item.enabled = false;
                     Destroy(item);
                 }

@@ -29,7 +29,9 @@ public class DataManager : MonoBehaviour
 
         InitDic();
         LoadAllData();
+        
         SceneManager.sceneLoaded += LoadSceanData;
+     
     }
 
 
@@ -58,7 +60,8 @@ public class DataManager : MonoBehaviour
 
     private void LoadSceanData(Scene scene, LoadSceneMode mode)
     {
-        items = FindObjectsOfType<Item>().ToList();
+        
+        List<Item> items = FindObjectsOfType<Item>().ToList();
         foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
         {
             if (items.Count > 0)
@@ -75,6 +78,25 @@ public class DataManager : MonoBehaviour
 
                             items[i].SetSprite(sprite);
                         }
+
+                        this.items.Add(items[i]);
+                        //미리 다 로드하고 그냥 체크하자 
+
+                        if (SaveManager.Instance.itemsavedata.Count > 0)
+                        {
+                            // 이건 뭔가 얻거나 썼거나 했단거임 
+                            if (SaveManager.Instance.itemsavedata.ContainsKey(items[i].ID))
+                            {
+                                if(SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(true) &&
+                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount > 0)
+                                {
+                                    PlayerManager.Instance.ui_inventory.GetItemTouch(items[i]);
+                                   items[i].gameObject.SetActive(false);
+                                }
+                            }
+                        }
+
+                        
                     }
                 }
             }

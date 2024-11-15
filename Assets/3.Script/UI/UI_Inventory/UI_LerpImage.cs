@@ -5,61 +5,45 @@ using UnityEngine.UI;
 
 public class UI_LerpImage : MonoBehaviour
 {
-    [SerializeField]private RectTransform inventoryButton; // ÀÎº¥Åä¸® ¹öÆ°ÀÇ RectTransform
-    [SerializeField]private Canvas canvas;
-    
-    private Vector2 invenPos;
+    [SerializeField] public RectTransform inventoryButton; // ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½Æ°ï¿½ï¿½ RectTransform
+    private Image image;
 
-    private RectTransform lerpImage;
-
-    public Coroutine lerp_co { get; private set; } = null;
-
-    public void Start()
+    private void OnEnable()
     {
-        TryGetComponent(out lerpImage);
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            (RectTransform)canvas.transform,
-            inventoryButton.anchoredPosition,
-            null,
-            out invenPos);
+        TryGetComponent(out image);
     }
 
-    //¾ÆÀÌÅÛÀÇ ÅÍÄ¡¾Øµå¿¡¼­ ÀÌ ÇÔ¼ö ºÒ·¯ÁÖ½Ã¸é µË´Ï´Ù!
-    public void OnLerpItem(Vector2 position)
+    private void OnDisable()
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            (RectTransform)canvas.transform,
-            position,
-            null,
-            out Vector2 localPoint);
-
-        if(lerp_co == null)
-        {
-            lerp_co = StartCoroutine(LerpImage_co(localPoint));
-        }
+        StopCoroutine(MoveInvenButton_co());
     }
 
-    private IEnumerator LerpImage_co(Vector2 localPoint)
+    public void InputMovementInventory(Item item, Vector2 pos)
     {
-        float lerpTime = 0f;
-        while(lerpTime.Equals(1f))
+        transform.position = pos;
+        image.sprite = item.Sprite;
+
+        StartCoroutine(MoveInvenButton_co());
+
+    }
+
+
+    private IEnumerator MoveInvenButton_co()
+    {
+        float lerptiem = 0f;
+        Vector2 startpos = transform.position;
+        Vector2 tartgetpos = inventoryButton.transform.position;
+
+        while (lerptiem * 1.2f < 1f)
         {
-            lerpTime += Time.deltaTime;
-            if(lerpTime>1f)
-            {
-                lerpTime = 1f;
-            }
-            lerpImage.anchoredPosition = Vector2.Lerp(localPoint, invenPos, lerpTime);
-            if(!lerpImage.gameObject.activeSelf)
-            {
-                lerpImage.gameObject.SetActive(true);
-            }
+            lerptiem += Time.fixedDeltaTime;
+
+            transform.position = Vector3.Lerp(startpos, tartgetpos, lerptiem  * 1.2f);
+
             yield return null;
         }
-        //¿©±â¼­ ÀÎº¥¿¡ µé¾î°¡´Â Ã³¸®ÇÏ¸é µÉ°Í°°½À´Ï´Ù!
-        lerpImage.gameObject.SetActive(false);
-        lerp_co = null;
-        yield break;
-
+        gameObject.SetActive(false);
     }
+
+
 }

@@ -14,6 +14,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject playerInterface;
     public GameObject getInterface { get; private set; }
 
+    [SerializeField] private UI_LerpImage lerpimage;
+    public UI_LerpImage ui_lerpImage { get => lerpimage; }
+
     [SerializeField] private Transform mainPlayer;
     public Transform getMainPlayer { get; private set; }
 
