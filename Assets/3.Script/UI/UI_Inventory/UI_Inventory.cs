@@ -17,20 +17,20 @@ public class UI_Inventory : MonoBehaviour
     private List<Item> myitems;
     public List<Item> MyItems { get => myitems; }
 
-    // UI_Press >> µå·¡±×ÇÏ´Â°Å ÇØµÒ 
+    // UI_Press >> ï¿½å·¡ï¿½ï¿½ï¿½Ï´Â°ï¿½ ï¿½Øµï¿½ 
 
-    // 1. ÀÌ³Ñ Å¸ÀÔ¿¡ µû¶ó Äü½½·Ô °¥Áö ÀÎº¥ °¥Áö 
-    // 2. ÃßÈÄ SaveManager¿¡ ¼ÒÁö ¾ÆÀÌÅÛ ´øÁú ÁØºñ ÇÏ±â 
-    // 3. Äü½½·Ôµµ »ó¼Ó ½ÃÅ°±â 
+    // 1. ï¿½Ì³ï¿½ Å¸ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½ 
+    // 2. ï¿½ï¿½ï¿½ï¿½ SaveManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Øºï¿½ ï¿½Ï±ï¿½ 
+    // 3. ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Å°ï¿½ï¿½ 
 
-    // 1. ´Ù¸¥ ¿ÀºêÁ§Æ® Å¬¸¯ ½Ã È­¸é¿¡ ¶ç¿ì°Ô ÇÏ±â 
-    // 2. Á¶ÇÕ 
-    // 3. 3D·»´õ¸µ 
+    // 1. ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å¬ï¿½ï¿½ ï¿½ï¿½ È­ï¿½é¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ 
+    // 2. ï¿½ï¿½ï¿½ï¿½ 
+    // 3. 3Dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 
 
-    // Äü½½·Ô ¸¸¾à 0~3 ÀÖ´Âµ¥ 2 ¾²¸é ÇÑÄ­¾¿ ¶¯°ÜÁö°Ô 
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 0~3 ï¿½Ö´Âµï¿½ 2 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 
-    // ¹øµéÅ° 2È¸ »ç¿ë ÇØ¾ßÇÔ 
+    // ï¿½ï¿½ï¿½ï¿½Å° 2È¸ ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½ 
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
-    //¾ÆÀÌÅÛ Type¿¡ µû¶ó 
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Typeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
     public void GetItemTouch(Item item)
     {
         //if (item.gameObject.CompareTag("Item3D"))
@@ -85,7 +85,7 @@ public class UI_Inventory : MonoBehaviour
                 break;
 
             default:
-                Debug.Log("¾Æ¹«°Íµµ ¾Æ´Ñ°¨?");
+                Debug.Log("ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½Æ´Ñ°ï¿½?");
                 break;
 
         }
@@ -145,6 +145,7 @@ public class UI_Inventory : MonoBehaviour
             {
                 Item itemUI = inventoryslots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
+                itemUI.SwitchGetbool();
 
                 if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
@@ -199,16 +200,13 @@ public class UI_Inventory : MonoBehaviour
                 break;
 
             default:
-                Debug.Log("¾Æ¹«°Íµµ ¾Æ´Ñ°¨?");
+                Debug.Log("ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½Æ´Ñ°ï¿½?");
                 break;
 
         }
 
         
     }
-
-
-    
 
 
     public void DestroyElement(int elementindex)
@@ -251,9 +249,118 @@ public class UI_Inventory : MonoBehaviour
     }
 
 
+
     private void OutPutItemText(Item item)
     {
         DialogueManager.Instance.SetDialogue("Table_ItemExplanation", item.ID);
+    }
+
+
+    public void LoadItem(Item item)
+    {
+
+        item.SetItemSaveData();
+        SaveManager.Instance.InputItemSavedata(item);
+
+        switch (item.Type)
+        {
+            case eItemType.Quick:
+                SetItemQuickLoad(item);
+                break;
+
+            case eItemType.Element:
+                SetItemLoad(item);
+                break;
+
+            case eItemType.Trigger:
+                SetItemQuickLoad(item);
+                break;
+
+            case eItemType.Clue:
+                SetItemLoad(item);
+                break;
+
+            default:
+                Debug.Log("ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½Æ´Ñ°ï¿½?");
+                break;
+
+        }
+    }
+
+    public void SetItemLoad(Item item)
+    {
+
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
+            {
+                Item itemUI = inventoryslots[i].AddComponent<Item>();
+                itemUI.PutInInvenItem(item);
+
+                if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = itemUI.Sprite;
+                }
+
+                break;
+            }
+        }
+
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+
+            if (inventoryslots[i].TryGetComponent(out Item uiitem))
+            {
+                if (uiitem.enabled.Equals(true))
+                {
+                    inventoryslots[i].SetActive(true);
+                }
+                else
+                {
+                    inventoryslots[i].SetActive(false);
+                }
+            }
+            else
+            {
+                inventoryslots[i].SetActive(false);
+            }
+
+        }
+    }
+
+    public void SetItemQuickLoad(Item item)
+    {
+        for (int i = 0; i < inventoryslots.Length; i++)
+        {
+            if (!inventoryslots[i].transform.TryGetComponent(out Item notusethis))
+            {
+                Item itemUI = inventoryslots[i].AddComponent<Item>();
+                itemUI.PutInInvenItem(item);
+
+                if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = itemUI.Sprite;
+                }
+                break;
+            }
+        }
+
+        for (int i = 0; i < quickSlots.Length; i++)
+        {
+            if (!quickSlots[i].TryGetComponent(out Item notusethis))
+            {
+                quickSlots[i].SetActive(true);
+                quickSlots[i].transform.GetChild(0).gameObject.SetActive(true);
+                Item itemUI = quickSlots[i].AddComponent<Item>();
+                itemUI.PutInInvenItem(item);
+
+                if (itemUI.transform.GetChild(0).TryGetComponent(out Image sprite))
+                {
+                    sprite.sprite = itemUI.Sprite;
+                }
+                break;
+            }
+        }
     }
 
 }

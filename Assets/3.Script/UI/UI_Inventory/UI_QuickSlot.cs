@@ -10,7 +10,7 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
     private Item copyItem;
     private Coroutine dragcoroutine;
     private float downTime;
-    
+
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -68,7 +68,7 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
                 }
                 if(hit.collider.TryGetComponent(out PlayOBJ puzzle))
                 {
-                    for(int i = 0; i < puzzle.getObjectIndex.Length;i++)
+                    for (int i = 0; i < puzzle.getObjectIndex.Length; i++)
                     {
                         if (copyItem.ID.Equals(puzzle.getObjectIndex[i]))
                         {
@@ -88,7 +88,7 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
            
         }
 
-        
+
         Debug.Log("퀵 드래그엔드");
         Debug.Log("여기다가 상호작용");
     }

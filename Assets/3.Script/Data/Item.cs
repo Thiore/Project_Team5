@@ -23,10 +23,10 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
     [SerializeField] private UI_LerpImage lerpimage;
 
     private int usecount;
-    public int Usecount {  get => usecount; }
+    public int Usecount { get => usecount; }
 
     private bool isget;
-    public bool IsGet {  get => isget; }    
+    public bool IsGet { get => isget; }
 
 
     private Sprite sprite;
@@ -39,7 +39,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         inven = PlayerManager.Instance.ui_inventory;
         iteminfo = PlayerManager.Instance.ui_iteminfo;
         lerpimage = PlayerManager.Instance.ui_lerpImage;
-        // ÀÌ°Å È°¼ºÈ­·Î Ã£¾ÆÁØ ´ÙÀ½ ÇØÁà¾ßµÊ 
+        // ï¿½Ì°ï¿½ È°ï¿½ï¿½È­ï¿½ï¿½ Ã£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ßµï¿½ 
     }
 
     public void InputItemInfomationByID(int id, ItemData data)
@@ -88,12 +88,12 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void OnTouchStarted(Vector2 position)
     {
-       
+
     }
 
     public void OnTouchHold(Vector2 position)
     {
-        
+
     }
 
     public void OnTouchEnd(Vector2 position)
@@ -101,16 +101,16 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            if (hit.collider.gameObject.Equals(gameObject)&&hit.collider.CompareTag("Item3D"))
+            if (hit.collider.gameObject.Equals(gameObject) && gameObject.CompareTag("Item3D"))
             {
                 lerpimage.gameObject.SetActive(true);
-            lerpimage.InputMovementInventory(this, position);
-            SwitchGetbool();
-            inven.GetItemTouch(this);
+                lerpimage.InputMovementInventory(this, position);
+                SwitchGetbool();
+                inven.GetItemTouch(this);
             }
         }
     }
-    
+
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -122,9 +122,9 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //ÅÍÄ¡ ¶ª¶§ÀÇ À§Ä¡°¡ ½ÃÀÛÀ§Ä¡¿¡¼­ ÀÏÁ¤°Å¸® ¶³¾îÁ®ÀÖÀ»¶§ ¾Æ¹«ÀÏµµ ¾ÈÀÏ¾î³ªµµ·Ï ÇÏ±âÀ§ÇØ »ç¿ë
+        //ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¹ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½Ï¾î³ªï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         float touchUpDelta = Vector2.Distance(firstPos, eventData.position);
-        //°Å¸®ÀÇ ±âÁØÀ» ÀâÁö¸øÇØ 50À¸·Î ÀÓ½Ã·Î ÁöÁ¤Çß½À´Ï´Ù ÃßÈÄ ¼öÁ¤ÀÌ ÇÊ¿äÇÕ´Ï´Ù.
+        //ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 50ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½.
         if (touchUpDelta < 50f && gameObject.CompareTag("Item2D"))
         {
             SetInventoryInfomation();
