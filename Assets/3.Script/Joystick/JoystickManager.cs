@@ -25,26 +25,7 @@ public class JoystickManager : MonoBehaviour, ITouchable
         TouchManager.Instance.OnMoveEnd += OnTouchEnd;
     }
 
-    private void Update()
-    {
-        //if(input.moveData.isTouch)
-        //{
-        //    // 터치 상태에 따라 처리
-        //    if (joystickActive)
-        //    {
-        //        HandleMove();
-        //    }
-        //    else
-        //    {
-        //        HandleTouchBegan(input.moveData.startValue);
-        //    }
-        //}
-        //else
-        //{
-        //    if(joystickActive)
-        //        HandleTouchEnded();
-        //}
-    }
+    
 
     
 

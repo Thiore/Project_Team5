@@ -11,11 +11,6 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
     private Coroutine dragcoroutine;
     private float downTime;
 
-    // 사용하면 떙겨지게 
-    private void Awake()
-    {
-
-    }
     
 
     public void OnDrag(PointerEventData eventData)
