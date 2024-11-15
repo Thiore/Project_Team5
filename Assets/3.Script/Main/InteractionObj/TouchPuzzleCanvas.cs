@@ -13,7 +13,9 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
     [Header("SaveManager 참고")]
     [SerializeField] private int floorIndex;
-    [SerializeField] private int objectIndex;
+    public int getFloorIndex { get => floorIndex; }
+    [SerializeField] private int[] objectIndex;
+    public int[] getObjectIndex { get => objectIndex; }
 
     [Header("상호작용 아이템이 없다면 0")]
     [SerializeField] private int InteractionIndex;
@@ -30,7 +32,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     public bool isInteracted;
 
     private List<GameObject> defaultObj; //게임이 시작되면 기본적으로 꺼져야하는것들
-    public GameObject quickSlot { get; private set; }
+    private UseButton quickSlot;
     
 
     
@@ -49,15 +51,21 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             }
             else if (playerInterface.GetChild(i).CompareTag("QuickSlot"))
             {
-                quickSlot = playerInterface.GetChild(i).gameObject;
+                playerInterface.TryGetComponent(out quickSlot);
             }
             else
             {
                 defaultObj.Add(playerInterface.GetChild(i).gameObject);
             }
         }
-
-        isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
+        for(int i = 0; i < objectIndex.Length;i++)
+        {
+            if(!SaveManager.Instance.PuzzleState(floorIndex, objectIndex[i]))
+            {
+                isClear = false;
+                break;
+            }
+        }
 
         isInteracted = SaveManager.Instance.PuzzleState(floorIndex, InteractionIndex);
      
@@ -108,7 +116,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             {
                 defaultObj[i].SetActive(true);
             }
-            quickSlot.SetActive(true);
+            quickSlot.QucikSlotButton(true);
         }
            
 
@@ -144,7 +152,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
                     btnExit.SetActive(true);
 
-                if(playPuzzle .getInteractionCount> 0)
+                if(playPuzzle!=null&&playPuzzle.getInteractionCount> 0)
                 {
                     for(int i = 0; i < defaultObj.Count;i++)
                     {
@@ -157,7 +165,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
                     {
                         defaultObj[i].SetActive(false);
                     }
-                    quickSlot.SetActive(false);
+                    quickSlot.QucikSlotButton(false);
                 }
 
                 if(anim != null)
@@ -203,13 +211,13 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         {
             defaultObj[i].SetActive(true);
         }
-        quickSlot.SetActive(true);
+        quickSlot.QucikSlotButton(true);
     }
     public void SetQuickSlot()
     {
         if (playPuzzle.getInteractionCount.Equals(0))
         {
-            quickSlot.SetActive(false);
+            quickSlot.QucikSlotButton(true);
         }
     }
     

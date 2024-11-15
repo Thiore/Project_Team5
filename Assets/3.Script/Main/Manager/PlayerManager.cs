@@ -23,9 +23,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform playerCam;
     public Transform getPlayerCam { get => playerCam; }
 
-    [SerializeField] private GameObject flashLight;
-    public GameObject getFlashLight { get => flashLight; }
-
+    public Light flashLight;
+    
     private void Awake()
     {
         if (Instance == null)

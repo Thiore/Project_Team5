@@ -95,6 +95,12 @@ public class DataManager : MonoBehaviour
                                 }
                             }
                         }
+                        if(items[i].ID.Equals(2))
+                        {
+                            items[i].TryGetComponent(out Light flashLight);
+                            if(flashLight.enabled)
+                                flashLight.enabled = false;
+                        }
 
                         
                     }

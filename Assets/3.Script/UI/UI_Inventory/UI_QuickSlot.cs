@@ -10,7 +10,6 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
     private Item copyItem;
     private Coroutine dragcoroutine;
     private float downTime;
-
     
 
     public void OnDrag(PointerEventData eventData)
@@ -36,13 +35,14 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
                 dragImage.gameObject.SetActive(true);
             }
         }
+
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (copyItem.ID.Equals(2))
         {
-            PlayerManager.Instance.getFlashLight.SetActive(true);
+            PlayerManager.Instance.flashLight.enabled = !PlayerManager.Instance.flashLight.enabled;
         }
         else
         {
@@ -51,25 +51,49 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
             {
                 if (hit.collider.TryGetComponent(out TouchPuzzleCanvas toggle))
                 {
-                    
+                    for(int i = 0; i < toggle.getObjectIndex.Length;i++)
+                    {
+                        if (copyItem.ID.Equals(toggle.getObjectIndex[i]))
+                        {
+                            toggle.isInteracted = true;
+                            SaveManager.Instance.UpdateObjectState(toggle.getFloorIndex, toggle.getObjectIndex[i],true);
+                        Destroy(copyItem);
+                        }
+                    }
                 }
+                else if(hit.collider.TryGetComponent(out PlayOBJ puzzle))
+                {
+                    for(int i = 0; i < puzzle.getObjectIndex.Length;i++)
+                    {
+                        if (copyItem.ID.Equals(puzzle.getObjectIndex[i]))
+                        {
+                            puzzle.InteractionCount();
+                            SaveManager.Instance.UpdateObjectState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
+                            Destroy(copyItem);
+                        }
+                    }
+                   
+                }
+            }
+            if (dragImage.gameObject.activeSelf)
+            {
+                dragImage.gameObject.SetActive(false);
             }
         }
 
-        if (dragImage.gameObject.activeSelf)
-        {
-            dragImage.gameObject.SetActive(false);
-        }
+        
         Debug.Log("퀵 드래그엔드");
         Debug.Log("여기다가 상호작용");
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (copyItem.ID.Equals(2))
+        if (TryGetComponent(out copyItem))
         {
-            PlayerManager.Instance.getFlashLight.SetActive(!PlayerManager.Instance.getFlashLight.activeSelf);
+            if (copyItem.ID.Equals(2))
+            {
+                PlayerManager.Instance.flashLight.enabled = !PlayerManager.Instance.flashLight.enabled;
+            }
         }
-     
     }
 }

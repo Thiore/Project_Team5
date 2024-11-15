@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class PlayOBJ : MonoBehaviour
 {
-    [SerializeField] private TouchPuzzleCanvas puzzle;
-    [SerializeField] private int interactionCount;
+    [Header("SaveManager Âü°í")]
+    [SerializeField] protected int floorIndex;
+    public int getFloorIndex { get => floorIndex; }
+    [SerializeField] protected int[] objectIndex;
+    public int[] getObjectIndex { get => objectIndex; }
+
+    [SerializeField] protected TouchPuzzleCanvas puzzle;
+    [SerializeField] protected int interactionCount;
     public int getInteractionCount { get => interactionCount; }
 
     public void InteractionCount()

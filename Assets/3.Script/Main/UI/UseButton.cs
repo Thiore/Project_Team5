@@ -12,10 +12,18 @@ public class UseButton : MonoBehaviour
     private void Start()
     {
         quickBtn.TryGetComponent(out quickAnim);
-        quickAnim.SetBool(openAnim, quickBtn.isOn);
+        quickAnim.SetBool(openAnim, !quickBtn.isOn);
     }
-    public void QucikSlotButton()
+    public void QucikSlotButton(bool isOn)
     {
-        quickAnim.SetBool(openAnim, quickBtn.isOn);
+        if(!quickBtn.isOn.Equals(isOn))
+        {
+            quickAnim.SetBool(openAnim, quickBtn.isOn);
+        }
+        else
+        {
+            quickAnim.SetBool(openAnim, isOn);
+        }
+        
     }
 }

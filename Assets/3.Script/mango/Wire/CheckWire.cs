@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CheckWire : MonoBehaviour
+public class CheckWire : PlayOBJ
 {
     public StartPoint[] startArray;
     public event Action connectEvent;
@@ -28,6 +28,8 @@ public class CheckWire : MonoBehaviour
         }
 
         Debug.Log("게임성공");
+        SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
+        puzzle.OffKeypad();
     }
 
 }

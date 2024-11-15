@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Keypad_Btn : MonoBehaviour
+public class Keypad_Btn : PlayOBJ
 {
     [SerializeField] private InputField input;
     [SerializeField] private int answer;
 
-    [SerializeField] private TouchPuzzleCanvas touchablePuzzle;
-
-    //상호작용 관련
-    [SerializeField] private int floorIndex; //오브젝트의 현재 층
-    [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
 
     
     
@@ -40,11 +35,11 @@ public class Keypad_Btn : MonoBehaviour
                 Debug.Log($"Answer is {input.text}");
                 if (input.text.Equals(answer.ToString()))
                 {
-                    SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex, true);
-                    touchablePuzzle.isClear = true;
+                    SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
+                    puzzle.isClear = true;
                 }
                 input.text = "";
-                touchablePuzzle.OffKeypad();
+                puzzle.OffKeypad();
             }
             else
             {
