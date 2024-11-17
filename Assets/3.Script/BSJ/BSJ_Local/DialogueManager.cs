@@ -39,6 +39,7 @@ public class DialogueManager : MonoBehaviour
         {
             instance = this;
             Instance = instance;
+            _ = LocalizationSettings.InitializationOperation;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -53,7 +54,8 @@ public class DialogueManager : MonoBehaviour
     {
         // 씬 로드 이벤트 등록
         SceneManager.sceneLoaded += OnSceneLoaded;
-        playInterface = GameObject.FindGameObjectWithTag("PlayInterface");
+        if(PlayerManager.Instance != null)
+            playInterface = PlayerManager.Instance.getInterface;
     }
 
     private void OnDisable()
