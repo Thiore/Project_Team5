@@ -9,6 +9,7 @@ public class StateData : MonoBehaviour
     public class GameState
     {
         public List<FloorState> floors; //전체 층의 상태를 담는 리스트
+        public string selectedLocale; //현재 선택된 언어
 
         //플레이어 위치
         public float playerPositionX;

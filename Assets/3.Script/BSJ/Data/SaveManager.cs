@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization.Settings;
 
 public class SaveManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class SaveManager : MonoBehaviour
     private GameObject mainButton; //Lobby Main Button
     public StateData.GameState gameState; //���� ���� ���� ��ü
     public Dictionary<int, ItemSaveData> itemsavedata; // ��� Ƚ��,��� ���� ����
+    public string selectedLocale; //현재 선택된 언어
 
 
     private void Awake()
@@ -127,15 +129,19 @@ public class SaveManager : MonoBehaviour
 
     }
 
-    // ���� �ε�
+    // 이어하기
     public void LoadGameState()
     {
-        //����� Json������ ���� �ϴ� ��� �ε�
+        // 저장된 파일이 존재하면 데이터를 읽어들임
         if (File.Exists(savePath))
         {
             string json = File.ReadAllText(savePath);
-            //Json ���ڿ��� GameState ��ü�� �Ҵ�
+
+            //Json 데이터를 GameState 객체로 역직렬화
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
+
+            //저장된 언어 상태 가져오기
+            selectedLocale = gameState.selectedLocale;
         }
 
         if (File.Exists(itemstatepath))
@@ -150,6 +156,11 @@ public class SaveManager : MonoBehaviour
     {
         //�÷��̾� ��ġ �� ȸ�� ����
 
+        //로컬라이제이션 현재 선택 언어 저장
+        gameState.selectedLocale = LocalizationSettings.SelectedLocale.Identifier.Code;
+
+
+        // 게임 상태를 JSON 형식으로 직렬화하여 파일에 저장
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
 
@@ -310,58 +321,5 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // ī��Ʈ�� 0 �̻��ΰ͵�, �׸��� bool get�� true ��� ������ �ְ��� 
-    // ī��Ʈ�� 0 �̰�, bool get false ��� ���Ű��� 
-    // ī���Ͱ� 0 �̻��̰� get�� false ��� �ȸ����Ű��� 
-
-
-    // ���� ������ �߰��ϰ� �����ϴ°� �ִµ� 
-    // �̰� ID�� ���ٸ� ? �׳� �����ص� ���� �ʳ� 
-
-
-
-
-
-
-
-    //private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    //{
-    //    // ���� �÷��̰� ����Ǵ� B1F �������� LoadGameState ȣ��
-    //    if (scene.name == "B1F 3") // B1F �� �̸��� ��Ȯ�ϰ� ���
-    //    {
-    //        LoadGameState();
-
-    //    }
-    //}
-
-    //private IEnumerator test_co()
-    //{
-    //    GameObject player = GameObject.FindGameObjectWithTag("RealPlayer");
-    //    if (player != null)
-    //    {
-    //        // ������ ��ġ�� �ݺ������� ����
-    //        Vector3 targetPosition = new Vector3(
-    //            gameState.playerPositionX,
-    //            gameState.playerPositionY,
-    //            gameState.playerPositionZ
-    //        );
-
-    //        Quaternion targetRotation = new Quaternion(
-    //            gameState.playerRotationX,
-    //            gameState.playerRotationY,
-    //            gameState.playerRotationZ,
-    //            gameState.playerRotationW
-    //        );
-
-    //        // ���� �ð� ���� �ݺ��Ͽ� ��ġ ����
-    //        for (int i = 0; i < 5; i++) // 5ȸ �ݺ� ����
-    //        {
-    //            player.transform.localPosition = targetPosition;
-    //            player.transform.localRotation = targetRotation;
-    //            Debug.Log($"EnsurePlayerPosition - Reapply Position: {player.transform.position}");
-    //            yield return new WaitForSeconds(0.1f); // ����
-    //        }
-    //    }
-
-    //}
+    
 }

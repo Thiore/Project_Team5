@@ -32,14 +32,14 @@ public class DialogueManager : MonoBehaviour
     private LocalizedString itemExplanationLocalizedString = new LocalizedString();
 
     private bool isChanging; //언어 변경
-
+    
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             Instance = instance;
-            _ = LocalizationSettings.InitializationOperation;
+            
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -47,7 +47,7 @@ public class DialogueManager : MonoBehaviour
             Destroy(gameObject);
         }
         
-        UpdateButtonColorByLocale();
+       
     }
 
     private void OnEnable()
