@@ -157,15 +157,9 @@ public class LockGame : PlayOBJ
         isAnswer = true;
         canvas.gameObject.SetActive(false);
         //번호가 맞으면 자물쇠 열리는 애니메이션 실행
-        LockOpenAnimation();
+        puzzle.OffKeypad();
     }
 
-    private void LockOpenAnimation()
-    {
-        //EndGame();
-        ani.SetTrigger("Open");
-        Debug.Log("정답");
-    }
 
     //private void GameSetting()
     //{

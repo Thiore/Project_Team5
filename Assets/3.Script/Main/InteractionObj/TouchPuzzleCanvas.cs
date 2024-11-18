@@ -32,6 +32,8 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     public bool isClear;
     [HideInInspector]
     public bool isInteracted;
+    [HideInInspector]
+    public bool isInteractionCam;
 
     private GameObject btnList;
     private UseButton quickSlot;
@@ -45,7 +47,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     private void OnEnable()
     {
         btnList = PlayerManager.Instance.getBtnList;
-        quickSlot = PlayerManager.Instance.getQucikSlot;
+        quickSlot = PlayerManager.Instance.getQuickSlot;
         
             if(!SaveManager.Instance.PuzzleState(floorIndex, objectIndex))
             {
@@ -81,8 +83,14 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             for (int i = 0; i < interactionAnim.Length; i++)
             {
                 interactionAnim[i].SetBool(openAnim, true);
+                if(TryGetComponent(out ToggleOBJ toggleObj))
+                {
+                    toggleObj.ClearOpen();
+                }
             }
         }
+
+        isInteractionCam = false;
     }
 
     private void Start()
@@ -90,7 +98,6 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         if (TryGetComponent(out outline))
             outline.enabled = false;
         TryGetComponent(out mask);
-        isClear = false;
         TryGetComponent(out anim);
     }
 
@@ -112,7 +119,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             missionStart.SetActive(false);
             if (anim != null)
             {
-                anim.SetBool(openAnim, false);
+                anim.SetBool(openAnim, true);
             }
             Invoke("ClearEvent", 2f);
         }
@@ -150,7 +157,9 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         {
             if (interactionCam != null)
             {
-                interactionCam.SetActive(true);
+                isInteractionCam = !isInteractionCam;
+                interactionCam.SetActive(isInteractionCam);
+                quickSlot.QucikSlotButton(!isInteractionCam);
             }
 
             return;
@@ -218,8 +227,8 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             if(interactionCam == null||outline != null)
             {
                 outline.enabled = false;
+                return;
             }
-            return;
         }
 
        

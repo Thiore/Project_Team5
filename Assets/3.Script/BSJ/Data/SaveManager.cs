@@ -26,6 +26,8 @@ public class SaveManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            InitializeSaveManager();
+            LoadGameState();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -33,7 +35,7 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        InitializeSaveManager();
+        
     }
 
     private void OnEnable()
@@ -87,14 +89,18 @@ public class SaveManager : MonoBehaviour
         {
             floors = new List<StateData.FloorState>(),
 
+            masterVolume = SettingsManager.Instance.master,
+            bgmVoluem = SettingsManager.Instance.BGM,
+            sfxVoluem = SettingsManager.Instance.SFX,
+            camSpeed = SettingsManager.Instance.CameraSpeed,
             //�÷��̾� �ʱ�ȭ
-            playerPositionX = 204.699f,
+            playerPositionX = 4.224149f,
             playerPositionY = 1f,
-            playerPositionZ = 2.91f,
-            playerRotationX = 23f,
-            playerRotationY = 408.2f,
-            playerRotationZ = 0,
-            playerRotationW = 1 // �⺻ ȸ�� ����
+            playerPositionZ = 3.059584f,
+            playerRotationX = -0.1819898f,
+            playerRotationY = -0.400133f,
+            playerRotationZ = 0.08140796f,
+            playerRotationW = -0.8945088f // �⺻ ȸ�� ����
 
         };
 
@@ -163,11 +169,11 @@ public class SaveManager : MonoBehaviour
         string itemjson = File.ReadAllText(itemstatepath);
         itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
 
-        Debug.Log("Loaded Item Data:");
-        foreach (var item in itemsavedata.Values)
-        {
-            Debug.Log($"Loaded Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
-        }
+        //Debug.Log("Loaded Item Data:");
+        //foreach (var item in itemsavedata.Values)
+        //{
+        //    Debug.Log($"Loaded Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
+        //}
 
 
     }
@@ -248,7 +254,7 @@ public class SaveManager : MonoBehaviour
             objState.isInteracted = isInteracted;
         }
 
-
+        SavePlayerState();
     }
 
     //puzzle�� ��ȣ�ۿ��ϴ� door�� ���� �˸���
@@ -299,16 +305,16 @@ public class SaveManager : MonoBehaviour
     }
 
     //�÷��̾��� ��ġ (������ ��, SaveManager�� Player�� ��ġ�� �˰� ����Ǿ�� �ؼ�??)
-    public void SavePlayerPosition()
+    public void SavePlayerState()
     {
-            gameState.playerPositionX = PlayerManager.Instance.getMainPlayer.localPosition.x;
-            gameState.playerPositionY = PlayerManager.Instance.getMainPlayer.localPosition.y;
-            gameState.playerPositionZ = PlayerManager.Instance.getMainPlayer.localPosition.z;
+            gameState.playerPositionX = PlayerManager.Instance.mainPlayer.localPosition.x;
+            gameState.playerPositionY = PlayerManager.Instance.mainPlayer.localPosition.y;
+            gameState.playerPositionZ = PlayerManager.Instance.mainPlayer.localPosition.z;
 
-            gameState.playerRotationX = PlayerManager.Instance.getPlayerCam.localRotation.x;
-            gameState.playerRotationY = PlayerManager.Instance.getPlayerCam.localRotation.y;
-            gameState.playerRotationZ = PlayerManager.Instance.getPlayerCam.localRotation.z;
-            gameState.playerRotationW = PlayerManager.Instance.getPlayerCam.localRotation.w;
+            gameState.playerRotationX = PlayerManager.Instance.playerCam.localRotation.x;
+            gameState.playerRotationY = PlayerManager.Instance.playerCam.localRotation.y;
+            gameState.playerRotationZ = PlayerManager.Instance.playerCam.localRotation.z;
+            gameState.playerRotationW = PlayerManager.Instance.playerCam.localRotation.w;
         
 
     }
@@ -358,8 +364,6 @@ public class SaveManager : MonoBehaviour
         gameState.bgmVoluem = bgm;
         gameState.sfxVoluem = sfx;
         gameState.camSpeed = canSpeed;
-
-        SaveGameState();
     }
     
 }

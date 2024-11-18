@@ -10,6 +10,7 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
     private Item copyItem;
     private Coroutine dragcoroutine;
     private float downTime;
+    [SerializeField] private UI_Inventory inven;
 
 
     public void OnDrag(PointerEventData eventData)
@@ -58,10 +59,7 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
                             toggle.isInteracted = true;
                             SaveManager.Instance.UpdateObjectState(toggle.getFloorIndex, toggle.getInteractionIndex[i],true);
                             Debug.Log("여기1?");
-                            if (dragImage.gameObject.activeSelf)
-                            {
-                                dragImage.gameObject.SetActive(false);
-                            }
+                            
                             CheckInteraction(toggle.getInteractionIndex[i]);
                         }
                     }
@@ -75,10 +73,7 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
                             puzzle.InteractionCount();
                             SaveManager.Instance.UpdateObjectState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
                             Debug.Log("여기2?");
-                            if (dragImage.gameObject.activeSelf)
-                            {
-                                dragImage.gameObject.SetActive(false);
-                            }
+                            
                             CheckInteraction(puzzle.getObjectIndex[i]);
                         }
                     }
@@ -109,19 +104,17 @@ public class UI_QuickSlot : MonoBehaviour, IEndDragHandler, IDragHandler, IBegin
     {
         if (copyItem.ID.Equals(id))
         {
-            if (copyItem.ID.Equals(id))
-            {
                 if(transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
                     sprite.sprite = null;
                     sprite.gameObject.SetActive(false);
-                    Destroy(copyItem);
+                Destroy(copyItem);
                     return;
                 }
-                
+            
 
                 
-            }
+            
         }
     }
 }

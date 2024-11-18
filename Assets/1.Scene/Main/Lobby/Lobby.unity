@@ -607,6 +607,7 @@ MonoBehaviour:
   BGM: 0
   SFX: 0
   CameraSpeed: 0
+  settingPage: {fileID: 3989635594388749368}
   koreanButtonText: {fileID: 4724226537826137925}
   englishButtonText: {fileID: 6214492969380828652}
 --- !u!82 &620924257
@@ -1241,18 +1242,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2050155895554778954}
-        m_TargetAssemblyTypeName: SaveManager, Assembly-CSharp
-        m_MethodName: LoadGameState
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1806452924}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: LoadB1F
@@ -1532,6 +1521,50 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1617385632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1617385634}
+  - component: {fileID: 1617385633}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1617385633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617385632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fbc3abb5367871438be03bfdc62d78c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1617385634
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617385632}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.6198306, y: -0.89681685, z: 4.3362055}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1806452923
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,7 +1595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadePanel: {fileID: 1614577006}
-  fadeTime: 2
+  fadeTime: 1
   B1F: B1F
 --- !u!4 &1806452925
 Transform:
@@ -1972,7 +2005,6 @@ GameObject:
   - component: {fileID: 2018659481}
   - component: {fileID: 2018659480}
   - component: {fileID: 2018659479}
-  - component: {fileID: 2018659483}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2063,21 +2095,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &2018659483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2018659478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcb4e40a1556be6449753d7e84ee535e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioMixer: {fileID: 0}
-  slideType: 0
-  introBtn: {fileID: 6126812345146034466}
 --- !u!1 &2110066193
 GameObject:
   m_ObjectHideFlags: 0
@@ -2553,10 +2570,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueButton: {fileID: 6359127547797222242}
   dialogueText: {fileID: 7660649820079224236}
-  itemName: {fileID: 0}
-  explanation: {fileID: 0}
-  koreanButtonText: {fileID: 4724226537826137925}
-  englishButtonText: {fileID: 6214492969380828652}
 --- !u!224 &391501068476756326
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2634,9 +2647,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8405692005594986718}
         m_TargetAssemblyTypeName: Settings, Assembly-CSharp
-        m_MethodName: LoadLobby
+        m_MethodName: SaveComplete
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2662,6 +2675,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8405692005594986718}
+        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
+        m_MethodName: LoadLobby
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3818,6 +3843,10 @@ MonoBehaviour:
   gameState:
     floors: []
     selectedLocale: 
+    masterVolume: 0
+    bgmVoluem: 0
+    sfxVoluem: 0
+    camSpeed: 0
     playerPositionX: 0
     playerPositionY: 0
     playerPositionZ: 0
@@ -4829,7 +4858,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8405692005594986718}
+        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
+        m_MethodName: SaveComplete
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8405692005594986718}
         m_TargetAssemblyTypeName: Settings, Assembly-CSharp
         m_MethodName: GameEnd
         m_Mode: 1
@@ -5178,6 +5219,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 8405692005594986718}
+        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
+        m_MethodName: SaveComplete
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3989635594388749368}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -5302,6 +5355,7 @@ GameObject:
   - component: {fileID: 7877219249267390372}
   - component: {fileID: 5382905155589279624}
   - component: {fileID: 8405692005594986717}
+  - component: {fileID: 8405692005594986718}
   m_Layer: 5
   m_Name: Setting Page
   m_TagString: Untagged
@@ -8372,6 +8426,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8405692005594986718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3989635594388749368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcb4e40a1556be6449753d7e84ee535e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 0}
+  slideType: 0
+  introBtn: {fileID: 6126812345146034466}
 --- !u!1 &8426782729507203357
 GameObject:
   m_ObjectHideFlags: 0
@@ -8863,3 +8932,4 @@ SceneRoots:
   - {fileID: 620924255}
   - {fileID: 2072592083820470635}
   - {fileID: 1806452925}
+  - {fileID: 1617385634}

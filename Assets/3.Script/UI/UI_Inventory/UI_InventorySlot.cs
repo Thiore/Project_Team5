@@ -9,6 +9,7 @@ public class UI_InventorySlot : MonoBehaviour, IEndDragHandler, IDragHandler, IB
     [SerializeField] private Image dragImage;
     [SerializeField] private Image itemInformation;
     private Item copyItem;
+    public Item getCopyItem { get => copyItem; }
     private Coroutine dragcoroutine;
     private float downTime;
 

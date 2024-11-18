@@ -72,16 +72,20 @@ public class Settings : MonoBehaviour
                 SceneManager.sceneLoaded -= OnSettingLoaded;
                 break;
             case eSlideType.Master:
-                typeSlider.value = SettingsManager.Instance.master;
+                SettingsManager.Instance.master = typeSlider.value;
                 typeSlider.onValueChanged.RemoveListener(SetMasterVolume);
                 break;
             case eSlideType.BGM:
-                typeSlider.value = SettingsManager.Instance.BGM;
+                SettingsManager.Instance.BGM = typeSlider.value;
                 typeSlider.onValueChanged.RemoveListener(SetBGMVolume);
                 break;
             case eSlideType.SFX:
-                typeSlider.value = SettingsManager.Instance.SFX;
+                SettingsManager.Instance.SFX = typeSlider.value;
                 typeSlider.onValueChanged.RemoveListener(SetSFXVolume);
+                break;
+            case eSlideType.CameraSpeed:
+                SettingsManager.Instance.CameraSpeed = typeSlider.value;
+                typeSlider.onValueChanged.RemoveListener(SetCamSpeed);
                 break;
         }
     }

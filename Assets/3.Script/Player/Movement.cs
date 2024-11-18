@@ -27,13 +27,19 @@ public class Movement : MonoBehaviour, ITouchable
 
         SaveManager.Instance.LoadPlayerPosition(transform);
         SaveManager.Instance.LoadPlayerRotation(playerCamera.transform);
-        playerCamera.localPosition += Vector3.up * 0.5f;
+        
+        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
     }
 
     private void FixedUpdate()
     {
-        transform.Translate(moveDir * speed * Time.fixedDeltaTime);
-        playerCamera.transform.localPosition = transform.localPosition + Vector3.up*0.5f;
+        if(!moveDir.Equals(Vector3.zero))
+        {
+            transform.Translate(moveDir * speed * Time.unscaledDeltaTime);
+            playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
+        }
+        
+        
     }
 
     public void OnTouchStarted(Vector2 position)
@@ -56,7 +62,6 @@ public class Movement : MonoBehaviour, ITouchable
         Vector2 joystickInput = value - startValue;
         joystickInput = joystickInput.normalized;
         moveDir = (cameraRight * joystickInput.x + cameraFoward * joystickInput.y).normalized;
-
     }
 
     public void OnTouchEnd(Vector2 position)

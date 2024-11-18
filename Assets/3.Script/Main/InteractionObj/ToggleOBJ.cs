@@ -54,6 +54,11 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
             }
         }
     }
+    public void ClearOpen()
+    {
+        isTouching = true;
+       
+    }
     
     
 }

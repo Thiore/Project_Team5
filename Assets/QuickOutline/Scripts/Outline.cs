@@ -17,8 +17,8 @@ public class Outline : MonoBehaviour {
   private static HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
 
   public enum Mode {
-    OutlineAll,
     OutlineVisible,
+    OutlineAll,
     OutlineHidden,
     OutlineAndSilhouette,
     SilhouetteOnly
@@ -60,7 +60,7 @@ public class Outline : MonoBehaviour {
   private Color outlineColor = Color.white;
 
   [SerializeField, Range(0f, 10f)]
-  private float outlineWidth = 2f;
+  private float outlineWidth = 5f;
 
   [Header("Optional")]
 
@@ -277,7 +277,7 @@ public class Outline : MonoBehaviour {
     switch (outlineMode) {
       case Mode.OutlineAll:
         outlineMaskMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
-        outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
+        outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Equal);
         outlineFillMaterial.SetFloat("_OutlineWidth", outlineWidth);
         break;
 

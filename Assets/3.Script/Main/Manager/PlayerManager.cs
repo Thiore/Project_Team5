@@ -18,8 +18,8 @@ public class PlayerManager : MonoBehaviour
 
     //Äü½½·Ô ¹× 
     [SerializeField] private UseButton quickSlot;
-    public GameObject getInterface { get => quickSlot.gameObject; }
-    public UseButton getQucikSlot { get => quickSlot; }
+    public UseButton getQuickSlot { get => quickSlot; }
+    public Transform playerInterface { get => quickSlot.transform.parent; }
 
 
     [SerializeField] private UI_LerpImage lerpimage;

@@ -20,12 +20,12 @@ public class DialogueManager : MonoBehaviour
 
 
     //인벤토리 관련 Text
-    public TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
-    public TMP_Text explanation; //인벤토리 아이템 설명 띄울 TextMeshPro
+    private TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
+    private TMP_Text explanation; //인벤토리 아이템 설명 띄울 TextMeshPro
 
     //옵션 관련 Text
-    public TMP_Text koreanButtonText; //한국어 버튼
-    public TMP_Text englishButtonText; //영어 버튼
+    private TMP_Text koreanButtonText; //한국어 버튼
+    private TMP_Text englishButtonText; //영어 버튼
     private Color activeColor = Color.green; //활성화 중인 언어 텍스트의 색상
     private Color inactiveColor = Color.white; //비활성화 중인 언어 텍스트의 색상
 
@@ -70,13 +70,13 @@ public class DialogueManager : MonoBehaviour
         if (PlayerManager.Instance != null)
         {
             btnList = PlayerManager.Instance.getBtnList;
-            quickSlot = PlayerManager.Instance.getQucikSlot;
+            quickSlot = PlayerManager.Instance.getQuickSlot;
             itemName = PlayerManager.Instance.getItemName;
             explanation = PlayerManager.Instance.getExplanation;
-            koreanButtonText = SettingsManager.Instance.koreanButtonText;
-            englishButtonText = SettingsManager.Instance.englishButtonText;
+            
         }
-
+        koreanButtonText = SettingsManager.Instance.koreanButtonText;
+        englishButtonText = SettingsManager.Instance.englishButtonText;
         UpdateButtonColorByLocale();
     }
 
@@ -105,6 +105,7 @@ public class DialogueManager : MonoBehaviour
             //2초 동안 버튼 비활성화
             dialogueButton.interactable = false;
             dialogueButton.gameObject.SetActive(true); //버튼 활성화
+            TouchManager.Instance.EnableMoveHandler(false);
             quickSlot.QucikSlotButton(false); //퀵슬롯 비활성화
             btnList.SetActive(false);//인벤토리버튼 비활성화
             yield return new WaitForSeconds(2f);
@@ -112,6 +113,7 @@ public class DialogueManager : MonoBehaviour
             //2초 후 버튼 활성화 및 터치 이벤트
             dialogueButton.interactable = true;
             dialogueButton.onClick.AddListener(OnButtonClicked);
+            TouchManager.Instance.EnableMoveHandler(true);
 
         }
 

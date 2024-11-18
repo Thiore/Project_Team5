@@ -13,6 +13,8 @@ public class UI_Inventory : MonoBehaviour
     [SerializeField] private GameObject invenBtnPos;
     [SerializeField] private GameObject quickBtnPos;
     [SerializeField] private UI_LerpImage lerpImage;
+    [SerializeField] private UI_ItemInformation info;
+    [SerializeField] private Button optionBtn;
 
     private List<Item> myitems;
     public List<Item> MyItems { get => myitems; }
@@ -52,6 +54,7 @@ public class UI_Inventory : MonoBehaviour
             }
 
         }
+        optionBtn.onClick.AddListener(SettingsManager.Instance.OnSettingPage);
     }
 
 
@@ -207,7 +210,21 @@ public class UI_Inventory : MonoBehaviour
 
         
     }
-
+    //public void RemoveItem(int id)
+    //{
+    //    for (int i = 0; i < inventoryslots.Length; i++)
+    //    {
+    //        if (inventoryslots[i].TryGetComponent(out Item item))
+    //        {
+    //            if(item.ID.Equals(id))
+    //            {
+    //                myitems.Remove(item);
+    //                info.getCopyItem
+    //            }
+    //        }
+    //    }
+                
+    //}
 
     public void DestroyElement(int elementindex)
     {

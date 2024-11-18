@@ -13,7 +13,7 @@ public class ItemOutline : MonoBehaviour
         if (TryGetComponent(out outline))
             outline.enabled = false;
 
-        TryGetComponent(out myItem);
+        //TryGetComponent(out myItem);
 
     }
 

@@ -18,6 +18,8 @@ public class SettingsManager : MonoBehaviour
     [HideInInspector]
     public float CameraSpeed;
 
+    [SerializeField] private GameObject settingPage;
+
     public TMP_Text koreanButtonText;//한국어 버튼
 
     public TMP_Text englishButtonText;//한국어 버튼
@@ -38,10 +40,10 @@ public class SettingsManager : MonoBehaviour
     {
         //승주씨 수정부탁드려요? + Settings SaveComplete부분에 저장하는거 넣어주시면됩니다.
         //setting창 끄는버튼에 저 메서드들 추가해뒀어요~
-        master = 0.5f;
-        BGM = 0.5f;
-        SFX = 0.5f;
-        CameraSpeed = 0.1f;
+        master = SaveManager.Instance.gameState.masterVolume;
+        BGM = SaveManager.Instance.gameState.bgmVoluem;
+        SFX = SaveManager.Instance.gameState.sfxVoluem;
+        CameraSpeed = SaveManager.Instance.gameState.camSpeed;
 
         float masterValue = Mathf.Lerp(-60f, 0f, master);
         audioMixer.SetFloat("Master", masterValue);
@@ -51,5 +53,10 @@ public class SettingsManager : MonoBehaviour
        
         float SFXValue = Mathf.Lerp(-60f, 0f, SFX);
         audioMixer.SetFloat("SFX", SFXValue);
+    }
+
+    public void OnSettingPage()
+    {
+        settingPage.SetActive(true);
     }
 }

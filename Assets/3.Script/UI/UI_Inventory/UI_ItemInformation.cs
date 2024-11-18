@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UI_ItemInformation : MonoBehaviour/*, IDropHandler*/
 {
-    [SerializeField] UI_Inventory inven;
+    [SerializeField] private UI_Inventory inven;
     private int id;
     public int ID { get; private set; }
     private int elementindex;
@@ -16,6 +16,11 @@ public class UI_ItemInformation : MonoBehaviour/*, IDropHandler*/
     {
         inven = PlayerManager.Instance.ui_inventory;
     }
+
+    //private void OnEnable()
+    //{
+    //    if(inven.MyItems.Count>0)
+    //}
 
     public void SetInfoByID(Item item)
     {
@@ -28,6 +33,7 @@ public class UI_ItemInformation : MonoBehaviour/*, IDropHandler*/
             image.sprite = item.Sprite;
         }
     }
+    
 
     public void Combine(PointerEventData eventData)
     {
