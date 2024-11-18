@@ -102,7 +102,7 @@ public class DataManager : MonoBehaviour
                                     }
                                 }
                                 else if(SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(false) &&
-                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount < 0)
+                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount <= 0)
                                 {
                                     items[i].gameObject.SetActive(false);
                                 }

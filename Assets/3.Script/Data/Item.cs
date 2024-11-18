@@ -78,6 +78,8 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
         isfix = item.isfix;
         spritename = item.spritename;
         sprite = item.sprite;
+        usecount = item.usecount;
+        isget = item.isget;
     }
 
     public void SetInventoryInfomation()
