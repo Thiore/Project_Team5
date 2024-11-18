@@ -10,6 +10,11 @@ public class StateData : MonoBehaviour
     {
         public List<FloorState> floors; //전체 층의 상태를 담는 리스트
         public string selectedLocale; //현재 선택된 언어
+        public float masterVolume;
+        public float bgm;
+        public float sfx;
+        public float cameraSpeed;
+
 
         //플레이어 위치
         public float playerPositionX;
