@@ -141,6 +141,13 @@ public class Settings : MonoBehaviour
     public void SaveComplete()
     {
         //SaveManager.Instance.Update~~ 4가지 값저장
+        SaveManager.Instance.UpdateVolumeSettings(
+            SettingsManager.Instance.master,
+            SettingsManager.Instance.BGM,
+            SettingsManager.Instance.SFX,
+            SettingsManager.Instance.CameraSpeed);
+        Debug.Log("SaveComplete");
+        
     }
 
     private void OnSettingPage()
