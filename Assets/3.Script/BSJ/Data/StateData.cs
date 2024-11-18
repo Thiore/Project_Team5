@@ -4,43 +4,43 @@ using UnityEngine;
 
 public class StateData : MonoBehaviour
 {
-    //ÀüÃ¼
+    //ï¿½ï¿½Ã¼
     [System.Serializable]
     public class GameState
     {
-        public List<FloorState> floors; //ÀüÃ¼ ÃþÀÇ »óÅÂ¸¦ ´ã´Â ¸®½ºÆ®
-        public string selectedLocale; //ÇöÀç ¼±ÅÃµÈ ¾ð¾î
+        public List<FloorState> floors; //ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+        public string selectedLocale; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½
         public float masterVolume;
         public float bgm;
         public float sfx;
         public float cameraSpeed;
 
 
-        //ÇÃ·¹ÀÌ¾î À§Ä¡
+        //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡
         public float playerPositionX;
         public float playerPositionY;
         public float playerPositionZ;
 
-        //ÇÃ·¹ÀÌ¾î È¸Àü
+        //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ È¸ï¿½ï¿½
         public float playerRotationX;
         public float playerRotationY;
         public float playerRotationZ;
         public float playerRotationW;
     }
 
-    //Ãþº°
+    //ï¿½ï¿½ï¿½ï¿½
     [System.Serializable]
     public class FloorState
     {
-        public int floorIndex; // °¢ Ãþ Index
-        public List<InteractableObjectState> interactableObjects; //ÇØ´ç ÃþÀÇ ¿ÀºêÁ§Æ® »óÅÂ ¸®½ºÆ®
+        public int floorIndex; // ï¿½ï¿½ ï¿½ï¿½ Index
+        public List<InteractableObjectState> interactableObjects; //ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
     }
 
-    //Ãþº° »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ®
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     [System.Serializable]
     public class InteractableObjectState
     {
-        public int objectIndex; //°¢ »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ®ÀÇ Index
-        public bool isInteracted; // »óÈ£ÀÛ¿ë »óÅÂ
+        public int objectIndex; //ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Index
+        public bool isInteracted; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 }
