@@ -73,6 +73,7 @@ public class SaveManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SaveGameState();
+        
     }
 
     //������
@@ -138,11 +139,27 @@ public class SaveManager : MonoBehaviour
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
         }
 
-        if (File.Exists(itemstatepath))
+    }
+
+    public void LoadItemData()
+    {
+        //파일 없으면 새로 만들기 
+        if (!File.Exists(itemstatepath))
         {
-            string itemjson = File.ReadAllText(itemstatepath);
-            itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
+            itemsavedata = new Dictionary<int, ItemSaveData>();
+            SaveItemData();
+            return;
         }
+
+        string itemjson = File.ReadAllText(itemstatepath);
+        itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
+    }
+
+    public void SaveItemData()
+    {
+        List<ItemSaveData> itemList = itemsavedata.Values.ToList();
+        string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
+        File.WriteAllText(itemstatepath, itemsjson);
     }
 
     // ���� ���� ����
@@ -153,9 +170,7 @@ public class SaveManager : MonoBehaviour
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
 
-        List<ItemSaveData> itemList = itemsavedata.Values.ToList();
-        string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
-        File.WriteAllText(itemstatepath, itemsjson);
+        SaveItemData();
 
         //저장 후 LoadGameButton 상태 업데이트
         UpdateLoadGameButton();
