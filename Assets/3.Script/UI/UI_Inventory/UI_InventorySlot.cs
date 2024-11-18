@@ -35,7 +35,7 @@ public class UI_InventorySlot : MonoBehaviour, IEndDragHandler, IDragHandler, IB
         Debug.Log("드래그엔드");
         Debug.Log(eventData.pointerEnter.name);
 
-        if(eventData.pointerEnter.TryGetComponent(out UI_ItemInformation info))
+        if (eventData.pointerEnter.TryGetComponent(out UI_ItemInformation info))
         {
             info.Combine(eventData);
         }

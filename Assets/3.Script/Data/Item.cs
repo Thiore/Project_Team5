@@ -105,7 +105,6 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
             {
                 lerpimage.gameObject.SetActive(true);
                 lerpimage.InputMovementInventory(this, position);
-                SwitchGetbool();
                 inven.GetItemTouch(this);
             }
         }
@@ -139,6 +138,7 @@ public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHa
     public void SwitchGetbool()
     {
         isget = !isget;
+        Debug.Log("IsGet 바꾸기");
     }
 
     public void UseAndDiscount()

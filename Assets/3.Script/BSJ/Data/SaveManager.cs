@@ -139,6 +139,7 @@ public class SaveManager : MonoBehaviour
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
         }
 
+        LoadItemData();
     }
 
     public void LoadItemData()
@@ -146,6 +147,7 @@ public class SaveManager : MonoBehaviour
         //파일 없으면 새로 만들기 
         if (!File.Exists(itemstatepath))
         {
+            Debug.Log("Item save file not found. Initializing empty data.");
             itemsavedata = new Dictionary<int, ItemSaveData>();
             SaveItemData();
             return;
@@ -153,11 +155,25 @@ public class SaveManager : MonoBehaviour
 
         string itemjson = File.ReadAllText(itemstatepath);
         itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
+
+        Debug.Log("Loaded Item Data:");
+        foreach (var item in itemsavedata.Values)
+        {
+            Debug.Log($"Loaded Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
+        }
+
+
     }
 
     public void SaveItemData()
     {
+        Debug.Log("Saving Item Data...");
         List<ItemSaveData> itemList = itemsavedata.Values.ToList();
+        foreach (var item in itemList)
+        {
+            Debug.Log($"Saving Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
+        }
+
         string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
         File.WriteAllText(itemstatepath, itemsjson);
     }
@@ -300,13 +316,11 @@ public class SaveManager : MonoBehaviour
         {
             itemsavedata[item.ID].itemgetstate = item.IsGet;
             itemsavedata[item.ID].itemusecount = item.Usecount;
-            Debug.Log("���̺� ������ ����");
         }
         else
         {
             ItemSaveData data = item.SetItemSaveData();
             itemsavedata.Add(item.ID, data);
-            Debug.Log("���̺� ������ �߰�");
         }
     }
 

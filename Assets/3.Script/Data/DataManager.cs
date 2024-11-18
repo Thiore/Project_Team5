@@ -90,7 +90,7 @@ public class DataManager : MonoBehaviour
                                 if (SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(true) &&
                                     SaveManager.Instance.itemsavedata[items[i].ID].itemusecount > 0)
                                 {
-                                    if (!SaveManager.Instance.itemsavedata[items[i].ID].Equals(2))
+                                    if (SaveManager.Instance.itemsavedata[items[i].ID].Equals(2))
                                     {
                                         PlayerManager.Instance.ui_inventory.LoadItem(items[i]);
                                         items[i].gameObject.SetActive(true);
