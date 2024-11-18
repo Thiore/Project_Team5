@@ -84,8 +84,6 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueText.text = text;
 
-        //텍스트 내용에 따라 크기 조정
-        //StartCoroutine(DialogueSize_co());
     }
 
 
@@ -158,20 +156,7 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    ////임시로 만들어 뒀습니다, 나중에 그냥 크기 고정 시키는 방향??이면 삭제
-    //private IEnumerator DialogueSize_co()
-    //{
-    //    yield return null; //프레임 대기
-
-    //    RectTransform rectTransform = dialogueText.GetComponent<RectTransform>();
-    //    rectTransform.sizeDelta = new Vector2(dialogueText.preferredWidth, dialogueText.preferredHeight);
-    //}
-
-    //private void TextFinish()
-    //{
-    //    dialogueText.gameObject.SetActive(false);
-    //}
-
+    
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
     //언어 변경
@@ -199,7 +184,7 @@ public class DialogueManager : MonoBehaviour
         //현재 언어에 따라 버튼 색상 업데이트
         UpdateButtonTextColor(index);
 
-        //dia.SetDialogue("B1", 22);
+        
     }
 
     //색상 업데이트
