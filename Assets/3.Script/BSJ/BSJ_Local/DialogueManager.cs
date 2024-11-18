@@ -15,7 +15,9 @@ public class DialogueManager : MonoBehaviour
     //스토리 관련 UI Text
     public Button dialogueButton; //대사 버튼 (터치 시, 사라지게 하기 위함)
     public TMP_Text dialogueText; //대사 표시할 TextMeshPro
-    private GameObject playInterface;
+    private GameObject btnList;
+    private UseButton quickSlot;
+
 
     //인벤토리 관련 Text
     public TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
@@ -54,8 +56,6 @@ public class DialogueManager : MonoBehaviour
     {
         // 씬 로드 이벤트 등록
         SceneManager.sceneLoaded += OnSceneLoaded;
-        if(PlayerManager.Instance != null)
-            playInterface = PlayerManager.Instance.getInterface;
     }
 
     private void OnDisable()
@@ -67,6 +67,16 @@ public class DialogueManager : MonoBehaviour
     //새 씬이 로드될 때 호출
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (PlayerManager.Instance != null)
+        {
+            btnList = PlayerManager.Instance.getBtnList;
+            quickSlot = PlayerManager.Instance.getQucikSlot;
+            itemName = PlayerManager.Instance.getItemName;
+            explanation = PlayerManager.Instance.getExplanation;
+            koreanButtonText = SettingsManager.Instance.koreanButtonText;
+            englishButtonText = SettingsManager.Instance.englishButtonText;
+        }
+
         UpdateButtonColorByLocale();
     }
 
@@ -90,22 +100,19 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator StoryBottonState_co()
     {
-        if (playInterface != null)
+        if (PlayerManager.Instance != null)
         {
             //2초 동안 버튼 비활성화
             dialogueButton.interactable = false;
             dialogueButton.gameObject.SetActive(true); //버튼 활성화
-            //playInterface.gameObject.SetActive(false); //인터페이스 비활성화
+            quickSlot.QucikSlotButton(false); //퀵슬롯 비활성화
+            btnList.SetActive(false);//인벤토리버튼 비활성화
             yield return new WaitForSeconds(2f);
 
             //2초 후 버튼 활성화 및 터치 이벤트
             dialogueButton.interactable = true;
             dialogueButton.onClick.AddListener(OnButtonClicked);
 
-            //if (!dialogueButton.gameObject.activeSelf)
-            //{
-            //    playInterface.gameObject.SetActive(true); //인터페이스 활성화
-            //}
         }
 
 
@@ -121,6 +128,8 @@ public class DialogueManager : MonoBehaviour
 
         //터치 이벤트 제거
         dialogueButton.onClick.RemoveListener(OnButtonClicked);
+        quickSlot.QucikSlotButton(true); //퀵슬롯 활성화
+        btnList.SetActive(true);//인벤토리버튼 활성화
     }
 
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ

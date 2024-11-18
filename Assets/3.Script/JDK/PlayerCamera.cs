@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour, ITouchable
 {
-
-    [Header("카메라 회전 스피드")]
-    [Range(0, 10)]
-    private float cameraSpeed;
-
     //[SerializeField] private Slider slideSpeed;
     private Vector2 lastTouchPosition;
 
@@ -24,7 +19,6 @@ public class PlayerCamera : MonoBehaviour, ITouchable
         TouchManager.Instance.OnLookEnd += OnTouchEnd;
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
-        cameraSpeed = 2f;
         currentRotationX = transform.localEulerAngles.x; // 누적 X축 회전값을 추적하는 변수
     }
     private void FixedUpdate()
@@ -59,7 +53,8 @@ public class PlayerCamera : MonoBehaviour, ITouchable
         {
             Vector2 delta = position - lastTouchPosition;
 
-            deltaRot = new Vector3(delta.x * cameraSpeed, delta.y * cameraSpeed);
+            deltaRot = new Vector3(delta.x * SettingsManager.Instance.CameraSpeed, 
+                                   delta.y * SettingsManager.Instance.CameraSpeed);
 
             lastTouchPosition = position;
         }

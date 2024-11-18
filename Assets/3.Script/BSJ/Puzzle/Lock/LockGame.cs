@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class LockGame : MonoBehaviour
+public class LockGame : PlayOBJ
 {
-    //상호작용 관련
-    [SerializeField] private int floorIndex; //오브젝트의 현재 층
-    [SerializeField] private int objectIndex; //오브젝트 본인의 인덱스
 
     private int[] correctNumber = { 1, 3, 0, 4 }; //정답 번호
     private int[] currentNumber = { 0, 0, 0, 0 }; //현재 번호
@@ -130,10 +127,11 @@ public class LockGame : MonoBehaviour
 
         while(rotationTime/rotationSpeed<1f)
         {
-            rotationSpeed += Time.deltaTime;
+            Debug.Log(rotationTime);
+            rotationTime += Time.deltaTime;
             //목표 회전 각도까지 부드럽게
             numberWheels[wheelIndex].localRotation =
-                Quaternion.Slerp(numberWheels[wheelIndex].localRotation,
+                Quaternion.Lerp(numberWheels[wheelIndex].localRotation,
                                  targetRotations[wheelIndex],
                                  rotationTime / rotationSpeed);
             yield return null;
@@ -155,7 +153,7 @@ public class LockGame : MonoBehaviour
         }
 
         //번호가 맞으면 상태(true) 저장
-        SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex, true);
+        SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
         isAnswer = true;
         canvas.gameObject.SetActive(false);
         //번호가 맞으면 자물쇠 열리는 애니메이션 실행

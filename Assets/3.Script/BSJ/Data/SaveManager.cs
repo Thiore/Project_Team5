@@ -269,14 +269,14 @@ public class SaveManager : MonoBehaviour
     //�÷��̾��� ��ġ (������ ��, SaveManager�� Player�� ��ġ�� �˰� ����Ǿ�� �ؼ�??)
     public void SavePlayerPosition()
     {
-            gameState.playerPositionX = PlayerManager.Instance.getMainPlayer.localPosition.x;
-            gameState.playerPositionY = PlayerManager.Instance.getMainPlayer.localPosition.y;
-            gameState.playerPositionZ = PlayerManager.Instance.getMainPlayer.localPosition.z;
+            gameState.playerPositionX = PlayerManager.Instance.mainPlayer.localPosition.x;
+            gameState.playerPositionY = PlayerManager.Instance.mainPlayer.localPosition.y;
+            gameState.playerPositionZ = PlayerManager.Instance.mainPlayer.localPosition.z;
 
-            gameState.playerRotationX = PlayerManager.Instance.getPlayerCam.localRotation.x;
-            gameState.playerRotationY = PlayerManager.Instance.getPlayerCam.localRotation.y;
-            gameState.playerRotationZ = PlayerManager.Instance.getPlayerCam.localRotation.z;
-            gameState.playerRotationW = PlayerManager.Instance.getPlayerCam.localRotation.w;
+            gameState.playerRotationX = PlayerManager.Instance.playerCam.localRotation.x;
+            gameState.playerRotationY = PlayerManager.Instance.playerCam.localRotation.y;
+            gameState.playerRotationZ = PlayerManager.Instance.playerCam.localRotation.z;
+            gameState.playerRotationW = PlayerManager.Instance.playerCam.localRotation.w;
         
 
     }

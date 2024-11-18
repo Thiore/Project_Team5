@@ -90,25 +90,33 @@ public class TouchManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        OnEnableTuchAction();
-        isMoving = true;
-    }
-    private void OnDisable()
-    {
-        OnDisableTuchAction();
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
         currentTouchDic = new Dictionary<int, ITouchable>();
         activeTouchID = new HashSet<int>();
         touchState = etouchState.Normal;
         moveID = -1;
         lookID = -1;
+        OnEnableTuchAction();
+        isMoving = true;
+        //SceneManager.sceneLoaded += OnTouchLoaded;
+        
     }
+    //private void OnDisable()
+    //{
+    //    OnDisableTuchAction();
+    //    SceneManager.sceneLoaded -= OnTouchLoaded;
+        
+    //}
+
+    //private void OnTouchLoaded(Scene scene, LoadSceneMode mode)
+    //{
+    //    currentTouchDic = new Dictionary<int, ITouchable>();
+    //    activeTouchID = new HashSet<int>();
+    //    touchState = etouchState.Normal;
+    //    moveID = -1;
+    //    lookID = -1;
+    //    OnEnableTuchAction();
+    //    isMoving = true;
+    //}
 
     //private void Start()
     //{
@@ -274,13 +282,18 @@ public class TouchManager : MonoBehaviour
                     default:
                         break;
                 }
-                
-                activeTouchID.Remove(touchId);
-                if(activeTouchID.Count.Equals(0))
+                if(activeTouchID != null)
                 {
-                    touchState = etouchState.Normal;
-                    currentTouchDic.Clear();
+                    if (activeTouchID.Contains(touchId))
+                        activeTouchID.Remove(touchId);
+
+                    if (activeTouchID.Count.Equals(0))
+                    {
+                        touchState = etouchState.Normal;
+                        currentTouchDic.Clear();
+                    }
                 }
+                    
 
             }
         }

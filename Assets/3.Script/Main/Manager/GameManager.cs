@@ -9,9 +9,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; } = null;
 
     [SerializeField] private Image fadePanel;
+    [Range(0.1f,5f)]
     [SerializeField] private float fadeTime;
     private float fade;
     private Coroutine fade_co;
+    private bool isFadeOut;
+
 
 
     [SerializeField] private string B1F;
@@ -47,6 +50,7 @@ public class GameManager : MonoBehaviour
         fadePanel.color = new Color(0f, 0f, 0f, fade);
         fade_co = null;
         FadeIn();
+        isFadeOut = false;
     }
     public void LoadSlide()
     {
@@ -54,7 +58,11 @@ public class GameManager : MonoBehaviour
     }
     public void LoadB1F()
     {
-        SceneManager.LoadScene(B1F);
+        FadeOut(B1F);
+    }
+    public void LoadScene(string SceneName)
+    {
+        FadeOut(SceneName);
     }
 
     public void GameEnd()
@@ -76,17 +84,22 @@ public class GameManager : MonoBehaviour
             fade_co = StartCoroutine(Fade_co(-1f));
         }
     }
-    public void FadeOut()
+    public void FadeOut(string SceneName)
     {
-        if (fade_co == null)
+        if (!isFadeOut)
         {
+            if(fade_co !=null)
+            {
+                StopCoroutine(fade_co);
+            }
+            isFadeOut = true;
             if (TouchManager.Instance != null)
                 TouchManager.Instance.EnableMoveHandler(false);
 
-            fade_co = StartCoroutine(Fade_co(1f));
+            fade_co = StartCoroutine(Fade_co(1f,SceneName));
         }
     }
-    private IEnumerator Fade_co(float isFade)
+    private IEnumerator Fade_co(float isFade,string SceneName = null)
     {
         while(true)
         {
@@ -94,12 +107,22 @@ public class GameManager : MonoBehaviour
             float fadeAlpha = Mathf.Lerp(0f, 1f, fade);
             fadePanel.color = new Color(0f, 0f, 0f, fadeAlpha);
 
-            if(fadeAlpha.Equals(0f)||fadeAlpha.Equals(1f))
+            if(fadeAlpha.Equals(0f))
             {
                 if (TouchManager.Instance != null)
                     TouchManager.Instance.EnableMoveHandler(true);
 
                 fade_co = null;
+                yield break;
+            }
+            if(fadeAlpha.Equals(1f))
+            {
+                if (TouchManager.Instance != null)
+                    TouchManager.Instance.EnableMoveHandler(true);
+
+                fade_co = null;
+                isFadeOut = false;
+                SceneManager.LoadScene(SceneName);
                 yield break;
             }
             yield return null;

@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using TMPro;
 
-public class AudioManager : MonoBehaviour
+public class SettingsManager : MonoBehaviour
 {
-    public static AudioManager Instance { get; private set; } = null;
+    public static SettingsManager Instance { get; private set; } = null;
 
     [SerializeField] private AudioMixer audioMixer;
     [HideInInspector]
@@ -14,7 +15,12 @@ public class AudioManager : MonoBehaviour
     public float BGM;
     [HideInInspector]
     public float SFX;
+    [HideInInspector]
+    public float CameraSpeed;
 
+    public TMP_Text koreanButtonText;//한국어 버튼
+
+    public TMP_Text englishButtonText;//한국어 버튼
 
     private void Awake()
     {
@@ -30,10 +36,12 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-
+        //승주씨 수정부탁드려요? + Settings SaveComplete부분에 저장하는거 넣어주시면됩니다.
+        //setting창 끄는버튼에 저 메서드들 추가해뒀어요~
         master = 0.5f;
         BGM = 0.5f;
         SFX = 0.5f;
+        CameraSpeed = 0.1f;
 
         float masterValue = Mathf.Lerp(-60f, 0f, master);
         audioMixer.SetFloat("Master", masterValue);
