@@ -76,6 +76,7 @@ public class SaveManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SaveGameState();
+        
     }
 
     //������
@@ -145,11 +146,43 @@ public class SaveManager : MonoBehaviour
             selectedLocale = gameState.selectedLocale;
         }
 
-        if (File.Exists(itemstatepath))
+        LoadItemData();
+    }
+
+    public void LoadItemData()
+    {
+        //파일 없으면 새로 만들기 
+        if (!File.Exists(itemstatepath))
         {
-            string itemjson = File.ReadAllText(itemstatepath);
-            itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
+            Debug.Log("Item save file not found. Initializing empty data.");
+            itemsavedata = new Dictionary<int, ItemSaveData>();
+            SaveItemData();
+            return;
         }
+
+        string itemjson = File.ReadAllText(itemstatepath);
+        itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
+
+        Debug.Log("Loaded Item Data:");
+        foreach (var item in itemsavedata.Values)
+        {
+            Debug.Log($"Loaded Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
+        }
+
+
+    }
+
+    public void SaveItemData()
+    {
+        Debug.Log("Saving Item Data...");
+        List<ItemSaveData> itemList = itemsavedata.Values.ToList();
+        foreach (var item in itemList)
+        {
+            Debug.Log($"Saving Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
+        }
+
+        string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
+        File.WriteAllText(itemstatepath, itemsjson);
     }
 
     // ���� ���� ����
@@ -165,9 +198,7 @@ public class SaveManager : MonoBehaviour
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
 
-        List<ItemSaveData> itemList = itemsavedata.Values.ToList();
-        string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
-        File.WriteAllText(itemstatepath, itemsjson);
+        SaveItemData();
 
         //저장 후 LoadGameButton 상태 업데이트
         UpdateLoadGameButton();
@@ -297,13 +328,11 @@ public class SaveManager : MonoBehaviour
         {
             itemsavedata[item.ID].itemgetstate = item.IsGet;
             itemsavedata[item.ID].itemusecount = item.Usecount;
-            Debug.Log("���̺� ������ ����");
         }
         else
         {
             ItemSaveData data = item.SetItemSaveData();
             itemsavedata.Add(item.ID, data);
-            Debug.Log("���̺� ������ �߰�");
         }
     }
 

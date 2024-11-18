@@ -259,9 +259,6 @@ public class UI_Inventory : MonoBehaviour
     public void LoadItem(Item item)
     {
 
-        item.SetItemSaveData();
-        SaveManager.Instance.InputItemSavedata(item);
-
         switch (item.Type)
         {
             case eItemType.Quick:
