@@ -55,6 +55,9 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        inven.gameObject.SetActive(true);
+        inven.gameObject.SetActive(false);
         //if (Instance == null)
         //{
         //    Instance = this;

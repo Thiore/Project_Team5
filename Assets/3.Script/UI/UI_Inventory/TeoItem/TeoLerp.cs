@@ -5,37 +5,44 @@ using UnityEngine.UI;
 
 public class TeoLerp : MonoBehaviour
 {
-    [SerializeField] public RectTransform inventoryButton; // �κ��丮 ��ư�� RectTransform
+    [SerializeField] private RectTransform inventoryButton; // �κ��丮 ��ư�� RectTransform
+    [SerializeField] private Inventory inven;
     private Image image;
-    public bool isLerp { get; private set; }
+    public Coroutine lerp_co;
 
-    private void OnEnable()
+    
+
+    private void Start()
     {
-        TryGetComponent(out image);
-        isLerp = false;
+        lerp_co = null;
     }
 
-    private void OnDisable()
+    public bool InputMovementInventory(TeoItemData item, Vector2 pos)
     {
-        StopCoroutine(MoveInvenButton_co());
+        if(lerp_co == null)
+        {
+            gameObject.SetActive(true);
+            if(image == null)
+            {
+                TryGetComponent(out image);
+            }
+            transform.position = pos;
+            image.sprite = item.sprite;
+            lerp_co = StartCoroutine(MoveInvenButton_co(item));
+            return true;
+        }
+        return false;
+       
+
     }
 
-    public void InputMovementInventory(TeoItemData item, Vector2 pos)
-    {
-        transform.position = pos;
-        image.sprite = item.sprite;
-        isLerp = true;
-        StartCoroutine(MoveInvenButton_co());
 
-    }
-
-
-    private IEnumerator MoveInvenButton_co()
+    private IEnumerator MoveInvenButton_co(TeoItemData item)
     {
         float lerptiem = 0f;
         Vector2 startpos = transform.position;
         Vector2 tartgetpos = inventoryButton.transform.position;
-
+        
         while (lerptiem * 1.2f < 1f)
         {
             lerptiem += Time.fixedDeltaTime;
@@ -44,7 +51,10 @@ public class TeoLerp : MonoBehaviour
 
             yield return null;
         }
-        isLerp = false;
+        
+        inven.GetItem(item);
+        lerp_co = null;
         gameObject.SetActive(false);
+        yield break;
     }
 }

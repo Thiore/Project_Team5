@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+public enum eGameType
+{
+    LoadGame = 0,
+    NewGame
+    
+}
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } = null;
@@ -14,7 +20,7 @@ public class GameManager : MonoBehaviour
     private float fade;
     private Coroutine fade_co;
     private bool isFadeOut;
-
+    public eGameType gameType;
 
 
     [SerializeField] private string B1F;

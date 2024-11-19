@@ -59,7 +59,7 @@ public class TeoItem : MonoBehaviour
         itemManager = TeoItemManager.Instance;
         if (itemManager.item_Dic.TryGetValue(itemID, out ItemData data))
         {
-            if (itemManager.itemSave_Dic.ContainsKey(itemID))
+            if (GameManager.Instance.gameType.Equals(eGameType.LoadGame)&&itemManager.itemSave_Dic.ContainsKey(itemID))
             {
                 if (!itemID.Equals(2))
                 {
@@ -69,10 +69,11 @@ public class TeoItem : MonoBehaviour
                         itemData = new TeoItemData(itemID, (eItemType)data.eItemType, data.elementindex,
                               data.combineindex, data.tableName, sprite,
                               itemManager.itemSave_Dic[itemID].itemgetstate, itemManager.itemSave_Dic[itemID].itemusecount);
+                        Inventory.Instance.GetItem(itemData);
                     }
                     else
                     {
-                        Destroy(gameObject);
+                        gameObject.SetActive(false);
                     }
                 }
             }

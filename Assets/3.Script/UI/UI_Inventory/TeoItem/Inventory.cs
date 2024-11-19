@@ -18,14 +18,17 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
 {
     
     public static Inventory Instance = null;
+    [SerializeField] private TeoItem[] CombineObjects;
 
     [SerializeField] private GameObject[] invenSlot;
+    
     [SerializeField] private Button optionBtn;
-    [SerializeField] private Image info;
-    private int infoIndex;
     [SerializeField] private Image dragImage;
+    [SerializeField] private Image info;
+
+
     public List<InvenSlot> invenList;
-    private GraphicRaycaster raycaster;
+
     private InvenSlot selectObj;
 
     private bool isDrag;
@@ -47,7 +50,7 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
         data.GetItem();
         for(int i = 0; i < invenSlot.Length;i++)
         {
-            if (invenSlot[i].activeInHierarchy)
+            if (invenSlot[i].activeSelf)
             {
                 continue;
             }
@@ -55,10 +58,15 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
             {
                 invenList.Add(new InvenSlot(invenSlot[i], data));
                 SaveManager.Instance.TeoItemDataSave(data);
+                invenList[i].item.transform.GetChild(0).TryGetComponent(out Image sprite);
+                sprite.sprite = data.sprite;
                 invenList[i].item.SetActive(true);
-                
-                infoIndex = invenList.Count -1;
                 UpdateInformation(data, true);
+                if(data.type.Equals(eItemType.Quick)|| data.type.Equals(eItemType.Trigger))
+                {
+                    QuickSlot.Instance.AddQuickItem(data);
+                    
+                }
                 break;
             }
         }
@@ -66,6 +74,22 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
     public void UseItem(TeoItemData data)
     {
         data.SetUseCount();
+        if(data.useCount.Equals(0))
+        {
+            InvenSlot item = invenList.Find(x => x.data == data);
+            item.item.SetActive(false);
+            item.data.SetUseCount();
+            invenList.Remove(item);
+            if(invenList.Count>0)
+            {
+                UpdateInformation(invenList[invenList.Count - 1].data, true);
+            }
+            else
+            {
+                UpdateInformation(null, true);
+            }
+            
+        }
 
     }
 
@@ -73,22 +97,33 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(eventData.selectedObject.CompareTag("ItemSlot"))
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        List<RaycastResult> results = new List<RaycastResult>();
+        GraphicRaycaster raycaster = null;
+        raycaster.Raycast(pointerEventData, results);
+
+        if (results.Count > 0)
         {
-            selectObj = invenList.Find(x => x.item.Equals(eventData.selectedObject));
-            if(selectObj.data.type.Equals(eItemType.Element))
+            foreach (var rayresult in results)
             {
-                isDrag = true;
-                dragImage.sprite = selectObj.data.sprite;
-                dragImage.transform.position = eventData.position;
-                dragImage.gameObject.SetActive(true);
+                if (rayresult.gameObject.CompareTag("ItemSlot"))
+                {
+                    Debug.Log(EventSystem.current.gameObject);
+                    selectObj = invenList.Find(x => x.item.Equals(EventSystem.current.gameObject));
+                    if (selectObj.data.type.Equals(eItemType.Element))
+                    {
+                        isDrag = true;
+                        dragImage.sprite = selectObj.data.sprite;
+                        dragImage.transform.position = eventData.position;
+                        dragImage.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        selectObj = null;
+                        return;
+                    }
+                }
             }
-            else
-            {
-                selectObj = null;
-                return;
-            }
-            
         }
     }
 
@@ -104,6 +139,7 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
 
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
         List<RaycastResult> results = new List<RaycastResult>();
+        GraphicRaycaster raycaster = null;
         raycaster.Raycast(pointerEventData, results);
         if (results.Count > 0)
         {
@@ -111,9 +147,7 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
             {
                 if (rayresult.gameObject.Equals(info.gameObject))
                 {
-                   
-                    
-
+                    CombineItem();
                 }
             }
         }
@@ -123,18 +157,34 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        selectObj = invenList.Find(x => x.item.Equals(eventData.selectedObject));
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        List<RaycastResult> results = new List<RaycastResult>();
+        GraphicRaycaster raycaster = null;
+        raycaster.Raycast(pointerEventData, results);
 
-        infoIndex = invenList.IndexOf(selectObj);
-        UpdateInformation(selectObj.data, true);
+        if (results.Count > 0)
+        {
+            foreach (var rayresult in results)
+            {
+                if (rayresult.gameObject.CompareTag("ItemSlot"))
+                {
+                    selectObj = invenList.Find(x => x.item.Equals(EventSystem.current.gameObject));
 
+                    UpdateInformation(selectObj.data, true);
+                }
+            }
+        }
     }
 
     private void UpdateInformation(TeoItemData data, bool activeInfo)
     {
-        info.sprite = data.sprite;
-        DialogueManager.Instance.SetItemNameText("Table_ItemName", data.id);
-        DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", data.id);
+        if(data != null)
+        {
+            info.sprite = data.sprite;
+            DialogueManager.Instance.SetItemNameText("Table_ItemName", data.id);
+            DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", data.id);
+        }
+        
         info.gameObject.SetActive(activeInfo);
     }
 
@@ -143,10 +193,18 @@ public class Inventory : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginDra
         int combineIndex = selectObj.data.elementIndex;
         InvenSlot infoitem = invenList.Find(x => x.data.sprite == info.sprite);
         infoitem.item.SetActive(false);
+        infoitem.data.SetUseCount();
         invenList.Remove(infoitem);
         selectObj.item.SetActive(false);
+        selectObj.data.SetUseCount();
         invenList.Remove(selectObj);
         selectObj = null;
-        //TeoItemManager.Instance.item_Dic.
+        foreach(TeoItem item in CombineObjects)
+        {
+            if(item.itemData.combineIndex.Equals(combineIndex))
+            {
+                GetItem(item.itemData);
+            }
+        }
     }
 }
