@@ -49,6 +49,7 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
                 {
                     //"잠겨있어"라는 독백 대사 출력
                     DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                    Debug.Log("여기 안 들어오나?");
                 }
                 
             }

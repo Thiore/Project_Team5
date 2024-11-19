@@ -18,6 +18,12 @@ public class SaveManager : MonoBehaviour
     public StateData.GameState gameState; // 게임 상태 데이터
     public Dictionary<int, ItemSaveData> itemsavedata; // 아이템 상태 데이터 저장 딕셔너리
     public string selectedLocale; //현재 선택된 언어
+    private bool hasSaveFileCache; //파일 존재여부 한 번만 확인 후 캐싱하기 위해
+    public string selectedLocale_ //현재 선택된 언어
+    {
+        get => gameState.selectedLocale;
+        set => gameState.selectedLocale = value;
+    }
 
 
     private void Awake()
@@ -42,6 +48,11 @@ public class SaveManager : MonoBehaviour
         Transform loadGame = mainButton.transform.GetChild(0);
         loadGameButton = loadGame.gameObject;
 
+        //초기 저장 파일 상태 확인
+        //CheckSaveFile에서 파일 존재 여부를 한 번만 확인 후, 결과를 hasSaveFileCache에 저장
+        //이후 캐싱된 값을 참조하여 디스크 접근을 제거 (속도 향상, 효율 Up ???)
+        CheckSaveFile();
+
         if (loadGameButton != null)
         {
             //저장 파일이 있는 경우 버튼 활성화, 없으면 비활성화
@@ -63,7 +74,7 @@ public class SaveManager : MonoBehaviour
         itemsavedata = new Dictionary<int, ItemSaveData>();// 아이템 상태 초기화
     }
 
-    //������ ��׶���� ���� ��, ����
+    //유저가 백그라운드로 갔을 때, 저장
     private void OnApplicationPause(bool pause)
     {
         if (pause)
@@ -73,59 +84,59 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    //���ø����̼��� ���� �Ǿ��� ��
+    //어플리케이션이 종료 되었을 때
     private void OnApplicationQuit()
     {
         SaveGameState();
     }
 
-    //������
+    //새게임
     public void NewGame()
     {
-        //gameState �ʱ�ȭ (�� ����Ʈ)
+        //gameState 초기화 (층 리스트)
         gameState = new StateData.GameState
         {
             floors = new List<StateData.FloorState>(),
 
-            //�÷��̾� �ʱ�ȭ
+            //플레이어 위치 초기화
             playerPositionX = 204.699f,
             playerPositionY = 1f,
             playerPositionZ = 2.91f,
             playerRotationX = 23f,
             playerRotationY = 408.2f,
             playerRotationZ = 0,
-            playerRotationW = 1 // �⺻ ȸ�� ����
+            playerRotationW = 1 // 기본 회전
 
         };
 
 
-        // �� ���� ��ȣ�ۿ� ������Ʈ �ʱ�ȭ �� �⺻ ���� ���� (�ӽ÷� 4 �س���)
+        // 각 층과 상호작용 오브젝트 초기화 및 기본 상태 설정 (4개의 층) *추가 수정 있으면 바꿀 것
         for (int floorIndex = 0; floorIndex < 4; floorIndex++)
         {
-            // �� ������ �ʱ�ȭ �� �� �ε��� �� ������Ʈ ���� ����Ʈ ����
+            // 층 정보를 초기화 후 층 인덱스 및 오브젝트 상태 리스트 설정
             StateData.FloorState floor = new StateData.FloorState
             {
-                //���� �� �ε��� ����
+                //현재 층 인덱스 설정
                 floorIndex = floorIndex,
-                //�� �� ������Ʈ ����Ʈ �ʱ�ȭ
+                //층 내 오브젝트 리스트 초기화
                 interactableObjects = new List<StateData.InteractableObjectState>()
             };
 
-            // �� �� ��ȣ�ۿ� ������Ʈ �ʱ�ȭ (�ӽ÷� 5 �س���)
+            // 각 층 상호작용 오브젝트 초기화 (임시로 5 해놨습니다.)
             for (int objectIndex = 0; objectIndex < 5; objectIndex++)
             {
-                //������Ʈ ���� �ʱ�ȭ(��ȣ�ۿ���� ���� ���·�)
+                //오브젝트 상태 초기화 (상호작용되지 않은 상태로)
                 StateData.InteractableObjectState objState = new StateData.InteractableObjectState
                 {
-                    //������Ʈ �ε��� ����
+                    //오브젝트 인덱스 설정
                     objectIndex = objectIndex,
-                    //��ȣ�ۿ���� ���� ����
+                    //상호작용되지 않은 상태
                     isInteracted = false
                 };
-                //�ʱ�ȭ�� ������Ʈ ���¸� ���� �߰�
+                //초기화된 오브젝트 상태를 층에 추가
                 floor.interactableObjects.Add(objState);
             }
-            //�ʱ�ȭ �� �� ���¸� ���� ���¿� �߰�
+            //초기화 된 층 상태를 게임 상태에 추가
             gameState.floors.Add(floor);
         }
 
@@ -143,7 +154,7 @@ public class SaveManager : MonoBehaviour
             gameState = JsonConvert.DeserializeObject<StateData.GameState>(json);
 
             //저장된 언어 상태 가져오기
-            selectedLocale = gameState.selectedLocale;
+            selectedLocale_ = gameState.selectedLocale;
         }
 
         if (File.Exists(itemstatepath))
@@ -153,11 +164,9 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // ���� ���� ����
+    // 게임 상태 저장
     public void SaveGameState()
     {
-        //�÷��̾� ��ġ �� ȸ�� ����
-
         //로컬라이제이션 현재 선택 언어 저장
         gameState.selectedLocale = LocalizationSettings.SelectedLocale.Identifier.Code;
 
@@ -173,55 +182,57 @@ public class SaveManager : MonoBehaviour
         //저장 후 LoadGameButton 상태 업데이트
         UpdateLoadGameButton();
 
+        hasSaveFileCache = true;
+
     }
 
 
-    // ���� ������Ʈ (�� �� ������Ʈ ���� ������Ʈ)
+    // 상태 업데이트 (층 및 오브젝트 상태 업데이트)
     public void UpdateObjectState(int floorIndex, int objectIndex, bool isInteracted)
     {
-        //�ش� ���� ã�ų� ���� ����(������)
+        //해당 층을 찾거나 새로 생성(새게임)
         StateData.FloorState floor = gameState.floors.Find(f => f.floorIndex == floorIndex);
 
-        //�ش� ���� ���� ��� ���ο� �� �߰�
+        //해당 층이 없을 경우 새로운 층 추가
         if (floor == null)
         {
             floor = new StateData.FloorState
             {
-                //�� �ε��� ����
+                //층 인덱스 설정
                 floorIndex = floorIndex,
-                //������Ʈ ����Ʈ �ʱ�ȭ
+                //오브젝트 리스트 초기화
                 interactableObjects = new List<StateData.InteractableObjectState>()
             };
-            //������ ���� floors ����Ʈ�� �߰�
+            //생성한 층을 floors 리스트에 추가
             gameState.floors.Add(floor);
         }
 
-        //�ش� ������Ʈ�� ã�ų� ���� �����Ͽ� ���� ������Ʈ
+        //해당 오브젝트를 찾거나 새로 생성하여 상태 업데이트
         StateData.InteractableObjectState objState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
 
-        //������Ʈ�� �������� ���� ��� ���ο� �κ���Ʈ �߰�
+        //오브젝트가 존재하지 않은 경우 새로운 오브젝트 추가
         if (objState == null)
         {
             objState = new StateData.InteractableObjectState
             {
-                //������Ʈ �ε��� ����
+                //오브젝트 인덱스 설정
                 objectIndex = objectIndex,
-                //���޵� ��ȣ�ۿ� ���� ����
+                //전달된 상호작용 상태 설정
                 isInteracted = isInteracted
             };
-            //������ ������ƮinteractableObjects ����Ʈ�� �߰�
+            //생성한 오브젝트 interactableObjects 리스트에 추가
             floor.interactableObjects.Add(objState);
         }
         else
         {
-            //������Ʈ�� �̹� �����ϴ� ��� -> ��ȣ�ۿ� ���¸� ������Ʈ
+            //오브젝트가 이미 존재하는 경우 -> 상호작용 상태만 업데이트
             objState.isInteracted = isInteracted;
         }
 
 
     }
 
-    //puzzle�� ��ȣ�ۿ��ϴ� door�� ���� �˸���
+    //puzzle과 상호작용하는 door에 상태 알리기
     public bool PuzzleState(int floorIndex, int objectIndex)
     {
         if(objectIndex.Equals(0))
@@ -242,6 +253,7 @@ public class SaveManager : MonoBehaviour
         return false;
     }
 
+    //플레이어 위치
     public void LoadPlayerPosition(Transform player)
     {
         
@@ -255,6 +267,8 @@ public class SaveManager : MonoBehaviour
             
         }
     }
+
+    //플레이어 회전
     public void LoadPlayerRotation(Transform camera)
     {
         if(camera != null)
@@ -268,7 +282,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    //�÷��̾��� ��ġ (������ ��, SaveManager�� Player�� ��ġ�� �˰� ����Ǿ�� �ؼ�??)
+    //플레이어의 위치를 받아와서 위치 및 회전 저장
     public void SavePlayerPosition()
     {
             gameState.playerPositionX = PlayerManager.Instance.getMainPlayer.localPosition.x;
@@ -307,11 +321,15 @@ public class SaveManager : MonoBehaviour
             Debug.Log("���̺� ������ �߰�");
         }
     }
+    private void CheckSaveFile()
+    {
+        hasSaveFileCache = File.Exists(savePath) || File.Exists(itemstatepath);
+    }
 
     //Lobby 씬에서 LoadGameButton 상태 확인
     private bool HasSaveFile()
     {
-        return File.Exists(savePath) || File.Exists(itemstatepath);
+        return hasSaveFileCache;
     }
 
     //게임 저장할 때, LoadGameButton 상태 업데이트
@@ -323,5 +341,16 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    
+
+    //볼륨 관련 업데이트
+    public void UpdateVolumeSettings(float master, float bgm, float sfx, float canSpeed)
+    {
+        gameState.masterVolume = master;
+        gameState.bgmVoluem = bgm;
+        gameState.sfxVoluem = sfx;
+        gameState.camSpeed = canSpeed;
+
+        SaveGameState();
+    }
+
 }
