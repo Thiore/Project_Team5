@@ -106,7 +106,7 @@ public class TouchManager : MonoBehaviour
     //{
     //    OnDisableTuchAction();
     //    SceneManager.sceneLoaded -= OnTouchLoaded;
-        
+
     //}
 
     //private void OnTouchLoaded(Scene scene, LoadSceneMode mode)
@@ -128,7 +128,7 @@ public class TouchManager : MonoBehaviour
     //    }
 
     //}
-
+    
     private void Update()
     {
         if(isTouching)
@@ -302,181 +302,181 @@ public class TouchManager : MonoBehaviour
         }
         
     }
+    /*
+    private void OnTouchStarted(InputAction.CallbackContext context)
+    {
+        var touchControl = context.control;
+        if (touchControl == null) return;
 
-    //private void OnTouchStarted(InputAction.CallbackContext context)
-    //{
-    //    var touchControl = context.control;
-    //    if (touchControl == null) return;
+        //int a = touchControl.
 
-    //    int a = touchControl.
+        foreach (var touch in Touchscreen.current.touches)
+        {
 
-    //    foreach (var touch in Touchscreen.current.touches)
-    //    {
-
-    //        if (!context.Equals(touch))
-    //        {
-    //            Debug.Log(context);
-    //            Debug.Log(touch);
-    //            continue;
-    //        }
-    //        int touchId = touch.touchId.ReadValue();
-    //        if (activeTouchID.Contains(touchId)) continue;
-    //        Vector2 position = touch.position.ReadValue();
-
-
-    //        if (IsTouchOnUI(touchId) &&
-    //            (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
-    //        {
-    //            activeTouchID.Add(touchId);
-
-    //            touchState = etouchState.UI;
-    //        }
-    //        else if (IsTouchOnJoystickArea(position) &&
-    //                 moveID.Equals(-1) &&
-    //                 (touchState.Equals(etouchState.Normal) ||
-    //                 touchState.Equals(etouchState.Player)))
-    //        {
-    //            activeTouchID.Add(touchId);
-    //            moveID = touchId;
-    //            OnMoveStarted?.Invoke(position);
-
-    //            if (touchState.Equals(etouchState.Normal))
-    //                touchState = etouchState.Player;
-
-    //        }
-    //        else if (IsTouchableObjectAtPosition(touchId, position) &&
-    //                 (touchState.Equals(etouchState.Normal) ||
-    //                 touchState.Equals(etouchState.Object)))
-    //        {
-    //            activeTouchID.Add(touchId);
-
-    //            touchState = etouchState.Object;
-
-    //        }
-    //        else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
-    //        {
-    //            if (IsTouchOnLeftScreen(position) && moveID.Equals(-1))
-    //            {
-    //                activeTouchID.Add(touchId);
-    //                moveID = touchId;
-    //                OnMoveStarted?.Invoke(position);
-
-    //                if (touchState.Equals(etouchState.Normal))
-    //                    touchState = etouchState.Player;
-    //            }
-    //            else if (IsTouchOnRightScreen(position) && lookID.Equals(-1))
-    //            {
-    //                activeTouchID.Add(touchId);
-    //                lookID = touchId;
-    //                OnLookStarted?.Invoke(position);
-
-    //                if (touchState.Equals(etouchState.Normal))
-    //                    touchState = etouchState.Player;
-
-    //            }
-    //        }
+            if (!context.Equals(touch))
+            {
+                Debug.Log(context);
+                Debug.Log(touch);
+                continue;
+            }
+            int touchId = touch.touchId.ReadValue();
+            if (activeTouchID.Contains(touchId)) continue;
+            Vector2 position = touch.position.ReadValue();
 
 
-    //    }
-    //}
-    //private void OnTouchPerformed(InputAction.CallbackContext context)
-    //{
+            if (IsTouchOnUI(touchId) &&
+                (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)))
+            {
+                activeTouchID.Add(touchId);
 
-    //    if (touchState.Equals(etouchState.UI)) return;
-    //    foreach (var touch in Touchscreen.current.touches)
-    //    {
-    //        if (!context.Equals(touch))
-    //        {
-    //            Debug.Log(context);
-    //            Debug.Log(touch);
-    //            continue;
-    //        }
+                touchState = etouchState.UI;
+            }
+            else if (IsTouchOnJoystickArea(position) &&
+                     moveID.Equals(-1) &&
+                     (touchState.Equals(etouchState.Normal) ||
+                     touchState.Equals(etouchState.Player)))
+            {
+                activeTouchID.Add(touchId);
+                moveID = touchId;
+                OnMoveStarted?.Invoke(position);
+
+                if (touchState.Equals(etouchState.Normal))
+                    touchState = etouchState.Player;
+
+            }
+            else if (IsTouchableObjectAtPosition(touchId, position) &&
+                     (touchState.Equals(etouchState.Normal) ||
+                     touchState.Equals(etouchState.Object)))
+            {
+                activeTouchID.Add(touchId);
+
+                touchState = etouchState.Object;
+
+            }
+            else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
+            {
+                if (IsTouchOnLeftScreen(position) && moveID.Equals(-1))
+                {
+                    activeTouchID.Add(touchId);
+                    moveID = touchId;
+                    OnMoveStarted?.Invoke(position);
+
+                    if (touchState.Equals(etouchState.Normal))
+                        touchState = etouchState.Player;
+                }
+                else if (IsTouchOnRightScreen(position) && lookID.Equals(-1))
+                {
+                    activeTouchID.Add(touchId);
+                    lookID = touchId;
+                    OnLookStarted?.Invoke(position);
+
+                    if (touchState.Equals(etouchState.Normal))
+                        touchState = etouchState.Player;
+
+                }
+            }
 
 
-    //        int touchId = touch.touchId.ReadValue();
-    //        if (!activeTouchID.Contains(touchId)) continue;
+        }
+    }
+    private void OnTouchPerformed(InputAction.CallbackContext context)
+    {
 
-    //        Vector2 position = touch.position.ReadValue();
+        if (touchState.Equals(etouchState.UI)) return;
+        foreach (var touch in Touchscreen.current.touches)
+        {
+            if (!context.Equals(touch))
+            {
+                Debug.Log(context);
+                Debug.Log(touch);
+                continue;
+            }
 
-    //        if (activeTouchID.Contains(touchId))
-    //        {
-    //            switch (touchState)
-    //            {
-    //                case etouchState.Player:
-    //                    if (moveID.Equals(touchId))
-    //                    {
-    //                        OnMoveHold?.Invoke(position);
-    //                    }
-    //                    if (lookID.Equals(touchId))
-    //                    {
-    //                        OnLookHold?.Invoke(position);
-    //                    }
-    //                    break;
-    //                case etouchState.Object:
-    //                    currentTouchDic[touchId].OnTouchHold(position);
-    //                    break;
-    //            }
-    //        }
-    //    }
-    //    }
 
-    //private void OnTouchCanceled(InputAction.CallbackContext context)
-    //{
-    //    foreach (var touch in Touchscreen.current.touches)
-    //    {
-    //        if (!context.Equals(touch))
-    //        {
-    //            Debug.Log(context);
-    //            Debug.Log(touch);
-    //            continue;
-    //        }
-    //        int touchId = touch.touchId.ReadValue();
-    //        Vector2 position = touch.position.ReadValue();
-    //        if (activeTouchID.Contains(touchId))
-    //        {
-    //            switch (touchState)
-    //            {
-    //                case etouchState.Player:
-    //                    if (moveID.Equals(touchId))
-    //                    {
-    //                        OnMoveEnd?.Invoke(position);
-    //                        activeTouchID.Remove(touchId);
-    //                        moveID = -1;
-    //                    }
-    //                    if (lookID.Equals(touchId))
-    //                    {
-    //                        activeTouchID.Remove(touchId);
-    //                        OnLookEnd?.Invoke(position);
-    //                        lookID = -1;
-    //                    }
-    //                    if (moveID.Equals(-1) && lookID.Equals(-1))
-    //                    {
-    //                        touchState = etouchState.Normal;
-    //                    }
-    //                    break;
-    //                case etouchState.UI:
-    //                    activeTouchID.Remove(touchId);
-    //                    if (activeTouchID.Count.Equals(0))
-    //                    {
-    //                        touchState = etouchState.Normal;
-    //                    }
+            int touchId = touch.touchId.ReadValue();
+            if (!activeTouchID.Contains(touchId)) continue;
 
-    //                    break;
-    //                case etouchState.Object:
-    //                    currentTouchDic[touchId].OnTouchEnd(position);
-    //                    currentTouchDic.Remove(touchId);
-    //                    activeTouchID.Remove(touchId);
-    //                    if (currentTouchDic.Count.Equals(0))
-    //                    {
-    //                        touchState = etouchState.Normal;
-    //                    }
-    //                    break;
-    //            }
-    //        }
+            Vector2 position = touch.position.ReadValue();
 
-    //    }
-    //    }
+            if (activeTouchID.Contains(touchId))
+            {
+                switch (touchState)
+                {
+                    case etouchState.Player:
+                        if (moveID.Equals(touchId))
+                        {
+                            OnMoveHold?.Invoke(position);
+                        }
+                        if (lookID.Equals(touchId))
+                        {
+                            OnLookHold?.Invoke(position);
+                        }
+                        break;
+                    case etouchState.Object:
+                        currentTouchDic[touchId].OnTouchHold(position);
+                        break;
+                }
+            }
+        }
+    }
 
+    private void OnTouchCanceled(InputAction.CallbackContext context)
+    {
+        foreach (var touch in Touchscreen.current.touches)
+        {
+            if (!context.Equals(touch))
+            {
+                Debug.Log(context);
+                Debug.Log(touch);
+                continue;
+            }
+            int touchId = touch.touchId.ReadValue();
+            Vector2 position = touch.position.ReadValue();
+            if (activeTouchID.Contains(touchId))
+            {
+                switch (touchState)
+                {
+                    case etouchState.Player:
+                        if (moveID.Equals(touchId))
+                        {
+                            OnMoveEnd?.Invoke(position);
+                            activeTouchID.Remove(touchId);
+                            moveID = -1;
+                        }
+                        if (lookID.Equals(touchId))
+                        {
+                            activeTouchID.Remove(touchId);
+                            OnLookEnd?.Invoke(position);
+                            lookID = -1;
+                        }
+                        if (moveID.Equals(-1) && lookID.Equals(-1))
+                        {
+                            touchState = etouchState.Normal;
+                        }
+                        break;
+                    case etouchState.UI:
+                        activeTouchID.Remove(touchId);
+                        if (activeTouchID.Count.Equals(0))
+                        {
+                            touchState = etouchState.Normal;
+                        }
+
+                        break;
+                    case etouchState.Object:
+                        currentTouchDic[touchId].OnTouchEnd(position);
+                        currentTouchDic.Remove(touchId);
+                        activeTouchID.Remove(touchId);
+                        if (currentTouchDic.Count.Equals(0))
+                        {
+                            touchState = etouchState.Normal;
+                        }
+                        break;
+                }
+            }
+
+        }
+    }
+    */
     private bool IsTouchOnUI(int touchId)
     {
         return EventSystem.current.IsPointerOverGameObject(touchId);
