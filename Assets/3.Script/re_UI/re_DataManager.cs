@@ -56,14 +56,21 @@ public class re_DataManager : MonoBehaviour
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
         dicItemData = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
-        dicItem = JsonConvert.DeserializeObject<re_Item[]>(itemJson).ToDictionary(x => x.id, x => x);
 
-        foreach(var data in dicItemData.Values)
+        foreach(KeyValuePair<int, ItemData> data in dicItemData)
         {
-            Sprite sprite = Resources.Load<Sprite>($"UI/Item/{data.spritename}");
-            dicsprite.Add(data.id, sprite);
+            Sprite sprite = Resources.Load<Sprite>($"UI/Item/{data.Value.spritename}");
+            dicsprite.Add(data.Value.id, sprite);
+
+            re_Item item = new re_Item(data.Value.id, data.Value.name, data.Value.eItemType, 
+                                       data.Value.elementindex, data.Value.combineindex, data.Value.tableName, data.Value.isused,
+                                       data.Value.usecount, data.Value.isused, sprite);
+
+            dicItem.Add(item.id, item);
             Debug.Log(sprite.name);
         }
+
+        Debug.Log(dicItem.Count);
     }
 
 

@@ -41,16 +41,39 @@ public class re_Item
     // 테이블자체에 spritename이 있지 
     // 역직렬화 할때 Sprite 자체를 
 
+
+
+
+
+    // 먹었을때 인벤에 넣고 
+    // 1개라도 있으면 인포 띄우고 마지막 아이템 기준 인포 띄우기 
+
     public int id;
     public string name;
-    public int eItemType;
+    public eItemType eItemType;
     public int elementindex;
     public int combineindex;
     public string tableName;
     public bool isused;
     public int usecount;
     public bool isfix;
-    public string spritename;
+    public Sprite sprite;
+
+
+    public re_Item(int id, string name, int eItemType, int elementindex, 
+                    int combineindex, string tableName, bool isused, int usecount, bool isfix, Sprite sprite)
+    {
+        this.id = id;
+        this.name = name;
+        this.eItemType = (eItemType)eItemType;
+        this.elementindex = elementindex;
+        this.combineindex = combineindex;
+        this.tableName = tableName;
+        this.isused = isused;
+        this.usecount = usecount;
+        this.isfix = isfix;
+        this.sprite = sprite;
+    }
 
 
 

@@ -6,5 +6,19 @@ using UnityEngine.UI;
 public class re_UI_QuickSlot : MonoBehaviour
 {
     [SerializeField] private int id = -1;
-    [SerializeField] private Image sprite;
+    public int SlotID { get => id; }
+    [SerializeField] private re_Item item;
+    [SerializeField] private Image image;
+
+
+    public void SetinvenByID(re_Item item)
+    {
+        this.id = item.id;
+        this.item = item;
+        this.image.sprite = item.sprite;
+    }
+
+
+
+
 }
