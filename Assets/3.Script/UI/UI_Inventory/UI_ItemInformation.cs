@@ -37,7 +37,7 @@ public class UI_ItemInformation : MonoBehaviour/*, IDropHandler*/
             {
                 Debug.Log("조합가능");
 
-                Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
+                Item combineitem = re_DataManager.instance.GetItemCombineIndex(elementindex);
                 inven.GetCombineItem(combineitem);
 
                 inven.DestroyElement(item.Elementindex);
@@ -58,7 +58,7 @@ public class UI_ItemInformation : MonoBehaviour/*, IDropHandler*/
             {
                 Debug.Log("조합가능");
 
-                Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
+                Item combineitem = re_DataManager.instance.GetItemCombineIndex(elementindex);
                 inven.GetCombineItem(combineitem);
 
                 inven.DestroyElement(item.Elementindex);

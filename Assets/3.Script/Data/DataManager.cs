@@ -21,14 +21,14 @@ public class DataManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+            InitDic();
+            LoadAllData();
         }
         else
         {
             Destroy(gameObject);
         }
-
-        InitDic();
-        LoadAllData();
         
         SceneManager.sceneLoaded += LoadSceanData;
      
@@ -54,7 +54,6 @@ public class DataManager : MonoBehaviour
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
         dicItemData = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
-
     }
 
 
