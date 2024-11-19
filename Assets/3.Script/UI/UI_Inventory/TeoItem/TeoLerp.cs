@@ -1,9 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_LerpImage : MonoBehaviour
+public class TeoLerp : MonoBehaviour
 {
     [SerializeField] public RectTransform inventoryButton; // �κ��丮 ��ư�� RectTransform
     private Image image;
@@ -20,10 +20,10 @@ public class UI_LerpImage : MonoBehaviour
         StopCoroutine(MoveInvenButton_co());
     }
 
-    public void InputMovementInventory(Item item, Vector2 pos)
+    public void InputMovementInventory(TeoItemData item, Vector2 pos)
     {
         transform.position = pos;
-        image.sprite = item.Sprite;
+        image.sprite = item.sprite;
         isLerp = true;
         StartCoroutine(MoveInvenButton_co());
 
@@ -40,13 +40,11 @@ public class UI_LerpImage : MonoBehaviour
         {
             lerptiem += Time.fixedDeltaTime;
 
-            transform.position = Vector3.Lerp(startpos, tartgetpos, lerptiem  * 1.2f);
+            transform.position = Vector3.Lerp(startpos, tartgetpos, lerptiem * 1.2f);
 
             yield return null;
         }
         isLerp = false;
         gameObject.SetActive(false);
     }
-
-
 }

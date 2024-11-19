@@ -36,16 +36,19 @@ public class PlayerManager : MonoBehaviour
     public TMP_Text getExplanation { get => explanation; }
 
 
+
+    #region addTeo
+    [SerializeField] private TeoLerp lerpImage;
+    public TeoLerp getLerpImage { get => lerpImage; }
+
     public Transform mainPlayer;
     public Transform playerCam;
 
     public Light flashLight;
+    [SerializeField] private Inventory inven;
+    public Inventory getInven { get => inven; }
+    #endregion
 
-
-
-
-
-    
 
     public Button optionBtn;
 

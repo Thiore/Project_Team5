@@ -11,7 +11,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
-    private Dictionary<int, ItemData> dicItemData; //원본 아이템 데이터
+    public Dictionary<int, ItemData> dicItemData { get; private set; } //원본 아이템 데이터
     private Dictionary<int, Item> dicItem;
     private List<Item> items;
 

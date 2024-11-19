@@ -341,6 +341,23 @@ public class SaveManager : MonoBehaviour
             itemsavedata.Add(item.ID, data);
         }
     }
+    #region addTeo
+    public void TeoItemDataSave(TeoItemData data)
+    {
+        if (itemsavedata.ContainsKey(data.id))
+        {
+            itemsavedata[data.id].itemgetstate = data.isFix;
+            itemsavedata[data.id].itemusecount = data.useCount;
+        }
+        else
+        {
+            ItemSaveData itemData = new ItemSaveData();
+            itemData.id = data.id;
+            itemData.itemusecount = data.useCount;
+            itemData.itemgetstate = data.isFix;
+        }
+    }
+    #endregion
 
     //Lobby 씬에서 LoadGameButton 상태 확인
     private bool HasSaveFile()
