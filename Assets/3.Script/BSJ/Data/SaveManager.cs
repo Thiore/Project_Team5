@@ -102,25 +102,17 @@ public class SaveManager : MonoBehaviour
             floors = new List<StateData.FloorState>(),
 
             //플레이어 위치 초기화
-            playerPositionX = 204.699f,
-            playerPositionY = 1f,
-            playerPositionZ = 2.91f,
-            playerRotationX = 23f,
-            playerRotationY = 408.2f,
-            playerRotationZ = 0,
-            playerRotationW = 1 // 기본 회전
             masterVolume = SettingsManager.Instance.master,
             bgmVoluem = SettingsManager.Instance.BGM,
             sfxVoluem = SettingsManager.Instance.SFX,
             camSpeed = SettingsManager.Instance.CameraSpeed,
-            //�÷��̾� �ʱ�ȭ
             playerPositionX = 4.224149f,
             playerPositionY = 1f,
             playerPositionZ = 3.059584f,
             playerRotationX = -0.1819898f,
             playerRotationY = -0.400133f,
             playerRotationZ = 0.08140796f,
-            playerRotationW = -0.8945088f // �⺻ ȸ�� ����
+            playerRotationW = -0.8945088f // 기본 회전
 
         };
 
@@ -328,7 +320,7 @@ public class SaveManager : MonoBehaviour
     }
 
     //플레이어의 위치를 받아와서 위치 및 회전 저장
-    public void SavePlayerPosition()
+    public void SavePlayerState()
     {
             gameState.playerPositionX = PlayerManager.Instance.mainPlayer.localPosition.x;
             gameState.playerPositionY = PlayerManager.Instance.mainPlayer.localPosition.y;

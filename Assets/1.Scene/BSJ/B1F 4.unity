@@ -7662,6 +7662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragImage: {fileID: 2183685839696573060}
+  inven: {fileID: 0}
 --- !u!1 &146624007605389213
 GameObject:
   m_ObjectHideFlags: 0
@@ -7937,6 +7938,8 @@ MonoBehaviour:
   invenBtnPos: {fileID: 6849660531888772503}
   quickBtnPos: {fileID: 933375473807331638}
   lerpImage: {fileID: 5751165775811847640}
+  info: {fileID: 0}
+  optionBtn: {fileID: 0}
 --- !u!4 &175821663682273842
 Transform:
   m_ObjectHideFlags: 0
@@ -11581,8 +11584,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c13114414c41d94ca4a85a7817cdb75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: f569c935f74a5d14e8c23b63377bc832, type: 2}
-  audioType: 0
 --- !u!33 &492923683927182583
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12902,8 +12903,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c13114414c41d94ca4a85a7817cdb75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: f569c935f74a5d14e8c23b63377bc832, type: 2}
-  audioType: 2
 --- !u!64 &648130122637728668
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -20127,8 +20126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c13114414c41d94ca4a85a7817cdb75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: f569c935f74a5d14e8c23b63377bc832, type: 2}
-  audioType: 1
 --- !u!4 &1252333231134628250
 Transform:
   m_ObjectHideFlags: 0
@@ -32947,10 +32944,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueButton: {fileID: 5954501376501271388}
   dialogueText: {fileID: 8281967990863782588}
-  itemName: {fileID: 1185496807944470567}
-  explanation: {fileID: 2635423731916185003}
-  koreanButtonText: {fileID: 643749666163008408}
-  englishButtonText: {fileID: 6338663669276097362}
 --- !u!224 &2288192968345485188
 RectTransform:
   m_ObjectHideFlags: 0
@@ -41624,6 +41617,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState:
     floors: []
+    selectedLocale: 
+    masterVolume: 0
+    bgmVoluem: 0
+    sfxVoluem: 0
+    camSpeed: 0
     playerPositionX: 0
     playerPositionY: 0
     playerPositionZ: 0
@@ -41631,6 +41629,7 @@ MonoBehaviour:
     playerRotationY: 0
     playerRotationZ: 0
     playerRotationW: 0
+  selectedLocale: 
 --- !u!23 &3019761022506865997
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -44361,6 +44360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragImage: {fileID: 2183685839696573060}
+  inven: {fileID: 0}
 --- !u!1 &3232089626222627111
 GameObject:
   m_ObjectHideFlags: 0
@@ -60891,11 +60891,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 174648759099818616}
   itemInfo: {fileID: 4618047106019221496}
-  playerInterface: {fileID: 6081760575332116950}
+  quickSlot: {fileID: 6081760575332116951}
   lerpimage: {fileID: 5751165775811847640}
+  btnList: {fileID: 2200099786291487655}
+  itemName: {fileID: 1185496807944470567}
+  explanation: {fileID: 2635423731916185003}
+  lerpImage: {fileID: 0}
   mainPlayer: {fileID: 3149699761016253050}
   playerCam: {fileID: 7946258479958299723}
   flashLight: {fileID: 4597486923187758125}
+  inven: {fileID: 0}
+  optionBtn: {fileID: 5942427750635709621}
 --- !u!224 &4637900942309448785
 RectTransform:
   m_ObjectHideFlags: 0
@@ -66079,6 +66085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragImage: {fileID: 2183685839696573060}
+  inven: {fileID: 0}
 --- !u!33 &5108650453142036670
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -67909,6 +67916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragImage: {fileID: 2183685839696573060}
+  inven: {fileID: 0}
 --- !u!1 &5298421053694946199
 GameObject:
   m_ObjectHideFlags: 0
@@ -76721,6 +76729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missionStart: {fileID: 3618844555992831362}
   missionExit: {fileID: 1402560482}
+  interactionCam: {fileID: 0}
   btnExit: {fileID: 1861046611}
   playPuzzle: {fileID: 2479786955450846883}
   floorIndex: 0
@@ -76731,6 +76740,7 @@ MonoBehaviour:
   - {fileID: 8472937615781577286}
   isClear: 0
   isInteracted: 0
+  isInteractionCam: 0
 --- !u!33 &6032369912419508787
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -87363,7 +87373,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorIndex: 0
-  objectIndex: 1
+  objectIndex: 
+  puzzle: {fileID: 0}
+  interactionCount: 0
   numberWheels:
   - {fileID: 2848759690690477536}
   - {fileID: 2179125318273333042}
@@ -95168,6 +95180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missionStart: {fileID: 325156248}
   missionExit: {fileID: 1772815905}
+  interactionCam: {fileID: 0}
   btnExit: {fileID: 1042691194}
   playPuzzle: {fileID: 0}
   floorIndex: 0
@@ -95176,6 +95189,7 @@ MonoBehaviour:
   interactionAnim: []
   isClear: 0
   isInteracted: 0
+  isInteractionCam: 0
 --- !u!23 &7574217629851417857
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -97671,6 +97685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragImage: {fileID: 2183685839696573060}
+  inven: {fileID: 0}
 --- !u!4 &7756141899452548988
 Transform:
   m_ObjectHideFlags: 0
@@ -104763,6 +104778,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb4e40a1556be6449753d7e84ee535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 0}
+  slideType: 0
+  introBtn: {fileID: 0}
 --- !u!1 &8386930038341895935
 GameObject:
   m_ObjectHideFlags: 0
