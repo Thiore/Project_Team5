@@ -11,12 +11,12 @@ public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; } = null;
 
-    private string savePath; //���� ���� ���
-    private string itemstatepath; //���� ���� ���
+    private string savePath; //게임 상태 저장 
+    private string itemstatepath; //아이템 상태 저장 
     private GameObject loadGameButton; //이어하기 버튼
     private GameObject mainButton; //Lobby Main Button
-    public StateData.GameState gameState; //���� ���� ���� ��ü
-    public Dictionary<int, ItemSaveData> itemsavedata; // ��� Ƚ��,��� ���� ����
+    public StateData.GameState gameState; // 게임 상태 데이터
+    public Dictionary<int, ItemSaveData> itemsavedata; // 아이템 상태 데이터 저장 딕셔너리
     public string selectedLocale; //현재 선택된 언어
 
 
@@ -48,6 +48,8 @@ public class SaveManager : MonoBehaviour
             loadGameButton.SetActive(HasSaveFile());
         }
     }
+
+    //SaveManager 초기화
     public void InitializeSaveManager()
     {
         // Json���� ���� ���
@@ -57,8 +59,8 @@ public class SaveManager : MonoBehaviour
         itemstatepath = Path.Combine(Application.persistentDataPath, "itemsaveState.json");
 
         //���� ���� �ʱ�ȭ (�� ����Ʈ �ʱ�ȭ)
-        gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };
-        itemsavedata = new Dictionary<int, ItemSaveData>();
+        gameState = new StateData.GameState { floors = new List<StateData.FloorState>() };// 기본 게임 상태 초기화
+        itemsavedata = new Dictionary<int, ItemSaveData>();// 아이템 상태 초기화
     }
 
     //������ ��׶���� ���� ��, ����
