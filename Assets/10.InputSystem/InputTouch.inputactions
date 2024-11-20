@@ -13,15 +13,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Position",
-                    "type": "PassThrough",
-                    "id": "723f748e-7692-4a49-b22a-f570c59dc7cb",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -35,17 +26,6 @@
                     "action": "Touch",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f1c4be2c-6e94-4e6a-a89a-300c2768983b",
-                    "path": "<Touchscreen>/touch*/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Android",
-                    "action": "Position",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
@@ -54,7 +34,7 @@
             "id": "cf679eea-a028-434d-8c28-6e63bc0fed87",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Acceleration",
                     "type": "Value",
                     "id": "a7afb610-53f2-4368-bf26-09839d30abf1",
                     "expectedControlType": "Vector3",
@@ -71,7 +51,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Android",
-                    "action": "New action",
+                    "action": "Acceleration",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

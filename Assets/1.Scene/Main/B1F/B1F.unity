@@ -99273,13 +99273,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04131b179f9b9ae4a9cf828c7467ee89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputAsset: {fileID: -944628639613478452, guid: 59635ca0e21d78e409d5461498e7670d, type: 3}
+  touchAction:
+    m_Name: Touch
+    m_Type: 2
+    m_ExpectedControlType: Button
+    m_Id: 4789d611-d32d-42e3-8ceb-ae572c74a7c9
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 7e652322-14d9-4b6b-8fe2-f7d7f8ec1aeb
+      m_Path: <Touchscreen>/touch*/Press
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Touch
+      m_Flags: 0
+    m_Flags: 1
   touchableObjectLayer:
     serializedVersion: 2
     m_Bits: 64
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   touchDistance: 2
 --- !u!4 &8384828106376944600
 Transform:

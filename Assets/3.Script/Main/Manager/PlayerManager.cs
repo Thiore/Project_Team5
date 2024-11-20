@@ -56,8 +56,6 @@ public class PlayerManager : MonoBehaviour
     {
         Instance = this;
 
-        inven.gameObject.SetActive(true);
-        inven.gameObject.SetActive(false);
         //if (Instance == null)
         //{
         //    Instance = this;
