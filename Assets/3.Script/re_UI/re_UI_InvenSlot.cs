@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
+public class re_UI_InvenSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
 {
     [SerializeField] private int id = -1;
     public int SlotID { get => id; }
@@ -21,9 +21,30 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
         id = item.id;
         this.item = item;
         image.sprite = item.sprite;
-        image.enabled = true;
     }
 
+    public void SetInvenEmpty()
+    {
+        id = -1;
+        item = null;
+        image.sprite = null;
+    }
+
+
+    // 업, 다운 같이 있어야 기능 사용 가능 / eventsystem 50 설정 
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("더ㅣㅅ냐");
+        if (!isdragging)
+        {
+            UI_InvenManager.Instance.iteminfo.SetInfoByItem(item);
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("다운");  
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -36,7 +57,8 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        // 이건 끝나는 곳 확인 할 필요가 있음 
+        // 조합 여부는 Infomation에서, EndDrag 시 PointerUp이랑 같이 되서 info 의 OnDrop에서 처리
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
     }
+
 }

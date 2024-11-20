@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Linq;
-using System.IO;
 
-public class DataManager : MonoBehaviour
+public class re_DataManager : MonoBehaviour
 {
-    public static DataManager instance = null;
+    public static re_DataManager instance = null;
 
     private Dictionary<int, re_Item> dicItem;
 
@@ -27,9 +25,9 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        
         SceneManager.sceneLoaded += LoadSceanData; // 씬이 로드 될때마다 
-
+     
     }
 
 
@@ -44,7 +42,8 @@ public class DataManager : MonoBehaviour
 
     }
 
-    // 데이터 역직렬화 후 바로 Item 타입으로 전환 
+
+
     private void LoadItemData()
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
@@ -62,10 +61,13 @@ public class DataManager : MonoBehaviour
     {
         return dicItem[id];
     }
-
+    
     public int GetItemElementIndex(int id)
     {
         return dicItem[id].elementindex;
     }
+
+
+    
 
 }

@@ -4,70 +4,37 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ItemInformation : MonoBehaviour/*, IDropHandler*/
+public class UI_ItemInformation : MonoBehaviour, IDropHandler
 {
-    [SerializeField] UI_Inventory inven;
+    [SerializeField] UI_InvenManager invenmanager;
     private int id;
     public int ID { get; private set; }
     private int elementindex;
     public int Elementindex { get => elementindex; }
 
-    private void Start()
-    {
-        inven = PlayerManager.Instance.ui_inventory;
-    }
 
-    public void SetInfoByID(Item item)
+    public void SetInfoByItem(re_Item item)
     {
-        this.id = item.ID;
-        this.elementindex = item.Elementindex;
+        this.id = item.id;
         DialogueManager.Instance.SetItemNameText("Table_ItemName", id);
         DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", id);
         if(TryGetComponent(out Image image))
         {
-            image.sprite = item.Sprite;
+            image.sprite = item.sprite;
         }
     }
-
-    public void Combine(PointerEventData eventData)
-    {
-        if (eventData.pointerDrag.gameObject.TryGetComponent(out Item item))
-        {
-            if (!item.ID.Equals(id) && item.Elementindex.Equals(elementindex))
-            {
-                Debug.Log("조합가능");
-
-                Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
-                inven.GetCombineItem(combineitem);
-
-                inven.DestroyElement(item.Elementindex);
-
-                // 애들 비워줘야 됨 
-
-            }
-        }
-    }
-
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("afsdafsdafsdafsd!!!#!!!!!!!!");
-        if (eventData.pointerDrag.gameObject.TryGetComponent(out Item item))
+        Debug.Log(eventData.pointerDrag.gameObject.name);
+        Debug.Log(eventData.pointerEnter.gameObject.name);
+        if (eventData.pointerDrag.gameObject.TryGetComponent(out re_UI_InvenSlot item))
         {
-            if (!item.ID.Equals(id) && item.Elementindex.Equals(elementindex))
-            {
-                Debug.Log("조합가능");
+            UI_InvenManager.Instance.dragimage.gameObject.SetActive(false);
+            item.FragIsDrag();
+            UI_InvenManager.Instance.Combine(item, id);
 
-                Item combineitem = DataManager.instance.GetItemCombineIndex(elementindex);
-                inven.GetCombineItem(combineitem);
-
-                inven.DestroyElement(item.Elementindex);
-
-                // 애들 비워줘야 됨 
-
-            }
         }
-
     }
 
 }

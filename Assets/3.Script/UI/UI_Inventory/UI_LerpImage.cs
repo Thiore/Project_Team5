@@ -24,7 +24,6 @@ public class UI_LerpImage : MonoBehaviour
         image.sprite = item.Sprite;
 
         StartCoroutine(MoveInvenButton_co());
-
     }
 
 
