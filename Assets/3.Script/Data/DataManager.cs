@@ -11,7 +11,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
-    private Dictionary<int, re_Item> dicItem;
+    private Dictionary<int, Item> dicItem;
 
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class DataManager : MonoBehaviour
 
     private void InitDic()
     {
-        dicItem = new Dictionary<int, re_Item>();
+        dicItem = new Dictionary<int, Item>();
     }
 
     private void LoadAllData()
@@ -48,7 +48,7 @@ public class DataManager : MonoBehaviour
     private void LoadItemData()
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
-        dicItem = JsonConvert.DeserializeObject<re_Item[]>(itemJson).ToDictionary(x => x.id, x => x);
+        dicItem = JsonConvert.DeserializeObject<Item[]>(itemJson).ToDictionary(x => x.id, x => x);
         Debug.Log(dicItem.Count);
     }
 
@@ -58,7 +58,7 @@ public class DataManager : MonoBehaviour
 
     }
 
-    public re_Item GetItemInfoById(int id)
+    public Item GetItemInfoById(int id)
     {
         return dicItem[id];
     }

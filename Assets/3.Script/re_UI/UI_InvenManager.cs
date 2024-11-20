@@ -8,7 +8,7 @@ public class UI_InvenManager : MonoBehaviour
     public static UI_InvenManager Instance { get; private set; } = null;
 
     [SerializeField] public List<UI_InventorySlot> invenslots;
-    [SerializeField] public List<re_UI_QuickSlot> quickslots;
+    [SerializeField] public List<UI_QuickSlot> quickslots;
 
     [SerializeField] private GameObject inven;
     [SerializeField] public UI_ItemInformation iteminfo;
@@ -33,7 +33,7 @@ public class UI_InvenManager : MonoBehaviour
 
     public void GetItemByID(int id)
     {
-        re_Item item = re_DataManager.instance.GetItemInfoById(id);
+        Item item = DataManager.instance.GetItemInfoById(id);
         iteminfo.SetInfoByItem(item);
         AddSlotItem(item);
         // 세이브 생각 해야함 
@@ -58,7 +58,7 @@ public class UI_InvenManager : MonoBehaviour
     }
 
 
-    public void AddSlotItem(re_Item item)
+    public void AddSlotItem(Item item)
     {
         for (int i = 0; i < invenslots.Count; i++)
         {
@@ -70,7 +70,7 @@ public class UI_InvenManager : MonoBehaviour
         }
     }
 
-    public void AddQuickItem(re_Item quick)
+    public void AddQuickItem(Item quick)
     {
         for (int i = 0; i < quickslots.Count; i++)
         {
@@ -97,19 +97,19 @@ public class UI_InvenManager : MonoBehaviour
         }
     }
 
-    public void Combine(re_UI_InvenSlot itemslot, int id)
+    public void Combine(UI_InventorySlot itemslot, int id)
     {
-        int firstelement = re_DataManager.instance.GetItemElementIndex(itemslot.SlotID);
-        int secondelement = re_DataManager.instance.GetItemElementIndex(id);
+        int firstelement = DataManager.instance.GetItemElementIndex(itemslot.SlotID);
+        int secondelement = DataManager.instance.GetItemElementIndex(id);
 
         if (firstelement.Equals(secondelement) && !itemslot.SlotID.Equals(id)) 
         {
             switch (firstelement)
             {
                 case 10: // 손전등
+                    GetItemByID(2);
                     SortInvenSlot(itemslot.SlotID);
                     SortInvenSlot(id);
-                    GetItemByID(2);
                     flashright.enabled = true;
                     OpenInventory();
                     break;

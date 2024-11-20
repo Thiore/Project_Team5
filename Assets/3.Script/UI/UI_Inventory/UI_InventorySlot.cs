@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
+public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private int id = -1;
     public int SlotID { get => id; }
-    [SerializeField] private re_Item item;
+    [SerializeField] private Item item;
     [SerializeField] private Image image;
     private bool isdragging = false;
     public void FragIsDrag()
@@ -16,7 +16,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         isdragging = !isdragging;
     }
 
-    public void SetinvenByID(re_Item item)
+    public void SetinvenByID(Item item)
     {
         id = item.id;
         this.item = item;
@@ -48,7 +48,6 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("������");
         isdragging = true;
         UI_InvenManager.Instance.dragimage.sprite = image.sprite;
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
@@ -61,4 +60,9 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
     }
 
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        UI_InvenManager.Instance.dragimage.gameObject.SetActive(false);
+        FragIsDrag();
+    }
 }

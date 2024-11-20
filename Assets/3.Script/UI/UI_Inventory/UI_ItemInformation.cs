@@ -13,8 +13,12 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
     public int Elementindex { get => elementindex; }
 
 
-    public void SetInfoByItem(re_Item item)
+    public void SetInfoByItem(Item item)
     {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
         this.id = item.id;
         DialogueManager.Instance.SetItemNameText("Table_ItemName", id);
         DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", id);
@@ -29,7 +33,7 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
     {
         Debug.Log(eventData.pointerDrag.gameObject.name);
         Debug.Log(eventData.pointerEnter.gameObject.name);
-        if (eventData.pointerDrag.gameObject.TryGetComponent(out re_UI_InvenSlot item))
+        if (eventData.pointerDrag.gameObject.TryGetComponent(out UI_InventorySlot item))
         {
             UI_InvenManager.Instance.dragimage.gameObject.SetActive(false);
             item.FragIsDrag();

@@ -345,32 +345,32 @@ public class SaveManager : MonoBehaviour
     public void InputItemSavedata(Item item)
     {
 
-        if (itemsavedata.ContainsKey(item.ID))
-        {
-            itemsavedata[item.ID].itemgetstate = item.IsGet;
-            itemsavedata[item.ID].itemusecount = item.Usecount;
-        }
-        else
-        {
-            ItemSaveData data = item.SetItemSaveData();
-            itemsavedata.Add(item.ID, data);
-        }
+        //if (itemsavedata.ContainsKey(item.id))
+        //{
+        //    itemsavedata[item.id].itemgetstate = item.isused;
+        //    itemsavedata[item.id].itemusecount = item.usecount;
+        //}
+        //else
+        //{
+        //    ItemSaveData data = item.SetItemSaveData();
+        //    itemsavedata.Add(item.ID, data);
+        //}
     }
     #region addTeo
-    public void TeoItemDataSave(TeoItemData data)
+    public void TeoItemDataSave()
     {
-        if (itemsavedata.ContainsKey(data.id))
-        {
-            itemsavedata[data.id].itemgetstate = data.isFix;
-            itemsavedata[data.id].itemusecount = data.useCount;
-        }
-        else
-        {
-            ItemSaveData itemData = new ItemSaveData();
-            itemData.id = data.id;
-            itemData.itemusecount = data.useCount;
-            itemData.itemgetstate = data.isFix;
-        }
+        //if (itemsavedata.ContainsKey(data.id))
+        //{
+        //    itemsavedata[data.id].itemgetstate = data.isFix;
+        //    itemsavedata[data.id].itemusecount = data.useCount;
+        //}
+        //else
+        //{
+        //    ItemSaveData itemData = new ItemSaveData();
+        //    itemData.id = data.id;
+        //    itemData.itemusecount = data.useCount;
+        //    itemData.itemgetstate = data.isFix;
+        //}
     }
     #endregion
     private void CheckSaveFile()

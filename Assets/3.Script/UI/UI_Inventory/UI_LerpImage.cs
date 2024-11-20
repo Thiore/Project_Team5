@@ -23,7 +23,7 @@ public class UI_LerpImage : MonoBehaviour
     public void InputMovementInventory(Item item, Vector2 pos)
     {
         transform.position = pos;
-        image.sprite = item.Sprite;
+        image.sprite = item.sprite;
         isLerp = true;
         StartCoroutine(MoveInvenButton_co());
     }

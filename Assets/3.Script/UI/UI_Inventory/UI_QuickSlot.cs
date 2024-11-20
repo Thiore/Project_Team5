@@ -8,7 +8,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     [SerializeField] private int id = -1;
     public int SlotID { get => id; }
-    [SerializeField] private re_Item item;
+    [SerializeField] private Item item;
     [SerializeField] private Image image;
     private bool isdragging = false;
     public void FragIsDrag()
@@ -16,7 +16,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
         isdragging = !isdragging;
     }
 
-    public void SetinvenByID(re_Item item)
+    public void SetinvenByID(Item item)
     {
         id = item.id;
         this.item = item;
