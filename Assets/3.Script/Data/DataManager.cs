@@ -11,9 +11,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
-    private Dictionary<int, ItemData> dicItemData; //원본 아이템 데이터
-    private Dictionary<int, Item> dicItem;
-    private List<Item> items;
+    private Dictionary<int, re_Item> dicItem;
 
     private void Awake()
     {
@@ -29,17 +27,15 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
-        SceneManager.sceneLoaded += LoadSceanData;
-     
+
+        SceneManager.sceneLoaded += LoadSceanData; // 씬이 로드 될때마다 
+
     }
 
 
     private void InitDic()
     {
-        dicItemData = new Dictionary<int, ItemData>();
-        dicItem = new Dictionary<int, Item>();
-        items = new List<Item>();
+        dicItem = new Dictionary<int, re_Item>();
     }
 
     private void LoadAllData()
@@ -48,91 +44,28 @@ public class DataManager : MonoBehaviour
 
     }
 
-
-
+    // 데이터 역직렬화 후 바로 Item 타입으로 전환 
     private void LoadItemData()
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
-        dicItemData = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
+        dicItem = JsonConvert.DeserializeObject<re_Item[]>(itemJson).ToDictionary(x => x.id, x => x);
+        Debug.Log(dicItem.Count);
     }
 
 
     private void LoadSceanData(Scene scene, LoadSceneMode mode)
     {
-        
-        List<Item> items = FindObjectsOfType<Item>().ToList();
-        foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
-        {
-            if (items.Count > 0)
-            {
-                for (int i = 0; i < items.Count; i++)
-                {
-                    if (itemdata.Value.name == items[i].gameObject.name)
-                    {
-                        items[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
-                        Sprite sprite = Resources.Load<Sprite>($"UI/Item/{itemdata.Value.spritename}");
 
-                        if (sprite != null)
-                        {
-
-                            items[i].SetSprite(sprite);
-                        }
-
-                        this.items.Add(items[i]);
-                        //미리 다 로드하고 그냥 체크하자 
-
-                        if (SaveManager.Instance.itemsavedata.Count > 0)
-                        {
-                            // 이건 뭔가 얻거나 썼거나 했단거임 
-                            if (SaveManager.Instance.itemsavedata.ContainsKey(items[i].ID))
-                            {
-                                if (SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(true) &&
-                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount > 0)
-                                {
-                                    if (!SaveManager.Instance.itemsavedata[items[i].ID].Equals(2))
-                                    {
-                                        PlayerManager.Instance.ui_inventory.LoadItem(items[i]);
-                                        items[i].gameObject.SetActive(true);
-                                    }
-                                    else
-                                    {
-                                        PlayerManager.Instance.ui_inventory.LoadItem(items[i]);
-                                        items[i].gameObject.SetActive(false);
-                                    }
-                                }
-                                else if(SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(false) &&
-                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount < 0)
-                                {
-                                    items[i].gameObject.SetActive(false);
-                                }
-                            }
-                        }
-                        
-                    }
-                }
-            }
-        }
     }
 
-
-    public ItemData GetItemDataInfoById(int id)
+    public re_Item GetItemInfoById(int id)
     {
-        return dicItemData[id];
+        return dicItem[id];
     }
 
-    public Item GetItemCombineIndex(int combineindex)
+    public int GetItemElementIndex(int id)
     {
-        foreach(Item item in items)
-        {
-            if (item.Combineindex.Equals(combineindex))
-            {
-                return item;
-            }
-        }
-        return null;
+        return dicItem[id].elementindex;
     }
-
-
-    
 
 }

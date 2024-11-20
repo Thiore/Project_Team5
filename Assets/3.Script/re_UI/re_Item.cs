@@ -61,7 +61,7 @@ public class re_Item
 
 
     public re_Item(int id, string name, int eItemType, int elementindex, 
-                    int combineindex, string tableName, bool isused, int usecount, bool isfix, Sprite sprite)
+                    int combineindex, string tableName, bool isused, int usecount, bool isfix, string spritename)
     {
         this.id = id;
         this.name = name;
@@ -72,7 +72,8 @@ public class re_Item
         this.isused = isused;
         this.usecount = usecount;
         this.isfix = isfix;
-        this.sprite = sprite;
+        this.sprite = Resources.Load<Sprite>($"UI/Item/{spritename}");
+        Debug.Log(this.sprite);
     }
 
 

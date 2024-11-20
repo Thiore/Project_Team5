@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class re_Item3D : MonoBehaviour, ITouchable
+public class Item3D : MonoBehaviour, ITouchable
 {
     [SerializeField] private int id;
     [SerializeField] private UI_LerpImage lerpimage;
+
+
+    public void SetIDItem3D(int id)
+    {
+        this.id = id;
+    }
 
     public void OnTouchEnd(Vector2 position)
     {
@@ -19,7 +25,9 @@ public class re_Item3D : MonoBehaviour, ITouchable
                 // 이거 나중에 
 
                 //아이템 얻기 
-                re_UI_InvenManager.Instance.GetItemByID(id);
+                Debug.Log($"이거 아이디 : {id}");
+                UI_InvenManager.Instance.GetItemByID(id);
+                gameObject.SetActive(false);
             }
         }
     }
