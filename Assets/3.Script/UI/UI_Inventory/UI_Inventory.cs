@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class UI_Inventory : MonoBehaviour
 {
@@ -61,12 +62,7 @@ public class UI_Inventory : MonoBehaviour
     //������ Type�� ���� 
     public void GetItemTouch(Item item)
     {
-        //if (item.gameObject.CompareTag("Item3D"))
-        //{
-        //    OutPutItemText(item);
-        //}
-
-        item.SetItemSaveData();
+        item.SwitchGetbool();
         SaveManager.Instance.InputItemSavedata(item);
 
         switch (item.Type)
@@ -107,7 +103,6 @@ public class UI_Inventory : MonoBehaviour
             {
                 Item itemUI = inventoryslots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
-                itemUI.SwitchGetbool();
 
                 if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
@@ -148,7 +143,6 @@ public class UI_Inventory : MonoBehaviour
             {
                 Item itemUI = inventoryslots[i].AddComponent<Item>();
                 itemUI.PutInInvenItem(item);
-                itemUI.SwitchGetbool();
 
                 if (inventoryslots[i].transform.GetChild(0).TryGetComponent(out Image sprite))
                 {
@@ -178,10 +172,7 @@ public class UI_Inventory : MonoBehaviour
 
     public void GetCombineItem(Item item)
     {
-        //OutPutItemText(item);
-
         item.SwitchGetbool();
-        item.SetInventoryInfomation();
         SaveManager.Instance.InputItemSavedata(item);
 
         switch (item.Type)
@@ -238,7 +229,6 @@ public class UI_Inventory : MonoBehaviour
                     item.SwitchGetbool();
                     SaveManager.Instance.InputItemSavedata(item);
                     item.enabled = false;
-                    Destroy(item);
                 }
             }
         }
@@ -254,6 +244,7 @@ public class UI_Inventory : MonoBehaviour
                 }
                 else
                 {
+                    Destroy(item);
                     inventoryslots[i].SetActive(false);
                 }
             }

@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
+public class re_UI_InvenSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
 {
     [SerializeField] private int id = -1;
     public int SlotID { get => id; }
@@ -31,10 +31,10 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
 
 
-    // ï¿½ï¿½, ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ / eventsystem 50 ï¿½ï¿½ï¿½ï¿½ 
+    // ¾÷, ´Ù¿î °°ÀÌ ÀÖ¾î¾ß ±â´É »ç¿ë °¡´É / eventsystem 50 ¼³Á¤ 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("ï¿½ï¿½ï¿½Ó¤ï¿½ï¿½ï¿½");
+        Debug.Log("´õ¤Ó¤µ³Ä");
         if (!isdragging)
         {
             UI_InvenManager.Instance.iteminfo.SetInfoByItem(item);
@@ -43,12 +43,12 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("ï¿½Ù¿ï¿½");
+        Debug.Log("´Ù¿î");  
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+        Debug.Log("ºñ±ä½ÃÀÛ");
         isdragging = true;
         UI_InvenManager.Instance.dragimage.sprite = image.sprite;
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
@@ -57,7 +57,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnDrag(PointerEventData eventData)
     {
-        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î´ï¿½ Infomationï¿½ï¿½ï¿½ï¿½, EndDrag ï¿½ï¿½ PointerUpï¿½Ì¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¼ï¿½ info ï¿½ï¿½ OnDropï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        // Á¶ÇÕ ¿©ºÎ´Â Infomation¿¡¼­, EndDrag ½Ã PointerUpÀÌ¶û °°ÀÌ µÇ¼­ info ÀÇ OnDrop¿¡¼­ Ã³¸®
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
     }
 

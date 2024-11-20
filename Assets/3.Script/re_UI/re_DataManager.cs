@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Linq;
-using System.IO;
 
-public class DataManager : MonoBehaviour
+public class re_DataManager : MonoBehaviour
 {
-    public static DataManager instance = null;
+    public static re_DataManager instance = null;
 
     private Dictionary<int, re_Item> dicItem;
 
@@ -27,9 +25,9 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        SceneManager.sceneLoaded += LoadSceanData; // ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ 
-
+        
+        SceneManager.sceneLoaded += LoadSceanData; // ¾ÀÀÌ ·Îµå µÉ¶§¸¶´Ù 
+     
     }
 
 
@@ -40,11 +38,12 @@ public class DataManager : MonoBehaviour
 
     private void LoadAllData()
     {
-        LoadItemData(); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
+        LoadItemData(); //¿øº» ¾ÆÀÌÅÛ µ¥ÀÌÅÍ ·Îµå
 
     }
 
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ ï¿½Ù·ï¿½ Item Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ 
+
+
     private void LoadItemData()
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
@@ -62,10 +61,13 @@ public class DataManager : MonoBehaviour
     {
         return dicItem[id];
     }
-
+    
     public int GetItemElementIndex(int id)
     {
         return dicItem[id].elementindex;
     }
+
+
+    
 
 }

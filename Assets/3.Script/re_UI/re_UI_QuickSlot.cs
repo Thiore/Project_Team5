@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
+public class re_UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     [SerializeField] private int id = -1;
     public int SlotID { get => id; }
@@ -21,34 +21,13 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         id = item.id;
         this.item = item;
         image.sprite = item.sprite;
+        image.enabled = true;
     }
 
-    public void SetInvenEmpty()
-    {
-        id = -1;
-        item = null;
-        image.sprite = null;
-    }
-
-
-    // ï¿½ï¿½, ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ / eventsystem 50 ï¿½ï¿½ï¿½ï¿½ 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log("ï¿½ï¿½ï¿½Ó¤ï¿½ï¿½ï¿½");
-        if (!isdragging)
-        {
-            UI_InvenManager.Instance.iteminfo.SetInfoByItem(item);
-        }
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("ï¿½Ù¿ï¿½");
-    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+        Debug.Log("ºñ±ä½ÃÀÛ");
         isdragging = true;
         UI_InvenManager.Instance.dragimage.sprite = image.sprite;
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
@@ -57,8 +36,10 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnDrag(PointerEventData eventData)
     {
-        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î´ï¿½ Infomationï¿½ï¿½ï¿½ï¿½, EndDrag ï¿½ï¿½ PointerUpï¿½Ì¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¼ï¿½ info ï¿½ï¿½ OnDropï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        // ÀÌ°Ç ³¡³ª´Â °÷ È®ÀÎ ÇÒ ÇÊ¿ä°¡ ÀÖÀ½ 
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
     }
+
+
 
 }
