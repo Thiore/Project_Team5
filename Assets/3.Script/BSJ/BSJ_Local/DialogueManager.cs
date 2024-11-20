@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
-    private DialogueManager instance = null;
+    private static DialogueManager instance = null;
     public static DialogueManager Instance { get; private set; }
 
     //스토리 관련 UI Text
@@ -17,6 +17,7 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text dialogueText; //대사 표시할 TextMeshPro
     private GameObject btnList;
     private UseButton quickSlot;
+    
 
 
     //인벤토리 관련 Text
