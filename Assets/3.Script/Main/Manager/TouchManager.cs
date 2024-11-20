@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+//using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
+using ETouch = UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
@@ -120,12 +121,12 @@ public class TouchManager : MonoBehaviour
     }
 
 
-    private void OnTouchStarted(InputAction.CallbackContext context)
+    private void OnTouchStarted(Finger finger)
     {
         Debug.Log("Started");
     
-            Vector2 position = Vector2.zero;
-        int touchId = -1;
+            Vector2 position = finger.screenPosition;
+        int touchId = finger.index;
             if ((touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)) && IsTouchOnUI(touchId))
             {
                 UIID.Add(touchId);
@@ -197,15 +198,15 @@ public class TouchManager : MonoBehaviour
         
 
     }
-    private void OnTouchPerformed(InputAction.CallbackContext context)
+    private void OnTouchPerformed(Finger finger)
     {
         Debug.Log("Performed");
         if (touchState.Equals(etouchState.UI)) return;
-      
 
-        Vector2 position = Vector2.zero;
-            int touchId = -1;
-            switch (touchState)
+
+        Vector2 position = finger.screenPosition;
+        int touchId = finger.index;
+        switch (touchState)
             {
                 case etouchState.Player:
                     if (moveId.Equals(touchId))
@@ -227,13 +228,13 @@ public class TouchManager : MonoBehaviour
         
     }
 
-    private void OnTouchCanceled(InputAction.CallbackContext context)
+    private void OnTouchCanceled(Finger finger)
     {
         Debug.Log("Canceled");
-        
-            Vector2 position = Vector2.zero;
-            int touchId = -1;
-            switch (touchState)
+
+        Vector2 position = finger.screenPosition;
+        int touchId = finger.index;
+        switch (touchState)
             {
                 case etouchState.Player:
                     if (moveId.Equals(touchId))
@@ -387,8 +388,11 @@ public class TouchManager : MonoBehaviour
             currentTouchDic.Clear();
             UIID.Clear();
         activeTouchObj.Clear();
-
+        
         EnhancedTouchSupport.Enable();
+        ETouch.Touch.onFingerDown += OnTouchStarted;
+        ETouch.Touch.onFingerMove += OnTouchPerformed;
+        ETouch.Touch.onFingerUp += OnTouchCanceled;
 
         //Touch.onFingerDown += OnTouchStarted;
         //Touch.onFingerMove.performed += OnTouchPerformed;
@@ -397,14 +401,13 @@ public class TouchManager : MonoBehaviour
     }
     public void OnDisableTuchAction()
     {
-        
-        //pressAction.Disable();
-        //positionAction.Disable();
-        //pressAction.started -=OnTouchStarted;
-        //positionAction.performed -= OnTouchPerformed;
-        //pressAction.canceled -= OnTouchCanceled;
 
-            switch (touchState)
+        EnhancedTouchSupport.Disable();
+        ETouch.Touch.onFingerDown -= OnTouchStarted;
+        ETouch.Touch.onFingerMove -= OnTouchPerformed;
+        ETouch.Touch.onFingerUp -= OnTouchCanceled;
+
+        switch (touchState)
             {
                 case etouchState.Normal:
                     break;
@@ -469,17 +472,7 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    private int GetTouchId(Vector2 position)
-    {
-        foreach(var touch in Touchscreen.current.touches)
-        {
-            if(touch.position.ReadValue().Equals(position))
-            {
-                return touch.touchId.ReadValue();
-            }
-        }
-        return -1;
-    }
+ 
 }
 
 //private void Start()
