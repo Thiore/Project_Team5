@@ -65,19 +65,20 @@ public class DataManager : MonoBehaviour
                     {
                         if (items[i].ID.Equals(data.Key))
                         {
-                            items[i].gameObject.SetActive(false);
+                            if (data.Key.Equals(2))
+                            {
+                                UI_InvenManager.Instance.FlashLightOn();
+                            }
+                            else
+                            {
+                                items[i].gameObject.SetActive(false);
+                            }
 
                             if (data.Value.isused.Equals(false))
                             {
                                 Item item = GetItemInfoById(data.Key);
                                 item.isused = data.Value.isused;
                                 UI_InvenManager.Instance.GetItemByID(item);
-
-                                if (data.Key.Equals(2))
-                                {
-                                    UI_InvenManager.Instance.FlashLightOn();
-                                }
-                                
                             }
                         }
                     }

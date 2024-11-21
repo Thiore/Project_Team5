@@ -20,7 +20,6 @@ public class UI_InvenManager : MonoBehaviour
     [SerializeField] private Light flashright;
     public void FlashLightOn()
     {
-        flashright.gameObject.SetActive(true);
         flashright.enabled = true;
     }
 
