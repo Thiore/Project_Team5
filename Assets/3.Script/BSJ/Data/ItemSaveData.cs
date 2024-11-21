@@ -7,6 +7,5 @@ using UnityEngine;
 public class ItemSaveData
 {
     public int id;
-    public int itemusecount;
-    public bool itemgetstate;
+    public bool isused;
 }

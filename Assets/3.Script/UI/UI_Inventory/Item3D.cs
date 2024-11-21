@@ -5,8 +5,16 @@ using UnityEngine;
 public class Item3D : MonoBehaviour, ITouchable
 {
     [SerializeField] private int id;
+    public int ID { get => id; }
+    private Item item;
     [SerializeField] private UI_LerpImage lerpimage;
 
+    private void OnEnable()
+    {
+        item = DataManager.instance.GetItemInfoById(id);
+        // 이거 나중에 GameManager 의 eGameType 에 따라서  Load Game이면 savedata 참조해서
+        // 알아서 false 되게 
+    }
 
     public void SetIDItem3D(int id)
     {
@@ -20,9 +28,8 @@ public class Item3D : MonoBehaviour, ITouchable
         {
             if (hit.collider.gameObject.Equals(gameObject) && gameObject.CompareTag("Item3D"))
             {
-                //lerpimage.gameObject.SetActive(true);
-                //lerpimage.InputMovementInventory(this, position); 
-                // 이거 나중에 
+                lerpimage.gameObject.SetActive(true);
+                lerpimage.InputMovementInventory(item, position);
 
                 //아이템 얻기 
                 Debug.Log($"이거 아이디 : {id}");

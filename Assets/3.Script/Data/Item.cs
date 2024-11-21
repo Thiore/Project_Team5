@@ -1,5 +1,11 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+public enum eItemType
+{
+    Element = 0,
+    Clue,
+    Trigger,
+    Quick
+}
 
 public class Item
 {
@@ -28,7 +34,6 @@ public class Item
         this.usecount = usecount;
         this.isfix = isfix;
         this.sprite = Resources.Load<Sprite>($"UI/Item/{spritename}");
-        Debug.Log(this.sprite);
     }
 
 }

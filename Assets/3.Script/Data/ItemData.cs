@@ -1,10 +1,4 @@
-public enum eItemType
-{
-    Element = 0,
-    Clue,
-    Trigger,
-    Quick
-}
+
 
 public class ItemData
 {

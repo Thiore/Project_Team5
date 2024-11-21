@@ -23,11 +23,6 @@ public class UI_InvenManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 
@@ -37,6 +32,7 @@ public class UI_InvenManager : MonoBehaviour
         iteminfo.SetInfoByItem(item);
         AddSlotItem(item);
         // 세이브 생각 해야함 
+        SaveManager.Instance.InputItemSavedata(item);
 
         // 타입에 따라 추후 추가 작업
         switch (item.eItemType)
@@ -126,6 +122,7 @@ public class UI_InvenManager : MonoBehaviour
         {
             if (invenslots[i].SlotID.Equals(id))
             {
+                SaveManager.Instance.InputItemSavedata(DataManager.instance.GetItemInfoById(id));
                 invenslots[i].SetInvenEmpty();
                 invenslots[i].transform.SetParent(null);
                 invenslots[i].gameObject.SetActive(false);
@@ -134,5 +131,6 @@ public class UI_InvenManager : MonoBehaviour
             }
         }
     }
+
 
 }

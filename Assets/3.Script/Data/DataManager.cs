@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Linq;
-using System.IO;
 
 public class DataManager : MonoBehaviour
 {
@@ -28,8 +26,7 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        SceneManager.sceneLoaded += LoadSceanData; // ���� �ε� �ɶ����� 
-
+        SceneManager.sceneLoaded += LoadSceanData; 
     }
 
 
@@ -55,7 +52,30 @@ public class DataManager : MonoBehaviour
 
     private void LoadSceanData(Scene scene, LoadSceneMode mode)
     {
+        if (!scene.name.Equals("Lobby"))
+        {
+            Dictionary<int, ItemSaveData> savedata = SaveManager.Instance.itemsavedata;
+            if(savedata.Count > 0)
+            {
+                Item3D[] items = FindObjectsOfType<Item3D>();
 
+                foreach (KeyValuePair<int, ItemSaveData> data in savedata)
+                {
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        if (items[i].ID.Equals(data.Key))
+                        {
+                            items[i].gameObject.SetActive(false);
+
+                            if (data.Value.isused.Equals(false))
+                            {
+                                UI_InvenManager.Instance.GetItemByID(data.Key);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public Item GetItemInfoById(int id)

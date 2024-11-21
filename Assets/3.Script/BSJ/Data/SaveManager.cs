@@ -167,6 +167,17 @@ public class SaveManager : MonoBehaviour
         LoadItemData();
     }
 
+    public void NewGameItemData()
+    {
+        Debug.Log("새로하기: 아이템 데이터를 초기화합니다.");
+
+        // 데이터를 초기화
+        itemsavedata = new Dictionary<int, ItemSaveData>();
+
+        // 새로운 초기 데이터를 저장
+        SaveItemData();
+    }
+
     public void LoadItemData()
     {
         //파일 없으면 새로 만들기 
@@ -181,13 +192,6 @@ public class SaveManager : MonoBehaviour
         string itemjson = File.ReadAllText(itemstatepath);
         itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
 
-        //Debug.Log("Loaded Item Data:");
-        //foreach (var item in itemsavedata.Values)
-        //{
-        //    Debug.Log($"Loaded Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
-        //}
-
-
     }
 
     public void SaveItemData()
@@ -196,7 +200,7 @@ public class SaveManager : MonoBehaviour
         List<ItemSaveData> itemList = itemsavedata.Values.ToList();
         foreach (var item in itemList)
         {
-            Debug.Log($"Saving Item - ID: {item.id}, GetState: {item.itemgetstate}, UseCount: {item.itemusecount}");
+            Debug.Log($"Saving Item - ID: {item.id}, GetState: {item.isused}");
         }
 
         string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
@@ -330,8 +334,7 @@ public class SaveManager : MonoBehaviour
             gameState.playerRotationY = PlayerManager.Instance.playerCam.localRotation.y;
             gameState.playerRotationZ = PlayerManager.Instance.playerCam.localRotation.z;
             gameState.playerRotationW = PlayerManager.Instance.playerCam.localRotation.w;
-        
-
+       
     }
 
 
@@ -344,35 +347,20 @@ public class SaveManager : MonoBehaviour
 
     public void InputItemSavedata(Item item)
     {
+        // 여기에 담겼다는거 자체가 이미 얻었기 때문에 isused 여부만 
+        if (itemsavedata.ContainsKey(item.id))
+        {
+            itemsavedata[item.id].isused = !item.isused;
+        }
+        else
+        {
+            ItemSaveData data = new ItemSaveData();
+            data.id = item.id;
+            data.isused = item.isused;   
+            itemsavedata.Add(item.id, data);
+        }
+    }
 
-        //if (itemsavedata.ContainsKey(item.id))
-        //{
-        //    itemsavedata[item.id].itemgetstate = item.isused;
-        //    itemsavedata[item.id].itemusecount = item.usecount;
-        //}
-        //else
-        //{
-        //    ItemSaveData data = item.SetItemSaveData();
-        //    itemsavedata.Add(item.ID, data);
-        //}
-    }
-    #region addTeo
-    public void TeoItemDataSave()
-    {
-        //if (itemsavedata.ContainsKey(data.id))
-        //{
-        //    itemsavedata[data.id].itemgetstate = data.isFix;
-        //    itemsavedata[data.id].itemusecount = data.useCount;
-        //}
-        //else
-        //{
-        //    ItemSaveData itemData = new ItemSaveData();
-        //    itemData.id = data.id;
-        //    itemData.itemusecount = data.useCount;
-        //    itemData.itemgetstate = data.isFix;
-        //}
-    }
-    #endregion
     private void CheckSaveFile()
     {
         hasSaveFileCache = File.Exists(savePath) || File.Exists(itemstatepath);
