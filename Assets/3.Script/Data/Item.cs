@@ -1,160 +1,34 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Item : MonoBehaviour, ITouchable, IPointerDownHandler, IPointerUpHandler
+public class Item
 {
-
-    [SerializeField] private int id;
-    [SerializeField] private eItemType type;
-    [SerializeField] private int elementindex;
-    [SerializeField] private int combineindex;
-    [SerializeField] private string tableName;
-    [SerializeField] private bool isfix;
-    [SerializeField] private string spritename;
-
-    public int ID { get => id; }
-    public eItemType Type { get => type; }
-    public int Elementindex { get => elementindex; }
-    public int Combineindex { get => combineindex; }
+    public int id;
+    public string name;
+    public eItemType eItemType;
+    public int elementindex;
+    public int combineindex;
+    public string tableName;
+    public bool isused;
+    public int usecount;
+    public bool isfix;
+    public Sprite sprite;
 
 
-    [SerializeField] private UI_Inventory inven;
-    [SerializeField] private UI_ItemInformation iteminfo;
-    [SerializeField] private UI_LerpImage lerpimage;
-
-    private int usecount;
-    public int Usecount { get => usecount; }
-
-    private bool isget;
-    public bool IsGet { get => isget; }
-
-
-    private Sprite sprite;
-    public Sprite Sprite { get => sprite; private set => sprite = Sprite; }
-    private Vector2 firstPos;
-
-    private void Start()
-    {
-
-        inven = PlayerManager.Instance.ui_inventory;
-        iteminfo = PlayerManager.Instance.ui_iteminfo;
-        lerpimage = PlayerManager.Instance.ui_lerpImage;
-        // �̰� Ȱ��ȭ�� ã���� ���� ����ߵ� 
-    }
-
-    public void InputItemInfomationByID(int id, ItemData data)
+    public Item(int id, string name, int eItemType, int elementindex,
+                    int combineindex, string tableName, bool isused, int usecount, bool isfix, string spritename)
     {
         this.id = id;
-        type = (eItemType)data.eItemType;
-        elementindex = data.elementindex;
-        combineindex = data.combineindex;
-        tableName = data.tableName;
-        isfix = data.isfix;
-        spritename = data.spritename;
-
-        if (id.Equals(9) || id.Equals(13))
-        {
-            usecount = 2;
-        }
-        else
-        {
-            usecount = 1;
-        }
-
-    }
-
-    public void SetSprite(Sprite sprite)
-    {
-        this.sprite = sprite;
-    }
-
-    public void PutInInvenItem(Item item)
-    {
-        this.id = item.id;
-        type = item.type;
-        elementindex = item.elementindex;
-        combineindex = item.combineindex;
-        tableName = item.tableName;
-        isfix = item.isfix;
-        spritename = item.spritename;
-        sprite = item.sprite;
-    }
-
-    public void SetInventoryInfomation()
-    {
-        iteminfo.SetInfoByID(this);
-    }
-
-
-    public void OnTouchStarted(Vector2 position)
-    {
-
-    }
-
-    public void OnTouchHold(Vector2 position)
-    {
-
-    }
-
-    public void OnTouchEnd(Vector2 position)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(position);
-        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
-        {
-            if (hit.collider.gameObject.Equals(gameObject) && gameObject.CompareTag("Item3D"))
-            {
-                lerpimage.gameObject.SetActive(true);
-                lerpimage.InputMovementInventory(this, position);
-                inven.GetItemTouch(this);
-            }
-        }
-    }
-
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (gameObject.CompareTag("Item2D"))
-        {
-            firstPos = eventData.position;
-        }
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        //��ġ ������ ��ġ�� ������ġ���� �����Ÿ� ������������ �ƹ��ϵ� ���Ͼ���� �ϱ����� ���
-        float touchUpDelta = Vector2.Distance(firstPos, eventData.position);
-        //�Ÿ��� ������ �������� 50���� �ӽ÷� �����߽��ϴ� ���� ������ �ʿ��մϴ�.
-        if (touchUpDelta < 50f && gameObject.CompareTag("Item2D"))
-        {
-            SetInventoryInfomation();
-            if (!iteminfo.gameObject.activeSelf)
-            {
-                iteminfo.gameObject.SetActive(true);
-            }
-        }
-    }
-
-
-    public void SwitchGetbool()
-    {
-        isget = !isget;
-        Debug.Log("IsGet 바꾸기");
-    }
-
-    public void UseAndDiscount()
-    {
-        usecount--;
-    }
-
-
-    public ItemSaveData SetItemSaveData()
-    {
-        ItemSaveData data = new ItemSaveData();
-        data.id = id;
-        data.itemusecount = usecount;
-        data.itemgetstate = isget;
-
-        return data;
+        this.name = name;
+        this.eItemType = (eItemType)eItemType;
+        this.elementindex = elementindex;
+        this.combineindex = combineindex;
+        this.tableName = tableName;
+        this.isused = isused;
+        this.usecount = usecount;
+        this.isfix = isfix;
+        this.sprite = Resources.Load<Sprite>($"UI/Item/{spritename}");
+        Debug.Log(this.sprite);
     }
 
 }

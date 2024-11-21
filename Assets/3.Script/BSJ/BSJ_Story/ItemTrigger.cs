@@ -12,7 +12,7 @@ public class ItemTrigger : MonoBehaviour, ITouchable
     private GameObject mainPlayer;
     private GameObject canvas;
     private GameObject inventory;
-    private UI_Inventory uiInventory;
+    private UI_InvenManager uiInventory;
 
     //상호작용 독백 출력
     private void ItemText()

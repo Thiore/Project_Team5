@@ -11,9 +11,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
-    public Dictionary<int, ItemData> dicItemData { get; private set; } //¿øº» ¾ÆÀÌÅÛ µ¥ÀÌÅÍ
     private Dictionary<int, Item> dicItem;
-    private List<Item> items;
 
     private void Awake()
     {
@@ -21,119 +19,53 @@ public class DataManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+            InitDic();
+            LoadAllData();
         }
         else
         {
             Destroy(gameObject);
         }
 
-        InitDic();
-        LoadAllData();
-        
-        SceneManager.sceneLoaded += LoadSceanData;
-     
+        SceneManager.sceneLoaded += LoadSceanData; // ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ 
+
     }
 
 
     private void InitDic()
     {
-        dicItemData = new Dictionary<int, ItemData>();
         dicItem = new Dictionary<int, Item>();
-        items = new List<Item>();
     }
 
     private void LoadAllData()
     {
-        LoadItemData(); //¿øº» ¾ÆÀÌÅÛ µ¥ÀÌÅÍ ·Îµå
+        LoadItemData(); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
 
     }
 
-
-
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ ï¿½Ù·ï¿½ Item Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ 
     private void LoadItemData()
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
-        dicItemData = JsonConvert.DeserializeObject<ItemData[]>(itemJson).ToDictionary(x => x.id, x => x);
-
+        dicItem = JsonConvert.DeserializeObject<Item[]>(itemJson).ToDictionary(x => x.id, x => x);
+        Debug.Log(dicItem.Count);
     }
 
 
     private void LoadSceanData(Scene scene, LoadSceneMode mode)
     {
-        
-        List<Item> items = FindObjectsOfType<Item>().ToList();
-        foreach (KeyValuePair<int, ItemData> itemdata in dicItemData)
-        {
-            if (items.Count > 0)
-            {
-                for (int i = 0; i < items.Count; i++)
-                {
-                    if (itemdata.Value.name == items[i].gameObject.name)
-                    {
-                        items[i].InputItemInfomationByID(itemdata.Key, itemdata.Value);
-                        Sprite sprite = Resources.Load<Sprite>($"UI/Item/{itemdata.Value.spritename}");
 
-                        if (sprite != null)
-                        {
-
-                            items[i].SetSprite(sprite);
-                        }
-
-                        this.items.Add(items[i]);
-                        //¹Ì¸® ´Ù ·ÎµåÇÏ°í ±×³É Ã¼Å©ÇÏÀÚ 
-
-                        if (SaveManager.Instance.itemsavedata.Count > 0)
-                        {
-                            // ÀÌ°Ç ¹º°¡ ¾ò°Å³ª ½è°Å³ª Çß´Ü°ÅÀÓ 
-                            if (SaveManager.Instance.itemsavedata.ContainsKey(items[i].ID))
-                            {
-                                if (SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(true) &&
-                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount > 0)
-                                {
-                                    if (SaveManager.Instance.itemsavedata[items[i].ID].Equals(2))
-                                    {
-                                        PlayerManager.Instance.ui_inventory.LoadItem(items[i]);
-                                        items[i].gameObject.SetActive(true);
-                                    }
-                                    else
-                                    {
-                                        PlayerManager.Instance.ui_inventory.LoadItem(items[i]);
-                                        items[i].gameObject.SetActive(false);
-                                    }
-                                }
-                                else if(SaveManager.Instance.itemsavedata[items[i].ID].itemgetstate.Equals(false) &&
-                                    SaveManager.Instance.itemsavedata[items[i].ID].itemusecount < 0)
-                                {
-                                    items[i].gameObject.SetActive(false);
-                                }
-                            }
-                        }
-                        
-                    }
-                }
-            }
-        }
     }
 
-
-    public ItemData GetItemDataInfoById(int id)
+    public Item GetItemInfoById(int id)
     {
-        return dicItemData[id];
+        return dicItem[id];
     }
 
-    public Item GetItemCombineIndex(int combineindex)
+    public int GetItemElementIndex(int id)
     {
-        foreach(Item item in items)
-        {
-            if (item.Combineindex.Equals(combineindex))
-            {
-                return item;
-            }
-        }
-        return null;
+        return dicItem[id].elementindex;
     }
-
-
-    
 
 }

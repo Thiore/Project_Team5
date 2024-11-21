@@ -8,10 +8,6 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    //인벤토리
-    [SerializeField] private UI_Inventory inventory;
-    public UI_Inventory ui_inventory { get => inventory; }
-
     //아이템 Information
     [SerializeField] private UI_ItemInformation itemInfo;
     public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
@@ -35,20 +31,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private TMP_Text explanation;//인벤토리 아이템 설명 띄울 TextMeshPro
     public TMP_Text getExplanation { get => explanation; }
 
-
-
-    #region addTeo
-    [SerializeField] private TeoLerp lerpImage;
-    public TeoLerp getLerpImage { get => lerpImage; }
-
     public Transform mainPlayer;
     public Transform playerCam;
-
-    public Light flashLight;
-    [SerializeField] private Inventory inven;
-    public Inventory getInven { get => inven; }
-    #endregion
-
 
     public Button optionBtn;
 
