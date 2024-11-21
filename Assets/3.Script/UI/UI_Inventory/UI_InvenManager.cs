@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class UI_InvenManager : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class UI_InvenManager : MonoBehaviour
     // 플래시 라이트 조합 되면 트리거로 빠지면서 이거 true 
     private bool isFlashlight;
     [SerializeField] private Light flashright;
+    public void FlashLightOn()
+    {
+        flashright.gameObject.SetActive(true);
+        flashright.enabled = true;
+    }
 
     private void Awake()
     {
@@ -26,13 +32,11 @@ public class UI_InvenManager : MonoBehaviour
         }
     }
 
-    public void GetItemByID(int id)
+    public void GetItemByID(Item item)
     {
-        Item item = DataManager.instance.GetItemInfoById(id);
         iteminfo.SetInfoByItem(item);
         AddSlotItem(item);
-        // 세이브 생각 해야함 
-        SaveManager.Instance.InputItemSavedata(item);
+        // 세이브 생각 해야함  >> Item3D에 해둠
 
         // 타입에 따라 추후 추가 작업
         switch (item.eItemType)
@@ -103,15 +107,17 @@ public class UI_InvenManager : MonoBehaviour
             switch (firstelement)
             {
                 case 10: // 손전등
-                    GetItemByID(2);
-                    SortInvenSlot(itemslot.SlotID);
-                    SortInvenSlot(id);
+                    Item item = DataManager.instance.GetItemInfoById(2);
+                    GetItemByID(item);
+                    SaveManager.Instance.InputItemSavedata(item);
                     flashright.enabled = true;
-                    OpenInventory();
                     break;
                                    
             }
 
+            SortInvenSlot(itemslot.SlotID);
+            SortInvenSlot(id);
+            OpenInventory();
         }
     }
 

@@ -33,7 +33,8 @@ public class Item3D : MonoBehaviour, ITouchable
 
                 //아이템 얻기 
                 Debug.Log($"이거 아이디 : {id}");
-                UI_InvenManager.Instance.GetItemByID(id);
+                UI_InvenManager.Instance.GetItemByID(item);
+                SaveManager.Instance.InputItemSavedata(item);
                 gameObject.SetActive(false);
             }
         }

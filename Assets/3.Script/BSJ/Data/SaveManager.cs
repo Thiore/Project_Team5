@@ -40,7 +40,7 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        
+
     }
 
     private void OnEnable()
@@ -82,7 +82,7 @@ public class SaveManager : MonoBehaviour
         if (pause)
         {
             SaveGameState();
-            
+
         }
     }
 
@@ -90,7 +90,7 @@ public class SaveManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SaveGameState();
-        
+
     }
 
     //새게임
@@ -276,7 +276,7 @@ public class SaveManager : MonoBehaviour
     //puzzle과 상호작용하는 door에 상태 알리기
     public bool PuzzleState(int floorIndex, int objectIndex)
     {
-        if(objectIndex.Equals(0))
+        if (objectIndex.Equals(0))
         {
             return true;
         }
@@ -297,7 +297,7 @@ public class SaveManager : MonoBehaviour
     //플레이어 위치
     public void LoadPlayerPosition(Transform player)
     {
-        
+
         if (player != null)
         {
             player.transform.localPosition = new Vector3(
@@ -305,14 +305,14 @@ public class SaveManager : MonoBehaviour
                 gameState.playerPositionY,
                 gameState.playerPositionZ
                 );
-            
+
         }
     }
 
     //플레이어 회전
     public void LoadPlayerRotation(Transform camera)
     {
-        if(camera != null)
+        if (camera != null)
         {
             camera.transform.localRotation = new Quaternion(
                 gameState.playerRotationX,
@@ -326,15 +326,15 @@ public class SaveManager : MonoBehaviour
     //플레이어의 위치를 받아와서 위치 및 회전 저장
     public void SavePlayerState()
     {
-            gameState.playerPositionX = PlayerManager.Instance.mainPlayer.localPosition.x;
-            gameState.playerPositionY = PlayerManager.Instance.mainPlayer.localPosition.y;
-            gameState.playerPositionZ = PlayerManager.Instance.mainPlayer.localPosition.z;
+        gameState.playerPositionX = PlayerManager.Instance.mainPlayer.localPosition.x;
+        gameState.playerPositionY = PlayerManager.Instance.mainPlayer.localPosition.y;
+        gameState.playerPositionZ = PlayerManager.Instance.mainPlayer.localPosition.z;
 
-            gameState.playerRotationX = PlayerManager.Instance.playerCam.localRotation.x;
-            gameState.playerRotationY = PlayerManager.Instance.playerCam.localRotation.y;
-            gameState.playerRotationZ = PlayerManager.Instance.playerCam.localRotation.z;
-            gameState.playerRotationW = PlayerManager.Instance.playerCam.localRotation.w;
-       
+        gameState.playerRotationX = PlayerManager.Instance.playerCam.localRotation.x;
+        gameState.playerRotationY = PlayerManager.Instance.playerCam.localRotation.y;
+        gameState.playerRotationZ = PlayerManager.Instance.playerCam.localRotation.z;
+        gameState.playerRotationW = PlayerManager.Instance.playerCam.localRotation.w;
+
     }
 
 
@@ -356,7 +356,7 @@ public class SaveManager : MonoBehaviour
         {
             ItemSaveData data = new ItemSaveData();
             data.id = item.id;
-            data.isused = item.isused;   
+            data.isused = item.isused;
             itemsavedata.Add(item.id, data);
         }
     }
