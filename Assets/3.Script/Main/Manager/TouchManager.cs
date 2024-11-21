@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using ETouch = UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.EventSystems;
@@ -27,18 +26,6 @@ public interface ITouchable
     public void OnTouchEnd(Vector2 position);
 }
 
-public class TouchObj
-{
-    public ITouchable touchable;
-    public Vector2 position;
-
-    public TouchObj(ITouchable Touchable, Vector2 Position)
-    {
-        touchable = Touchable;
-        position = Position;
-    }
-}
-
 public class TouchManager : MonoBehaviour
 {
     public static TouchManager Instance { get; private set; } = null;
@@ -50,7 +37,7 @@ public class TouchManager : MonoBehaviour
         UI,
         Object
     }
-    
+
     private etouchState touchState;
 
     public event Action<Vector2> OnMoveStarted;
@@ -63,16 +50,15 @@ public class TouchManager : MonoBehaviour
 
     private EventSystem eventSystem;
 
-    
-    private Dictionary<int, TouchObj> currentTouchDic; // 현재 터치된 오브젝트
+
+    private Dictionary<int, ITouchable> currentTouchDic; // 현재 터치된 오브젝트
 
     [SerializeField] private LayerMask touchableObjectLayer;
     public LayerMask getTouchableLayer { get => touchableObjectLayer; }
     [SerializeField] private LayerMask playerLayer;
 
     private HashSet<int> UIID;// 활성화된 터치 ID 추적
-    private HashSet<ITouchable> activeTouchObj;// 활성화중인 오브젝트를 검사하기위해 담아둠
-    
+
 
     private int moveId;
     private int lookId;
@@ -81,26 +67,22 @@ public class TouchManager : MonoBehaviour
     public float getTouchDistance { get => touchDistance; }
 
     private bool isMoving; // 미니게임 등 이동을 막아야할때 사용
-    private bool isTouching; // 컷신등 터치를 완전히 막아야할때 사용
+
+    private bool isTouching;
+
+    private bool isQuitting = false;
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
-            Debug.Log("touch");
             Instance = this;
-
-            //InputActionMap actionMap = inputAsset.FindActionMap("Input");
-            //touchAction = actionMap.FindAction("Touch");
-            currentTouchDic = new Dictionary<int, TouchObj>();
-            UIID = new HashSet<int>();
-            activeTouchObj = new HashSet<ITouchable>();
 
             DontDestroyOnLoad(gameObject);
         }
         else
         {
-           Destroy(gameObject);
+            Destroy(gameObject);
         }
 
     }
@@ -114,6 +96,15 @@ public class TouchManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnTouchLoaded;
 
     }
+    private void OnApplicationPause(bool pause)
+    {
+        isQuitting = pause;
+    }
+
+    private void OnApplicationQuit()
+    {
+        isQuitting = true;
+    }
 
     private void OnTouchLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -123,20 +114,22 @@ public class TouchManager : MonoBehaviour
 
     private void OnTouchStarted(Finger finger)
     {
-        Debug.Log("Started");
-    
-            Vector2 position = finger.screenPosition;
-        int touchId = finger.index;
-            if ((touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.UI)) && IsTouchOnUI(touchId))
-            {
-                UIID.Add(touchId);
 
-                touchState = etouchState.UI;
-            }
-            else if (IsTouchOnJoystickArea(position) &&
-                     moveId.Equals(-1) &&
-                     (touchState.Equals(etouchState.Normal) ||
-                     touchState.Equals(etouchState.Player)))
+        Vector2 position = finger.screenPosition;
+        int touchId = finger.index;
+
+        if (IsTouchOnUI(position))
+        {
+            UIID.Add(touchId);
+
+            touchState = etouchState.UI;
+        }
+        else if(isTouching)
+        {
+            if (moveId.Equals(-1) &&
+                 isMoving &&
+                 (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player)) &&
+                 IsTouchOnJoystickArea(position))
             {
 
                 moveId = touchId;
@@ -152,15 +145,20 @@ public class TouchManager : MonoBehaviour
                 }
                 OnMoveStarted?.Invoke(position);
             }
-            else if ((touchState.Equals(etouchState.Normal) ||
-                     touchState.Equals(etouchState.Object)) &&
+            else if ((touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Object)) &&
                      IsTouchableObjectAtPosition(touchId, position))
             {
+                if (eventSystem.enabled)
+                {
+                    eventSystem.enabled = false;
+                }
 
-                currentTouchDic[touchId].touchable.OnTouchStarted(position);
-                currentTouchDic[touchId].position = position;
+                currentTouchDic[touchId].OnTouchStarted(position);
+
+                if (touchState.Equals(etouchState.Normal))
+                    touchState = etouchState.Object;
             }
-            else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player))
+            else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player) && isMoving)
             {
                 if (IsTouchOnLeftScreen(position) && moveId.Equals(-1))
                 {
@@ -171,6 +169,7 @@ public class TouchManager : MonoBehaviour
                     if (touchState.Equals(etouchState.Normal))
                     {
                         touchState = etouchState.Player;
+
                         if (eventSystem.enabled)
                         {
                             eventSystem.enabled = false;
@@ -192,51 +191,51 @@ public class TouchManager : MonoBehaviour
                         }
                     }
                     OnLookStarted?.Invoke(position);
-
                 }
             }
-        
-
+        }
     }
     private void OnTouchPerformed(Finger finger)
     {
-        Debug.Log("Performed");
         if (touchState.Equals(etouchState.UI)) return;
 
-
-        Vector2 position = finger.screenPosition;
-        int touchId = finger.index;
-        switch (touchState)
+        if(isTouching)
+        {
+            Vector2 position = finger.screenPosition;
+            int touchId = finger.index;
+            switch (touchState)
             {
                 case etouchState.Player:
-                    if (moveId.Equals(touchId))
+                    if (isMoving)
                     {
-                        OnMoveHold?.Invoke(position);
-                    }
-                    if (lookId.Equals(touchId))
-                    {
-                        OnLookHold?.Invoke(position);
+                        if (moveId.Equals(touchId))
+                        {
+                            OnMoveHold?.Invoke(position);
+                        }
+                        if (lookId.Equals(touchId))
+                        {
+                            OnLookHold?.Invoke(position);
+                        }
                     }
                     break;
                 case etouchState.Object:
-                    currentTouchDic[touchId].touchable?.OnTouchHold(position);
-                    currentTouchDic[touchId].position = position;
+                    if(currentTouchDic.TryGetValue(touchId,out ITouchable value))
+                        value?.OnTouchHold(position);
                     break;
             }
-        
-        
-        
+        }
     }
 
     private void OnTouchCanceled(Finger finger)
     {
-        Debug.Log("Canceled");
 
         Vector2 position = finger.screenPosition;
         int touchId = finger.index;
         switch (touchState)
-            {
-                case etouchState.Player:
+        {
+            case etouchState.Player:
+                if(isMoving)
+                {
                     if (moveId.Equals(touchId))
                     {
                         OnMoveEnd?.Invoke(position);
@@ -253,44 +252,50 @@ public class TouchManager : MonoBehaviour
                         touchState = etouchState.Normal;
                         eventSystem.enabled = true;
                     }
-                    break;
-                case etouchState.UI:
-                    UIID.Remove(touchId);
-                    if (UIID.Count.Equals(0))
-                    {
-                        touchState = etouchState.Normal;
-                    }
-
-                    break;
-                case etouchState.Object:
-                    currentTouchDic[touchId].touchable?.OnTouchEnd(position);
-                    activeTouchObj.Remove(currentTouchDic[touchId].touchable);
-                    currentTouchDic.Remove(touchId);
-                    if (currentTouchDic.Count.Equals(0))
-                    {
-                        touchState = etouchState.Normal;
-                        eventSystem.enabled = true;
-
-                    }
-                    break;
-            
+                }
+                break;
+            case etouchState.UI:
+                UIID.Remove(touchId);
+                if (UIID.Count.Equals(0))
+                {
+                    touchState = etouchState.Normal;
+                }
+                break;
+            case etouchState.Object:
+                if (currentTouchDic.Remove(touchId, out ITouchable value))
+                {
+                    value?.OnTouchEnd(position);
+                }
+                if (currentTouchDic.Count.Equals(0))
+                {
+                    touchState = etouchState.Normal;
+                    eventSystem.enabled = true;
+                }
+                break;
         }
     }
-
-    private bool IsTouchOnUI(int touchId)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    private bool IsTouchOnUI(Vector2 position)
     {
-        if (EventSystem.current.IsPointerOverGameObject(touchId))
+        if (eventSystem.enabled)
         {
-            Debug.Log("UI 터치 감지 성공");
-            Debug.Log($"Touch ID: {touchId}, UI Hit: {EventSystem.current.IsPointerOverGameObject(touchId)}");
+            PointerEventData pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = position
+            };
+
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
+
+            return results.Count > 0;
         }
-        else
-        {
-            Debug.Log("UI 외의 터치");
-            Debug.Log($"Touch ID: {touchId}, UI Hit: {EventSystem.current.IsPointerOverGameObject(touchId)}");
-        }
-        return EventSystem.current.IsPointerOverGameObject(touchId);
+        return false;
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -309,10 +314,10 @@ public class TouchManager : MonoBehaviour
     /// </summary>
     /// <param name="touchPosition">adfs</param>
     /// <returns></returns>
-    private bool IsTouchableObjectAtPosition(int touchId, Vector2 touchPosition)
+    private bool IsTouchableObjectAtPosition(int touchId, Vector2 position)
     {
-            Ray ray = Camera.main.ScreenPointToRay(touchPosition);
-            RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(position);
+        RaycastHit hit;
         //레이케스트가 터치가능 오브젝트에 충돌했거나 어디에도 충돌되지 않았을 때
         if (Physics.Raycast(ray, out hit, touchDistance))
         {
@@ -327,24 +332,13 @@ public class TouchManager : MonoBehaviour
             {
                 if (hit.collider.TryGetComponent(out ITouchable touchable))
                 {
-                    
-                    if (activeTouchObj.Contains(touchable)) return false;
+                    if (currentTouchDic.ContainsValue(touchable)) return false;
 
-                    if (eventSystem.enabled)
-                    {
-                        eventSystem.enabled = false;
-                    }
-
-                    currentTouchDic.Add(touchId, new TouchObj(touchable,touchPosition));
-                    activeTouchObj.Add(touchable);
-
-                    if (touchState.Equals(etouchState.Object))
-                        touchState = etouchState.Object;
+                    currentTouchDic.Add(touchId, touchable);
 
                     return true;
                 }
             }
-            return false;
         }
         return false;
     }
@@ -370,91 +364,49 @@ public class TouchManager : MonoBehaviour
     public void OnEnableTuchAction()
     {
         Debug.Log("추가됨");
-            touchState = etouchState.Normal;
-            if(eventSystem != null)
-            {
-                eventSystem.enabled = true;
-            }
-            else
-            {
-                eventSystem = FindObjectOfType<EventSystem>();
-                eventSystem.enabled = true;
-                Debug.Log("이벤트시스템 없음");
-            }
-            
-            moveId = -1;
-            lookId = -1;
-            isMoving = true;
-            currentTouchDic.Clear();
-            UIID.Clear();
-        activeTouchObj.Clear();
-        
+        touchState = etouchState.Normal;
+        if (eventSystem == null)
+        {
+            eventSystem = FindObjectOfType<EventSystem>();
+            eventSystem.enabled = true;
+        }
+        else
+        {
+            eventSystem.enabled = true;
+        }
+
+        moveId = -1;
+        lookId = -1;
+        isMoving = true;
+        isTouching = true;
+        currentTouchDic = new Dictionary<int, ITouchable>();
+        UIID = new HashSet<int>();
+
         EnhancedTouchSupport.Enable();
         ETouch.Touch.onFingerDown += OnTouchStarted;
         ETouch.Touch.onFingerMove += OnTouchPerformed;
         ETouch.Touch.onFingerUp += OnTouchCanceled;
-
-        //Touch.onFingerDown += OnTouchStarted;
-        //Touch.onFingerMove.performed += OnTouchPerformed;
-        //UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerUp += OnTouchCanceled;
-        
     }
     public void OnDisableTuchAction()
     {
+        if(isQuitting)
+        {
+            EnhancedTouchSupport.Disable();
+            ETouch.Touch.onFingerDown -= OnTouchStarted;
+            ETouch.Touch.onFingerMove -= OnTouchPerformed;
+            ETouch.Touch.onFingerUp -= OnTouchCanceled;
+        }
+       
 
-        EnhancedTouchSupport.Disable();
-        ETouch.Touch.onFingerDown -= OnTouchStarted;
-        ETouch.Touch.onFingerMove -= OnTouchPerformed;
-        ETouch.Touch.onFingerUp -= OnTouchCanceled;
-
-        switch (touchState)
-            {
-                case etouchState.Normal:
-                    break;
-                case etouchState.Player:
-                    touchState = etouchState.Normal;
-                    if (!moveId.Equals(-1))
-                    {
-                        OnMoveEnd?.Invoke(Vector2.zero);
-                        moveId = -1;
-                    }
-                    if (!lookId.Equals(-1))
-                    {
-                        OnLookEnd?.Invoke(Vector2.zero);
-                        lookId = -1;
-                    }
-                    eventSystem.enabled = true;
-                    break;
-                case etouchState.UI:
-                    touchState = etouchState.Normal;
-                    break;
-                case etouchState.Object:
-                    touchState = etouchState.Normal;
-                    if (!currentTouchDic.Count.Equals(0))
-                    {
-                        foreach (int touchId in currentTouchDic.Keys)
-                        {
-                            currentTouchDic[touchId].touchable?.OnTouchEnd(currentTouchDic[touchId].position);
-                            activeTouchObj.Remove(currentTouchDic[touchId].touchable);
-                            currentTouchDic.Remove(touchId);
-                        }
-                        eventSystem.enabled = true;
-                    }
-                    break;
-            }
-
-            currentTouchDic.Clear();
-            activeTouchObj.Clear();
-            UIID.Clear();
         
     }
 
     public void EnableMoveHandler(bool dontTouch)
     {
         isMoving = dontTouch;
-        if(dontTouch.Equals(false))
+        if (!isMoving)
         {
-            if(touchState.Equals(etouchState.Player))
+            if (touchState.Equals(etouchState.Player))
             {
                 eventSystem.enabled = true;
                 touchState = etouchState.Normal;
@@ -472,17 +424,37 @@ public class TouchManager : MonoBehaviour
         }
     }
 
- 
+    public void EnableTouchHandle(bool dontTouch)
+    {
+        isTouching = dontTouch;
+        if(!isTouching)
+        {
+            switch(touchState)
+            {
+                case etouchState.Player:
+                    eventSystem.enabled = true;
+                    touchState = etouchState.Normal;
+                    if (!moveId.Equals(-1))
+                    {
+                        OnMoveEnd?.Invoke(Vector2.zero);
+                        moveId = -1;
+                    }
+                    if (!lookId.Equals(-1))
+                    {
+                        OnLookEnd?.Invoke(Vector2.zero);
+                        lookId = -1;
+                    }
+                    break;
+                case etouchState.Object:
+                    currentTouchDic.Clear();
+                    touchState = etouchState.Normal;
+                    eventSystem.enabled = true;
+                    break;
+            }
+        }
+    }
 }
 
-//private void Start()
-//{
-//    if(touchDistance>100f||touchDistance<1f)
-//    {
-//        touchDistance = 5f;
-//    }
-
-//}
 /*
 private void Update()
 {

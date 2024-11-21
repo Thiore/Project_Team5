@@ -113,7 +113,7 @@ public class Settings : MonoBehaviour
 
     private void SetMasterVolume(float volume)
     {
-        float dBValue = Mathf.Lerp(-60f, 0f, volume);
+        float dBValue = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f; // 0 ~ 1 -> -80dB ~ 0dB
         audioMixer.SetFloat("Master", dBValue);
 
 
@@ -122,7 +122,7 @@ public class Settings : MonoBehaviour
 
     private void SetBGMVolume(float volume)
     {
-        float dBValue = Mathf.Lerp(-60f, 0f, volume);
+        float dBValue = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f; // 0 ~ 1 -> -80dB ~ 0dB
         audioMixer.SetFloat("BGM", dBValue);
 
         SettingsManager.Instance.BGM = volume;
@@ -130,7 +130,7 @@ public class Settings : MonoBehaviour
 
     private void SetSFXVolume(float volume)
     {
-        float dBValue = Mathf.Lerp(-60f, 0f, volume);
+        float dBValue = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f; // 0 ~ 1 -> -80dB ~ 0dB
         audioMixer.SetFloat("SFX", dBValue);
 
         SettingsManager.Instance.SFX = volume;
@@ -144,7 +144,7 @@ public class Settings : MonoBehaviour
     }
     public void SaveComplete()
     {
-        //SaveManager.Instance.Update~~ 4°¡Áö °ªÀúÀå
+        //SaveManager.Instance.Update~~ 4ê°€ì§€ ê°’ì €ì¥
         SaveManager.Instance.UpdateVolumeSettings(
             SettingsManager.Instance.master,
             SettingsManager.Instance.BGM,

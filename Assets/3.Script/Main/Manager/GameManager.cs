@@ -8,7 +8,13 @@ public enum eGameType
 {
     LoadGame = 0,
     NewGame
-    
+}
+public enum ePlayerState
+{
+    Normal = 0,
+    Minigame,
+    Story,
+    CutScene
 }
 public class GameManager : MonoBehaviour
 {
