@@ -1,11 +1,11 @@
- using System.Collections;
- using System.Collections.Generic;
- using UnityEngine;
- using System.IO;
- using System.Linq;
- using Newtonsoft.Json;
- using UnityEngine.SceneManagement;
- using UnityEngine.Localization.Settings;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
+using UnityEngine.Localization.Settings;
 
 public class SaveManager : MonoBehaviour
 {

@@ -1,9 +1,9 @@
- using System.Collections;
- using System.Collections.Generic;
- using UnityEngine;
- using UnityEngine.SceneManagement;
- using Newtonsoft.Json;
- using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
+using System.Linq;
 
 public class DataManager : MonoBehaviour
 {

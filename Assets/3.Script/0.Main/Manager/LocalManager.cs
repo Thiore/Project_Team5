@@ -1,7 +1,7 @@
- using System.Collections;
- using System.Collections.Generic;
- using UnityEngine;
- using UnityEngine.Localization.Settings;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Localization.Settings;
 public class LocalManager : MonoBehaviour
 {
     private bool isChanging;

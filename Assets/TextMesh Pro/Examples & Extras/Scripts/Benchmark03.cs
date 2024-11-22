@@ -1,6 +1,6 @@
-﻿ using UnityEngine;
- using System.Collections;
- using UnityEngine.TextCore.LowLevel;
+﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.TextCore.LowLevel;
 
 
 namespace TMPro.Examples
