@@ -3060,7 +3060,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1.229, y: 1.352}
+  m_AnchoredPosition: {x: 1.2290039, y: 1.3519897}
   m_SizeDelta: {x: 2000, y: 1500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &477269528626670309
@@ -3108,7 +3108,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6217512915658190112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3364,10 +3364,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0fe1bc61fe1eee4a849ec1da7b886cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floorIndex: 0
+  objectIndex: 
+  puzzle: {fileID: 0}
+  interactionCount: 0
   input: {fileID: 5473113578085010646}
   answer: 27
-  floorIndex: 0
-  objectIndex: 0
 --- !u!1 &8970558292905537667
 GameObject:
   m_ObjectHideFlags: 0
