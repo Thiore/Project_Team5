@@ -79,9 +79,7 @@ public class DataManager : MonoBehaviour
 
                             if (data.Value.isused.Equals(false))
                             {
-                                Debug.Log(data.Key);
                                 Item item = GetItemInfoById(data.Key);
-                                Debug.Log(item.name);
                                 item.isused = data.Value.isused;
                                 UI_InvenManager.Instance.GetItemByID(item);
                             }
