@@ -24,11 +24,15 @@ public class DataManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+
         }
 
-        SceneManager.sceneLoaded += LoadSceanData;
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += LoadSceanData;
+    }
 
     private void InitDic()
     {
