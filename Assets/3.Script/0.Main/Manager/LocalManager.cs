@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Localization.Settings;
+ using System.Collections;
+ using System.Collections.Generic;
+ using UnityEngine;
+ using UnityEngine.Localization.Settings;
 public class LocalManager : MonoBehaviour
 {
     private bool isChanging;
     public DialogueManager dia;
 
-    //¾ğ¾î º¯°æ
+    //ì–¸ì–´ ë³€ê²½
     public void ChangeLocale(int index)
     {
         if (isChanging)
@@ -20,9 +20,9 @@ public class LocalManager : MonoBehaviour
     {
         isChanging = true;
 
-        yield return LocalizationSettings.InitializationOperation; //ÃÊ±âÈ­
+        yield return LocalizationSettings.InitializationOperation; //ì´ˆê¸°í™”
 
-        // ¾ğ¾î ¹Ù²ãÁÖ±â SelectedLocale¿¡ ÀÖ´Â ¾ğ¾î·Î
+        // ì–¸ì–´ ë°”ê¿”ì£¼ê¸° SelectedLocaleì— ìˆëŠ” ì–¸ì–´ë¡œ
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
         isChanging = false;

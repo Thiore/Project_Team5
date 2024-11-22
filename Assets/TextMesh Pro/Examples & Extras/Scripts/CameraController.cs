@@ -1,5 +1,5 @@
-using UnityEngine;
-using System.Collections;
+ using UnityEngine;
+ using System.Collections;
 
 
 namespace TMPro.Examples
@@ -100,13 +100,13 @@ namespace TMPro.Examples
 
                 if (MovementSmoothing == true)
                 {
-                    // Using Smoothing
+                    //  using Smoothing
                     cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, desiredPosition, ref currentVelocity, MovementSmoothingValue * Time.fixedDeltaTime);
                     //cameraTransform.position = Vector3.Lerp(cameraTransform.position, desiredPosition, Time.deltaTime * 5.0f);
                 }
                 else
                 {
-                    // Not using Smoothing
+                    // Not  using Smoothing
                     cameraTransform.position = desiredPosition;
                 }
 

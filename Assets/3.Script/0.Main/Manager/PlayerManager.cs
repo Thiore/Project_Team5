@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+ using System.Collections;
+ using System.Collections.Generic;
+ using UnityEngine;
+ using UnityEngine.UI;
+ using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    //¾ÆÀÌÅÛ Information
+    //ì•„ì´í…œ Information
     [SerializeField] private UI_ItemInformation itemInfo;
     public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
 
-    //Äü½½·Ô ¹× 
+    //í€µìŠ¬ë¡¯ ë° 
     [SerializeField] private UseButton quickSlot;
     public UseButton getQuickSlot { get => quickSlot; }
     public Transform playerInterface { get => quickSlot.transform.parent; }
@@ -25,10 +25,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject btnList;
     public GameObject getBtnList { get => btnList; }
 
-    [SerializeField] private TMP_Text itemName;//ÀÎº¥Åä¸® ¾ÆÀÌÅÛ ÀÌ¸§ ¶ç¿ï TextMeshPro
+    [SerializeField] private TMP_Text itemName;//ì¸ë²¤í† ë¦¬ ì•„ì´í…œ ì´ë¦„ ë„ìš¸ TextMeshPro
     public TMP_Text getItemName { get => itemName; }
 
-    [SerializeField] private TMP_Text explanation;//ÀÎº¥Åä¸® ¾ÆÀÌÅÛ ¼³¸í ¶ç¿ï TextMeshPro
+    [SerializeField] private TMP_Text explanation;//ì¸ë²¤í† ë¦¬ ì•„ì´í…œ ì„¤ëª… ë„ìš¸ TextMeshPro
     public TMP_Text getExplanation { get => explanation; }
 
     public Transform mainPlayer;

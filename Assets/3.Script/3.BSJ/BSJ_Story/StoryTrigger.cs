@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ using System.Collections;
+ using System.Collections.Generic;
+ using UnityEngine;
 
 public class StoryTrigger : MonoBehaviour, ITouchable
 {
-    // ÀÚ½ÅÀÇ ÀÎµ¦½º¸¦ °¡Áö°Ô
+    // ìì‹ ì˜ ì¸ë±ìŠ¤ë¥¼ ê°€ì§€ê²Œ
     [SerializeField] private int storyIndex;
 
 
 
-    //µ¶¹é Text ³ª¿À°Ô
+    //ë…ë°± Text ë‚˜ì˜¤ê²Œ
     private void StoryStart()
     {
-        //isStory = true; //»óÈ£ÀÛ¿ë »óÅÂ 
+        //isStory = true; //ìƒí˜¸ì‘ìš© ìƒíƒœ 
 
-        //´ë»ç Ãâ·Â
+        //ëŒ€ì‚¬ ì¶œë ¥
         if (DialogueManager.Instance != null)
         {
             DialogueManager.Instance.SetDialogue("Table_StoryB1", storyIndex);

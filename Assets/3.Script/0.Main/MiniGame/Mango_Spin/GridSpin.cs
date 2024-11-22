@@ -1,5 +1,5 @@
-using UnityEngine;
-using System;
+ using UnityEngine;
+ using System;
 
 public class GridSpin : MonoBehaviour
 {
