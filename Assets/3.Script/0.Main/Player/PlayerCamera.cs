@@ -52,9 +52,18 @@ public class PlayerCamera : MonoBehaviour, ITouchable
         if (!position.Equals(lastTouchPosition))
         {
             Vector2 delta = position - lastTouchPosition;
-
-            deltaRot = new Vector3(delta.x * SettingsManager.Instance.CameraSpeed, 
+            //빼야함
+            if(SettingsManager.Instance == null)
+            {
+                deltaRot = new Vector3(delta.x * 3f,
+                                  delta.y * 3f);
+            }
+            else
+            {
+                deltaRot = new Vector3(delta.x * SettingsManager.Instance.CameraSpeed,
                                    delta.y * SettingsManager.Instance.CameraSpeed);
+            }
+            
 
             lastTouchPosition = position;
         }
