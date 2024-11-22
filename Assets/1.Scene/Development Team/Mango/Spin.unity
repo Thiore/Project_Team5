@@ -1773,7 +1773,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 92ed5b7501a16c3479a23f3ecdf6bc89, type: 2}
+  - {fileID: 2100000, guid: 4be70be3ec2349c46aadb9e7fe60e998, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2131,7 +2131,6 @@ GameObject:
   - component: {fileID: 999239557}
   - component: {fileID: 999239551}
   - component: {fileID: 999239556}
-  - component: {fileID: 999239557}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -2146,7 +2145,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 999239549}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e825bcaadbc5a74c854575f292c3132, type: 3}
   m_Name: 
@@ -2321,10 +2320,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04131b179f9b9ae4a9cf828c7467ee89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputAsset: {fileID: -944628639613478452, guid: 59635ca0e21d78e409d5461498e7670d, type: 3}
   touchableObjectLayer:
     serializedVersion: 2
     m_Bits: 64
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
   touchDistance: 30
 --- !u!1 &1071874904
 GameObject:
@@ -4966,7 +4967,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 92ed5b7501a16c3479a23f3ecdf6bc89, type: 2}
+  - {fileID: 2100000, guid: 4be70be3ec2349c46aadb9e7fe60e998, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5266,7 +5267,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 92ed5b7501a16c3479a23f3ecdf6bc89, type: 2}
+  - {fileID: 2100000, guid: 4be70be3ec2349c46aadb9e7fe60e998, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
