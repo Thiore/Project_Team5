@@ -37,11 +37,10 @@ public class DataManager : MonoBehaviour
 
     private void LoadAllData()
     {
-        LoadItemData(); //���� ������ ������ �ε�
+        LoadItemData(); 
 
     }
 
-    // ������ ������ȭ �� �ٷ� Item Ÿ������ ��ȯ 
     private void LoadItemData()
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
@@ -76,7 +75,9 @@ public class DataManager : MonoBehaviour
 
                             if (data.Value.isused.Equals(false))
                             {
+                                Debug.Log(data.Key);
                                 Item item = GetItemInfoById(data.Key);
+                                Debug.Log(item.name);
                                 item.isused = data.Value.isused;
                                 UI_InvenManager.Instance.GetItemByID(item);
                             }
