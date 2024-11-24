@@ -34,13 +34,6 @@ public class Settings : MonoBehaviour
         switch (slideType)
         {
             case eSlideType.Default:
-                if (SceneManager.GetSceneByName("Lobby").Equals(SceneManager.GetActiveScene()))
-                {
-                    introBtn.SetActive(false);
-                }
-                else
-                    introBtn.SetActive(true);
-
                 SceneManager.sceneLoaded += OnSettingLoaded;
                 break;
             case eSlideType.Master:
@@ -91,6 +84,16 @@ public class Settings : MonoBehaviour
     }
     private void OnSettingLoaded(Scene scene, LoadSceneMode mode)
     {
+        if(slideType.Equals(eSlideType.Default))
+        {
+            if (SceneManager.GetSceneByName("Lobby").Equals(SceneManager.GetActiveScene()))
+            {
+                introBtn.SetActive(false);
+            }
+            else
+                introBtn.SetActive(true);
+        }
+
         if(PlayerManager.Instance != null)
         {
             PlayerManager.Instance.optionBtn.onClick.AddListener(OnSettingPage);
