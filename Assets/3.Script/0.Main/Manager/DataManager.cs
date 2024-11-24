@@ -24,11 +24,15 @@ public class DataManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+
         }
 
-        SceneManager.sceneLoaded += LoadSceanData;
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += LoadSceanData;
+    }
 
     private void InitDic()
     {
@@ -37,11 +41,10 @@ public class DataManager : MonoBehaviour
 
     private void LoadAllData()
     {
-        LoadItemData(); //���� ������ ������ �ε�
+        LoadItemData(); 
 
     }
 
-    // ������ ������ȭ �� �ٷ� Item Ÿ������ ��ȯ 
     private void LoadItemData()
     {
         string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;

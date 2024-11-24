@@ -6,6 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
+using static UnityEditor.Progress;
 
 public class SaveManager : MonoBehaviour
 {
@@ -191,7 +192,10 @@ public class SaveManager : MonoBehaviour
 
         string itemjson = File.ReadAllText(itemstatepath);
         itemsavedata = JsonConvert.DeserializeObject<ItemSaveData[]>(itemjson).ToDictionary(x => x.id, x => x);
-
+        foreach (KeyValuePair<int, ItemSaveData> data in itemsavedata)
+        {
+            Debug.Log($"Saving Item - ID: {data.Key}: {data.Value.isused}");
+        }
     }
 
     public void SaveItemData()
@@ -200,7 +204,7 @@ public class SaveManager : MonoBehaviour
         List<ItemSaveData> itemList = itemsavedata.Values.ToList();
         foreach (var item in itemList)
         {
-            Debug.Log($"Saving Item - ID: {item.id}, GetState: {item.isused}");
+            Debug.Log($"Saving Item - ID: {item.id}, UseState: {item.isused}");
         }
 
         string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);

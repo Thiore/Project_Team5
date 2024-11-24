@@ -12,8 +12,6 @@ public class Item3D : MonoBehaviour, ITouchable
     private void OnEnable()
     {
         item = DataManager.instance.GetItemInfoById(id);
-        // �̰� ���߿� GameManager �� eGameType �� ����  Load Game�̸� savedata �����ؼ�
-        // �˾Ƽ� false �ǰ� 
     }
 
     public void SetIDItem3D(int id)
