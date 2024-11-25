@@ -7,7 +7,9 @@ public class Item3D : MonoBehaviour, ITouchable
     [SerializeField] private int id;
     public int ID { get => id; }
     private Item item;
-    [SerializeField] private UI_LerpImage lerpimage;
+    //[SerializeField] private UI_LerpImage lerpimage;
+
+    
 
     private void OnEnable()
     {
@@ -26,8 +28,8 @@ public class Item3D : MonoBehaviour, ITouchable
         {
             if (hit.collider.gameObject.Equals(gameObject) && gameObject.CompareTag("Item3D"))
             {
-                lerpimage.gameObject.SetActive(true);
-                lerpimage.InputMovementInventory(item, position);
+                //lerpimage.gameObject.SetActive(true);
+                //lerpimage.InputMovementInventory(item, position);
 
                 //������ ��� 
                 Debug.Log($"�̰� ���̵� : {id}");
@@ -47,4 +49,5 @@ public class Item3D : MonoBehaviour, ITouchable
     {
 
     }
+    
 }

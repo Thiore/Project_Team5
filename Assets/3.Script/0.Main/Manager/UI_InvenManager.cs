@@ -14,6 +14,14 @@ public class UI_InvenManager : MonoBehaviour
     [SerializeField] public UI_ItemInformation iteminfo;
     [SerializeField] public Image dragimage;
 
+    [SerializeField] private RectTransform lerpImage;
+    [SerializeField] private float lerpSpeed;
+    [SerializeField] private float DelayTime;
+    private Queue<Sprite> getItemQueue;
+    private Coroutine getItemImage_co = null;
+    private WaitForSeconds waitForDelayTime;
+    
+
     // �÷��� ����Ʈ ���� �Ǹ� Ʈ���ŷ� �����鼭 �̰� true 
     private bool isFlashlight;
     [SerializeField] private Light flashright;
@@ -27,11 +35,18 @@ public class UI_InvenManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            getItemQueue = new Queue<Sprite>();
+            waitForDelayTime = new WaitForSeconds(DelayTime);
         }
     }
 
-    public void GetItemByID(Item item)
+    public void GetItemByID(Item item, bool isLoading = false)
     {
+        if(!isLoading)
+        {
+            GetItemByImage(item);
+        }
+        
         iteminfo.SetInfoByItem(item);
         AddSlotItem(item);
         // ���̺� ���� �ؾ���  >> Item3D�� �ص�
@@ -136,5 +151,46 @@ public class UI_InvenManager : MonoBehaviour
         }
     }
 
+    private void GetItemByImage(Item item)
+    {
+        getItemQueue.Enqueue(item.sprite);
+        if(getItemImage_co == null)
+        {
+            getItemImage_co = StartCoroutine(GetItemByImage_co());
+        }
 
+    }
+
+    private IEnumerator GetItemByImage_co()
+    {
+        lerpImage.transform.GetChild(0).TryGetComponent(out Image setImage);
+        
+        while(getItemQueue.Count>0)
+        {
+            setImage.sprite = getItemQueue.Peek();
+            float lerpImageY;
+            float lerpTime = 0f;
+            while (lerpTime/lerpSpeed<1f)
+            {
+                lerpTime += Time.fixedUnscaledDeltaTime;
+                lerpImageY = Mathf.Lerp(170f, 0f, lerpTime / lerpSpeed);
+                lerpImage.anchoredPosition = 
+                    new Vector2(lerpImage.anchoredPosition.x, lerpImageY);
+                yield return null;
+            }
+
+            yield return waitForDelayTime;
+
+            while (lerpTime / lerpSpeed > 0f)
+            {
+                lerpTime -= Time.fixedUnscaledDeltaTime;
+                lerpImageY = Mathf.Lerp(170f, 0f, lerpTime / lerpSpeed);
+                lerpImage.anchoredPosition =
+                    new Vector2(lerpImage.anchoredPosition.x, lerpImageY);
+                yield return null;
+            }
+            getItemQueue.Dequeue();
+        }
+        getItemImage_co = null;
+    }
 }

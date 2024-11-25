@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
+public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private int id = -1;
     public int SlotID { get => id; }
@@ -27,7 +27,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("ºñ±ä½ÃÀÛ");
+        Debug.Log("ë¹„ê¸´ì‹œì‘");
         isdragging = true;
         UI_InvenManager.Instance.dragimage.sprite = image.sprite;
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
@@ -36,7 +36,12 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        // ÀÌ°Ç ³¡³ª´Â °÷ È®ÀÎ ÇÒ ÇÊ¿ä°¡ ÀÖÀ½ 
+        // ì´ê±´ ëë‚˜ëŠ” ê³³ í™•ì¸ í•  í•„ìš”ê°€ ìˆìŒ 
         UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        
     }
 }

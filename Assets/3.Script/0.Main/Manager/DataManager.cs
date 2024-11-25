@@ -81,7 +81,7 @@ public class DataManager : MonoBehaviour
                             {
                                 Item item = GetItemInfoById(data.Key);
                                 item.isused = data.Value.isused;
-                                UI_InvenManager.Instance.GetItemByID(item);
+                                UI_InvenManager.Instance.GetItemByID(item,true);
                             }
                         }
                     }
