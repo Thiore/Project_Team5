@@ -7,12 +7,24 @@ public class UI_InvenManager : MonoBehaviour
 {
     public static UI_InvenManager Instance { get; private set; } = null;
 
-    [SerializeField] public List<UI_InventorySlot> invenslots;
-    [SerializeField] public List<UI_QuickSlot> quickslots;
+    [SerializeField] private Transform invenList;
 
-    [SerializeField] private GameObject inven;
+    [SerializeField] private UI_InventorySlot invenSlotPrefabs;
+    private List<UI_InventorySlot> invenSlots;
+    private Queue<UI_InventorySlot> invenSlots_Queue;
+
+    [SerializeField] private Transform quickSlotList;
+    [SerializeField] private UI_QuickSlot quickSlotPrefabs;
+    private List<UI_QuickSlot> quickSlots;
+    private Queue<UI_QuickSlot> quickSlots_Queue;
+
+    [SerializeField] private Transform triggerSlotList;
+    [SerializeField] private UI_TriggerSlot triggerSlotPrefabs;
+    private List<UI_TriggerSlot> triggerSlots;
+
+
     [SerializeField] public UI_ItemInformation iteminfo;
-    [SerializeField] public Image dragimage;
+    [SerializeField] public Image dragImage;
 
     [SerializeField] private RectTransform lerpImage;
     [SerializeField] private float lerpSpeed;
@@ -22,13 +34,8 @@ public class UI_InvenManager : MonoBehaviour
     private WaitForSeconds waitForDelayTime;
     
 
-    // �÷��� ����Ʈ ���� �Ǹ� Ʈ���ŷ� �����鼭 �̰� true 
-    private bool isFlashlight;
-    [SerializeField] private Light flashright;
-    public void FlashLightOn()
-    {
-        flashright.enabled = true;
-    }
+    [SerializeField] private FlashLight flashLight;
+    
 
     private void Awake()
     {
@@ -37,6 +44,38 @@ public class UI_InvenManager : MonoBehaviour
             Instance = this;
             getItemQueue = new Queue<Sprite>();
             waitForDelayTime = new WaitForSeconds(DelayTime);
+            InitSlots();
+        }
+    }
+
+    private void InitSlots()
+    {
+        InitInvenSlots();
+
+        InitQuickSlots();
+
+        triggerSlots = new List<UI_TriggerSlot>();
+    }
+    private void InitInvenSlots()
+    {
+        invenSlots = new List<UI_InventorySlot>();
+        invenSlots_Queue = new Queue<UI_InventorySlot>();
+        for (int i = 0; i < 5f; i++)
+        {
+            UI_InventorySlot newObj = Instantiate(invenSlotPrefabs, invenList);
+            newObj.gameObject.SetActive(false);
+            invenSlots_Queue.Enqueue(newObj);
+        }
+    }
+    private void InitQuickSlots()
+    {
+        quickSlots = new List<UI_QuickSlot>();
+        quickSlots_Queue = new Queue<UI_QuickSlot>();
+        for (int i = 0; i < 5f; i++)
+        {
+            UI_QuickSlot newObj = Instantiate(quickSlotPrefabs, quickSlotList);
+            newObj.gameObject.SetActive(false);
+            quickSlots_Queue.Enqueue(newObj);
         }
     }
 
@@ -48,7 +87,7 @@ public class UI_InvenManager : MonoBehaviour
         }
         
         iteminfo.SetInfoByItem(item);
-        AddSlotItem(item);
+        AddInventoryItem(item);
         // ���̺� ���� �ؾ���  >> Item3D�� �ص�
 
         // Ÿ�Կ� ���� ���� �߰� �۾�
@@ -59,7 +98,7 @@ public class UI_InvenManager : MonoBehaviour
             case eItemType.Clue:
                 break;
             case eItemType.Trigger:
-                AddQuickItem(item);
+                AddTriggerItem(item);
                 break;
             case eItemType.Quick:
                 AddQuickItem(item);
@@ -71,84 +110,114 @@ public class UI_InvenManager : MonoBehaviour
     }
 
 
-    public void AddSlotItem(Item item)
+    private void AddInventoryItem(Item item)
     {
-        for (int i = 0; i < invenslots.Count; i++)
+        if(invenSlots_Queue == null || invenSlots == null)
         {
-            if (invenslots[i].SlotID.Equals(-1))
-            {
-                invenslots[i].SetinvenByID(item);
-                break;
-            }
+            InitInvenSlots();
+        }
+        if(invenSlots_Queue.Count>0)
+        {
+            UI_InventorySlot slot = invenSlots_Queue.Dequeue();
+            slot.SetinvenByItem(item);
+            invenSlots.Add(slot);
+            slot.gameObject.SetActive(true);
+        }
+        else
+        {
+            UI_InventorySlot newSlot = Instantiate(invenSlotPrefabs, invenList);
+            newSlot.SetinvenByItem(item);
+            invenSlots.Add(newSlot);
+            newSlot.gameObject.SetActive(true);
         }
     }
 
-    public void AddQuickItem(Item quick)
+    private void AddQuickItem(Item quick)
     {
-        for (int i = 0; i < quickslots.Count; i++)
+        if (quickSlots_Queue == null || quickSlots == null)
         {
-            if (quickslots[i].SlotID.Equals(-1))
-            {
-                quickslots[i].SetinvenByID(quick);
-                break;
-            }
+            InitQuickSlots();
+        }
+        if (quickSlots_Queue.Count > 0)
+        {
+            UI_QuickSlot slot = quickSlots_Queue.Dequeue();
+            slot.SetinvenByID(quick.id);
+            quickSlots.Add(slot);
+            slot.gameObject.SetActive(true);
+        }
+        else
+        {
+            UI_QuickSlot newSlot = Instantiate(quickSlotPrefabs, quickSlotList);
+            newSlot.SetinvenByID(quick.id);
+            quickSlots.Add(newSlot);
+            newSlot.gameObject.SetActive(true);
         }
     }
-
-    public void OpenInventory()
+    private void AddTriggerItem(Item item)
     {
-        for (int i = 0; i < invenslots.Count; i++)
+        if(triggerSlots == null)
         {
-            if (!invenslots[i].SlotID.Equals(-1))
-            {
-                invenslots[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                invenslots[i].gameObject.SetActive(false);
-            }
+            triggerSlots = new List<UI_TriggerSlot>();
         }
+        UI_TriggerSlot newSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
+        newSlot.SetinvenByItem(item);
+        triggerSlots.Add(newSlot);
+
     }
 
-    public void Combine(UI_InventorySlot itemslot, int id)
+    //public void OpenInventory()
+    //{
+    //    for (int i = 0; i < invenSlots.Count; i++)
+    //    {
+    //        if (!invenSlots[i].SlotID.Equals(-1))
+    //        {
+    //            invenSlots[i].gameObject.SetActive(true);
+    //        }
+    //        else
+    //        {
+    //            invenSlots[i].gameObject.SetActive(false);
+    //        }
+    //    }
+    //}
+
+    public void Combine(UI_InventorySlot slot, int id)
     {
-        int firstelement = DataManager.instance.GetItemElementIndex(itemslot.SlotID);
+        int firstelement = DataManager.instance.GetItemElementIndex(slot.item.id);
         int secondelement = DataManager.instance.GetItemElementIndex(id);
 
-        if (firstelement.Equals(secondelement) && !itemslot.SlotID.Equals(id))
+        if (firstelement.Equals(secondelement) && !slot.item.id.Equals(id))
         {
+            SortInvenSlot(slot.item.id);
+            SortInvenSlot(id);
             switch (firstelement)
             {
-                case 10: // ������
+                case 10:
+                    
                     Item item = DataManager.instance.GetItemInfoById(2);
                     GetItemByID(item);
                     SaveManager.Instance.InputItemSavedata(item);
-                    flashright.enabled = true;
+                    AddTriggerItem(item);
+                    flashLight.SetUseFlashLight();
                     break;
 
             }
 
-            SortInvenSlot(itemslot.SlotID);
-            SortInvenSlot(id);
-            OpenInventory();
+            
+            //OpenInventory();
         }
     }
 
 
     public void SortInvenSlot(int id)
     {
-        for (int i = 0; i < invenslots.Count; i++)
-        {
-            if (invenslots[i].SlotID.Equals(id))
-            {
-                SaveManager.Instance.InputItemSavedata(DataManager.instance.GetItemInfoById(id));
-                invenslots[i].SetInvenEmpty();
-                invenslots[i].transform.SetParent(null);
-                invenslots[i].gameObject.SetActive(false);
-                invenslots[i].transform.SetParent(inven.transform);
-                break;
-            }
-        }
+        UI_InventorySlot slot = invenSlots.Find(x => x.item.id.Equals(id));
+
+        SaveManager.Instance.InputItemSavedata(DataManager.instance.GetItemInfoById(id));
+        //slot.SetInvenEmpty();
+        slot.transform.SetAsLastSibling();
+        slot.gameObject.SetActive(false);
+        invenSlots.Remove(slot);
+        invenSlots_Queue.Enqueue(slot);
     }
 
     private void GetItemByImage(Item item)

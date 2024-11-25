@@ -35,8 +35,7 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
         Debug.Log(eventData.pointerEnter.gameObject.name);
         if (eventData.pointerDrag.gameObject.TryGetComponent(out UI_InventorySlot item))
         {
-            UI_InvenManager.Instance.dragimage.gameObject.SetActive(false);
-            item.FragIsDrag();
+            UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
             UI_InvenManager.Instance.Combine(item, id);
 
         }
