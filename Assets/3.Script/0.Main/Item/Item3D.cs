@@ -5,15 +5,23 @@ using UnityEngine;
 public class Item3D : MonoBehaviour, ITouchable
 {
     [SerializeField] private int id;
-    public int ID { get => id; }
-    private Item item;
+    //public int ID { get => id; }
+    public Item item { get; private set; }
     //[SerializeField] private UI_LerpImage lerpimage;
 
     
 
     private void OnEnable()
     {
-        item = DataManager.instance.GetItemInfoById(id);
+        if(DataManager.instance.savedata.TryGetValue(id, out ItemSaveData data))
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            item = DataManager.instance.GetItemInfoById(id);
+        }
+        
     }
 
     public void SetIDItem3D(int id)

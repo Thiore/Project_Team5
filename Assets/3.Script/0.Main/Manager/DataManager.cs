@@ -9,7 +9,8 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
-    private Dictionary<int, Item> dicItem;
+    public Dictionary<int, Item> dicItem { get; private set; }
+    public Dictionary<int, ItemSaveData> savedata { get; private set; }
 
     private void Awake()
     {
@@ -18,8 +19,7 @@ public class DataManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
 
-            InitDic();
-            LoadAllData();
+            LoadItemData();
         }
         else
         {
@@ -34,16 +34,7 @@ public class DataManager : MonoBehaviour
         SceneManager.sceneLoaded += LoadSceanData;
     }
 
-    private void InitDic()
-    {
-        dicItem = new Dictionary<int, Item>();
-    }
 
-    private void LoadAllData()
-    {
-        LoadItemData(); 
-
-    }
 
     private void LoadItemData()
     {
@@ -57,33 +48,18 @@ public class DataManager : MonoBehaviour
     {
         if (!scene.name.Equals("Lobby"))
         {
-            Dictionary<int, ItemSaveData> savedata = SaveManager.Instance.itemsavedata;
-            if (savedata.Count > 0)
+            savedata = SaveManager.Instance.itemsavedata;
+            if (savedata.Count > 0 &&GameManager.Instance.gameType.Equals(eGameType.LoadGame))
             {
-                Item3D[] items = FindObjectsOfType<Item3D>();
+                //Item3D[] items = FindObjectsOfType<Item3D>();
 
                 foreach (KeyValuePair<int, ItemSaveData> data in savedata)
                 {
-                    for (int i = 0; i < items.Length; i++)
+                    if (data.Value.isused.Equals(false))
                     {
-                        if (items[i].ID.Equals(data.Key))
-                        {
-                            if (data.Key.Equals(2))
-                            {
-                                UI_InvenManager.Instance.FlashLightOn();
-                            }
-                            else
-                            {
-                                items[i].gameObject.SetActive(false);
-                            }
-
-                            if (data.Value.isused.Equals(false))
-                            {
-                                Item item = GetItemInfoById(data.Key);
-                                item.isused = data.Value.isused;
-                                UI_InvenManager.Instance.GetItemByID(item,true);
-                            }
-                        }
+                        Item item = GetItemInfoById(data.Key);
+                        item.isused = data.Value.isused;
+                        UI_InvenManager.Instance.GetItemByID(item, true);
                     }
                 }
             }

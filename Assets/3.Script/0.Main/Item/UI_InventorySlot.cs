@@ -6,36 +6,36 @@ using UnityEngine.UI;
 
 public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] private int id = -1;
-    public int SlotID { get => id; }
-    [SerializeField] private Item item;
+    //private int id = -1;
+    //public int SlotID { get => id; }
+    public Item item { get; private set; }
     [SerializeField] private Image image;
-    private bool isdragging = false;
+    private bool isDragging = false;
     public void FragIsDrag()
     {
-        isdragging = !isdragging;
+        isDragging = false;
     }
 
-    public void SetinvenByID(Item item)
+    public void SetinvenByItem(Item item)
     {
-        id = item.id;
+        //id = item.id;
         this.item = item;
         image.sprite = item.sprite;
     }
 
-    public void SetInvenEmpty()
-    {
-        id = -1;
-        item = null;
-        image.sprite = null;
-    }
+    //public void SetInvenEmpty()
+    //{
+    //    id = -1;
+    //    item = null;
+    //    image.sprite = null;
+    //}
 
 
     // ��, �ٿ� ���� �־�� ��� ��� ���� / eventsystem 50 ���� 
     public void OnPointerUp(PointerEventData eventData)
     {
         Debug.Log("���Ӥ���");
-        if (!isdragging)
+        if (!isDragging)
         {
             UI_InvenManager.Instance.iteminfo.SetInfoByItem(item);
         }
@@ -48,21 +48,34 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        isdragging = true;
-        UI_InvenManager.Instance.dragimage.sprite = image.sprite;
-        UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
-        UI_InvenManager.Instance.dragimage.gameObject.SetActive(true);
+        if(!isDragging)
+        {
+            isDragging = true;
+            UI_InvenManager.Instance.dragImage.sprite = image.sprite;
+            UI_InvenManager.Instance.dragImage.transform.position = eventData.position;
+            UI_InvenManager.Instance.dragImage.gameObject.SetActive(true);
+        }
+            
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // ���� ���δ� Infomation����, EndDrag �� PointerUp�̶� ���� �Ǽ� info �� OnDrop���� ó��
-        UI_InvenManager.Instance.dragimage.transform.position = eventData.position;
+        if(isDragging)
+        {
+            // ���� ���δ� Infomation����, EndDrag �� PointerUp�̶� ���� �Ǽ� info �� OnDrop���� ó��
+            UI_InvenManager.Instance.dragImage.transform.position = eventData.position;
+        }
+       
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        UI_InvenManager.Instance.dragimage.gameObject.SetActive(false);
-        FragIsDrag();
+        if(isDragging)
+        {
+            UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
+            FragIsDrag();
+
+        }
+       
     }
 }
