@@ -6,16 +6,14 @@ using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManager Instance { get; private set; }
+    public static PlayerManager Instance { get; private set; } = null;
 
     //아이템 Information
     [SerializeField] private UI_ItemInformation itemInfo;
     public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
 
-    //퀵슬롯 및 
-    [SerializeField] private UseButton quickSlot;
-    public UseButton getQuickSlot { get => quickSlot; }
-    public Transform playerInterface { get => quickSlot.transform.parent; }
+    
+   
 
 
     [SerializeField] private UI_LerpImage lerpimage;

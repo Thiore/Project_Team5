@@ -6,19 +6,19 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 {
     [SerializeField] private GameObject missionStart;
     [SerializeField] private GameObject missionExit;
-    [Header("°ÔÀÓÀÌ ³¡³­ ÈÄ »óÈ£ÀÛ¿ëÀÌ °¡´ÉÇÑ ¿ÀºêÁ§Æ®µé")]
+    [Header("ê²Œìž„ì´ ëë‚œ í›„ ìƒí˜¸ìž‘ìš©ì´ ê°€ëŠ¥í•œ ì˜¤ë¸Œì íŠ¸ë“¤")]
     [SerializeField] private GameObject interactionCam;
 
     [SerializeField] private GameObject btnExit;
 
     [SerializeField] private PlayOBJ playPuzzle;
 
-    [Header("SaveManager Âü°í")]
+    [Header("SaveManager ì°¸ê³ ")]
     [SerializeField] private int floorIndex;
     public int getFloorIndex { get => floorIndex; }
     [SerializeField] private int objectIndex;
 
-    [Header("»óÈ£ÀÛ¿ë ¾ÆÀÌÅÛÀÌ ¾ø´Ù¸é -1")]
+    [Header("ìƒí˜¸ìž‘ìš© ì•„ì´í…œì´ ì—†ë‹¤ë©´ -1")]
     [SerializeField] private int[] InteractionIndex;
     public int[] getInteractionIndex { get => InteractionIndex; }
 
@@ -36,7 +36,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     public bool isInteractionCam;
 
     private GameObject btnList;
-    private UseButton quickSlot;
+    //private UseButton quickSlot;
 
     
 
@@ -47,7 +47,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     private void OnEnable()
     {
         btnList = PlayerManager.Instance.getBtnList;
-        quickSlot = PlayerManager.Instance.getQuickSlot;
+        //quickSlot = PlayerManager.Instance.getQuickSlot;
         
             if(!SaveManager.Instance.PuzzleState(floorIndex, objectIndex))
             {
@@ -134,7 +134,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             
             btnList.SetActive(true);
             
-            quickSlot.QucikSlotButton(true);
+            //quickSlot.QucikSlotButton(true);
         }
            
 
@@ -159,7 +159,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             {
                 isInteractionCam = !isInteractionCam;
                 interactionCam.SetActive(isInteractionCam);
-                quickSlot.QucikSlotButton(!isInteractionCam);
+                //quickSlot.QucikSlotButton(!isInteractionCam);
             }
 
             return;
@@ -191,7 +191,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
                 {
                     btnList.SetActive(false);
                 }
-                    quickSlot.QucikSlotButton(false);
+                    //quickSlot.QucikSlotButton(false);
 
                 if(anim != null)
                 {
@@ -251,13 +251,13 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         missionExit.SetActive(false);
         TouchManager.Instance.EnableMoveHandler(true);
         btnList.SetActive(true);
-        quickSlot.QucikSlotButton(true);
+        //quickSlot.QucikSlotButton(true);
     }
     public void SetQuickSlot()
     {
         if (playPuzzle.getInteractionCount>0)
         {
-            quickSlot.QucikSlotButton(true);
+            //quickSlot.QucikSlotButton(true);
         }
     }
     

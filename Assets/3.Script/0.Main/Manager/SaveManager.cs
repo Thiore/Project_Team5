@@ -147,7 +147,7 @@ public class SaveManager : MonoBehaviour
             //초기화 된 층 상태를 게임 상태에 추가
             gameState.floors.Add(floor);
         }
-        GameManager.Instance.gameType = eGameType.NewGame;
+        NewGameItemData();
     }
 
     // 이어하기

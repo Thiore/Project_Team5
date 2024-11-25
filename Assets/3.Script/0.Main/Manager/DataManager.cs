@@ -46,10 +46,11 @@ public class DataManager : MonoBehaviour
 
     private void LoadSceanData(Scene scene, LoadSceneMode mode)
     {
+        savedata = SaveManager.Instance.itemsavedata;
         if (!scene.name.Equals("Lobby"))
         {
-            savedata = SaveManager.Instance.itemsavedata;
-            if (savedata.Count > 0 &&GameManager.Instance.gameType.Equals(eGameType.LoadGame))
+            
+            if (savedata.Count > 0)
             {
                 //Item3D[] items = FindObjectsOfType<Item3D>();
 

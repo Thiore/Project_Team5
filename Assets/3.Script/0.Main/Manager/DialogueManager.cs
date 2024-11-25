@@ -12,29 +12,28 @@ public class DialogueManager : MonoBehaviour
     private static DialogueManager instance = null;
     public static DialogueManager Instance { get; private set; }
 
-    //½ºÅä¸® °ü·Ã UI Text
-    public Button dialogueButton; //´ë»ç ¹öÆ° (ÅÍÄ¡ ½Ã, »ç¶óÁö°Ô ÇÏ±â À§ÇÔ)
-    public TMP_Text dialogueText; //´ë»ç Ç¥½ÃÇÒ TextMeshPro
+    //ìŠ¤í† ë¦¬ ê´€ë ¨ UI Text
+    public Button dialogueButton; //ëŒ€ì‚¬ ë²„íŠ¼ (í„°ì¹˜ ì‹œ, ì‚¬ë¼ì§€ê²Œ í•˜ê¸° ìœ„í•¨)
+    public TMP_Text dialogueText; //ëŒ€ì‚¬ í‘œì‹œí•  TextMeshPro
     private GameObject btnList;
-    private UseButton quickSlot;
     
 
 
-    //ÀÎº¥Åä¸® °ü·Ã Text
-    private TMP_Text itemName; //ÀÎº¥Åä¸® ¾ÆÀÌÅÛ ÀÌ¸§ ¶ç¿ï TextMeshPro
-    private TMP_Text explanation; //ÀÎº¥Åä¸® ¾ÆÀÌÅÛ ¼³¸í ¶ç¿ï TextMeshPro
+    //ì¸ë²¤í† ë¦¬ ê´€ë ¨ Text
+    private TMP_Text itemName; //ì¸ë²¤í† ë¦¬ ì•„ì´í…œ ì´ë¦„ ë„ìš¸ TextMeshPro
+    private TMP_Text explanation; //ì¸ë²¤í† ë¦¬ ì•„ì´í…œ ì„¤ëª… ë„ìš¸ TextMeshPro
 
-    //¿É¼Ç °ü·Ã Text
-    private TMP_Text koreanButtonText; //ÇÑ±¹¾î ¹öÆ°
-    private TMP_Text englishButtonText; //¿µ¾î ¹öÆ°
-    private Color activeColor = Color.green; //È°¼ºÈ­ ÁßÀÎ ¾ğ¾î ÅØ½ºÆ®ÀÇ »ö»ó
-    private Color inactiveColor = Color.white; //ºñÈ°¼ºÈ­ ÁßÀÎ ¾ğ¾î ÅØ½ºÆ®ÀÇ »ö»ó
+    //ì˜µì…˜ ê´€ë ¨ Text
+    private TMP_Text koreanButtonText; //í•œêµ­ì–´ ë²„íŠ¼
+    private TMP_Text englishButtonText; //ì˜ì–´ ë²„íŠ¼
+    private Color activeColor = Color.green; //í™œì„±í™” ì¤‘ì¸ ì–¸ì–´ í…ìŠ¤íŠ¸ì˜ ìƒ‰ìƒ
+    private Color inactiveColor = Color.white; //ë¹„í™œì„±í™” ì¤‘ì¸ ì–¸ì–´ í…ìŠ¤íŠ¸ì˜ ìƒ‰ìƒ
 
     private LocalizedString localizedString = new LocalizedString();
     private LocalizedString itemNameLocalizedString = new LocalizedString();
     private LocalizedString itemExplanationLocalizedString = new LocalizedString();
 
-    private bool isChanging; //¾ğ¾î º¯°æ
+    private bool isChanging; //ì–¸ì–´ ë³€ê²½
     
     private void Awake()
     {
@@ -55,23 +54,23 @@ public class DialogueManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // ¾À ·Îµå ÀÌº¥Æ® µî·Ï
+        // ì”¬ ë¡œë“œ ì´ë²¤íŠ¸ ë“±ë¡
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
-        // ¾À ·Îµå ÀÌº¥Æ® µî·Ï
+        // ì”¬ ë¡œë“œ ì´ë²¤íŠ¸ ë“±ë¡
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    //»õ ¾ÀÀÌ ·ÎµåµÉ ¶§ È£Ãâ
+    //ìƒˆ ì”¬ì´ ë¡œë“œë  ë•Œ í˜¸ì¶œ
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (PlayerManager.Instance != null)
         {
             btnList = PlayerManager.Instance.getBtnList;
-            quickSlot = PlayerManager.Instance.getQuickSlot;
+            
             itemName = PlayerManager.Instance.getItemName;
             explanation = PlayerManager.Instance.getExplanation;
             
@@ -81,13 +80,13 @@ public class DialogueManager : MonoBehaviour
         UpdateButtonColorByLocale();
     }
 
-    //Story Å×ÀÌºí ÀÌ¸§°ú Å°°ªÀ» ÅëÇØ ´ë»ç Ãâ·Â
+    //Story í…Œì´ë¸” ì´ë¦„ê³¼ í‚¤ê°’ì„ í†µí•´ ëŒ€ì‚¬ ì¶œë ¥
     public void SetDialogue(string tableName, int key)
     {
-        localizedString.TableReference = tableName; //Å×ÀÌºí ÀÌ¸§ °¡Á®¿À±â
+        localizedString.TableReference = tableName; //í…Œì´ë¸” ì´ë¦„ ê°€ì ¸ì˜¤ê¸°
         localizedString.TableEntryReference = key.ToString();
         localizedString.StringChanged += UpdateDialogueText;
-        localizedString.RefreshString(); //¹ø¿ªµÈ ¹®ÀÚ¿­ ¾÷µ¥ÀÌÆ®
+        localizedString.RefreshString(); //ë²ˆì—­ëœ ë¬¸ìì—´ ì—…ë°ì´íŠ¸
 
         StartCoroutine(StoryBottonState_co());
     }
@@ -103,15 +102,15 @@ public class DialogueManager : MonoBehaviour
     {
         if (PlayerManager.Instance != null)
         {
-            //2ÃÊ µ¿¾È ¹öÆ° ºñÈ°¼ºÈ­
+            //2ì´ˆ ë™ì•ˆ ë²„íŠ¼ ë¹„í™œì„±í™”
             dialogueButton.interactable = false;
-            dialogueButton.gameObject.SetActive(true); //¹öÆ° È°¼ºÈ­
+            dialogueButton.gameObject.SetActive(true); //ë²„íŠ¼ í™œì„±í™”
             TouchManager.Instance.EnableMoveHandler(false);
-            quickSlot.QucikSlotButton(false); //Äü½½·Ô ºñÈ°¼ºÈ­
-            btnList.SetActive(false);//ÀÎº¥Åä¸®¹öÆ° ºñÈ°¼ºÈ­
+            //quickSlot.QucikSlotButton(false); //í€µìŠ¬ë¡¯ ë¹„í™œì„±í™”
+            btnList.SetActive(false);//ì¸ë²¤í† ë¦¬ë²„íŠ¼ ë¹„í™œì„±í™”
             yield return new WaitForSeconds(2f);
 
-            //2ÃÊ ÈÄ ¹öÆ° È°¼ºÈ­ ¹× ÅÍÄ¡ ÀÌº¥Æ®
+            //2ì´ˆ í›„ ë²„íŠ¼ í™œì„±í™” ë° í„°ì¹˜ ì´ë²¤íŠ¸
             dialogueButton.interactable = true;
             dialogueButton.onClick.AddListener(OnButtonClicked);
             TouchManager.Instance.EnableMoveHandler(true);
@@ -119,38 +118,37 @@ public class DialogueManager : MonoBehaviour
         }
 
 
-        //7ÃÊ ÈÄ ÀÚµ¿ ºñÈ°¼ºÈ­(ÅÍÄ¡·Î ºñÈ°¼ºÈ­µÇÁö ¾Ê¾ÒÀ» °æ¿ì)
-        //yield return new WaitForSeconds(4f); //3ÃÊ ´ë±â ÈÄ 4ÃÊ ´õ ´ë±â
+        //7ì´ˆ í›„ ìë™ ë¹„í™œì„±í™”(í„°ì¹˜ë¡œ ë¹„í™œì„±í™”ë˜ì§€ ì•Šì•˜ì„ ê²½ìš°)
+        //yield return new WaitForSeconds(4f); //3ì´ˆ ëŒ€ê¸° í›„ 4ì´ˆ ë” ëŒ€ê¸°
         //dialogueButton.gameObject.SetActive(false);
     }
 
     private void OnButtonClicked()
     {
-        //¹öÆ° ÅÍÄ¡ ½Ã Áï½Ã ºñÈ°¼ºÈ­
+        //ë²„íŠ¼ í„°ì¹˜ ì‹œ ì¦‰ì‹œ ë¹„í™œì„±í™”
         dialogueButton.gameObject.SetActive(false);
 
-        //ÅÍÄ¡ ÀÌº¥Æ® Á¦°Å
+        //í„°ì¹˜ ì´ë²¤íŠ¸ ì œê±°
         dialogueButton.onClick.RemoveListener(OnButtonClicked);
-        quickSlot.QucikSlotButton(true); //Äü½½·Ô È°¼ºÈ­
-        btnList.SetActive(true);//ÀÎº¥Åä¸®¹öÆ° È°¼ºÈ­
+        btnList.SetActive(true);//ì¸ë²¤í† ë¦¬ë²„íŠ¼ í™œì„±í™”
     }
 
-    //¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
+    //ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡
 
-    //ÀÎº¥Åä¸® Item Id°ª°ú Localization key °ª ÀÏÄ¡ÇÏ°Ô ¸¸µé¾î Ãâ·Â
+    //ì¸ë²¤í† ë¦¬ Item Idê°’ê³¼ Localization key ê°’ ì¼ì¹˜í•˜ê²Œ ë§Œë“¤ì–´ ì¶œë ¥
     public void SetItemNameText(string tableName, int key)
     {
-        itemNameLocalizedString.TableReference = tableName; //Å×ÀÌºí ÀÌ¸§ °¡Á®¿À±â
+        itemNameLocalizedString.TableReference = tableName; //í…Œì´ë¸” ì´ë¦„ ê°€ì ¸ì˜¤ê¸°
         itemNameLocalizedString.TableEntryReference = key.ToString();
         itemNameLocalizedString.StringChanged += UpdateItemnameText;
-        itemNameLocalizedString.RefreshString(); //¹ø¿ªµÈ ¹®ÀÚ¿­ ¾÷µ¥ÀÌÆ®
+        itemNameLocalizedString.RefreshString(); //ë²ˆì—­ëœ ë¬¸ìì—´ ì—…ë°ì´íŠ¸
     }
     public void SetItemExplanationText(string tableName, int key)
     {
-        itemExplanationLocalizedString.TableReference = tableName; //Å×ÀÌºí ÀÌ¸§ °¡Á®¿À±â
+        itemExplanationLocalizedString.TableReference = tableName; //í…Œì´ë¸” ì´ë¦„ ê°€ì ¸ì˜¤ê¸°
         itemExplanationLocalizedString.TableEntryReference = key.ToString();
         itemExplanationLocalizedString.StringChanged += UpdateItemExplanationText;
-        itemExplanationLocalizedString.RefreshString(); //¹ø¿ªµÈ ¹®ÀÚ¿­ ¾÷µ¥ÀÌÆ®
+        itemExplanationLocalizedString.RefreshString(); //ë²ˆì—­ëœ ë¬¸ìì—´ ì—…ë°ì´íŠ¸
     }
     private void UpdateItemnameText(string text)
     {
@@ -161,17 +159,17 @@ public class DialogueManager : MonoBehaviour
         explanation.text = text;
     }
 
-    //¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
+    //ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡
     private void OnDestroy()
     {
-        localizedString.StringChanged -= UpdateDialogueText; //¸®½º³Ê ÇØÁ¦
+        localizedString.StringChanged -= UpdateDialogueText; //ë¦¬ìŠ¤ë„ˆ í•´ì œ
     }
 
 
     
-    //¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
+    //ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡
 
-    //¾ğ¾î º¯°æ
+    //ì–¸ì–´ ë³€ê²½
     public void ChangeLocale(int index)
     {
         if (isChanging)
@@ -186,20 +184,20 @@ public class DialogueManager : MonoBehaviour
     {
         isChanging = true;
 
-        yield return LocalizationSettings.InitializationOperation; //ÃÊ±âÈ­
+        yield return LocalizationSettings.InitializationOperation; //ì´ˆê¸°í™”
 
-        // ¾ğ¾î ¹Ù²ãÁÖ±â SelectedLocale¿¡ ÀÖ´Â ¾ğ¾î·Î
+        // ì–¸ì–´ ë°”ê¿”ì£¼ê¸° SelectedLocaleì— ìˆëŠ” ì–¸ì–´ë¡œ
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
         isChanging = false;
 
-        //ÇöÀç ¾ğ¾î¿¡ µû¶ó ¹öÆ° »ö»ó ¾÷µ¥ÀÌÆ®
+        //í˜„ì¬ ì–¸ì–´ì— ë”°ë¼ ë²„íŠ¼ ìƒ‰ìƒ ì—…ë°ì´íŠ¸
         UpdateButtonTextColor(index);
 
         
     }
 
-    //»ö»ó ¾÷µ¥ÀÌÆ®
+    //ìƒ‰ìƒ ì—…ë°ì´íŠ¸
     private void UpdateButtonTextColor(int index)
     {
         if (index == 1)
@@ -218,7 +216,7 @@ public class DialogueManager : MonoBehaviour
    
     private void UpdateButtonColorByLocale()
     {
-        // ÇöÀç LocaleÀÇ ÀÎµ¦½º¸¦ °¡Á®¿Í ¹öÆ° »ö»ó ¼³Á¤
+        // í˜„ì¬ Localeì˜ ì¸ë±ìŠ¤ë¥¼ ê°€ì ¸ì™€ ë²„íŠ¼ ìƒ‰ìƒ ì„¤ì •
         int currentLocaleIndex = LocalizationSettings.AvailableLocales.Locales.IndexOf(LocalizationSettings.SelectedLocale);
         UpdateButtonTextColor(currentLocaleIndex);
     }
