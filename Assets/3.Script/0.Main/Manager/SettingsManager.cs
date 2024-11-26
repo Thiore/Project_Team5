@@ -49,15 +49,13 @@ public class SettingsManager : MonoBehaviour
     }
     private void Start()
     {
-        
-
-        float masterValue = Mathf.Lerp(-60f, 0f, master);
+        float masterValue = Mathf.Log10(Mathf.Clamp(master, 0.0001f, 1f)) * 20f;
         audioMixer.SetFloat("Master", masterValue);
 
-        float BGMValue = Mathf.Lerp(-60f, 0f, BGM);
+        float BGMValue = Mathf.Log10(Mathf.Clamp(BGM, 0.0001f, 1f)) * 20f;
         audioMixer.SetFloat("BGM", BGMValue);
        
-        float SFXValue = Mathf.Lerp(-60f, 0f, SFX);
+        float SFXValue = Mathf.Log10(Mathf.Clamp(SFX, 0.0001f, 1f)) * 20f;
         audioMixer.SetFloat("SFX", SFXValue);
     }
 
