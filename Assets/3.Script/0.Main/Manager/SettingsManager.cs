@@ -8,27 +8,38 @@ public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance { get; private set; } = null;
 
+
     [SerializeField] private AudioMixer audioMixer;
+
+    public readonly string hashMaster = "Master";  
     [HideInInspector]
     public float master;
+
+    public readonly string hashBGM = "BGM";
     [HideInInspector]
     public float BGM;
+
+    public readonly string hashSFX = "SFX";
     [HideInInspector]
     public float SFX;
+
+    public readonly string hashCameraSpeed = "CameraSpeed";
     [HideInInspector]
     public float CameraSpeed;
 
     [SerializeField] private GameObject settingPage;
 
-    public TMP_Text koreanButtonText;//ÇÑ±¹¾î ¹öÆ°
+    public TMP_Text koreanButtonText;//í•œêµ­ì–´ ë²„íŠ¼
 
-    public TMP_Text englishButtonText;//ÇÑ±¹¾î ¹öÆ°
+    public TMP_Text englishButtonText;//í•œêµ­ì–´ ë²„íŠ¼
 
     private void Awake()
     {
         if(Instance == null)
         {
             Instance = this;
+
+            InitSetting();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -38,12 +49,7 @@ public class SettingsManager : MonoBehaviour
     }
     private void Start()
     {
-        //½ÂÁÖ¾¾ ¼öÁ¤ºÎÅ¹µå·Á¿ä? + Settings SaveCompleteºÎºÐ¿¡ ÀúÀåÇÏ´Â°Å ³Ö¾îÁÖ½Ã¸éµË´Ï´Ù.
-        //settingÃ¢ ²ô´Â¹öÆ°¿¡ Àú ¸Þ¼­µåµé Ãß°¡ÇØµ×¾î¿ä~
-        master = SaveManager.Instance.gameState.masterVolume;
-        BGM = SaveManager.Instance.gameState.bgmVoluem;
-        SFX = SaveManager.Instance.gameState.sfxVoluem;
-        CameraSpeed = SaveManager.Instance.gameState.camSpeed;
+        
 
         float masterValue = Mathf.Lerp(-60f, 0f, master);
         audioMixer.SetFloat("Master", masterValue);
@@ -59,4 +65,38 @@ public class SettingsManager : MonoBehaviour
     {
         settingPage.SetActive(true);
     }
+    private void InitSetting()
+    {
+        if (PlayerPrefs.HasKey(hashMaster))
+        {
+            master = PlayerPrefs.GetFloat(hashMaster);
+        }
+        else
+            master = 0.5f;
+
+        if (PlayerPrefs.HasKey(hashBGM))
+        {
+            BGM = PlayerPrefs.GetFloat(hashBGM);
+        }
+        else
+            BGM = 0.5f;
+
+        if (PlayerPrefs.HasKey(hashSFX))
+        {
+            SFX = PlayerPrefs.GetFloat(hashSFX);
+        }
+        else
+            SFX = 0.5f;
+
+        if (PlayerPrefs.HasKey(hashCameraSpeed))
+        {
+            CameraSpeed = PlayerPrefs.GetFloat(hashCameraSpeed);
+        }
+        else
+            CameraSpeed = 0.5f;
+
+       
+    }
+
+   
 }

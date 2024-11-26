@@ -10,10 +10,6 @@ public class StateData : MonoBehaviour
     {
         public List<FloorState> floors; //��ü ���� ���¸� ��� ����Ʈ
         public string selectedLocale; //���� ���õ� ���
-        public float masterVolume;
-        public float bgmVoluem;
-        public float sfxVoluem;
-        public float camSpeed;
 
 
         //�÷��̾� ��ġ

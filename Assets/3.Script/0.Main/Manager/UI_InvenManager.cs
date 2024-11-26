@@ -32,6 +32,8 @@ public class UI_InvenManager : MonoBehaviour
     private Queue<Sprite> getItemQueue;
     private Coroutine getItemImage_co = null;
     private WaitForSeconds waitForDelayTime;
+
+    [SerializeField] private Button optionBtn;
     
 
     [SerializeField] private FlashLight flashLight;
@@ -66,6 +68,11 @@ public class UI_InvenManager : MonoBehaviour
             newObj.gameObject.SetActive(false);
             invenSlots_Queue.Enqueue(newObj);
         }
+    }
+
+    public void OnOpenInventory()
+    {
+        optionBtn.onClick.AddListener(SettingsManager.Instance.OnSettingPage);
     }
     private void InitQuickSlots()
     {

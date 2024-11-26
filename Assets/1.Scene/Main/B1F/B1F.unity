@@ -10468,7 +10468,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7487910266999211536}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -15997,19 +15997,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: a626294411d710a4b9e1872ce0855f79, type: 2}
---- !u!114 &1114490032261188284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4855761884185712977}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d547b26d67aee54e86b8dfa353c1523, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  quickBtn: {fileID: 0}
 --- !u!1 &1117669029351746785
 GameObject:
   m_ObjectHideFlags: 0
@@ -38075,10 +38062,6 @@ MonoBehaviour:
   gameState:
     floors: []
     selectedLocale: 
-    masterVolume: 0
-    bgmVoluem: 0
-    sfxVoluem: 0
-    camSpeed: 0
     playerPositionX: 0
     playerPositionY: 0
     playerPositionZ: 0
@@ -56040,6 +56023,7 @@ MonoBehaviour:
   lerpImage: {fileID: 5755279082770447794}
   lerpSpeed: 0.5
   DelayTime: 1
+  optionBtn: {fileID: 1481313669705984255}
   flashLight: {fileID: 7871085648074735281}
 --- !u!65 &4586011945672548234
 BoxCollider:
@@ -56520,14 +56504,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c392388972e9af48aa5e388be11329f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemInfo: {fileID: 0}
-  lerpimage: {fileID: 0}
-  btnList: {fileID: 0}
-  itemName: {fileID: 0}
-  explanation: {fileID: 0}
+  itemInfo: {fileID: 8589114407488960635}
+  btnList: {fileID: 7688532207830826402}
+  itemName: {fileID: 1407377983731356703}
+  explanation: {fileID: 8159195349872907932}
   mainPlayer: {fileID: 3149699761016253050}
   playerCam: {fileID: 7946258479958299723}
-  optionBtn: {fileID: 0}
 --- !u!224 &4637900942309448785
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58913,7 +58895,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3056004384085611769}
-  - component: {fileID: 1114490032261188284}
   m_Layer: 5
   m_Name: PlayInterface
   m_TagString: PlayInterface
@@ -67358,7 +67339,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 4584007621664017321}
         m_TargetAssemblyTypeName: UI_InvenManager, Assembly-CSharp
-        m_MethodName: OpenInventory
+        m_MethodName: OnOpenInventory
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

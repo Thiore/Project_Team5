@@ -16,8 +16,8 @@ public class PlayerManager : MonoBehaviour
    
 
 
-    [SerializeField] private UI_LerpImage lerpimage;
-    public UI_LerpImage ui_lerpImage { get => lerpimage; }
+    //[SerializeField] private UI_LerpImage lerpimage;
+    //public UI_LerpImage ui_lerpImage { get => lerpimage; }
 
 
     [SerializeField] private GameObject btnList;
@@ -31,8 +31,6 @@ public class PlayerManager : MonoBehaviour
 
     public Transform mainPlayer;
     public Transform playerCam;
-
-    public Button optionBtn;
 
     private void Awake()
     {
@@ -48,4 +46,5 @@ public class PlayerManager : MonoBehaviour
         //    Destroy(gameObject);
         //}
     }
+    
 }

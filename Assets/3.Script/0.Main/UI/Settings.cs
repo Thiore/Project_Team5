@@ -44,20 +44,19 @@ public class Settings : MonoBehaviour
                 SceneManager.sceneLoaded += OnSettingLoaded;
                 break;
             case eSlideType.Master:
-                typeSlider.value = SettingsManager.Instance.master;
                 typeSlider.onValueChanged.AddListener(SetMasterVolume);
+                typeSlider.value = SettingsManager.Instance.master;
                 break;
             case eSlideType.BGM:
-                typeSlider.value = SettingsManager.Instance.BGM;
                 typeSlider.onValueChanged.AddListener(SetBGMVolume);
+                typeSlider.value = SettingsManager.Instance.BGM;
                 break;
             case eSlideType.SFX:
-                typeSlider.value = SettingsManager.Instance.SFX;
                 typeSlider.onValueChanged.AddListener(SetSFXVolume);
+                typeSlider.value = SettingsManager.Instance.SFX;
                 break;
             case eSlideType.CameraSpeed:
                 typeSlider.value = SettingsManager.Instance.CameraSpeed;
-                typeSlider.onValueChanged.AddListener(SetCamSpeed);
                 break;
         }
         
@@ -74,31 +73,33 @@ public class Settings : MonoBehaviour
             case eSlideType.Master:
                 SettingsManager.Instance.master = typeSlider.value;
                 typeSlider.onValueChanged.RemoveListener(SetMasterVolume);
+                PlayerPrefs.SetFloat(SettingsManager.Instance.hashMaster, typeSlider.value);
                 break;
             case eSlideType.BGM:
                 SettingsManager.Instance.BGM = typeSlider.value;
+                PlayerPrefs.SetFloat(SettingsManager.Instance.hashBGM, typeSlider.value);
                 typeSlider.onValueChanged.RemoveListener(SetBGMVolume);
                 break;
             case eSlideType.SFX:
                 SettingsManager.Instance.SFX = typeSlider.value;
                 typeSlider.onValueChanged.RemoveListener(SetSFXVolume);
+                PlayerPrefs.SetFloat(SettingsManager.Instance.hashSFX, typeSlider.value);
                 break;
             case eSlideType.CameraSpeed:
                 SettingsManager.Instance.CameraSpeed = typeSlider.value;
-                typeSlider.onValueChanged.RemoveListener(SetCamSpeed);
+                PlayerPrefs.SetFloat(SettingsManager.Instance.hashCameraSpeed, typeSlider.value);
                 break;
         }
     }
+
+    
+
     private void OnSettingLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(PlayerManager.Instance != null)
-        {
-            PlayerManager.Instance.optionBtn.onClick.AddListener(OnSettingPage);
-        }
+        
     }
     public void LoadLobby()
     {
-        SaveManager.Instance.SaveGameState();
         GameManager.Instance.LoadScene("Lobby");
     }
 
@@ -116,8 +117,6 @@ public class Settings : MonoBehaviour
         float dBValue = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f; // 0 ~ 1 -> -80dB ~ 0dB
         audioMixer.SetFloat("Master", dBValue);
 
-
-        SettingsManager.Instance.master = volume;
     }
 
     private void SetBGMVolume(float volume)
@@ -125,7 +124,6 @@ public class Settings : MonoBehaviour
         float dBValue = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f; // 0 ~ 1 -> -80dB ~ 0dB
         audioMixer.SetFloat("BGM", dBValue);
 
-        SettingsManager.Instance.BGM = volume;
     }
 
     private void SetSFXVolume(float volume)
@@ -133,29 +131,8 @@ public class Settings : MonoBehaviour
         float dBValue = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f; // 0 ~ 1 -> -80dB ~ 0dB
         audioMixer.SetFloat("SFX", dBValue);
 
-        SettingsManager.Instance.SFX = volume;
     }
 
-    private void SetCamSpeed(float speed)
-    {
-        float speedValue = Mathf.Lerp(0.1f, 5f, speed);
+    
 
-        SettingsManager.Instance.CameraSpeed = speedValue;
-    }
-    public void SaveComplete()
-    {
-        //SaveManager.Instance.Update~~ 4가지 값저장
-        SaveManager.Instance.UpdateVolumeSettings(
-            SettingsManager.Instance.master,
-            SettingsManager.Instance.BGM,
-            SettingsManager.Instance.SFX,
-            SettingsManager.Instance.CameraSpeed);
-        Debug.Log("SaveComplete");
-        
-    }
-
-    private void OnSettingPage()
-    {
-        transform.GetChild(0).gameObject.SetActive(true);
-    }
 }

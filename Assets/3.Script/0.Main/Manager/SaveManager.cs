@@ -6,7 +6,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
-using static UnityEditor.Progress;
 
 public class SaveManager : MonoBehaviour
 {
@@ -82,16 +81,16 @@ public class SaveManager : MonoBehaviour
     {
         if (pause)
         {
+            PlayerPrefs.Save();
             SaveGameState();
-
         }
     }
 
     //어플리케이션이 종료 되었을 때
     private void OnApplicationQuit()
     {
+        PlayerPrefs.Save();
         SaveGameState();
-
     }
 
     //새게임
@@ -102,10 +101,6 @@ public class SaveManager : MonoBehaviour
         {
             floors = new List<StateData.FloorState>(),
 
-            masterVolume = SettingsManager.Instance.master,
-            bgmVoluem = SettingsManager.Instance.BGM,
-            sfxVoluem = SettingsManager.Instance.SFX,
-            camSpeed = SettingsManager.Instance.CameraSpeed,
             //플레이어 위치 초기화
             playerPositionX = 4.224149f,
             playerPositionY = 1f,
@@ -176,7 +171,7 @@ public class SaveManager : MonoBehaviour
         itemsavedata = new Dictionary<int, ItemSaveData>();
 
         // 새로운 초기 데이터를 저장
-        SaveItemData();
+        //SaveItemData();
     }
 
     public void LoadItemData()
@@ -384,17 +379,4 @@ public class SaveManager : MonoBehaviour
             loadGameButton.SetActive(HasSaveFile());
         }
     }
-
-
-    //볼륨 관련 업데이트
-    public void UpdateVolumeSettings(float master, float bgm, float sfx, float canSpeed)
-    {
-        gameState.masterVolume = master;
-        gameState.bgmVoluem = bgm;
-        gameState.sfxVoluem = sfx;
-        gameState.camSpeed = canSpeed;
-
-        SaveGameState();
-    }
-
 }
