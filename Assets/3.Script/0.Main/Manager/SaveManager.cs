@@ -220,15 +220,33 @@ public class SaveManager : MonoBehaviour
         //로컬라이제이션 현재 선택 언어 저장
         gameState.selectedLocale = LocalizationSettings.SelectedLocale.Identifier.Code;
 
-        //isInteracted가 하나라도 true인지 확인
-        if (!HasInteractedObjects())
+        //isInteracted가 true인 데이터만 추출
+        var filteredFloors = gameState.floors
+            .Where(floor => floor.Value.Any(obj => obj.isInteracted)) //상호작용 완료된 데이터가 있는 층만
+            .ToDictionary(floor => floor.Key, //층 인덱스
+            floor => floor.Value.Where(obj => obj.isInteracted).ToList()); //상호작용된 오브젝트만 저장
+
+        //데이터가 없으면 저장하지 않음
+        if (filteredFloors.Count == 0)
         {
-            Debug.Log("여기 들어왔나연~  아무것도 엄서용~");
+            Debug.Log("아무 데이터도 엄서용~");
             return;
         }
 
-        // 게임 상태를 JSON 형식으로 직렬화하여 파일에 저장
-        string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
+        // JSON 파일로 저장
+        string json = JsonConvert.SerializeObject(new StateData.GameState
+        {
+            floors = filteredFloors,
+            selectedLocale = gameState.selectedLocale,
+            playerPositionX = gameState.playerPositionX,
+            playerPositionY = gameState.playerPositionY,
+            playerPositionZ = gameState.playerPositionZ,
+            playerRotationX = gameState.playerRotationX,
+            playerRotationY = gameState.playerRotationY,
+            playerRotationZ = gameState.playerRotationZ,
+            playerRotationW = gameState.playerRotationW
+        }, Formatting.Indented);
+
         File.WriteAllText(savePath, json);
 
 
@@ -262,46 +280,30 @@ public class SaveManager : MonoBehaviour
     // 상태 업데이트 (층 및 오브젝트 상태 업데이트)
     public void UpdateObjectState(int floorIndex, int objectIndex, bool isInteracted)
     {
-        //해당 층을 찾거나 새로 생성(새게임)
-        StateData.FloorState floor = gameState.floors.Find(f => f.floorIndex == floorIndex);
-
-        //해당 층이 없을 경우 새로운 층 추가
-        if (floor == null)
+        //층 상태 가져오기 (없으면 생성)
+        if (!gameState.floors.ContainsKey(floorIndex))
         {
-            floor = new StateData.FloorState
-            {
-                //층 인덱스 설정
-                floorIndex = floorIndex,
-                //오브젝트 리스트 초기화
-                interactableObjects = new List<StateData.InteractableObjectState>()
-            };
-            //생성한 층을 floors 리스트에 추가
-            gameState.floors.Add(floor);
+            gameState.floors[floorIndex] = new List<StateData.InteractableObjectState>();
         }
 
-        //해당 오브젝트를 찾거나 새로 생성하여 상태 업데이트
-        StateData.InteractableObjectState objState = floor.interactableObjects.Find(obj => obj.objectIndex == objectIndex);
-
-        //오브젝트가 존재하지 않은 경우 새로운 오브젝트 추가
+        //오브젝트 상태 가져오기 (없으면 생성)
+        var objState = gameState.floors[floorIndex].FirstOrDefault(obj => obj.objectIndex == objectIndex);
         if (objState == null)
         {
             objState = new StateData.InteractableObjectState
             {
-                //오브젝트 인덱스 설정
                 objectIndex = objectIndex,
-                //전달된 상호작용 상태 설정
                 isInteracted = isInteracted
             };
-            //생성한 오브젝트 interactableObjects 리스트에 추가
-            floor.interactableObjects.Add(objState);
+            gameState.floors[floorIndex].Add(objState);
         }
-        else
+        else 
         {
-            //오브젝트가 이미 존재하는 경우 -> 상호작용 상태만 업데이트
+            //기존 상태 업데이트
             objState.isInteracted = isInteracted;
         }
 
-        SavePlayerState();
+        //SavePlayerState();
     }
 
     //puzzle과 상호작용하는 door에 상태 알리기

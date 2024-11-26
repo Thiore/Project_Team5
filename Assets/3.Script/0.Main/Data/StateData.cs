@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class StateData : MonoBehaviour
 {
-    //��ü
+    //전체 게임 상태
     [System.Serializable]
     public class GameState
     {
-        public List<FloorState> floors; //��ü ���� ���¸� ��� ����Ʈ
-        public string selectedLocale; //���� ���õ� ���
+        public Dictionary<int, List<InteractableObjectState>> floors; //층별 오브젝트의 상태
+        public string selectedLocale; //현재 선택된 언어
 
 
         //�÷��̾� ��ġ
