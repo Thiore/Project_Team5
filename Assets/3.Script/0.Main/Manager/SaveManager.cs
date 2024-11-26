@@ -158,9 +158,11 @@ public class SaveManager : MonoBehaviour
 
             //저장된 언어 상태 가져오기
             selectedLocale_ = gameState.selectedLocale;
+            
+            //아이템
+            LoadItemData();
         }
 
-        LoadItemData();
     }
 
     public void NewGameItemData()
@@ -195,15 +197,21 @@ public class SaveManager : MonoBehaviour
 
     public void SaveItemData()
     {
-        Debug.Log("Saving Item Data...");
-        List<ItemSaveData> itemList = itemsavedata.Values.ToList();
-        foreach (var item in itemList)
+        if (DataManager.instance.savedata.Count > 0)
         {
-            Debug.Log($"Saving Item - ID: {item.id}, UseState: {item.isused}");
-        }
+            Debug.Log("Saving Item Data...");
+            List<ItemSaveData> itemList = itemsavedata.Values.ToList();
+            foreach (var item in itemList)
+            {
+                Debug.Log($"Saving Item - ID: {item.id}, UseState: {item.isused}");
+            }
 
-        string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
-        File.WriteAllText(itemstatepath, itemsjson);
+            string itemsjson = JsonConvert.SerializeObject(itemList, Formatting.Indented);
+            File.WriteAllText(itemstatepath, itemsjson);
+
+        }
+        else
+            Debug.Log("아이템이 아무것도 엄서용~");
     }
 
     // 게임 상태 저장
@@ -212,18 +220,42 @@ public class SaveManager : MonoBehaviour
         //로컬라이제이션 현재 선택 언어 저장
         gameState.selectedLocale = LocalizationSettings.SelectedLocale.Identifier.Code;
 
+        //isInteracted가 하나라도 true인지 확인
+        if (!HasInteractedObjects())
+        {
+            Debug.Log("여기 들어왔나연~  아무것도 엄서용~");
+            return;
+        }
 
         // 게임 상태를 JSON 형식으로 직렬화하여 파일에 저장
         string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
         File.WriteAllText(savePath, json);
 
-        SaveItemData();
 
         //저장 후 LoadGameButton 상태 업데이트
         UpdateLoadGameButton();
 
         hasSaveFileCache = true;
 
+        //아이템 저장
+        SaveItemData();
+    }
+
+    //상호작용 여부 확인
+    private bool HasInteractedObjects()
+    {
+        //층수의 상호작용 오브젝트 검사
+        foreach (var floor in gameState.floors)
+        {
+            //해당 층의 오브젝트 중 isInteracted가 true 라면 저장
+            //유저가 플레이를 하지 않았음에도 json파일을 생성하여 저장하는 불필요한 작업을 막기 위해
+            if (floor.interactableObjects.Count(obj => obj.isInteracted)>0)
+            {
+                return true;
+            }
+        }
+        //true인 Object가 없다면 저장하지 않음
+        return false;
     }
 
 
