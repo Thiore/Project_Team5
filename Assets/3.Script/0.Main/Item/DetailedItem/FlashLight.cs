@@ -13,7 +13,7 @@ public class FlashLight : MonoBehaviour, IUseTrigger
     }
     private void OnEnable()
     {
-        if (DataManager.instance.savedata.TryGetValue(id, out ItemSaveData data))
+        if (DataManager.instance.savedata.ContainsKey(id))
         {
             TriggerButton.OnUseTrigger += OnUseTrigger;
         }

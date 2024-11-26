@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     }
     public void LoadB1F()
     {
+        TouchManager.Instance.OnDisableTuchAction();
         FadeOut(B1F);
     }
     public void LoadScene(string SceneName)
@@ -134,7 +135,8 @@ public class GameManager : MonoBehaviour
 
                 fade_co = null;
                 isFadeOut = false;
-                SceneManager.LoadScene(SceneName);
+                if(SceneName != null)
+                    SceneManager.LoadScene(SceneName);
                 yield break;
             }
             yield return null;

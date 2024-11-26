@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using System.Linq;
+using System.IO;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance = null;
 
     public Dictionary<int, Item> dicItem { get; private set; }
-    public Dictionary<int, ItemSaveData> savedata { get; private set; }
+    public Dictionary<int, bool> savedata { get; private set; }
 
     private void Awake()
     {
@@ -54,12 +55,12 @@ public class DataManager : MonoBehaviour
             {
                 //Item3D[] items = FindObjectsOfType<Item3D>();
 
-                foreach (KeyValuePair<int, ItemSaveData> data in savedata)
+                foreach (KeyValuePair<int, bool> data in savedata)
                 {
-                    if (data.Value.isused.Equals(false))
+                    if (data.Value.Equals(false))
                     {
                         Item item = GetItemInfoById(data.Key);
-                        item.isused = data.Value.isused;
+                        item.isused = data.Value;
                         UI_InvenManager.Instance.GetItemByID(item, true);
                     }
                 }

@@ -3171,6 +3171,7 @@ MonoBehaviour:
   lerpImage: {fileID: 547179564}
   lerpSpeed: 0.5
   DelayTime: 1
+  optionBtn: {fileID: 0}
   flashLight: {fileID: 0}
 --- !u!1 &967226753
 GameObject:
@@ -40400,21 +40401,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d79aca0ffd4a4438a0ba90a3d383fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState:
-    floors: []
-    selectedLocale: 
-    masterVolume: 0
-    bgmVoluem: 0
-    sfxVoluem: 0
-    camSpeed: 0
-    playerPositionX: 0
-    playerPositionY: 0
-    playerPositionZ: 0
-    playerRotationX: 0
-    playerRotationY: 0
-    playerRotationZ: 0
-    playerRotationW: 0
   selectedLocale: 
+  loadButton: {fileID: 0}
+  lloadbutton: {fileID: 0}
 --- !u!23 &3019761022506865997
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -49923,7 +49912,7 @@ PrefabInstance:
       objectReference: {fileID: 2032244355}
     - target: {fileID: 4970807519450020527, guid: 7c0a68be6327e9847b1e5c8cdd44473b, type: 3}
       propertyPath: m_VersionIndex
-      value: 23
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 6836327329535808402, guid: 7c0a68be6327e9847b1e5c8cdd44473b, type: 3}
       propertyPath: m_LocalScale.x
@@ -58287,14 +58276,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 1947038039}
-  quickSlot: {fileID: 2095107262}
-  lerpimage: {fileID: 0}
   btnList: {fileID: 304580789}
   itemName: {fileID: 1955879438}
   explanation: {fileID: 1763221232}
   mainPlayer: {fileID: 3149699761016253050}
   playerCam: {fileID: 7946258479958299723}
-  optionBtn: {fileID: 999657517}
 --- !u!224 &4637900942309448785
 RectTransform:
   m_ObjectHideFlags: 0

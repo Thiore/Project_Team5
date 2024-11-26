@@ -72,6 +72,8 @@ public class TouchManager : MonoBehaviour
 
     private bool isQuitting = false;
 
+    private bool isTouchSupportEnabled = false; // EnhancedTouch 상태 관리
+
     private void Awake()
     {
         if (Instance == null)
@@ -92,22 +94,29 @@ public class TouchManager : MonoBehaviour
     }
     private void OnDisable()
     {
-        OnDisableTuchAction();
+        
         SceneManager.sceneLoaded -= OnTouchLoaded;
 
     }
     private void OnApplicationPause(bool pause)
     {
         isQuitting = pause;
+        if (isQuitting)
+            OnDisableTuchAction();
+        else
+            OnEnableTuchAction();
     }
 
     private void OnApplicationQuit()
     {
         isQuitting = true;
+        OnDisableTuchAction();
     }
 
     private void OnTouchLoaded(Scene scene, LoadSceneMode mode)
     {
+        eventSystem = FindObjectOfType<EventSystem>();
+        eventSystem.enabled = true;
         OnEnableTuchAction();
     }
 
@@ -363,17 +372,13 @@ public class TouchManager : MonoBehaviour
     }
     public void OnEnableTuchAction()
     {
+        if (isTouchSupportEnabled) return;
+
+        isTouchSupportEnabled = true;
+
         Debug.Log("추가됨");
         touchState = etouchState.Normal;
-        if (eventSystem == null)
-        {
-            eventSystem = FindObjectOfType<EventSystem>();
-            eventSystem.enabled = true;
-        }
-        else
-        {
-            eventSystem.enabled = true;
-        }
+        
 
         moveId = -1;
         lookId = -1;
@@ -389,16 +394,14 @@ public class TouchManager : MonoBehaviour
     }
     public void OnDisableTuchAction()
     {
-        if(isQuitting)
-        {
-            EnhancedTouchSupport.Disable();
-            ETouch.Touch.onFingerDown -= OnTouchStarted;
-            ETouch.Touch.onFingerMove -= OnTouchPerformed;
-            ETouch.Touch.onFingerUp -= OnTouchCanceled;
-        }
-       
+        if (!isTouchSupportEnabled) return;
 
-        
+        isTouchSupportEnabled = false;
+
+        EnhancedTouchSupport.Disable();
+        ETouch.Touch.onFingerDown -= OnTouchStarted;
+        ETouch.Touch.onFingerMove -= OnTouchPerformed;
+        ETouch.Touch.onFingerUp -= OnTouchCanceled;
     }
 
     public void EnableMoveHandler(bool dontTouch)
