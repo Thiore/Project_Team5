@@ -2,34 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FuseSwithManager : MonoBehaviour, ITouchable
+public class FuseSwithManager : MonoBehaviour
 {
-    
-    
-    
+    [SerializeField] private Fuse[] emptyfuselist;
+    [SerializeField] private Fuse[] resultobjs;
+
+    [SerializeField] private int[] result = new int[] { 0, 1, 1, 2, 2 };
 
 
-    public void OnTouchEnd(Vector2 position)
+    public void CheckResult()
     {
-        Ray ray = Camera.main.ScreenPointToRay(position);
-        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+        int samecount = 0;
+
+
+        for(int i = 0; i < resultobjs.Length; i++)
         {
-            if (hit.collider.gameObject.Equals(gameObject)) 
+            // 비교와 같다면
+            if(emptyfuselist[i].GetFuseColor().Equals(result[i]))
             {
-                
-
+                resultobjs[i].SetFuseColor(2);
+                samecount++;
             }
+            else
+            {
+                resultobjs[i].SetFuseColor(0);
+            }
+        }
 
+
+        if (samecount.Equals(5))
+        {
+            Debug.Log("성공");
+        }
+        else
+        {
+            Debug.Log("다시");          
         }
     }
 
-    public void OnTouchHold(Vector2 position)
+    public void Reset()
     {
-
-    }
-
-    public void OnTouchStarted(Vector2 position)
-    {
-
+        for(int i = 0; i < emptyfuselist.Length; i++)
+        {
+            emptyfuselist[i].SetFuseColor(3);
+        }
     }
 }
