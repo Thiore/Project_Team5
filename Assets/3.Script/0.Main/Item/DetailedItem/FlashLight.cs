@@ -13,12 +13,12 @@ public class FlashLight : MonoBehaviour, IUseTrigger
     }
     private void OnEnable()
     {
-        if (DataManager.instance.savedata.ContainsKey(id))
+        if (DataSaveManager.Instance.GetItemState(id))
         {
             TriggerButton.OnUseTrigger += OnUseTrigger;
         }
        
-        item = DataManager.instance.GetItemInfoById(id);
+        item = DataSaveManager.Instance.itemData[id];
         
     }
 

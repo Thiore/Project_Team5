@@ -24,6 +24,7 @@ public class UI_InvenManager : MonoBehaviour
 
 
     [SerializeField] public UI_ItemInformation iteminfo;
+
     [SerializeField] public Image dragImage;
 
     [SerializeField] private RectTransform lerpImage;
@@ -85,19 +86,21 @@ public class UI_InvenManager : MonoBehaviour
             quickSlots_Queue.Enqueue(newObj);
         }
     }
-
-    public void GetItemByID(Item item, bool isLoading = false)
+    /// <summary>
+    /// 아이템을 획득했을 때 인벤토리 및 퀵슬롯, 트리거슬롯에 추가해주는 메서드
+    /// </summary>
+    /// <param name="item">획득한 아이템을 추가해주세요</param>
+    /// <param name="isGetItemImage">처음 로딩할 때와 조합아이템은 true값을 입력하시면 획득 이미지가 나타나지 않습니다.</param>
+    public void GetItemByID(Item item, bool isGetItemImage = false)
     {
-        if(!isLoading)
+        if(!isGetItemImage)
         {
             GetItemByImage(item);
         }
         
         iteminfo.SetInfoByItem(item);
         AddInventoryItem(item);
-        // ���̺� ���� �ؾ���  >> Item3D�� �ص�
-
-        // Ÿ�Կ� ���� ���� �߰� �۾�
+        
         switch (item.eItemType)
         {
             case eItemType.Element:
@@ -189,8 +192,8 @@ public class UI_InvenManager : MonoBehaviour
 
     public void Combine(UI_InventorySlot slot, int id)
     {
-        int firstelement = DataManager.instance.GetItemElementIndex(slot.item.id);
-        int secondelement = DataManager.instance.GetItemElementIndex(id);
+        int firstelement = DataSaveManager.Instance.itemData[slot.item.id].elementindex;
+        int secondelement = DataSaveManager.Instance.itemData[id].elementindex;
 
         if (firstelement.Equals(secondelement) && !slot.item.id.Equals(id))
         {
@@ -200,9 +203,9 @@ public class UI_InvenManager : MonoBehaviour
             {
                 case 10:
                     
-                    Item item = DataManager.instance.GetItemInfoById(2);
-                    GetItemByID(item);
-                    SaveManager.Instance.InputItemSavedata(item);
+                    Item item = DataSaveManager.Instance.itemData[2];
+                    GetItemByID(item,true);
+                    DataSaveManager.Instance.UpdateItemState(item.id);
                     AddTriggerItem(item);
                     flashLight.SetUseFlashLight();
                     break;
@@ -219,7 +222,7 @@ public class UI_InvenManager : MonoBehaviour
     {
         UI_InventorySlot slot = invenSlots.Find(x => x.item.id.Equals(id));
 
-        SaveManager.Instance.InputItemSavedata(DataManager.instance.GetItemInfoById(id));
+        DataSaveManager.Instance.UpdateItemState(id);
         //slot.SetInvenEmpty();
         slot.transform.SetAsLastSibling();
         slot.gameObject.SetActive(false);

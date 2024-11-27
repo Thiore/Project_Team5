@@ -12,15 +12,32 @@ public class PlayerCamera : MonoBehaviour, ITouchable
 
     private float currentRotationX;
 
-    private void Start()
+    private void OnEnable()
     {
-        TouchManager.Instance.OnLookStarted += OnTouchStarted;
-        TouchManager.Instance.OnLookHold += OnTouchHold;
-        TouchManager.Instance.OnLookEnd += OnTouchEnd;
+        if (GameManager.Instance.gameType.Equals(eGameType.LoadGame))
+        {
+            transform.rotation = DataSaveManager.Instance.LoadGamePlayerRotation();
+        }
+        else
+        {
+            transform.rotation = DataSaveManager.Instance.NewGamePlayerRotation();
+        }
         lastTouchPosition = Vector2.zero;
         deltaRot = Vector3.zero;
         currentRotationX = transform.localEulerAngles.x; // 누적 X축 회전값을 추적하는 변수
+
+        TouchManager.Instance.OnLookStarted += OnTouchStarted;
+        TouchManager.Instance.OnLookHold += OnTouchHold;
+        TouchManager.Instance.OnLookEnd += OnTouchEnd;
+        
     }
+    private void OnDisable()
+    {
+        TouchManager.Instance.OnMoveStarted -= OnTouchStarted;
+        TouchManager.Instance.OnMoveHold -= OnTouchHold;
+        TouchManager.Instance.OnMoveEnd -= OnTouchEnd;
+    }
+
     private void FixedUpdate()
     {
         // 터치 delta 값을 기반으로 X축 회전값을 갱신
@@ -37,10 +54,8 @@ public class PlayerCamera : MonoBehaviour, ITouchable
         deltaRot = Vector3.zero;
     }
 
-    public void CameraSpeed()
-    {
-        //cameraSpeed = slideSpeed.value;
-    }
+
+    
 
     public void OnTouchStarted(Vector2 position)
     {

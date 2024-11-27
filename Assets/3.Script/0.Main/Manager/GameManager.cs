@@ -64,13 +64,15 @@ public class GameManager : MonoBehaviour
         FadeIn();
         isFadeOut = false;
     }
-    public void LoadSlide()
+    public void LoadGame()
     {
-        SceneManager.LoadScene("Slide");
+        gameType = eGameType.LoadGame;
+        FadeOut(B1F);
     }
-    public void LoadB1F()
+    public void NewGame()
     {
-        TouchManager.Instance.OnDisableTuchAction();
+        DataSaveManager.Instance.NewGame();
+        gameType = eGameType.NewGame;
         FadeOut(B1F);
     }
     public void LoadScene(string SceneName)

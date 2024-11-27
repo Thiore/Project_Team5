@@ -36,7 +36,7 @@ public class SaveManager : MonoBehaviour
     private GameObject loadGameButton; //이어하기 버튼
     private GameObject mainButton; //Lobby Main Button
 
-    public GameObject loadButton;
+    public GameObject loadButton;//게임매니저로 이전
     public GameObject lloadbutton;
 
     private readonly string posX = "playerPosX";
@@ -135,7 +135,7 @@ public class SaveManager : MonoBehaviour
     }
 
     //SaveManager 초기화
-    public void InitializeSaveManager()
+    public void InitializeSaveManager()//추가완료
     {
         Debug.Log("왜 안옴?");
         stateSavePath = Path.Combine(Application.persistentDataPath, "gameState.json");
@@ -262,7 +262,7 @@ public class SaveManager : MonoBehaviour
 
     //}
 
-    public void NewGameItemData()
+    public void NewGameItemData()// 추가완료
     {
        // Debug.Log("새로하기: 아이템 데이터를 초기화합니다.");
 
@@ -273,7 +273,7 @@ public class SaveManager : MonoBehaviour
         //SaveItemData();
     }
 
-    public void LoadItemData()
+    public void LoadItemData() //추가완료
     {
         //파일 없으면 새로 만들기 
         if (!File.Exists(itemstatepath))
@@ -300,7 +300,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // 게임 상태 저장
-    public void SaveGameState()
+    public void SaveGameState()//추가완료
     {
         //로컬라이제이션 현재 선택 언어 저장
         //gameState.selectedLocale = LocalizationSettings.SelectedLocale.Identifier.Code;
@@ -383,7 +383,7 @@ public class SaveManager : MonoBehaviour
 
 
     // 상태 업데이트 (층 및 오브젝트 상태 업데이트)
-    public void UpdateObjectState(int floorIndex, int objectIndex, bool isInteracted)
+    public void UpdateObjectState(int floorIndex, int objectIndex, bool isInteracted)//추가완료
     {
         //해당 층이 없다면 생성
         if(!gameState.ContainsKey(floorIndex))
@@ -428,7 +428,7 @@ public class SaveManager : MonoBehaviour
     }
 
     //puzzle과 상호작용하는 door에 상태 알리기
-    public bool PuzzleState(int floorIndex, int objectIndex)
+    public bool PuzzleState(int floorIndex, int objectIndex)//추가완료
     {
         //if (objectIndex.Equals(0))
         //{
@@ -460,7 +460,7 @@ public class SaveManager : MonoBehaviour
     }
 
     //플레이어 위치
-    public void LoadPlayerPosition(Transform player)
+    public void LoadPlayerPosition(Transform player)//추가완료
     {
 
         if (player != null)
@@ -478,7 +478,7 @@ public class SaveManager : MonoBehaviour
     }
 
     //플레이어 회전
-    public void LoadPlayerRotation(Transform camera)
+    public void LoadPlayerRotation(Transform camera)//추가완료
     {
         if (camera != null)
         {
@@ -493,7 +493,7 @@ public class SaveManager : MonoBehaviour
     }
 
     //플레이어의 위치를 받아와서 위치 및 회전 저장
-    public void SavePlayerState()
+    public void SavePlayerState()//추가완료
     {
         if(PlayerManager.Instance.mainPlayer != null)
         {

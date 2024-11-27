@@ -13,15 +13,14 @@ public class Item3D : MonoBehaviour, ITouchable
 
     private void OnEnable()
     {
-        if(DataManager.instance.savedata.ContainsKey(id))
+        if(DataSaveManager.Instance.GetItemState(id))
         {
             gameObject.SetActive(false);
         }
         else
         {
-            item = DataManager.instance.GetItemInfoById(id);
+            item = DataSaveManager.Instance.itemData[id];
         }
-        
     }
 
     public void SetIDItem3D(int id)
@@ -42,7 +41,7 @@ public class Item3D : MonoBehaviour, ITouchable
                 //������ ��� 
                 Debug.Log($"�̰� ���̵� : {id}");
                 UI_InvenManager.Instance.GetItemByID(item);
-                SaveManager.Instance.InputItemSavedata(item);
+                DataSaveManager.Instance.UpdateItemState(id);
                 gameObject.SetActive(false);
             }
         }
