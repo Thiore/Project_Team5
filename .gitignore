@@ -2,6 +2,7 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+# Unity-generated folders to ignore
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -47,10 +48,13 @@ ExportedObj/
 *.opendb
 *.VC.db
 
-# Unity3D generated meta files
+# Ignore specific debugging meta files
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
+
+# Ensure .meta files in Assets are always tracked
+!/[Aa]ssets/**/*.meta
 
 # Unity3D generated file on crash reports
 sysinfo.txt
