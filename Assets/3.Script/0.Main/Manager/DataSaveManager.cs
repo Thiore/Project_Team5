@@ -51,6 +51,8 @@ public class DataSaveManager : MonoBehaviour
     private readonly float newPlayerRotationZ = 0.08140796f;
     private readonly float newPlayerRotationW = -0.8945088f;
 
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -72,47 +74,8 @@ public class DataSaveManager : MonoBehaviour
     /// </summary>
     private void InitializeManager()
     {
-        string itemJson = Resources.Load<TextAsset>("Data/Json/Item_Data").text;
-        itemData = JsonConvert.DeserializeObject<Dictionary<int,Item>>(itemJson);
-#if UNITY_EDITOR
-        Debug.Log("아이템 로드 완료");
-#endif
         stateSavePath = Path.Combine(Application.persistentDataPath, "SaveGameState.json");
         itemSavePath = Path.Combine(Application.persistentDataPath, "SaveItemState.json");
-
-        // 게임상태에 대한 저장 파일이 존재하면 데이터를 읽어들임
-        if (File.Exists(stateSavePath))
-        {
-            string stateSaveJson = File.ReadAllText(stateSavePath);
-
-            //Json 데이터를 gameStateData로 역직렬화
-            gameStateData = JsonConvert.DeserializeObject<Dictionary<int, Dictionary<int, bool>>>(stateSaveJson);
-
-            // 아이템상태에 대한 저장 파일이 존재하면 데이터를 읽어들임
-            if (File.Exists(itemSavePath))
-            {
-                string itemSaveJson = File.ReadAllText(itemSavePath);
-                itemStateData = JsonConvert.DeserializeObject<Dictionary<int, bool>>(itemSaveJson);
-            }
-            else
-            {
-                itemStateData = new Dictionary<int, bool>();// 아이템 상태 초기화
-            }
-        }
-        else
-        {
-            gameStateData = new Dictionary<int, Dictionary<int, bool>>();// 게임 상태 초기화
-
-            if (File.Exists(itemSavePath))
-            {
-                string itemSaveJson = File.ReadAllText(itemSavePath);
-                itemStateData = JsonConvert.DeserializeObject<Dictionary<int, bool>>(itemSaveJson);
-            }
-            else
-            {
-                itemStateData = new Dictionary<int, bool>();// 아이템 상태 초기화
-            }
-        }
     }
 
     /// <summary>
@@ -308,5 +271,117 @@ public class DataSaveManager : MonoBehaviour
         return new Quaternion(x, y, z, w);
     }
 
+    public bool HistoryCount()
+    {
+        if(itemStateData.Count>0||gameStateData.Count>0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    /// <summary>
+    /// 저장된 게임 데이터를 불러오는 과정을 코루틴으로 분리
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator LoadGameSaveData_co()
+    {
+        // 게임상태에 대한 저장 파일이 존재하면 데이터를 읽어들임
+        if (File.Exists(stateSavePath))
+        {
+            string stateSaveJson = null;
+
+            yield return StartCoroutine(ReadFile_co(stateSavePath, result => stateSaveJson = result));
+
+            if (!string.IsNullOrEmpty(stateSaveJson))
+            {
+                //Json 데이터를 gameStateData로 역직렬화
+                gameStateData = JsonConvert.DeserializeObject<Dictionary<int, Dictionary<int, bool>>>(stateSaveJson);
+#if UNITY_EDITOR
+                Debug.Log("게임 상태 로드 완료.");
+#endif
+            }
+        }
+        else
+        {
+            gameStateData = new Dictionary<int, Dictionary<int, bool>>();// 게임 상태 초기화
+#if UNITY_EDITOR
+            Debug.Log("게임 상태의 저장된 파일이 없음: 기본 상태 초기화.");
+#endif
+        }
+    }
+
+    /// <summary>
+    /// 저장된 아이템 데이터를 불러오는 과정을 코루틴으로 분리
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator LoadItemSaveData_co()
+    {
+        // 게임상태에 대한 저장 파일이 존재하면 데이터를 읽어들임
+        if (File.Exists(itemSavePath))
+        {
+            // 아이템상태에 대한 저장 파일이 존재하면 데이터를 읽어들임
+            string itemSaveJson = null;
+            yield return StartCoroutine(ReadFile_co(itemSavePath, result => itemSaveJson = result));
+
+            if (!string.IsNullOrEmpty(itemSaveJson))
+            {
+                itemStateData = JsonConvert.DeserializeObject<Dictionary<int, bool>>(itemSaveJson);
+#if UNITY_EDITOR
+                Debug.Log("아이템 획득 및 사용 내역 로드 완료.");
+#endif
+            }
+        }
+        else
+        {
+            itemStateData = new Dictionary<int, bool>();// 아이템 상태 초기화
+#if UNITY_EDITOR
+            Debug.Log("아이템의 저장된 파일이 없음: 기본 상태 초기화.");
+#endif
+        }
+    }
+
+
+    public IEnumerator ReadFile_co(string path, System.Action<string> callback)
+    {
+        string result = null;
+
+        yield return new WaitUntil(() =>
+        { 
+        try
+            {
+                result = File.ReadAllText(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        });
+
+        callback?.Invoke(result);
+    }
+
+    public IEnumerator LoadItemData_co()
+    {
+        ResourceRequest request = Resources.LoadAsync<TextAsset>("Data/Json/Item_Data");
+        yield return request;
+
+        if(request.asset != null)
+        {
+            TextAsset itemJson = request.asset as TextAsset;
+            itemData = JsonConvert.DeserializeObject<Dictionary<int, Item>>(itemJson.text);
+#if UNITY_EDITOR
+            Debug.Log("아이템 데이터 비동기 로드 완료!");
+#endif
+        }
+        else
+        {
+#if UNITY_EDITOR
+            Debug.LogError("Item_Data.json 파일을 찾을 수 없습니다!");
+#endif
+        }
+    }
 
 }

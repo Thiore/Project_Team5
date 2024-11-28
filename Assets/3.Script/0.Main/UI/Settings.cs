@@ -100,7 +100,7 @@ public class Settings : MonoBehaviour
     }
     public void LoadLobby()
     {
-        GameManager.Instance.LoadScene("Lobby");
+        GameManager.Instance.LoadLobby();
     }
 
     public void GameEnd()

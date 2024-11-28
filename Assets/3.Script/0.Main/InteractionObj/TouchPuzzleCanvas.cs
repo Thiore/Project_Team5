@@ -49,7 +49,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         btnList = PlayerManager.Instance.getBtnList;
         //quickSlot = PlayerManager.Instance.getQuickSlot;
         
-            if(!SaveManager.Instance.PuzzleState(floorIndex, objectIndex))
+            if(!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
             {
                 isClear = false;
             }
