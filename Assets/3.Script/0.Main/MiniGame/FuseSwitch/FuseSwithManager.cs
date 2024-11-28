@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class FuseSwithManager : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class FuseSwithManager : MonoBehaviour
     [SerializeField] private Fuse[] resultobjs;
 
     [SerializeField] private int[] result = new int[] { 0, 1, 1, 2, 2 };
-
 
     public void CheckResult()
     {

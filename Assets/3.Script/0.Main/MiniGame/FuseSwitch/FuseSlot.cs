@@ -7,21 +7,14 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 {
     [SerializeField] private List<Fuse> fuselist;
     [SerializeField] private int efuseNum;
-    private GameObject ondragobj;
+    [SerializeField] private Fuse dragfuse;
     private bool isdragging;
     private Vector3 tartgetpos;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        for (int i = 0; i < fuselist.Count; i++)
-        {
-            if (fuselist[i].gameObject.activeSelf)
-            {
-                ondragobj = fuselist[i].gameObject;
-                break;
-            }
-        }
-
+        dragfuse.gameObject.SetActive(true);
+        dragfuse.SetFuseColor(efuseNum);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -30,9 +23,8 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Ray ray = Camera.main.ScreenPointToRay(eventData.position);
         if (Physics.Raycast(ray, out RaycastHit hit, 50f, LayerMask.GetMask("SlideWall")))
         {
-            Debug.Log("검출됨");
             tartgetpos = hit.point;
-            ondragobj.transform.position = tartgetpos;
+            dragfuse.gameObject.transform.position = tartgetpos;
         }
     }
 
@@ -55,21 +47,9 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             }
         }
 
-        ondragobj.SetActive(false);
-        ondragobj = null;
+        dragfuse.gameObject.SetActive(false);
         isdragging = false;
     }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-
-    }
-
 
 
 }
