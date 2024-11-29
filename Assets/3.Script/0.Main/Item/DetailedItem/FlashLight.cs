@@ -16,13 +16,13 @@ public class FlashLight : MonoBehaviour, IUseTrigger
         if (DataSaveManager.Instance.GetItemState(id))
         {
             TriggerButton.OnUseTrigger += OnUseTrigger;
+            Debug.Log("추가됨");
         }
        
-        item = DataSaveManager.Instance.itemData[id];
         
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         TriggerButton.OnUseTrigger -= OnUseTrigger;
     }

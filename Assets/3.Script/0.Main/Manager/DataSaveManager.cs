@@ -86,7 +86,22 @@ public class DataSaveManager : MonoBehaviour
         gameStateData.Clear();
         itemStateData.Clear();
     }
+    //유저가 백그라운드로 갔을 때, 저장
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            PlayerPrefs.Save();
+            SaveGame();
+        }
+    }
 
+    //어플리케이션이 종료 되었을 때
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.Save();
+        SaveGame();
+    }
     /// <summary>
     /// 게임이 정지&종료될 때와 Lobby로 넘어왔을 때 호출하여 
     /// <para>게임에 저장되어있는 데이터를 Json으로 직렬화해 내보내는 메서드</para>

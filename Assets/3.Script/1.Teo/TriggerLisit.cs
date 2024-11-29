@@ -45,6 +45,7 @@ public class TriggerList : MonoBehaviour
     }
     private IEnumerator SetList_co()
     {
+        lerpTime += Time.deltaTime;
         if (isOpen)
         {
             while (lerpTime / lerpSpeed < 1f)

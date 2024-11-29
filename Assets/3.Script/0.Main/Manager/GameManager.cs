@@ -68,6 +68,10 @@ public class GameManager : MonoBehaviour
     }
     public void LoadLobby()
     {
+        PlayerPrefs.Save();
+
+        DataSaveManager.Instance.SaveGame();
+
         LoadingManager.nextScene?.Invoke("Lobby");
     }
 

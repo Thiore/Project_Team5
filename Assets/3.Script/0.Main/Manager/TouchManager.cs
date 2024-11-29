@@ -70,8 +70,6 @@ public class TouchManager : MonoBehaviour
 
     private bool isTouching;
 
-    private bool isQuitting = false;
-
     private bool isTouchSupportEnabled = false; // EnhancedTouch 상태 관리
 
     private void Awake()
@@ -100,24 +98,24 @@ public class TouchManager : MonoBehaviour
     }
     private void OnApplicationPause(bool pause)
     {
-        isQuitting = pause;
-        if (isQuitting)
-            OnDisableTuchAction();
+        if (pause)
+            OnDisableTouchAction();
         else
-            OnEnableTuchAction();
+            OnEnableTouchAction();
     }
 
     private void OnApplicationQuit()
     {
-        isQuitting = true;
-        OnDisableTuchAction();
+        OnDisableTouchAction();
     }
 
     private void OnTouchLoaded(Scene scene, LoadSceneMode mode)
     {
+        OnDisableTouchAction();
         eventSystem = FindObjectOfType<EventSystem>();
         eventSystem.enabled = true;
-        OnEnableTuchAction();
+        
+        OnEnableTouchAction();
     }
 
 
@@ -370,7 +368,7 @@ public class TouchManager : MonoBehaviour
     {
         return touchPosition.x >= Screen.width / 2;
     }
-    public void OnEnableTuchAction()
+    public void OnEnableTouchAction()
     {
         if (isTouchSupportEnabled) return;
 
@@ -392,7 +390,7 @@ public class TouchManager : MonoBehaviour
         ETouch.Touch.onFingerMove += OnTouchPerformed;
         ETouch.Touch.onFingerUp += OnTouchCanceled;
     }
-    public void OnDisableTuchAction()
+    public void OnDisableTouchAction()
     {
         if (!isTouchSupportEnabled) return;
 

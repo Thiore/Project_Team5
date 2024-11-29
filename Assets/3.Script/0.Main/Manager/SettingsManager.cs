@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SettingsManager : MonoBehaviour
 {
@@ -29,9 +31,15 @@ public class SettingsManager : MonoBehaviour
 
     [SerializeField] private GameObject settingPage;
 
-    public TMP_Text koreanButtonText;//한국어 버튼
+    [SerializeField] private Toggle koreanText;//한국어 버튼
 
-    public TMP_Text englishButtonText;//한국어 버튼
+    [SerializeField] private Toggle englishText;//한국어 버튼
+
+    [SerializeField] private GameObject introBtn;
+
+    private Color activeColor = Color.green; //활성화 중인 언어 텍스트의 색상
+    private Color inactiveColor = Color.white; //비활성화 중인 언어 텍스트의 색상
+
 
     private void Awake()
     {
@@ -40,12 +48,17 @@ public class SettingsManager : MonoBehaviour
             Instance = this;
 
             InitSetting();
+            SceneManager.sceneLoaded += LoadedScene;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+    private void OnApplicationQuit()
+    {
+        SceneManager.sceneLoaded -= LoadedScene;
     }
     private void Start()
     {
@@ -57,6 +70,30 @@ public class SettingsManager : MonoBehaviour
        
         float SFXValue = Mathf.Log10(Mathf.Clamp(SFX, 0.0001f, 1f)) * 20f;
         audioMixer.SetFloat("SFX", SFXValue);
+    }
+
+    private void LoadedScene(Scene scene, LoadSceneMode mode)
+    {
+        englishText.onValueChanged.AddListener(delegate { ChangeLocale(); });
+        koreanText.onValueChanged.AddListener(delegate { ChangeLocale(); });
+
+        if (DialogueManager.Instance.selectedLocale.Equals("ko"))
+        {
+            koreanText.isOn = true;
+        }
+        else
+        {
+            englishText.isOn = true;
+        }
+        ChangeLocale();
+        if(!scene.name.Equals("Lobby"))
+        {
+            introBtn.SetActive(true);
+        }
+        else
+        {
+            introBtn.SetActive(false);
+        }
     }
 
     public void OnSettingPage()
@@ -92,9 +129,38 @@ public class SettingsManager : MonoBehaviour
         }
         else
             CameraSpeed = 0.5f;
-
-       
     }
 
-   
+    public void ChangeLocale()
+    {
+        if(koreanText.isOn)
+        {
+            DialogueManager.Instance.ChangeLocale(1);
+            koreanText.targetGraphic.color = activeColor;
+            englishText.targetGraphic.color = inactiveColor;
+        }
+        if(englishText.isOn)
+        {
+            DialogueManager.Instance.ChangeLocale(0);
+            englishText.targetGraphic.color = activeColor;
+            koreanText.targetGraphic.color = inactiveColor;
+        }
+        
+
+    }
+
+    public void LoadLobby()
+    {
+        GameManager.Instance.LoadLobby();
+    }
+
+    public void GameEnd()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
+
 }

@@ -9,39 +9,38 @@ using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
-    private static DialogueManager instance = null;
-    public static DialogueManager Instance { get; private set; }
+    public static DialogueManager Instance { get; private set; } = null;
+
+    public string selectedLocale { get; private set; } //현재 선택된 언어
+    private readonly string localeKey = "locale";
+
+    public readonly string[] localeArray = { "en", "ko" };
+
 
     //스토리 관련 UI Text
     public Button dialogueButton; //대사 버튼 (터치 시, 사라지게 하기 위함)
     public TMP_Text dialogueText; //대사 표시할 TextMeshPro
-    private GameObject btnList;
     
-
-
     //인벤토리 관련 Text
     private TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
     private TMP_Text explanation; //인벤토리 아이템 설명 띄울 TextMeshPro
 
-    //옵션 관련 Text
-    private TMP_Text koreanButtonText; //한국어 버튼
-    private TMP_Text englishButtonText; //영어 버튼
-    private Color activeColor = Color.green; //활성화 중인 언어 텍스트의 색상
-    private Color inactiveColor = Color.white; //비활성화 중인 언어 텍스트의 색상
+    
 
     private LocalizedString localizedString = new LocalizedString();
     private LocalizedString itemNameLocalizedString = new LocalizedString();
     private LocalizedString itemExplanationLocalizedString = new LocalizedString();
 
-    private bool isChanging; //언어 변경
+    public bool isDialogue { get; private set; } //현재 Dialogue가 활성화 중인지 여부
+
+   
     
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
-            Instance = instance;
-            
+            Instance = this;
+            WaitForLocalizationInitialization();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -67,17 +66,13 @@ public class DialogueManager : MonoBehaviour
     //새 씬이 로드될 때 호출
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        InitLocale();
+        isDialogue = false;
         if (PlayerManager.Instance != null)
         {
-            btnList = PlayerManager.Instance.getBtnList;
-            
             itemName = PlayerManager.Instance.getItemName;
             explanation = PlayerManager.Instance.getExplanation;
-            
         }
-        koreanButtonText = SettingsManager.Instance.koreanButtonText;
-        englishButtonText = SettingsManager.Instance.englishButtonText;
-        UpdateButtonColorByLocale();
     }
 
     //Story 테이블 이름과 키값을 통해 대사 출력
@@ -96,24 +91,21 @@ public class DialogueManager : MonoBehaviour
 
     }
 
-
-
     private IEnumerator StoryBottonState_co()
     {
         if (PlayerManager.Instance != null)
         {
+            isDialogue = true;
+            TouchManager.Instance.EnableMoveHandler(false);
             //2초 동안 버튼 비활성화
             dialogueButton.interactable = false;
             dialogueButton.gameObject.SetActive(true); //버튼 활성화
-            TouchManager.Instance.EnableMoveHandler(false);
-            //quickSlot.QucikSlotButton(false); //퀵슬롯 비활성화
-            btnList.SetActive(false);//인벤토리버튼 비활성화
             yield return new WaitForSeconds(2f);
 
             //2초 후 버튼 활성화 및 터치 이벤트
             dialogueButton.interactable = true;
             dialogueButton.onClick.AddListener(OnButtonClicked);
-            TouchManager.Instance.EnableMoveHandler(true);
+            
 
         }
 
@@ -125,12 +117,14 @@ public class DialogueManager : MonoBehaviour
 
     private void OnButtonClicked()
     {
+        isDialogue = false;
+        TouchManager.Instance.EnableMoveHandler(true);
         //버튼 터치 시 즉시 비활성화
         dialogueButton.gameObject.SetActive(false);
 
         //터치 이벤트 제거
         dialogueButton.onClick.RemoveListener(OnButtonClicked);
-        btnList.SetActive(true);//인벤토리버튼 활성화
+        //btnList.SetActive(true);//인벤토리버튼 활성화
     }
 
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -172,53 +166,80 @@ public class DialogueManager : MonoBehaviour
     //언어 변경
     public void ChangeLocale(int index)
     {
-        if (isChanging)
+        if (index >= localeArray.Length)
+        {
             return;
-
-        StartCoroutine(ChangeRoutine_co(index));
-
-        
-    }
-
-    private IEnumerator ChangeRoutine_co(int index)
-    {
-        isChanging = true;
-
-        yield return LocalizationSettings.InitializationOperation; //초기화
-
+        }
         // 언어 바꿔주기 SelectedLocale에 있는 언어로
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(localeArray[index]);
+        selectedLocale = localeArray[index];
+        PlayerPrefs.SetString(localeKey, localeArray[index]);
+        PlayerPrefs.Save();
 
-        isChanging = false;
-
-        //현재 언어에 따라 버튼 색상 업데이트
-        UpdateButtonTextColor(index);
-
-        
     }
 
     //색상 업데이트
-    private void UpdateButtonTextColor(int index)
+    //private void UpdateButtonTextColor(int index)
+    //{
+    //    if (index == 1)
+    //    {
+    //        koreanButtonText.color = activeColor;
+    //        englishButtonText.color = inactiveColor;
+    //    }
+    //    else if (index == 0)
+    //    {
+    //        koreanButtonText.color = inactiveColor;
+    //        englishButtonText.color = activeColor;
+    //    }
+    //}
+
+    private async void WaitForLocalizationInitialization()
     {
-        if (index == 1)
+        // InitializationOperation 가져오기
+        var operation = LocalizationSettings.InitializationOperation;
+
+        // 비동기 작업 완료 대기
+        await operation.Task;
+
+        if (operation.IsDone && !operation.Status.Equals(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Failed))
         {
-            koreanButtonText.color = activeColor;
-            englishButtonText.color = inactiveColor;
+            Debug.Log("Localization 초기화 완료!");
+            InitLocale();
+
+            
         }
-        else if (index == 0)
+        else
         {
-            koreanButtonText.color = inactiveColor;
-            englishButtonText.color = activeColor;
+            Debug.LogError("Localization 초기화 실패!");
         }
     }
 
-    
-   
-    private void UpdateButtonColorByLocale()
+    private void InitLocale()
     {
-        // 현재 Locale의 인덱스를 가져와 버튼 색상 설정
-        int currentLocaleIndex = LocalizationSettings.AvailableLocales.Locales.IndexOf(LocalizationSettings.SelectedLocale);
-        UpdateButtonTextColor(currentLocaleIndex);
+        if (PlayerPrefs.HasKey(localeKey))
+        {
+            selectedLocale = PlayerPrefs.GetString(localeKey);
+
+        }
+        else
+        {
+            selectedLocale = GetLocaleCodeFromSystemLanguage();
+            PlayerPrefs.SetString(localeKey, selectedLocale);
+            PlayerPrefs.Save();
+        }
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(selectedLocale);
     }
 
+    private string GetLocaleCodeFromSystemLanguage()
+    {
+        switch (Application.systemLanguage)
+        {
+            case SystemLanguage.Korean:
+                return "ko"; // 한국어
+            case SystemLanguage.English:
+                return "en"; // 영어
+            default:
+                return "ko"; // 기본값 (영어)
+        }
+    }
 }

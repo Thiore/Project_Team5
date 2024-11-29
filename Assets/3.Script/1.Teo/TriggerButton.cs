@@ -68,18 +68,15 @@ public class TriggerButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             touchTime_co = null;
             if (touchTime > touchLength)
             {
-                for(int i = 0; i < triggerList.transform.childCount;i++)
-                {
-                    if (triggerList.transform.GetChild(i).gameObject.activeInHierarchy)
-                    {
-                        triggerList.SetActive(true);
-                        break;
-                    }   
-                }
+
+                triggerList.SetActive(true);
+
+
             }
             else
             {
-                OnUseTrigger?.Invoke(item);
+                if (!triggerList.activeSelf)
+                    OnUseTrigger?.Invoke(item);
             }
             touchTime = 0f;
         }

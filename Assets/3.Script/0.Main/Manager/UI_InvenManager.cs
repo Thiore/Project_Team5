@@ -20,7 +20,10 @@ public class UI_InvenManager : MonoBehaviour
 
     [SerializeField] private Transform triggerSlotList;
     [SerializeField] private UI_TriggerSlot triggerSlotPrefabs;
+    [SerializeField] private GameObject btnTrigger;
+    [SerializeField] private TriggerButton triggerButton;
     private List<UI_TriggerSlot> triggerSlots;
+    
 
 
     [SerializeField] public UI_ItemInformation iteminfo;
@@ -38,26 +41,34 @@ public class UI_InvenManager : MonoBehaviour
     
 
     [SerializeField] private FlashLight flashLight;
-    
+
 
     private void Awake()
     {
-        if (Instance == null)
+        Instance = this;
+        getItemQueue = new Queue<Sprite>();
+        waitForDelayTime = new WaitForSeconds(DelayTime);
+        InitSlots();
+
+    }
+    private void Start()
+    {
+        OnOpenInventory();
+        var loadData = DataSaveManager.Instance.itemStateData;
+        foreach(KeyValuePair<int,bool> item in loadData)
         {
-            Instance = this;
-            getItemQueue = new Queue<Sprite>();
-            waitForDelayTime = new WaitForSeconds(DelayTime);
-            InitSlots();
+            if(!item.Value)
+            {
+                Item data = DataSaveManager.Instance.itemData[item.Key];
+                GetItemByID(data, true);
+            }
         }
     }
-
     private void InitSlots()
     {
         InitInvenSlots();
 
         InitQuickSlots();
-
-        triggerSlots = new List<UI_TriggerSlot>();
     }
     private void InitInvenSlots()
     {
@@ -168,6 +179,12 @@ public class UI_InvenManager : MonoBehaviour
         if(triggerSlots == null)
         {
             triggerSlots = new List<UI_TriggerSlot>();
+            btnTrigger.SetActive(true);
+            UI_TriggerSlot initSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
+            initSlot.SetinvenByItem(item);
+            triggerSlots.Add(initSlot);
+            
+            return;
         }
         UI_TriggerSlot newSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
         newSlot.SetinvenByItem(item);

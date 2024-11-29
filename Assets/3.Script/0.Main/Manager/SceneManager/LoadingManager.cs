@@ -22,20 +22,25 @@ public class LoadingManager : MonoBehaviour
     [SerializeField] private float fadeTime;
     private float fade;
     private Coroutine fade_co;
+    private bool isLoading;
     private bool isFadeOut;
-    private bool isReadyScene;
+    private bool isFadeIn;
+
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             isDataLoaded = false;
             fade = 1f;
             fadePanel.color = new Color(0f, 0f, 0f, fade);
             fade_co = null;
-            isReadyScene = false;
+
+            isLoading = true;
             isFadeOut = false;
+            isFadeIn = false;
+            FadeIn();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -47,29 +52,33 @@ public class LoadingManager : MonoBehaviour
     private void OnEnable()
     {
         Debug.Log("호출");
-        SceneManager.sceneLoaded += LoadedScene;
+        //SceneManager.sceneLoaded += LoadedScene;
         nextScene += LoadScene;
     }
-  
+
     private void OnApplicationQuit()
     {
-        SceneManager.sceneLoaded -= LoadedScene;
+        //SceneManager.sceneLoaded -= LoadedScene;
         nextScene -= LoadScene;
     }
 
-    private void LoadedScene(Scene scene, LoadSceneMode mode)
-    {
-        if(scene.name.Equals("LoadingScene"))
-            FadeIn();
-    }
+    //private void LoadedScene(Scene scene, LoadSceneMode mode)
+    //{
+    //    if(isLoading)
+    //    {
+
+    //        FadeIn();
+    //    }
+
+    //}
 
     private void LoadScene(string nextScene)
     {
         nextSceneName = nextScene;
         Debug.Log(nextSceneName);
-        isReadyScene = true;
+        isLoading = true;
         FadeOut();
-        
+
     }
 
     private IEnumerator LoadData_co()
@@ -81,7 +90,7 @@ public class LoadingManager : MonoBehaviour
         yield return StartCoroutine(DataSaveManager.Instance.LoadItemSaveData_co());
 
         isDataLoaded = true;
-        yield return StartCoroutine(LoadNextScene("Lobby"));
+        nextSceneName = "Lobby";
     }
 
     private IEnumerator LoadNextScene(string SceneName)
@@ -89,127 +98,143 @@ public class LoadingManager : MonoBehaviour
         // 비동기로 다음 씬 로드
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneName);
         asyncLoad.allowSceneActivation = false;
-
+        StopCoroutine(fade_co);
+        fade_co = null;
         // 씬 로드 진행률 표시 (선택 사항)
         while (!asyncLoad.isDone)
         {
-            float delayTime = 0;
+
             // progress가 0.9까지 도달할 때 로딩 진행률 갱신
             if (asyncLoad.progress >= 0.9f)
             {
-               
+                int delayTime = 0;
                 loadingProgress.text = "90%";
-                // 추가 딜레이를 주고 allowSceneActivation 설정
-                yield return new WaitForSeconds(0.1f); // 최소 대기 시간
-                delayTime += 1f;
-                loadingProgress.text = $"{90+ delayTime}%";
-                if(delayTime>7f)
+                while (delayTime < 10)
                 {
-                    FadeOut();
+                    // 추가 딜레이를 주고 allowSceneActivation 설정
+                    yield return new WaitForSeconds(0.1f); // 최소 대기 시간
+                    delayTime += 1;
+                    loadingProgress.text = $"{90 + delayTime}%";
+
                 }
-                else if(delayTime>10f)
-                {
-                    if (!isFadeOut)
-                    {
-                        asyncLoad.allowSceneActivation = true;
-                        FadeIn();
-                    }
-                }
+                isLoading = false;
+
                 
-                
-               
+
+                FadeOut();
                 yield return null;
+                while(isFadeOut.Equals(true))
+                {
+                    yield return null;
+                }
+
+
+                StopCoroutine(fade_co);
+                fade_co = null;
+
+                asyncLoad.allowSceneActivation = true;
+
             }
             else
             {
                 loadingProgress.text = $"{asyncLoad.progress * 100:F0}%";
             }
-            
+
             yield return null;
         }
+        FadeIn();
+        yield return null;
+        while (isFadeIn.Equals(true))
+        {
+            yield return null;
+        }        
+        StopCoroutine(fade_co);
+        fade_co = null;
+
+
 
         Debug.Log("씬 전환 완료");
     }
 
     public void FadeIn()
     {
-        if (fade_co == null)
+        if (fade_co != null)
         {
-            if (TouchManager.Instance != null)
-                TouchManager.Instance.EnableMoveHandler(true);
-
-            fade_co = StartCoroutine(Fade_co(-1f));
+            StopCoroutine(fade_co);
+            fade_co = null;
         }
+        isFadeIn = true;
+        if (isLoading)
+        {
+            loadingProgress.text = "0%";
+            loadingProgress.gameObject.SetActive(true);
+        }
+        if (TouchManager.Instance != null)
+            TouchManager.Instance.EnableMoveHandler(true);
+
+        fade_co = StartCoroutine(Fade_co(-1f));
     }
     public void FadeOut()
     {
-        if (!isFadeOut)
+        if(fade_co != null)
         {
-            if (fade_co != null)
-            {
-                StopCoroutine(fade_co);
-            }
-            isFadeOut = true;
-            if (TouchManager.Instance != null)
-                TouchManager.Instance.EnableMoveHandler(false);
-
-            fade_co = StartCoroutine(Fade_co(1f));
+            StopCoroutine(fade_co);
+            fade_co = null;
         }
+        
+        isFadeOut = true;
+
+        if (TouchManager.Instance != null)
+            TouchManager.Instance.EnableMoveHandler(false);
+
+        fade_co = StartCoroutine(Fade_co(1f));
     }
     private IEnumerator Fade_co(float isFade)
     {
-        if(isFade>0)
-        {
-            Debug.Log("out");
-        }
-            else
-        {
-            Debug.Log("in");
-        }
         while (true)
         {
             fade += isFade * Time.deltaTime / fadeTime;
-            float fadeAlpha = Mathf.Lerp(0f, 1f, fade);
-            fadePanel.color = new Color(0f, 0f, 0f, fadeAlpha);
+            fade = Mathf.Clamp(fade, 0f, 1f);
+            fadePanel.color = new Color(0f, 0f, 0f, fade);
 
-            if (fadeAlpha.Equals(0f))
+            if (fade <= 0f && isFadeIn)
             {
-                if (TouchManager.Instance != null)
-                    TouchManager.Instance.EnableMoveHandler(true);
-                if (SceneManager.GetActiveScene().name.Equals("LoadingScene"))
+                isFadeIn = false;
+
+                if (isLoading)
                 {
-                    loadingProgress.gameObject.SetActive(true);
-                    loadingProgress.text = "0%";
                     if (!isDataLoaded)
                     {
-                        StartCoroutine(LoadData_co());
+                        yield return StartCoroutine(LoadData_co());
                     }
-                    else
-                    {
+                    if (!nextSceneName.Equals("LoadingScene"))
                         StartCoroutine(LoadNextScene(nextSceneName));
-                    }
                 }
-
-                fade_co = null;
                 yield break;
             }
-            if (fadeAlpha.Equals(1f))
+            if (fade >= 1f && isFadeOut)
             {
-                if (TouchManager.Instance != null)
-                    TouchManager.Instance.EnableMoveHandler(false);
-                if (loadingProgress.gameObject.activeSelf)
-                    loadingProgress.gameObject.SetActive(false);
-                
-                if(isReadyScene)
-                {
-                    isReadyScene = false;
-                    SceneManager.LoadScene("LoadingScene");
-                }
-                fade_co = null;
                 isFadeOut = false;
+                if (isLoading)
+                {
+                    SceneManager.LoadScene("LoadingScene");
+                    FadeIn();
+                }
+                else
+                {
+                    if (loadingProgress.gameObject.activeSelf)
+                        loadingProgress.gameObject.SetActive(false);
+                }
                 yield break;
             }
             yield return null;
         }
+    }
+
+    private bool CheckFadeCoroutine()
+    {
+        if (fade_co != null) return false;
+
+        return true;
     }
 }

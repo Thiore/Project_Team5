@@ -41,7 +41,7 @@ public class Settings : MonoBehaviour
                 else
                     introBtn.SetActive(true);
 
-                SceneManager.sceneLoaded += OnSettingLoaded;
+                //SceneManager.sceneLoaded += OnSettingLoaded;
                 break;
             case eSlideType.Master:
                 typeSlider.onValueChanged.AddListener(SetMasterVolume);
@@ -68,7 +68,7 @@ public class Settings : MonoBehaviour
         switch (slideType)
         {
             case eSlideType.Default:
-                SceneManager.sceneLoaded -= OnSettingLoaded;
+                //SceneManager.sceneLoaded -= OnSettingLoaded;
                 break;
             case eSlideType.Master:
                 SettingsManager.Instance.master = typeSlider.value;
@@ -94,24 +94,10 @@ public class Settings : MonoBehaviour
 
     
 
-    private void OnSettingLoaded(Scene scene, LoadSceneMode mode)
-    {
+    //private void OnSettingLoaded(Scene scene, LoadSceneMode mode)
+    //{
         
-    }
-    public void LoadLobby()
-    {
-        GameManager.Instance.LoadLobby();
-    }
-
-    public void GameEnd()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-    Application.Quit();
-#endif
-    }
-
+    //}
     private void SetMasterVolume(float volume)
     {
         float dBValue = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f; // 0 ~ 1 -> -80dB ~ 0dB
