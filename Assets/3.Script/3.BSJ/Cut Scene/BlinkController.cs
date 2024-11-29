@@ -16,7 +16,7 @@ public class BlinkController : MonoBehaviour
 
     private void Start()
     {
-        propertyValue = 2f;
+        propertyValue = 2.35f;
 
         if (uiImage != null)
         {

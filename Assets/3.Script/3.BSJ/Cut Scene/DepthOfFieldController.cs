@@ -6,18 +6,56 @@ using UnityEngine.Rendering.Universal;
 using Cinemachine;
 public class DepthOfFieldController : MonoBehaviour
 {
-    [SerializeField] private Volume volumeProfile; // 적용할 Volume Profile
-    [SerializeField] private float focalLength; // 설정할 Focal Length 값
-    [SerializeField] private CinemachineVirtualCamera virtualCamera; // 연결할 Cinemachine Virtual Camera
+    public Volume globalVolume; // Cinemachine Virtual Camera 연결
+    //private VolumeProfile volumeProfile;           // Volume Profile 참조
+    private DepthOfField depthOfField;             // Depth of Field 참조\
+   
 
-    private DepthOfField depthOfField;
+    private float start = 10f;
+    private float finish = 1f;
 
-    private void Start()
+    public float dof;
+
+    void Start()
     {
-        if (volumeProfile != null &&  volumeProfile.profile.TryGet(out depthOfField))
+        // Cinemachine Virtual Camera에서 Volume Profile을 가져오기
+        //var volumeComponent = virtualCamera.GetCinemachineComponent<volumes>
+        //if (volumeComponent == null)
+        //{
+        //    Debug.LogError("Cinemachine Virtual Camera에 연결된 Volume이 없습니다!");
+        //    return;
+        //}
+
+        // Volume Profile 가져오기
+        //volumeProfile = volumeComponent.sharedProfile; // 연결된 Volume Profile 참조
+        //if (volumeProfile == null)
+        //{
+        //    Debug.LogError("Volume Profile이 Virtual Camera에 설정되지 않았습니다!");
+        //    return;
+        //}
+
+        // Depth of Field 가져오기
+        //if (!globalVolume.profile.TryGet<DepthOfField>(out depthOfField))
+        //{
+        //    Debug.LogError("Volume Profile에 Depth of Field 설정이 없습니다!");
+        //}
+        globalVolume.profile.TryGet(out depthOfField);
+
+    }
+
+    void FixedUpdate()
+    {
+        if (depthOfField != null)
         {
-            //초기 Focal Length 설정
-            depthOfField.focalLength.value = focalLength;
+            // Depth of Field 값 수정
+            //depthOfField.focalLength.value = Mathf.PingPong(Time.time * 10f, 50f); // 시간에 따라 변경
+
+            //dof = depthOfField.focalLength.value;
+            depthOfField.focalLength.value = dof;
+
+
         }
     }
 }
+
+    
