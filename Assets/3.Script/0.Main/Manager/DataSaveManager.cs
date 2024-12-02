@@ -41,15 +41,15 @@ public class DataSaveManager : MonoBehaviour
     private readonly string rotW = "playerrotW";
 
     //플레이어 새게임 좌표
-    private readonly float newPlayerPositionX = 4.224149f;
+    private readonly float newPlayerPositionX = 4.177f;
     private readonly float newPlayerPositionY = 1f;
-    private readonly float newPlayerPositionZ = 3.059584f;
+    private readonly float newPlayerPositionZ = 3.52f;
     
     //플레이어 새게임 화전값
-    private readonly float newPlayerRotationX = -0.1819898f;
-    private readonly float newPlayerRotationY = -0.400133f;
-    private readonly float newPlayerRotationZ = 0.08140796f;
-    private readonly float newPlayerRotationW = -0.8945088f;
+    private readonly float newPlayerRotationX = -0.1474587f;
+    private readonly float newPlayerRotationY = -0.6595014f;
+    private readonly float newPlayerRotationZ = 0.134177f;
+    private readonly float newPlayerRotationW = -0.724783f;
 
 
 

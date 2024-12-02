@@ -74,7 +74,7 @@ public class UI_InvenManager : MonoBehaviour
     {
         invenSlots = new List<UI_InventorySlot>();
         invenSlots_Queue = new Queue<UI_InventorySlot>();
-        for (int i = 0; i < 5f; i++)
+        for (int i = 0; i < 5; i++)
         {
             UI_InventorySlot newObj = Instantiate(invenSlotPrefabs, invenList);
             newObj.gameObject.SetActive(false);

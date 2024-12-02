@@ -25,7 +25,7 @@ public class StoryTrigger : MonoBehaviour, ITouchable
 
     public void OnTouchStarted(Vector2 position)
     {
-        StoryStart();
+        
     }
 
     public void OnTouchHold(Vector2 position)
@@ -35,6 +35,6 @@ public class StoryTrigger : MonoBehaviour, ITouchable
 
     public void OnTouchEnd(Vector2 position)
     {
-        
+        StoryStart();
     }
 }

@@ -5,20 +5,26 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class UseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class UseButton : MonoBehaviour, IUITouchable
 {
     [SerializeField] private GameObject openObj;
     private GameObject currentObj;
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnUIEnd(PointerEventData data)
     {
-        currentObj = eventData.pointerEnter;
+        if(currentObj == EventSystem.current.currentSelectedGameObject)
+            openObj.SetActive(true);
+
+        currentObj = null;
+    }
+
+    public void OnUIHold(PointerEventData data)
+    {
         
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnUIStarted(PointerEventData data)
     {
-        if(gameObject.Equals(currentObj))
-            openObj.SetActive(true);
+        currentObj = EventSystem.current.currentSelectedGameObject;
     }
 }

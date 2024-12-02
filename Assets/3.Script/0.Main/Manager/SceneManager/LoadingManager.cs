@@ -22,7 +22,7 @@ public class LoadingManager : MonoBehaviour
     [SerializeField] private float fadeTime;
     private float fade;
     private Coroutine fade_co;
-    private bool isLoading;
+    private bool isLoadingScene;//로딩씬에서의 구분을 위해 사용
     private bool isFadeOut;
     private bool isFadeIn;
 
@@ -37,10 +37,10 @@ public class LoadingManager : MonoBehaviour
             fadePanel.color = new Color(0f, 0f, 0f, fade);
             fade_co = null;
 
-            isLoading = true;
+            isLoadingScene = true;
             isFadeOut = false;
             isFadeIn = false;
-            FadeIn();
+            FadeIn(true);
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -76,8 +76,8 @@ public class LoadingManager : MonoBehaviour
     {
         nextSceneName = nextScene;
         Debug.Log(nextSceneName);
-        isLoading = true;
-        FadeOut();
+        isLoadingScene = true;
+        FadeOut(true);
 
     }
 
@@ -117,11 +117,11 @@ public class LoadingManager : MonoBehaviour
                     loadingProgress.text = $"{90 + delayTime}%";
 
                 }
-                isLoading = false;
+                isLoadingScene = false;
 
                 
 
-                FadeOut();
+                FadeOut(true);
                 yield return null;
                 while(isFadeOut.Equals(true))
                 {
@@ -142,7 +142,7 @@ public class LoadingManager : MonoBehaviour
 
             yield return null;
         }
-        FadeIn();
+        FadeIn(true);
         yield return null;
         while (isFadeIn.Equals(true))
         {
@@ -156,7 +156,7 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("씬 전환 완료");
     }
 
-    public void FadeIn()
+    public void FadeIn(bool isLoading = false)
     {
         if (fade_co != null)
         {
@@ -164,7 +164,7 @@ public class LoadingManager : MonoBehaviour
             fade_co = null;
         }
         isFadeIn = true;
-        if (isLoading)
+        if (isLoadingScene&&isLoading)
         {
             loadingProgress.text = "0%";
             loadingProgress.gameObject.SetActive(true);
@@ -172,9 +172,9 @@ public class LoadingManager : MonoBehaviour
         if (TouchManager.Instance != null)
             TouchManager.Instance.EnableMoveHandler(true);
 
-        fade_co = StartCoroutine(Fade_co(-1f));
+        fade_co = StartCoroutine(Fade_co(-1f, isLoading));
     }
-    public void FadeOut()
+    public void FadeOut(bool isLoading = false)
     {
         if(fade_co != null)
         {
@@ -187,9 +187,9 @@ public class LoadingManager : MonoBehaviour
         if (TouchManager.Instance != null)
             TouchManager.Instance.EnableMoveHandler(false);
 
-        fade_co = StartCoroutine(Fade_co(1f));
+        fade_co = StartCoroutine(Fade_co(1f, isLoading));
     }
-    private IEnumerator Fade_co(float isFade)
+    private IEnumerator Fade_co(float isFade, bool isLoading)
     {
         while (true)
         {
@@ -201,7 +201,7 @@ public class LoadingManager : MonoBehaviour
             {
                 isFadeIn = false;
 
-                if (isLoading)
+                if (isLoadingScene&& isLoading)
                 {
                     if (!isDataLoaded)
                     {
@@ -215,26 +215,24 @@ public class LoadingManager : MonoBehaviour
             if (fade >= 1f && isFadeOut)
             {
                 isFadeOut = false;
-                if (isLoading)
+                if(isLoading)
                 {
-                    SceneManager.LoadScene("LoadingScene");
-                    FadeIn();
+                    if (isLoadingScene)
+                    {
+                        SceneManager.LoadScene("LoadingScene");
+                        FadeIn(true);
+                    }
+                    else
+                    {
+                        if (loadingProgress.gameObject.activeSelf)
+                            loadingProgress.gameObject.SetActive(false);
+                    }
                 }
-                else
-                {
-                    if (loadingProgress.gameObject.activeSelf)
-                        loadingProgress.gameObject.SetActive(false);
-                }
+                
                 yield break;
             }
             yield return null;
         }
     }
 
-    private bool CheckFadeCoroutine()
-    {
-        if (fade_co != null) return false;
-
-        return true;
-    }
 }
