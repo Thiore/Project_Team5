@@ -65,7 +65,7 @@ public class TouchManager : MonoBehaviour
 
     [SerializeField] private LayerMask touchableObjectLayer;
     public LayerMask getTouchableLayer { get => touchableObjectLayer; }
-    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask ignoreLayer;
 
     private HashSet<int> UIID;// 활성화된 터치 ID 추적
 
@@ -368,8 +368,9 @@ public class TouchManager : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(position);
         RaycastHit hit;
+        int filteredLayer = ~ignoreLayer.value;
         //레이케스트가 터치가능 오브젝트에 충돌했거나 어디에도 충돌되지 않았을 때
-        if (Physics.Raycast(ray, out hit, touchDistance))
+        if (Physics.Raycast(ray, out hit, touchDistance, filteredLayer))
         {
             if (hit.collider == null) return false;
 
@@ -440,10 +441,10 @@ public class TouchManager : MonoBehaviour
 
         isTouchSupportEnabled = false;
 
-        EnhancedTouchSupport.Disable();
         ETouch.Touch.onFingerDown -= OnTouchStarted;
         ETouch.Touch.onFingerMove -= OnTouchPerformed;
         ETouch.Touch.onFingerUp -= OnTouchCanceled;
+        EnhancedTouchSupport.Disable();
     }
 
     public void EnableMoveHandler(bool dontTouch)
