@@ -14,32 +14,43 @@ public class Movement : MonoBehaviour, ITouchable
     private Vector2 value;
     
     Vector3 moveDir;
-    
 
-    private void Start()
+    private void OnEnable()
     {
-        TouchManager.Instance.OnMoveStarted += OnTouchStarted;
-        TouchManager.Instance.OnMoveHold += OnTouchHold;
-        TouchManager.Instance.OnMoveEnd += OnTouchEnd;
+        if (GameManager.Instance.gameType.Equals(eGameType.LoadGame))
+        {
+            transform.localPosition = DataSaveManager.Instance.LoadGamePlayerPosition();
+        }
+        else
+        {
+            transform.localPosition = DataSaveManager.Instance.NewGamePlayerPosition();
+        }
+
+        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
+
         moveDir = Vector3.zero;
         startValue = Vector2.zero;
         value = Vector2.zero;
 
-        SaveManager.Instance.LoadPlayerPosition(transform);
-        SaveManager.Instance.LoadPlayerRotation(playerCamera.transform);
-        
-        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
+        TouchManager.Instance.OnMoveStarted += OnTouchStarted;
+        TouchManager.Instance.OnMoveHold += OnTouchHold;
+        TouchManager.Instance.OnMoveEnd += OnTouchEnd;
     }
-
+    private void OnDisable()
+    {
+        TouchManager.Instance.OnMoveStarted -= OnTouchStarted;
+        TouchManager.Instance.OnMoveHold -= OnTouchHold;
+        TouchManager.Instance.OnMoveEnd -= OnTouchEnd;
+    }
     private void FixedUpdate()
     {
         if(!moveDir.Equals(Vector3.zero))
         {
             transform.Translate(moveDir * speed * Time.unscaledDeltaTime);
-            playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
+            
         }
-        
-        
+        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
+
     }
 
     public void OnTouchStarted(Vector2 position)

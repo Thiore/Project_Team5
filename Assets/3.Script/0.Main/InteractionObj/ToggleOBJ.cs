@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ToggleOBJ : InteractionOBJ, ITouchable
 {
-    [Header("SaveManager Âü°í")]
+    [Header("SaveManager ì°¸ê³ ")]
     [SerializeField] protected int floorIndex;
     [SerializeField] protected int objectIndex;
 
-    [Header("ÆÛÁñ µî ´Ù¸¥¿ÀºêÁ§Æ®¿Í »óÈ£ÀÛ¿ëÀÌ ÇÊ¿äÇÏ¸é False")]
+    [Header("í¼ì¦ ë“± ë‹¤ë¥¸ì˜¤ë¸Œì íŠ¸ì™€ ìƒí˜¸ì‘ìš©ì´ í•„ìš”í•˜ë©´ False")]
     [SerializeField] private bool isClear;
 
     protected override void Start()
@@ -18,7 +18,7 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
         TryGetComponent(out anim);
         if (!isClear)
         {
-            isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
+            isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
 
         }
     }
@@ -47,9 +47,9 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
                 }
                 else
                 {
-                    //"Àá°ÜÀÖ¾î"¶ó´Â µ¶¹é ´ë»ç Ãâ·Â
+                    //"ì ê²¨ìˆì–´"ë¼ëŠ” ë…ë°± ëŒ€ì‚¬ ì¶œë ¥
                     DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
-                    Debug.Log("¿©±â ¾È µé¾î¿À³ª?");
+                    Debug.Log("ì—¬ê¸° ì•ˆ ë“¤ì–´ì˜¤ë‚˜?");
                 }
                 
             }

@@ -31,7 +31,7 @@ public class UI_TriggerSlot : MonoBehaviour, IPointerClickHandler
         {
             InitSlot();
         }
-        if (!triggerButton.gameObject.activeInHierarchy)
+        if (!triggerButton.gameObject.activeSelf)
         {
             triggerButton.gameObject.SetActive(true);
             triggerButton.SetTriggerByItem(item);

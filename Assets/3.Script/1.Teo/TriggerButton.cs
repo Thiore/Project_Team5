@@ -10,7 +10,7 @@ public interface IUseTrigger
     public void OnUseTrigger(Item item);
 }
 
-public class TriggerButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class TriggerButton : MonoBehaviour, IUITouchable
 {
     public Item item { get; private set; } = null;
     private Image image;
@@ -23,8 +23,6 @@ public class TriggerButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     [SerializeField] private float touchLength;
     
     private float touchTime;// touchLength까지 도달할 시간
-
-    private Coroutine touchTime_co;
 
     //트리거버튼을 눌렀을때 트리거가능한 오브젝트가 있다면 메서드 실행
     public static event Action<Item> OnUseTrigger; 
@@ -42,7 +40,6 @@ public class TriggerButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     {
         transform.GetChild(0).TryGetComponent(out image);
         touchTime = 0f;
-        touchTime_co = null;
     }
     public void SetTriggerByItem(Item item)
     {
@@ -54,43 +51,36 @@ public class TriggerButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         image.sprite = item.sprite;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+
+    public void OnUIStarted(PointerEventData data)
     {
-        if(!triggerList.activeSelf)
-            touchTime_co = StartCoroutine(TouchTime_co());
+        if (!triggerList.activeSelf)
+            touchTime = 0f;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnUIHold(PointerEventData data)
     {
-        if(!triggerList.activeSelf)
+        if (!triggerList.activeSelf)
+            touchTime += Time.deltaTime;
+    }
+
+    public void OnUIEnd(PointerEventData data)
+    {
+        if (!triggerList.activeSelf)
         {
-            StopCoroutine(touchTime_co);
-            touchTime_co = null;
             if (touchTime > touchLength)
             {
-                for(int i = 0; i < triggerList.transform.childCount;i++)
-                {
-                    if (triggerList.transform.GetChild(i).gameObject.activeInHierarchy)
-                    {
-                        triggerList.SetActive(true);
-                        break;
-                    }   
-                }
+
+                triggerList.SetActive(true);
+
+
             }
             else
             {
-                OnUseTrigger?.Invoke(item);
+                if (!triggerList.activeSelf)
+                    OnUseTrigger?.Invoke(item);
             }
             touchTime = 0f;
         }
-    }
-    private IEnumerator TouchTime_co()
-    {
-        while(true)
-        {
-            touchTime += Time.deltaTime;
-            yield return null;
-        }
-        
     }
 }

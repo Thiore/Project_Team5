@@ -17,7 +17,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if(!isInteraction)
         {
             //this.id = id;
-            this.item = DataManager.instance.GetItemInfoById(id);
+            this.item = DataSaveManager.Instance.itemData[id];
             image.sprite = item.sprite;
             image.enabled = true;
         }
@@ -68,7 +68,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     if (item.id.Equals(toggle.getInteractionIndex[i]))
                     {
                         toggle.isInteracted = true;
-                        SaveManager.Instance.UpdateObjectState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
+                        DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
 
                         if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
                         {
@@ -86,7 +86,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     if (item.id.Equals(puzzle.getObjectIndex[i]))
                     {
                         puzzle.InteractionCount();
-                        SaveManager.Instance.UpdateObjectState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
+                        DataSaveManager.Instance.UpdateGameState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
                         if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
                         {
                             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);

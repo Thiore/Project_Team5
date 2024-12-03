@@ -18,8 +18,12 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void SetinvenByItem(Item item)
     {
-        //id = item.id;
         this.item = item;
+        if(item.eItemType.Equals(eItemType.Clue))
+        {
+            this.item.isfix = true;
+        }
+            
         image.sprite = item.sprite;
     }
 
