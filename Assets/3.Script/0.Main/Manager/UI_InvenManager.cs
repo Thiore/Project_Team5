@@ -109,7 +109,6 @@ public class UI_InvenManager : MonoBehaviour
             GetItemByImage(item);
         }
         
-        iteminfo.SetInfoByItem(item);
         AddInventoryItem(item);
         
         switch (item.eItemType)
@@ -127,6 +126,7 @@ public class UI_InvenManager : MonoBehaviour
 
         }
 
+        iteminfo.SetInfoByItem(item);
 
     }
 

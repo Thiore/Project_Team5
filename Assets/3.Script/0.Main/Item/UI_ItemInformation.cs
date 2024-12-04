@@ -6,23 +6,28 @@ using UnityEngine.UI;
 
 public class UI_ItemInformation : MonoBehaviour, IDropHandler
 {
-    [SerializeField] UI_InvenManager invenmanager;
-    private int id;
+    private int id = -1;
     public int ID { get; private set; }
     private int elementindex;
     public int Elementindex { get => elementindex; }
 
 
+
     public void SetInfoByItem(Item item)
     {
-        if (!gameObject.activeSelf)
+        if (id.Equals(-1))
         {
             gameObject.SetActive(true);
+
         }
+
+        ClueItem.childItem[id].gameObject.SetActive(false);
         this.id = item.id;
+        ClueItem.childItem[id].gameObject.SetActive(true);
+
         DialogueManager.Instance.SetItemNameText("Table_ItemName", id);
         DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", id);
-        if(TryGetComponent(out Image image))
+        if (TryGetComponent(out Image image))
         {
             image.sprite = item.sprite;
         }
