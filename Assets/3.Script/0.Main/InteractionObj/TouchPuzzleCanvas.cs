@@ -46,7 +46,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
     private void OnEnable()
     {
-        btnList = PlayerManager.Instance.getBtnList;
+        //btnList = PlayerManager.Instance.getBtnList;
         //quickSlot = PlayerManager.Instance.getQuickSlot;
         
             if(!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
@@ -67,7 +67,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         {
             for(int i = 0; i < InteractionIndex.Length;i++)
             {
-                if(!SaveManager.Instance.PuzzleState(floorIndex, InteractionIndex[i]))
+                if(!DataSaveManager.Instance.GetGameState(floorIndex, InteractionIndex[i]))
                 {
                     isInteracted = false;
                     break;
@@ -110,7 +110,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
         if(!isClear)
         {
-            isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
+            isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
         }
 
         if (isClear)
@@ -132,7 +132,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             }
             TouchManager.Instance.EnableMoveHandler(true);
             
-            btnList.SetActive(true);
+            //btnList.SetActive(true);
             
             //quickSlot.QucikSlotButton(true);
         }
@@ -185,11 +185,11 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
                 if(playPuzzle!=null&&playPuzzle.getInteractionCount> 0)
                 {
-                    btnList.SetActive(false);
+                    //btnList.SetActive(false);
                 }
                 else
                 {
-                    btnList.SetActive(false);
+                    //btnList.SetActive(false);
                 }
                     //quickSlot.QucikSlotButton(false);
 

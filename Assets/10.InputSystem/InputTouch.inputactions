@@ -6,10 +6,19 @@
             "id": "5b866205-2eaf-4763-be15-ba2691ca9e4a",
             "actions": [
                 {
-                    "name": "Touch",
-                    "type": "PassThrough",
+                    "name": "Rotation",
+                    "type": "Value",
                     "id": "fcc51373-dd28-443e-8a4a-7873e0f28198",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Scale",
+                    "type": "Value",
+                    "id": "0cb09fba-aaf4-434f-ba64-4bf4939baff8",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -17,13 +26,57 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "8c37382d-4f72-42df-98b7-4e35cd3af45f",
-                    "path": "<Touchscreen>/touch*/press",
-                    "interactions": "Press,Hold",
+                    "name": "Two Modifiers",
+                    "id": "314bc3b3-0b86-4411-bf91-0587bd622335",
+                    "path": "TwoModifiers",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scale",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier1",
+                    "id": "578617ad-3e54-480a-8ea5-36b53a8f99be",
+                    "path": "<Touchscreen>/touch*/Press",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Android",
-                    "action": "Touch",
+                    "action": "Scale",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "73f1826d-be5b-40f3-8f21-1725b1f02911",
+                    "path": "<Touchscreen>/touch*/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Android",
+                    "action": "Scale",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "99f361df-f62b-4e42-8a2d-a622b3ae1b3e",
+                    "path": "<Touchscreen>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Android",
+                    "action": "Scale",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7990d5ad-aa6c-4efd-886c-532ca80a6fd8",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Android",
+                    "action": "Rotation",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -377,6 +377,7 @@ public class TouchManager : MonoBehaviour
             int hitLayer = hit.collider.gameObject.layer;
 
             // `touchableObjectLayer`에 hit 객체의 레이어가 포함되어 있는지 확인
+           
             bool isTouchableObject = (touchableObjectLayer.value & (1 << hitLayer)) != 0;
 
             if (isTouchableObject)

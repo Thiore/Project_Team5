@@ -26,7 +26,7 @@ public class Movement : MonoBehaviour, ITouchable
             transform.localPosition = DataSaveManager.Instance.NewGamePlayerPosition();
         }
 
-        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
+        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.75f;
 
         moveDir = Vector3.zero;
         startValue = Vector2.zero;
@@ -49,7 +49,7 @@ public class Movement : MonoBehaviour, ITouchable
             transform.Translate(moveDir * speed * Time.unscaledDeltaTime);
             
         }
-        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.5f;
+        playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.75f;
 
     }
 
