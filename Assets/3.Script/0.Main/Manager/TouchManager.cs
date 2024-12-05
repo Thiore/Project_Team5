@@ -450,6 +450,7 @@ public class TouchManager : MonoBehaviour
 
     public void EnableMoveHandler(bool dontTouch)
     {
+        if (isMoving.Equals(dontTouch)) return;
         isMoving = dontTouch;
         if (!isMoving)
         {

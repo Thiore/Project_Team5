@@ -20,16 +20,26 @@ public class Joystick : MonoBehaviour, ITouchable
     {
         TryGetComponent(out panel);
         //TryGetComponent(out canvas);
+        
+    }
+    private void OnEnable()
+    {
         TouchManager.Instance.OnMoveStarted += OnTouchStarted;
         TouchManager.Instance.OnMoveHold += OnTouchHold;
         TouchManager.Instance.OnMoveEnd += OnTouchEnd;
     }
+    private void OnDisable()
+    {
+        TouchManager.Instance.OnMoveStarted -= OnTouchStarted;
+        TouchManager.Instance.OnMoveHold -= OnTouchHold;
+        TouchManager.Instance.OnMoveEnd -= OnTouchEnd;
+    }
 
-    
 
-    
 
-    
+
+
+
     /// <summary>
     /// 매 프레임 터치 위치에 따라서 가상 조이패드 핸들의 좌표 지정
     /// </summary>

@@ -63,13 +63,12 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             if (hit.collider.TryGetComponent(out TouchPuzzleCanvas toggle))
             {
-                for (int i = 0; i < toggle.getInteractionIndex.Length; i++)
+                for (int i = 0; i < toggle.getInteractionIndex.Count; i++)
                 {
                     if (item.id.Equals(toggle.getInteractionIndex[i]))
                     {
-                        toggle.isInteracted = true;
                         DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
-
+                        toggle.InteractionObject(item.id);   
                         if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
                         {
                             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
@@ -81,12 +80,12 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             }
             if (hit.collider.TryGetComponent(out PlayOBJ puzzle))
             {
-                for (int i = 0; i < puzzle.getObjectIndex.Length; i++)
+                for (int i = 0; i < puzzle.getObjectIndex.Count; i++)
                 {
                     if (item.id.Equals(puzzle.getObjectIndex[i]))
                     {
-                        puzzle.InteractionCount();
                         DataSaveManager.Instance.UpdateGameState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
+                        puzzle.InteractionObject(item.id);
                         if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
                         {
                             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);

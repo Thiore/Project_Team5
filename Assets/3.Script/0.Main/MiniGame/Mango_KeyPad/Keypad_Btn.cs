@@ -39,7 +39,7 @@ public class Keypad_Btn : PlayOBJ
                     puzzle.isClear = true;
                 }
                 input.text = "";
-                puzzle.OffKeypad();
+                puzzle.OffInteraction();
             }
             else
             {

@@ -22,15 +22,15 @@ public class CheckWire : PlayOBJ
         {
             if (!start.isConnect)
             {
-                Debug.Log("¾ÆÁ÷ ¼º°ø¾Æ´Ô");
+                Debug.Log("ì•„ì§ ì„±ê³µì•„ë‹˜");
                 return;
             }
         }
 
-        Debug.Log("°ÔÀÓ¼º°ø");
+        Debug.Log("ê²Œì„ì„±ê³µ");
         SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
-        puzzle.OffKeypad();
-        Debug.Log("³ª¿Í¶ó");
+        puzzle.OffInteraction();
+        Debug.Log("ë‚˜ì™€ë¼");
     }
 
 }

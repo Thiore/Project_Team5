@@ -7,24 +7,24 @@ using UnityEngine.InputSystem;
 public class LockGame : PlayOBJ
 {
 
-    private int[] correctNumber = { 1, 3, 0, 4 }; //Á¤´ä ¹øÈ£
-    private int[] currentNumber = { 0, 0, 0, 0 }; //ÇöÀç ¹øÈ£
+    private int[] correctNumber = { 1, 3, 0, 4 }; //ì •ë‹µ ë²ˆí˜¸
+    private int[] currentNumber = { 0, 0, 0, 0 }; //í˜„ì¬ ë²ˆí˜¸
 
-    //È¸ÀüÁßÀÎ ÈÙ ÄÚ·çÆ¾
+    //íšŒì „ì¤‘ì¸ íœ  ì½”ë£¨í‹´
     private Coroutine[] rotation_co;
 
-    //°¢ ¹øÈ£ ÈÙ ¿ÀºêÁ§Æ® (4°³)
+    //ê° ë²ˆí˜¸ íœ  ì˜¤ë¸Œì íŠ¸ (4ê°œ)
     public Transform[] numberWheels;
 
     public Animator ani;
 
-    //È¸Àü °¢µµ ¼³Á¤
+    //íšŒì „ ê°ë„ ì„¤ì •
     private float rotationAngle = -36f;
 
-    //È¸Àü ¼Óµµ
+    //íšŒì „ ì†ë„
     private float rotationSpeed = 5f;
 
-    //°¢ ÈÙÀÇ ¸ñÇ¥ È¸Àü °¢µµ
+    //ê° íœ ì˜ ëª©í‘œ íšŒì „ ê°ë„
     private Quaternion[] targetRotations;
 
 
@@ -38,21 +38,21 @@ public class LockGame : PlayOBJ
 
         ani.GetComponent<Animator>();
 
-        //ÃÊ±â ¸ñÇ¥ È¸Àü °¢µµ
+        //ì´ˆê¸° ëª©í‘œ íšŒì „ ê°ë„
         targetRotations = new Quaternion[numberWheels.Length];
         for (int i = 0; i < numberWheels.Length; i++)
         {
             targetRotations[i] = numberWheels[i].localRotation;
         }
 
-        //È¸ÀüÄÚ·çÆ¾ ÃÊ±âÈ­
+        //íšŒì „ì½”ë£¨í‹´ ì´ˆê¸°í™”
         rotation_co = new Coroutine[4];
         for(int i = 0; i < 4;i++)
         {
             rotation_co[i] = null;
         }
 
-        //¹øÈ£ ¸®¼Â
+        //ë²ˆí˜¸ ë¦¬ì…‹
         ResetLock();
     }
     //private void Update()
@@ -60,7 +60,7 @@ public class LockGame : PlayOBJ
     //    //GameSetting();
     //    for (int i = 0; i < numberWheels.Length; i++)
     //    {
-    //        //¸ñÇ¥ È¸Àü °¢µµ±îÁö ºÎµå·´°Ô
+    //        //ëª©í‘œ íšŒì „ ê°ë„ê¹Œì§€ ë¶€ë“œëŸ½ê²Œ
     //        numberWheels[i].localRotation = Quaternion.Lerp
     //            (numberWheels[i].localRotation,
     //            targetRotations[i],
@@ -69,7 +69,7 @@ public class LockGame : PlayOBJ
     //    }
     //}
 
-    //¹øÈ£ ¸®¼Â
+    //ë²ˆí˜¸ ë¦¬ì…‹
     public void ResetLock()
     {
         for (int i = 0; i < currentNumber.Length; i++)
@@ -87,29 +87,29 @@ public class LockGame : PlayOBJ
 
     
 
-    //Æ¯Á¤ ¹øÈ£ ÈÙÀ» ¿À¸¥ÂÊÀ¸·Î È¸Àü(+36µµ)
+    //íŠ¹ì • ë²ˆí˜¸ íœ ì„ ì˜¤ë¥¸ìª½ìœ¼ë¡œ íšŒì „(+36ë„)
     public void RotateWheelRight(int wheelIndex)
     {
         if(rotation_co[wheelIndex] == null && !isAnswer)
         {
             currentNumber[wheelIndex] = (currentNumber[wheelIndex] + 1) % 10;
 
-            //°¢ ¹øÈ£ ÈÙÀ» ÇØ´ç ¼ıÀÚ¿¡ ¸Â°Ô È¸Àü
+            //ê° ë²ˆí˜¸ íœ ì„ í•´ë‹¹ ìˆ«ìì— ë§ê²Œ íšŒì „
             float newRotation = currentNumber[wheelIndex] * rotationAngle;
             targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, -180);
             rotation_co[wheelIndex] = StartCoroutine(RotateWheel(wheelIndex));
         }
     }
 
-    //Æ¯Á¤ ¹øÈ£ ÈÙÀ» ¿ŞÂÊÀ¸·Î È¸Àü (-36µµ)
+    //íŠ¹ì • ë²ˆí˜¸ íœ ì„ ì™¼ìª½ìœ¼ë¡œ íšŒì „ (-36ë„)
     public void RotateWheelLeft(int wheelIndex)
     {
         if (rotation_co[wheelIndex] == null&&!isAnswer)
         {
-            //¼ıÀÚ¸¦ °¨¼Ò½ÃÅ°°í, 0º¸´Ù ÀÛÀ¸¸é 9·Î ¼³Á¤
+            //ìˆ«ìë¥¼ ê°ì†Œì‹œí‚¤ê³ , 0ë³´ë‹¤ ì‘ìœ¼ë©´ 9ë¡œ ì„¤ì •
             currentNumber[wheelIndex] = (currentNumber[wheelIndex] - 1 + 10) % 10;
 
-            //°¢ ¹øÈ£ ÈÙÀ» ÇØ´ç ¼ıÀÚ¿¡ ¸Â°Ô È¸Àü
+            //ê° ë²ˆí˜¸ íœ ì„ í•´ë‹¹ ìˆ«ìì— ë§ê²Œ íšŒì „
             float newRotation = currentNumber[wheelIndex] * rotationAngle;
             targetRotations[wheelIndex] = Quaternion.Euler(0, newRotation, -180);
             rotation_co[wheelIndex] = StartCoroutine(RotateWheel(wheelIndex));
@@ -117,9 +117,9 @@ public class LockGame : PlayOBJ
     }
 
     /// <summary>
-    /// ÄÚ·çÆ¾ È¸ÀüÀ» À§ÇÑ º¯¼öÀÔ´Ï´Ù.
+    /// ì½”ë£¨í‹´ íšŒì „ì„ ìœ„í•œ ë³€ìˆ˜ì…ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="wheelIndex">¼±ÅÃµÈ ÈÙÀÇ index°ª</param>
+    /// <param name="wheelIndex">ì„ íƒëœ íœ ì˜ indexê°’</param>
     /// <returns></returns>
     private IEnumerator RotateWheel(int wheelIndex)
     {
@@ -129,35 +129,35 @@ public class LockGame : PlayOBJ
         {
             Debug.Log(rotationTime);
             rotationTime += Time.deltaTime;
-            //¸ñÇ¥ È¸Àü °¢µµ±îÁö ºÎµå·´°Ô
+            //ëª©í‘œ íšŒì „ ê°ë„ê¹Œì§€ ë¶€ë“œëŸ½ê²Œ
             numberWheels[wheelIndex].localRotation =
                 Quaternion.Lerp(numberWheels[wheelIndex].localRotation,
                                  targetRotations[wheelIndex],
                                  rotationTime / rotationSpeed);
             yield return null;
         }
-        //Á¤´ä È®ÀÎ
+        //ì •ë‹µ í™•ì¸
         CheckNumber();
         rotation_co = null;
         yield break;
 
     }
 
-    //ÇöÀç ¹øÈ£¿Í Á¤´ä ¹øÈ£ ºñ±³
+    //í˜„ì¬ ë²ˆí˜¸ì™€ ì •ë‹µ ë²ˆí˜¸ ë¹„êµ
     private void CheckNumber()
     {
         for (int i = 0; i < correctNumber.Length; i++)
         {
             if (currentNumber[i] != correctNumber[i])
-                return; //ÇÏ³ª¶óµµ Æ²¸®¸é ¹İÈ¯
+                return; //í•˜ë‚˜ë¼ë„ í‹€ë¦¬ë©´ ë°˜í™˜
         }
 
-        //¹øÈ£°¡ ¸ÂÀ¸¸é »óÅÂ(true) ÀúÀå
+        //ë²ˆí˜¸ê°€ ë§ìœ¼ë©´ ìƒíƒœ(true) ì €ì¥
         SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
         isAnswer = true;
         canvas.gameObject.SetActive(false);
-        //¹øÈ£°¡ ¸ÂÀ¸¸é ÀÚ¹°¼è ¿­¸®´Â ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà
-        puzzle.OffKeypad();
+        //ë²ˆí˜¸ê°€ ë§ìœ¼ë©´ ìë¬¼ì‡  ì—´ë¦¬ëŠ” ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
+        puzzle.OffInteraction();
     }
 
 

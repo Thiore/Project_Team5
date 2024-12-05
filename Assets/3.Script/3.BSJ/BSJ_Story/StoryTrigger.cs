@@ -35,6 +35,14 @@ public class StoryTrigger : MonoBehaviour, ITouchable
 
     public void OnTouchEnd(Vector2 position)
     {
-        StoryStart();
+        Ray ray = Camera.main.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+        {
+            if (hit.collider.gameObject.Equals(gameObject))
+            {
+                StoryStart();
+            }
+        }
+        
     }
 }

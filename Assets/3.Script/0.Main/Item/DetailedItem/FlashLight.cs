@@ -15,6 +15,7 @@ public class FlashLight : MonoBehaviour, IUseTrigger
     {
         if (DataSaveManager.Instance.GetItemState(id))
         {
+            item = DataSaveManager.Instance.itemData[id];
             TriggerButton.OnUseTrigger += OnUseTrigger;
             Debug.Log("추가됨");
         }

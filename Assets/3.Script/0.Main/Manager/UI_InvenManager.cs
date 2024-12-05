@@ -14,15 +14,22 @@ public class UI_InvenManager : MonoBehaviour
     private Queue<UI_InventorySlot> invenSlots_Queue;
 
     [SerializeField] private Transform quickSlotList;
+    private RectTransform quickSlotRect;
     [SerializeField] private UI_QuickSlot quickSlotPrefabs;
     private List<UI_QuickSlot> quickSlots;
     private Queue<UI_QuickSlot> quickSlots_Queue;
+
+    private Coroutine quickSlot_co = null;
+    private float quickDir = 0;
+    public bool isOpenQuick { get; private set; }
 
     [SerializeField] private Transform triggerSlotList;
     [SerializeField] private UI_TriggerSlot triggerSlotPrefabs;
     [SerializeField] private GameObject btnTrigger;
     [SerializeField] private TriggerButton triggerButton;
     private List<UI_TriggerSlot> triggerSlots;
+
+    [SerializeField] private GameObject keyClue;
     
 
 
@@ -49,20 +56,26 @@ public class UI_InvenManager : MonoBehaviour
         getItemQueue = new Queue<Sprite>();
         waitForDelayTime = new WaitForSeconds(DelayTime);
         InitSlots();
+        TryGetComponent(out quickSlotRect);
+        isOpenQuick = false;
 
     }
     private void Start()
     {
         OnOpenInventory();
-        var loadData = DataSaveManager.Instance.itemStateData;
-        foreach(KeyValuePair<int,bool> item in loadData)
+        if(GameManager.Instance.gameType.Equals(eGameType.LoadGame))
         {
-            if(!item.Value)
+            var loadData = DataSaveManager.Instance.itemStateData;
+            foreach (KeyValuePair<int, bool> item in loadData)
             {
-                Item data = DataSaveManager.Instance.itemData[item.Key];
-                GetItemByID(data, true);
+                if (!item.Value)
+                {
+                    Item data = DataSaveManager.Instance.itemData[item.Key];
+                    GetItemByID(data, true);
+                }
             }
         }
+       
     }
     private void InitSlots()
     {
@@ -240,6 +253,7 @@ public class UI_InvenManager : MonoBehaviour
         UI_InventorySlot slot = invenSlots.Find(x => x.item.id.Equals(id));
 
         DataSaveManager.Instance.UpdateItemState(id);
+        ClueItem.Instance.UseItem(id);
         //slot.SetInvenEmpty();
         slot.transform.SetAsLastSibling();
         slot.gameObject.SetActive(false);
@@ -288,5 +302,48 @@ public class UI_InvenManager : MonoBehaviour
             getItemQueue.Dequeue();
         }
         getItemImage_co = null;
+    }
+
+    public bool HaveItem(List<int> id)
+    {
+        for(int i = 0; i < id.Count;i++)
+        {
+            if (!quickSlots.Find(x => x.item.id == id[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void OpenQuickSlot()
+    {
+        if (quickSlot_co != null)
+            StopCoroutine(quickSlot_co);
+        isOpenQuick = true;
+        quickSlot_co = StartCoroutine(QuickSlot_co(1f));
+    }
+    public void CloseQuickSlot()
+    {
+        if (quickSlot_co != null)
+            StopCoroutine(quickSlot_co);
+        isOpenQuick = false;
+        quickSlot_co = StartCoroutine(QuickSlot_co(-1f));
+    }
+    private IEnumerator QuickSlot_co(float dir)
+    {
+        
+        while(true)
+        {
+            quickDir += dir * Time.deltaTime / 0.5f;
+            quickDir = Mathf.Clamp(quickDir, -200f, 0f);
+            quickSlotRect.anchoredPosition = new Vector2(0f, quickDir);
+            if (quickDir.Equals(-200f) || quickDir.Equals(0f))
+            {
+                quickSlot_co = null;
+                yield break;
+            }
+            yield return null;  
+        }
     }
 }
