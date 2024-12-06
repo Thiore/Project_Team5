@@ -82,6 +82,9 @@ public class TouchManager : MonoBehaviour
 
     private bool isTouchSupportEnabled = false; // EnhancedTouch 상태 관리
 
+    private int falseCount; //여러군데에서 터치를 막는 메서드가 불릴경우를 대비해 사용
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -123,7 +126,7 @@ public class TouchManager : MonoBehaviour
     {
         OnDisableTouchAction();
         eventSystem = EventSystem.current;
-        StartCoroutine(EnableEventSystem());
+        eventSystem.enabled = true;
 
 
         OnEnableTouchAction();
@@ -280,7 +283,7 @@ public class TouchManager : MonoBehaviour
                     if (moveId.Equals(-1) && lookId.Equals(-1))
                     {
                         touchState = etouchState.Normal;
-                        StartCoroutine(EnableEventSystem());
+                        eventSystem.enabled = true;
                     }
                 }
                 break;
@@ -307,9 +310,16 @@ public class TouchManager : MonoBehaviour
                 if (currentTouchDic.Count.Equals(0))
                 {
                     touchState = etouchState.Normal;
-                    StartCoroutine(EnableEventSystem());
+                    eventSystem.enabled = true;
                 }
                 break;
+        }
+        if(touchState.Equals(etouchState.Normal))
+        {
+            if (!isMoving)
+            {
+                EnableMoveHandler(true);
+            }
         }
     }
     /// <summary>
@@ -338,6 +348,10 @@ public class TouchManager : MonoBehaviour
                         currentUIDic[touchId].OnUIStarted(pointerData);
                     }
 
+                }
+                if (isMoving)
+                {
+                    EnableMoveHandler(false);
                 }
                 return true;
             }
@@ -387,7 +401,10 @@ public class TouchManager : MonoBehaviour
                     if (currentTouchDic.ContainsValue(touchable)) return false;
 
                     currentTouchDic.Add(touchId, touchable);
-
+                    if(isMoving)
+                    {
+                        EnableMoveHandler(false);
+                    }
                     return true;
                 }
             }
@@ -450,38 +467,13 @@ public class TouchManager : MonoBehaviour
 
     public void EnableMoveHandler(bool dontTouch)
     {
-        if (isMoving.Equals(dontTouch)) return;
-        isMoving = dontTouch;
-        if (!isMoving)
+        if(dontTouch.Equals(false))
         {
-            if (touchState.Equals(etouchState.Player))
+            if (falseCount.Equals(0))
             {
-                StartCoroutine(EnableEventSystem());
-                touchState = etouchState.Normal;
-                if (!moveId.Equals(-1))
+                isMoving = false;
+                if (touchState.Equals(etouchState.Player))
                 {
-                    OnMoveEnd?.Invoke(Vector2.zero);
-                    moveId = -1;
-                }
-                if (!lookId.Equals(-1))
-                {
-                    OnLookEnd?.Invoke(Vector2.zero);
-                    lookId = -1;
-                }
-            }
-        }
-    }
-
-    public void EnableTouchHandle(bool dontTouch)
-    {
-        isTouching = dontTouch;
-        if(!isTouching)
-        {
-            switch(touchState)
-            {
-                case etouchState.Player:
-                    StartCoroutine(EnableEventSystem());
-                    touchState = etouchState.Normal;
                     if (!moveId.Equals(-1))
                     {
                         OnMoveEnd?.Invoke(Vector2.zero);
@@ -492,25 +484,59 @@ public class TouchManager : MonoBehaviour
                         OnLookEnd?.Invoke(Vector2.zero);
                         lookId = -1;
                     }
+                    if (!eventSystem.enabled)
+                        eventSystem.enabled = true;
+                    if (touchState.Equals(etouchState.Player))
+                        touchState = etouchState.Normal;
+                }
+            }
+            falseCount += 1;
+            
+        }
+        else
+        {
+            falseCount -= 1;
+            if(falseCount.Equals(0))
+            {
+                isMoving = true;
+            }
+        }
+        
+    }
+
+    public void EnableTouchHandle(bool dontTouch)
+    {
+        isTouching = dontTouch;
+        if(!isTouching)
+        {
+            switch(touchState)
+            {
+                case etouchState.Player:
+                    
+                    if (!moveId.Equals(-1))
+                    {
+                        OnMoveEnd?.Invoke(Vector2.zero);
+                        moveId = -1;
+                    }
+                    if (!lookId.Equals(-1))
+                    {
+                        OnLookEnd?.Invoke(Vector2.zero);
+                        lookId = -1;
+                    }
+                    eventSystem.enabled = true;
+                    touchState = etouchState.Normal;
                     break;
                 case etouchState.Object:
+                    foreach(var touch in currentTouchDic.Values)
+                    {
+                        touch?.OnTouchEnd(Vector2.zero);
+                    }
                     currentTouchDic.Clear();
                     touchState = etouchState.Normal;
-                    StartCoroutine(EnableEventSystem());
+                    eventSystem.enabled = true;
                     break;
             }
         }
-    }
-    private IEnumerator EnableEventSystem()
-    {
-        yield return null;
-        eventSystem.enabled = true;
-
-
-
-
-
-
     }
 }
 

@@ -32,19 +32,25 @@ public class PlayerManager : MonoBehaviour
     public Transform mainPlayer;
     public Transform playerCam;
 
+    
+
     private void Awake()
     {
         Instance = this;
-
-        //if (Instance == null)
-        //{
-        //    Instance = this;
-        //    DontDestroyOnLoad(gameObject);
-        //}
-        //else
-        //{
-        //    Destroy(gameObject);
-        //}
     }
-    
+
+    private void OnEnable()
+    {
+        DialogueManager.Instance.dialogEvent += SetBtn;
+    }
+
+    private void OnDisable()
+    {
+        DialogueManager.Instance.dialogEvent -= SetBtn;
+    }
+
+    private void SetBtn(bool isOn)
+    {
+        btnList.SetActive(isOn);
+    }
 }

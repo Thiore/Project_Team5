@@ -11,17 +11,7 @@ public class FlashLight : MonoBehaviour, IUseTrigger
     {
         TryGetComponent(out flashLight);
     }
-    private void OnEnable()
-    {
-        if (DataSaveManager.Instance.GetItemState(id))
-        {
-            item = DataSaveManager.Instance.itemData[id];
-            TriggerButton.OnUseTrigger += OnUseTrigger;
-            Debug.Log("추가됨");
-        }
-       
-        
-    }
+    
 
     private void OnDestroy()
     {

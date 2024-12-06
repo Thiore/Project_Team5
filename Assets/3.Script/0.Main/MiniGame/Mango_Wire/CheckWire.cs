@@ -28,7 +28,7 @@ public class CheckWire : PlayOBJ
         }
 
         Debug.Log("게임성공");
-        SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
+        DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex[0]);
         puzzle.OffInteraction();
         Debug.Log("나와라");
     }

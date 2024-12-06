@@ -5,8 +5,8 @@ using TMPro;
 
 public class StoryBox_Loading : MonoBehaviour
 {
-    public TMP_Text loadingText; // "..." ¹İº¹µÉ Text
-    private Coroutine loading_Co;
+    public TMP_Text loadingText; // "..." ë°˜ë³µë  Text
+    private Coroutine loading_Co = null;
 
     private void OnEnable()
     {
@@ -26,7 +26,7 @@ public class StoryBox_Loading : MonoBehaviour
 
         if (loadingText != null)
         {
-            loadingText.text = ""; //ÅØ½ºÆ® ÃÊ±âÈ­
+            loadingText.text = ""; //í…ìŠ¤íŠ¸ ì´ˆê¸°í™”
         }
     }
 
@@ -34,19 +34,18 @@ public class StoryBox_Loading : MonoBehaviour
     {
         string[] dots = { ".", "..", "..." };
         int index = 0;
-        float addTime = 0f; //½Ã°£ Ãß°¡
-        float duration = 2f; //2ÃÊ µ¿¾È ¹İº¹
+        float addTime = 0f; //ì‹œê°„ ì¶”ê°€
+        float duration = 2f; //2ì´ˆ ë™ì•ˆ ë°˜ë³µ
 
         while (addTime < duration)
         {
-            loadingText.text = dots[index]; //Text ¾÷µ¥ÀÌÆ®
-            index = (index + 1) % dots.Length; //ÀÎµ¦½º ¼øÈ¯
-            addTime += 0.5f;
-            yield return new WaitForSeconds(0.5f); //2ÃÊ ÁÖ±â¸¦ À§ÇÑ 0.5ÃÊ ´ë±â
+            loadingText.text = dots[index]; //Text ì—…ë°ì´íŠ¸
+            index = (index + 1) % dots.Length; //ì¸ë±ìŠ¤ ìˆœí™˜
+            addTime += 0.2f;
+            yield return new WaitForSeconds(0.2f); //2ì´ˆ ì£¼ê¸°ë¥¼ ìœ„í•œ 0.5ì´ˆ ëŒ€ê¸°
         }
 
-        //3ÃÊ ÈÄ "..." »óÅÂ·Î °íÁ¤
+        //3ì´ˆ í›„ "..." ìƒíƒœë¡œ ê³ ì •
         loadingText.text = "...";
-        loading_Co = null;
     }
 }

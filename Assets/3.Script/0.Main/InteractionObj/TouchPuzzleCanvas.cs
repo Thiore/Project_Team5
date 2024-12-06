@@ -6,7 +6,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 {
     [SerializeField] private GameObject missionStart;
     [SerializeField] private GameObject missionExit;
-    [Header("게임이 끝난 후 상호작용이 가능한 오브젝트들")]
+    [Header("Outline의 상호작용을 할 카메라")]
     [SerializeField] private GameObject interactionCam;
 
     [SerializeField] private GameObject btnExit;
@@ -99,31 +99,34 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     public void OffInteraction()
     {
         
-        mask.enabled = true;
+        
         if(btnExit != null)
             btnExit.SetActive(false);
 
-        if(UI_InvenManager.Instance.isOpenQuick)
-        {
-            UI_InvenManager.Instance.CloseQuickSlot();
-        }
+        isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
 
         if (!isClear)
         {
+            mask.enabled = true;
+            if (UI_InvenManager.Instance.isOpenQuick)
+            {
+                UI_InvenManager.Instance.CloseQuickSlot();
+            }
             missionStart.SetActive(false);
             missionExit.SetActive(false);
             if (anim != null)
             {
-                anim.SetBool(openAnim, isClear);
+                anim.SetBool(openAnim, false);
             }
             TouchManager.Instance.EnableMoveHandler(true);
         }
         else
         {
+            
             missionStart.SetActive(false);
             if (anim != null)
             {
-                anim.SetBool(openAnim, isClear);
+                anim.SetBool(openAnim, false);
             }
             Invoke("ClearEvent", 2f);
         }
@@ -171,8 +174,8 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
                     missionStart.SetActive(true);
                     missionExit.SetActive(true);
                     btnExit.SetActive(true);
-
-                    if(UI_InvenManager.Instance.isOpenQuick)
+                    mask.enabled = false;
+                    if (UI_InvenManager.Instance.isOpenQuick)
                     {
                         UI_InvenManager.Instance.CloseQuickSlot();
                     }
@@ -190,9 +193,30 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     {
         if (isClear) return;
 
-        if (other.CompareTag("MainCamera") && outline != null)
+        if(interactionCam != null)
         {
-            outline.enabled = true;
+            if(!interactionCam.activeInHierarchy)
+            {
+                if (other.CompareTag("MainCamera") && outline != null)
+                {
+                    outline.enabled = true;
+                }
+            }
+        }
+       
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if(interactionCam != null)
+        {
+            if(interactionCam.activeInHierarchy)
+            {
+                outline.enabled = false;
+            }
+            else
+            {
+                outline.enabled = true;
+            }
         }
     }
 
@@ -226,6 +250,10 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         if(interactionIndex.Count.Equals(0))
         {
             isInteracted = true;
+            if (UI_InvenManager.Instance.isOpenQuick)
+            {
+                UI_InvenManager.Instance.CloseQuickSlot();
+            }
         }
     }
 }

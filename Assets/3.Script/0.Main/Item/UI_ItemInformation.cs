@@ -19,50 +19,14 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
             gameObject.SetActive(true);
 
         }
-        if (!item.id.Equals(2))
-        {
-            switch (id)
-            {
-                case -1:
-                    break;
-                case 2:
-                    ClueItem.Instance.childItem[0].gameObject.SetActive(false);
-                    break;
-                default:
-                    ClueItem.Instance.childItem[id].gameObject.SetActive(false);
-                    break;
-            }
-
-            this.id = item.id;
-                ClueItem.Instance.SetPin(id);
-        }
         else
         {
-            switch (id)
-            {
-                case -1:
-                    break;
-                case 2:
-                    ClueItem.Instance.childItem[0].gameObject.SetActive(false);
-                    break;
-                default:
-                    ClueItem.Instance.childItem[id].gameObject.SetActive(false);
-                    break;
-            }
-
-            this.id = item.id;
-            switch (id)
-            {
-                case 2:
-                    ClueItem.Instance.SetPin(0);
-                    break;
-            }
-
-
+            ClueItem.Instance.childItem[id].gameObject.SetActive(false);
         }
 
-
-
+        this.id = item.id;
+        ClueItem.Instance.SetPin(id);
+            
         DialogueManager.Instance.SetItemNameText("Table_ItemName", id);
         DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", id);
 

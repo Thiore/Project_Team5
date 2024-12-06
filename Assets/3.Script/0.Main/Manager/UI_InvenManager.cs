@@ -20,16 +20,18 @@ public class UI_InvenManager : MonoBehaviour
     private Queue<UI_QuickSlot> quickSlots_Queue;
 
     private Coroutine quickSlot_co = null;
-    private float quickDir = 0;
+    private float quickDir;
+    [Header("퀵슬롯 이동 속도")]
+    [Range(100f,200f)]
+    [SerializeField] private float quickSlotSpeed;
     public bool isOpenQuick { get; private set; }
 
     [SerializeField] private Transform triggerSlotList;
     [SerializeField] private UI_TriggerSlot triggerSlotPrefabs;
     [SerializeField] private GameObject btnTrigger;
     [SerializeField] private TriggerButton triggerButton;
-    private List<UI_TriggerSlot> triggerSlots;
+    private List<UI_TriggerSlot> triggerSlots = null;
 
-    [SerializeField] private GameObject keyClue;
     
 
 
@@ -48,6 +50,7 @@ public class UI_InvenManager : MonoBehaviour
     
 
     [SerializeField] private FlashLight flashLight;
+    [SerializeField] private List<Item3D> items;
 
 
     private void Awake()
@@ -56,7 +59,7 @@ public class UI_InvenManager : MonoBehaviour
         getItemQueue = new Queue<Sprite>();
         waitForDelayTime = new WaitForSeconds(DelayTime);
         InitSlots();
-        TryGetComponent(out quickSlotRect);
+        quickSlotList.TryGetComponent(out quickSlotRect);
         isOpenQuick = false;
 
     }
@@ -71,7 +74,11 @@ public class UI_InvenManager : MonoBehaviour
                 if (!item.Value)
                 {
                     Item data = DataSaveManager.Instance.itemData[item.Key];
-                    GetItemByID(data, true);
+                    items[item.Key].GetItem();
+                }
+                else
+                {
+                    items[item.Key].UseItem();
                 }
             }
         }
@@ -191,17 +198,19 @@ public class UI_InvenManager : MonoBehaviour
     {
         if(triggerSlots == null)
         {
-            triggerSlots = new List<UI_TriggerSlot>();
             btnTrigger.SetActive(true);
+            triggerSlots = new List<UI_TriggerSlot>();
             UI_TriggerSlot initSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
             initSlot.SetinvenByItem(item);
             triggerSlots.Add(initSlot);
-            
-            return;
         }
-        UI_TriggerSlot newSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
-        newSlot.SetinvenByItem(item);
-        triggerSlots.Add(newSlot);
+        else
+        {
+            UI_TriggerSlot newSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
+            newSlot.SetinvenByItem(item);
+            triggerSlots.Add(newSlot);
+        }
+       
 
     }
 
@@ -227,20 +236,17 @@ public class UI_InvenManager : MonoBehaviour
 
         if (firstelement.Equals(secondelement) && !slot.item.id.Equals(id))
         {
-            SortInvenSlot(slot.item.id);
-            SortInvenSlot(id);
             switch (firstelement)
             {
                 case 10:
-                    
-                    Item item = DataSaveManager.Instance.itemData[2];
-                    GetItemByID(item,true);
-                    DataSaveManager.Instance.UpdateItemState(item.id);
-                    AddTriggerItem(item);
-                    flashLight.SetUseFlashLight();
+                    items[2].GetItem();
+                    AddTriggerItem(items[2].item);
+                    //flashLight.SetUseFlashLight();
                     break;
 
             }
+            SortInvenSlot(slot.item.id);
+            SortInvenSlot(id);
 
             
             //OpenInventory();
@@ -255,6 +261,16 @@ public class UI_InvenManager : MonoBehaviour
         DataSaveManager.Instance.UpdateItemState(id);
         ClueItem.Instance.UseItem(id);
         //slot.SetInvenEmpty();
+        switch (slot.item.eItemType)
+        {
+            case eItemType.Quick:
+                UI_QuickSlot quickSlot = quickSlots.Find(x => x.item.id.Equals(slot.item.id));
+                quickSlots.Remove(quickSlot);
+                quickSlot.gameObject.SetActive(false);
+                quickSlots_Queue.Enqueue(quickSlot);
+                break;
+
+        }
         slot.transform.SetAsLastSibling();
         slot.gameObject.SetActive(false);
         invenSlots.Remove(slot);
@@ -332,12 +348,12 @@ public class UI_InvenManager : MonoBehaviour
     }
     private IEnumerator QuickSlot_co(float dir)
     {
-        
-        while(true)
+        quickDir = quickSlotRect.anchoredPosition.y;
+        while (true)
         {
-            quickDir += dir * Time.deltaTime / 0.5f;
+            quickDir += dir * Time.deltaTime* quickSlotSpeed;
             quickDir = Mathf.Clamp(quickDir, -200f, 0f);
-            quickSlotRect.anchoredPosition = new Vector2(0f, quickDir);
+            quickSlotRect.anchoredPosition = new Vector2(0,quickDir);
             if (quickDir.Equals(-200f) || quickDir.Equals(0f))
             {
                 quickSlot_co = null;
