@@ -26,6 +26,9 @@ public class Battery : MonoBehaviour, ITouchable
 
     public void Turn()
     {
-        transform.Rotate(Vector3.up, 90, Space.Self);
+        if (transform.GetChild(0).gameObject.activeInHierarchy && transform.GetChild(1).gameObject.activeInHierarchy)
+        {
+            transform.Rotate(Vector3.up, 90, Space.Self);
+        }
     }
 }
