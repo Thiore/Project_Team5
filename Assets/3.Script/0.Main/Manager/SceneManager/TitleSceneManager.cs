@@ -9,7 +9,7 @@ public class TitleSceneManager : MonoBehaviour
     [SerializeField] private Button newGameBtn;
     [SerializeField] private Button settingBtn;
 
-    private void Start()
+    private void OnEnable()
     {
         settingBtn.onClick.AddListener(SettingsManager.Instance.OnSettingPage);
         newGameBtn.onClick.AddListener(GameManager.Instance.NewGame);

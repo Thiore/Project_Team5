@@ -7,56 +7,78 @@ public class Item3D : MonoBehaviour, ITouchable
     [SerializeField] private int id;
     public int ID { get => id; }
 
-    [SerializeField] private Transform clue;
-    public Item item { get; private set; }
-    //[SerializeField] private UI_LerpImage lerpimage;
+    public Item item { get; protected set; }
 
-    private bool isGet;
+    [Header("조합아이템이 아니라면 0으로 해주세요")]
+    [SerializeField] private int combineItem;
+    [SerializeField] private GameObject combineObj;
+
+    protected bool isGet;
 
     private void Awake()
     {
         isGet = false;
+        item = DataSaveManager.Instance.itemData[id];
+        
     }
-
-
-    private void OnEnable()
+    private void Start()
     {
-        if(DataSaveManager.Instance.GetItemState(id))
+        if(combineItem>0)
         {
-            transform.SetParent(clue);
-            transform.localPosition = Vector3.zero;
-            transform.rotation = Quaternion.identity;
-            transform.localScale *= 10f;
-            ClueItem.childItem.Add(id, this);
-            isGet = true;
-        }
-        else
-        {
-            item = DataSaveManager.Instance.itemData[id];
+            gameObject.SetActive(false);
         }
     }
+
+
+
 
     public void OnTouchEnd(Vector2 position)
     {
-        if(!isGet)
+        
+        if(combineItem.Equals(0)&&!isGet)
         {
             Ray ray = Camera.main.ScreenPointToRay(position);
             if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
             {
-                if (hit.collider.gameObject.Equals(gameObject) && gameObject.CompareTag("Item3D"))
+                if (hit.collider.gameObject.Equals(gameObject))
                 {
-
-                    transform.SetParent(clue);
-                    transform.localPosition = Vector3.zero;
-                    transform.rotation = Quaternion.identity;
-                    transform.localScale *= 10f;
-                    ClueItem.childItem.Add(id, this);
-                    isGet = true;
-                    DataSaveManager.Instance.UpdateItemState(id);
-                    UI_InvenManager.Instance.GetItemByID(item);
+                    GetItem(false);
                 }
             }
         }
+    }
+
+    public void GetItem(bool isLoading = true)
+    {
+        if (combineItem > 0)
+        {
+            switch (combineItem)
+            {
+                case 1:
+                    combineObj.TryGetComponent(out FlashLight light);
+                    light.SetUseFlashLight();
+
+                    break;
+            }
+
+        }
+        else
+        {
+            transform.SetParent(ClueItem.Instance.transform);
+            transform.localPosition = Vector3.zero;
+        }
+        ClueItem.Instance.GetItem(id, this);
+
+        isGet = true;
+        if(!isLoading)
+            DataSaveManager.Instance.UpdateItemState(id);
+
+        UI_InvenManager.Instance.GetItemByID(item, isLoading);
+    }
+    public void UseItem()
+    {
+        isGet = true;
+        gameObject.SetActive(false);
     }
         
 

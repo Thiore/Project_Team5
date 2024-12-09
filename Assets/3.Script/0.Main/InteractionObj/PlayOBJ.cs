@@ -4,19 +4,45 @@ using UnityEngine;
 
 public class PlayOBJ : MonoBehaviour
 {
-    [Header("SaveManager Âü°í")]
+    [Header("SaveManager ì°¸ê³ ")]
     [SerializeField] protected int floorIndex;
     public int getFloorIndex { get => floorIndex; }
-    [SerializeField] protected int[] objectIndex;
-    public int[] getObjectIndex { get => objectIndex; }
+    [SerializeField] protected List<int> objectIndex;
+    public List<int> getObjectIndex { get => objectIndex; }
+
+    protected bool isInteracted = false;
 
     [SerializeField] protected TouchPuzzleCanvas puzzle;
-    [SerializeField] protected int interactionCount;
-    public int getInteractionCount { get => interactionCount; }
 
-    public void InteractionCount()
+    private void OnEnable()
     {
-        interactionCount -= 1;
-        puzzle.SetQuickSlot();
+        if (objectIndex.Count.Equals(0))
+        {
+            isInteracted = true;
+        }
+        else
+        {
+            for (int i = objectIndex.Count - 1; i >= 0; --i)
+            {
+                if (!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex[i]))
+                {
+                    isInteracted = false;
+                    break;
+                }
+                else
+                {
+                    objectIndex.RemoveAt(i);
+                }
+                isInteracted = true;
+            }
+        }
+    }
+    public void InteractionObject(int obj)
+    {
+        objectIndex.Remove(obj);
+        if (objectIndex.Count.Equals(0))
+        {
+            isInteracted = true;
+        }
     }
 }

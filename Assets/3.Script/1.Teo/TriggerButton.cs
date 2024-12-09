@@ -13,7 +13,7 @@ public interface IUseTrigger
 public class TriggerButton : MonoBehaviour, IUITouchable
 {
     public Item item { get; private set; } = null;
-    private Image image;
+    public Image image { get; private set; }
 
     [SerializeField] private GameObject triggerList;
 
@@ -27,18 +27,9 @@ public class TriggerButton : MonoBehaviour, IUITouchable
     //트리거버튼을 눌렀을때 트리거가능한 오브젝트가 있다면 메서드 실행
     public static event Action<Item> OnUseTrigger; 
 
-
-    private void Start()
-    {
-        if (image == null)
-        {
-            InitButton();
-        }
-    }
-
     private void InitButton()
     {
-        transform.GetChild(0).TryGetComponent(out image);
+        image = transform.GetChild(0).GetComponent<Image>();
         touchTime = 0f;
     }
     public void SetTriggerByItem(Item item)

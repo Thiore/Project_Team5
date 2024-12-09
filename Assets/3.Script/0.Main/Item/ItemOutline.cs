@@ -7,9 +7,11 @@ public class ItemOutline : MonoBehaviour
     private Outline outline;
     [SerializeField] private GameObject cam;
     private Item myItem;
+    private bool isTrigger;
 
     private void Start()
     {
+        isTrigger = false;
         if (TryGetComponent(out outline))
             outline.enabled = false;
 
@@ -19,25 +21,34 @@ public class ItemOutline : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(cam != null)
+        if (other.CompareTag("MainCamera"))
+            isTrigger = true;
+        
+        
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if(isTrigger&&!outline.enabled)
         {
-            if(cam.activeSelf)
+            if (cam != null)
             {
-                if (outline != null && other.CompareTag("MainCamera"))
+                if (cam.activeSelf)
+                {
+                    if (outline != null)
+                    {
+                        outline.enabled = true;
+                    }
+                }
+
+            }
+            else
+            {
+                if (outline != null)
                 {
                     outline.enabled = true;
                 }
             }
-
         }
-        else
-        {
-            if (outline != null && other.CompareTag("MainCamera"))
-            {
-                outline.enabled = true;
-            }
-        }
-        
     }
 
     private void OnTriggerExit(Collider other)

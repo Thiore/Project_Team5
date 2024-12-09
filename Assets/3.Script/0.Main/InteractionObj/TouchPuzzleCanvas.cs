@@ -6,7 +6,7 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 {
     [SerializeField] private GameObject missionStart;
     [SerializeField] private GameObject missionExit;
-    [Header("게임이 끝난 후 상호작용이 가능한 오브젝트들")]
+    [Header("Outline의 상호작용을 할 카메라")]
     [SerializeField] private GameObject interactionCam;
 
     [SerializeField] private GameObject btnExit;
@@ -18,9 +18,9 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     public int getFloorIndex { get => floorIndex; }
     [SerializeField] private int objectIndex;
 
-    [Header("상호작용 아이템이 없다면 -1")]
-    [SerializeField] private int[] InteractionIndex;
-    public int[] getInteractionIndex { get => InteractionIndex; }
+    [Header("상호작용 아이템이 있다면 추가해주세요")]
+    [SerializeField] private List<int> interactionIndex;
+    public List<int> getInteractionIndex { get => interactionIndex; }
 
     private Animator anim;
 
@@ -32,65 +32,59 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     public bool isClear;
     [HideInInspector]
     public bool isInteracted;
-    [HideInInspector]
-    public bool isInteractionCam;
 
     private GameObject btnList;
     //private UseButton quickSlot;
-
-    
-
-    
 
     private Outline outline;
 
     private void OnEnable()
     {
-        //btnList = PlayerManager.Instance.getBtnList;
-        //quickSlot = PlayerManager.Instance.getQuickSlot;
-        
-            if(!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
-            {
-                isClear = false;
-            }
-            else
+        if (!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
+        {
+            isClear = false;
+        }
+        else
         {
             isClear = true;
+            if (interactionAnim.Length > 0)
+            {
+                for (int i = 0; i < interactionAnim.Length; i++)
+                {
+                    interactionAnim[i].SetBool(openAnim, true);
+                    if (TryGetComponent(out ToggleOBJ toggleObj))
+                    {
+                        toggleObj.ClearOpen();
+                    }
+                }
+            }
+            return;
         }
-            
+
         
-        if (InteractionIndex.Length.Equals(0))
+
+       
+
+        if (interactionIndex.Count.Equals(0))
         {
             isInteracted = true;
         }
         else
         {
-            for(int i = 0; i < InteractionIndex.Length;i++)
+            for(int i = interactionIndex.Count-1; i >= 0;--i)
             {
-                if(!DataSaveManager.Instance.GetGameState(floorIndex, InteractionIndex[i]))
+                if(!DataSaveManager.Instance.GetGameState(floorIndex, interactionIndex[i]))
                 {
                     isInteracted = false;
                     break;
                 }
+                else
+                {
+                    interactionIndex.RemoveAt(i);
+                }
                 isInteracted = true;
             }
         }
-            
-       
-     
-        if (isClear&&interactionAnim.Length>0)
-        {
-            for (int i = 0; i < interactionAnim.Length; i++)
-            {
-                interactionAnim[i].SetBool(openAnim, true);
-                if(TryGetComponent(out ToggleOBJ toggleObj))
-                {
-                    toggleObj.ClearOpen();
-                }
-            }
-        }
-
-        isInteractionCam = false;
     }
 
     private void Start()
@@ -102,44 +96,40 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     }
 
     
-    public void OffKeypad()
+    public void OffInteraction()
     {
         
-        mask.enabled = true;
-        btnExit.SetActive(false);
+        
+        if(btnExit != null)
+            btnExit.SetActive(false);
 
-        if(!isClear)
-        {
-            isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
-        }
+        isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
 
-        if (isClear)
+        if (!isClear)
         {
-            missionExit.SetActive(true);
-            missionStart.SetActive(false);
-            if (anim != null)
+            mask.enabled = true;
+            if (UI_InvenManager.Instance.isOpenQuick)
             {
-                anim.SetBool(openAnim, true);
+                UI_InvenManager.Instance.CloseQuickSlot();
             }
-            Invoke("ClearEvent", 2f);
-        }
-        else
-        {
             missionStart.SetActive(false);
+            missionExit.SetActive(false);
             if (anim != null)
             {
                 anim.SetBool(openAnim, false);
             }
             TouchManager.Instance.EnableMoveHandler(true);
-            
-            //btnList.SetActive(true);
-            
-            //quickSlot.QucikSlotButton(true);
         }
-           
-
-
-
+        else
+        {
+            
+            missionStart.SetActive(false);
+            if (anim != null)
+            {
+                anim.SetBool(openAnim, false);
+            }
+            Invoke("ClearEvent", 2f);
+        }
     }
 
     public void OnTouchStarted(Vector2 position)
@@ -153,85 +143,85 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     public void OnTouchEnd(Vector2 position)
     {
 
-        if (isClear)
-        {
-            if (interactionCam != null)
-            {
-                isInteractionCam = !isInteractionCam;
-                interactionCam.SetActive(isInteractionCam);
-                //quickSlot.QucikSlotButton(!isInteractionCam);
-            }
-
-            return;
-        }
-
-        if(!isInteracted)
-        {
-            DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
-            return;
-        }
+        if (isClear) return;
         Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
             if (hit.collider.gameObject.Equals(gameObject))
             {
-               
-                    TouchManager.Instance.EnableMoveHandler(false);
-                    missionStart.SetActive(true);
-
-                    mask.enabled = false;
-
-                    btnExit.SetActive(true);
-
-                if(playPuzzle!=null&&playPuzzle.getInteractionCount> 0)
+                if (!isInteracted && !UI_InvenManager.Instance.HaveItem(interactionIndex))
                 {
-                    //btnList.SetActive(false);
+                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                }
+                else if (!isInteracted)
+                {
+                    if(missionStart.activeInHierarchy)
+                    {
+                        DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                    }
+                    else
+                    {
+                        TouchManager.Instance.EnableMoveHandler(false);
+                        missionStart.SetActive(true);
+                        missionExit.SetActive(true);
+                        btnExit.SetActive(true);
+                        UI_InvenManager.Instance.OpenQuickSlot();
+                    }
                 }
                 else
                 {
-                    //btnList.SetActive(false);
-                }
-                    //quickSlot.QucikSlotButton(false);
+                    TouchManager.Instance.EnableMoveHandler(false);
+                    missionStart.SetActive(true);
+                    missionExit.SetActive(true);
+                    btnExit.SetActive(true);
+                    mask.enabled = false;
+                    if (UI_InvenManager.Instance.isOpenQuick)
+                    {
+                        UI_InvenManager.Instance.CloseQuickSlot();
+                    }
 
-                if(anim != null)
-                {
-                    anim.SetBool(openAnim, true);
+                    if (anim != null)
+                    {
+                        anim.SetBool(openAnim, true);
+                    }
                 }
-                
-                
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isClear)
-        {
-            if (interactionCam == null)
-            {
-                return;
-            }
+        if (isClear) return;
 
-            
-        }
-        if (other.CompareTag("MainCamera") && outline != null)
+        if(interactionCam != null)
         {
-            outline.enabled = true;
+            if(!interactionCam.activeInHierarchy)
+            {
+                if (other.CompareTag("MainCamera") && outline != null)
+                {
+                    outline.enabled = true;
+                }
+            }
+        }
+       
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if(interactionCam != null)
+        {
+            if(interactionCam.activeInHierarchy)
+            {
+                outline.enabled = false;
+            }
+            else
+            {
+                outline.enabled = true;
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (isClear)
-        {
-            if(interactionCam == null||outline != null)
-            {
-                outline.enabled = false;
-                return;
-            }
-        }
-
-       
         if (other.CompareTag("MainCamera") && outline != null)
         {
             outline.enabled = false;
@@ -253,13 +243,17 @@ public class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         btnList.SetActive(true);
         //quickSlot.QucikSlotButton(true);
     }
-    public void SetQuickSlot()
+
+    public void InteractionObject(int obj)
     {
-        if (playPuzzle.getInteractionCount>0)
+        interactionIndex.Remove(obj);
+        if(interactionIndex.Count.Equals(0))
         {
-            //quickSlot.QucikSlotButton(true);
+            isInteracted = true;
+            if (UI_InvenManager.Instance.isOpenQuick)
+            {
+                UI_InvenManager.Instance.CloseQuickSlot();
+            }
         }
     }
-    
-
 }

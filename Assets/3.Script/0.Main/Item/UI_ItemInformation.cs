@@ -8,9 +8,8 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
 {
     private int id = -1;
     public int ID { get; private set; }
-    private int elementindex;
-    public int Elementindex { get => elementindex; }
 
+    private Image image;
 
 
     public void SetInfoByItem(Item item)
@@ -20,17 +19,22 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
             gameObject.SetActive(true);
 
         }
+        else
+        {
+            ClueItem.Instance.childItem[id].gameObject.SetActive(false);
+        }
 
-        ClueItem.childItem[id].gameObject.SetActive(false);
         this.id = item.id;
-        ClueItem.childItem[id].gameObject.SetActive(true);
-
+        ClueItem.Instance.SetPin(id);
+            
         DialogueManager.Instance.SetItemNameText("Table_ItemName", id);
         DialogueManager.Instance.SetItemExplanationText("Table_ItemExplanation", id);
-        if (TryGetComponent(out Image image))
-        {
-            image.sprite = item.sprite;
-        }
+
+        if(image == null)
+            TryGetComponent(out image);
+
+        image.sprite = item.sprite;
+
     }
     
 

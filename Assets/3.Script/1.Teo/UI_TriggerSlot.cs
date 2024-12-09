@@ -11,13 +11,7 @@ public class UI_TriggerSlot : MonoBehaviour, IPointerClickHandler
     private TriggerList triggerList;
     private TriggerButton triggerButton;
 
-    private void OnEnable()
-    {
-        if (this.item == null)
-        {
-            InitSlot();
-        }
-    }
+    
 
     private void InitSlot()
     {
@@ -31,9 +25,8 @@ public class UI_TriggerSlot : MonoBehaviour, IPointerClickHandler
         {
             InitSlot();
         }
-        if (!triggerButton.gameObject.activeSelf)
+        if (triggerButton.image == null)
         {
-            triggerButton.gameObject.SetActive(true);
             triggerButton.SetTriggerByItem(item);
         }
         this.item = item;

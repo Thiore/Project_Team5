@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using Newtonsoft.Json;
 
+#if UNITY_EDITOR
 public class CSVToJsonConverter : EditorWindow
 {
     private string csvFilePath = "Assets/0.ETC/Data/";//csv 파일 경로
@@ -98,3 +99,4 @@ public class CSVToJsonConverter : EditorWindow
 
 }
 
+#endif

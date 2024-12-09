@@ -19,12 +19,14 @@ public class DataSaveManager : MonoBehaviour
     /// <para>Dictionary : 키는 층, value는 Dictionary(Key : 오브젝트, value : isInteracted(상호작용여부))</para>
     /// </summary>
     public Dictionary<int, Dictionary<int, bool>> gameStateData { get; private set; }
+    private Dictionary<int, Dictionary<int, bool>> tempGameStateData;
 
     /// <summary>
     /// 아이템의 획득 및 사용 여부를 저장하는 Dictionary
     /// <para>Dictionary : Key : ItemID, value : isUsed(사용여부)</para>
     /// </summary>
     public Dictionary<int, bool> itemStateData { get; private set; }
+    private Dictionary<int, bool> tempItemStateData;
     /// <summary>
     /// 아이템의 정보를 저장하는 Dictionary
     /// <para>Dictionary : Key : ItemID, value : Item의 정보</para>
@@ -58,7 +60,8 @@ public class DataSaveManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-
+            tempGameStateData = new Dictionary<int, Dictionary<int, bool>>();
+            tempItemStateData = new Dictionary<int, bool>();
             InitializeManager();
 
             DontDestroyOnLoad(gameObject);
@@ -83,8 +86,9 @@ public class DataSaveManager : MonoBehaviour
     /// </summary>
     public void NewGame()
     {
-        gameStateData.Clear();
-        itemStateData.Clear();
+        
+        gameStateData = new Dictionary<int, Dictionary<int, bool>>();
+        itemStateData = new Dictionary<int, bool>();
     }
     //유저가 백그라운드로 갔을 때, 저장
     private void OnApplicationPause(bool pause)
@@ -120,6 +124,7 @@ public class DataSaveManager : MonoBehaviour
                 {
                     string stateJson = JsonConvert.SerializeObject(gameStateData, Formatting.Indented);
                     File.WriteAllText(stateSavePath, stateJson);
+                    tempGameStateData = gameStateData;
                     break;
                 }
             }
@@ -128,7 +133,9 @@ public class DataSaveManager : MonoBehaviour
         {
             string itemJson = JsonConvert.SerializeObject(itemStateData, Formatting.Indented);
             File.WriteAllText(itemSavePath, itemJson);
+            tempItemStateData = itemStateData;
         }
+        
     }
 
     /// <summary>
@@ -288,7 +295,12 @@ public class DataSaveManager : MonoBehaviour
 
     public bool HistoryCount()
     {
-        if(itemStateData.Count>0||gameStateData.Count>0)
+        if (gameStateData.Count.Equals(0) && itemStateData.Count.Equals(0))
+        {
+            gameStateData = tempGameStateData;
+            itemStateData = tempItemStateData;
+        }
+        if (itemStateData.Count>0||gameStateData.Count>0)
         {
             return true;
         }
@@ -313,6 +325,8 @@ public class DataSaveManager : MonoBehaviour
             {
                 //Json 데이터를 gameStateData로 역직렬화
                 gameStateData = JsonConvert.DeserializeObject<Dictionary<int, Dictionary<int, bool>>>(stateSaveJson);
+                tempGameStateData = gameStateData;
+               
 #if UNITY_EDITOR
                 Debug.Log("게임 상태 로드 완료.");
 #endif
@@ -343,6 +357,7 @@ public class DataSaveManager : MonoBehaviour
             if (!string.IsNullOrEmpty(itemSaveJson))
             {
                 itemStateData = JsonConvert.DeserializeObject<Dictionary<int, bool>>(itemSaveJson);
+                tempItemStateData = itemStateData;
 #if UNITY_EDITOR
                 Debug.Log("아이템 획득 및 사용 내역 로드 완료.");
 #endif

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +34,7 @@ public class DialogueManager : MonoBehaviour
 
     public bool isDialogue { get; private set; } //현재 Dialogue가 활성화 중인지 여부
 
+    public event Action<bool> dialogEvent;
    
     
     private void Awake()
@@ -96,6 +98,7 @@ public class DialogueManager : MonoBehaviour
         if (PlayerManager.Instance != null)
         {
             isDialogue = true;
+            dialogEvent?.Invoke(isDialogue);
             TouchManager.Instance.EnableMoveHandler(false);
             //2초 동안 버튼 비활성화
             dialogueButton.interactable = false;
@@ -118,6 +121,7 @@ public class DialogueManager : MonoBehaviour
     private void OnButtonClicked()
     {
         isDialogue = false;
+        dialogEvent?.Invoke(isDialogue);
         TouchManager.Instance.EnableMoveHandler(true);
         //버튼 터치 시 즉시 비활성화
         dialogueButton.gameObject.SetActive(false);
