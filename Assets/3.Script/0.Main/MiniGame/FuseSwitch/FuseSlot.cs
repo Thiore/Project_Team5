@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] private List<Fuse> fuselist;
     [SerializeField] private int efuseNum;
     [SerializeField] private Fuse dragfuse;
+    [SerializeField] private Image image;
+    public Image Image { get => image; }
     private bool isdragging;
     private Vector3 tartgetpos;
 
@@ -15,6 +17,7 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         dragfuse.gameObject.SetActive(true);
         dragfuse.SetFuseColor(efuseNum);
+        image.enabled = false;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -31,25 +34,44 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("EndDrag");
-        RaycastHit[] hits = Physics.RaycastAll(tartgetpos, Vector3.forward);
-
-        Debug.Log(hits.Length);
-        for (int i = 0; i < hits.Length; i++)
+        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+        if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~(LayerMask.GetMask("SlideWall"))))
         {
-            if (hits[i].collider.gameObject.name.Equals("EmptyFuse"))
+            //Debug.Log(hit.collider.gameObject.name);
+            if (hit.collider.gameObject.name.Equals("EmptyFuse"))
             {
-                if (hits[i].transform.TryGetComponent(out Fuse fuse))
+                if (hit.transform.GetChild(0).TryGetComponent(out ResultFuse fuse))
                 {
-                    Debug.Log("검출됨");
-                    fuse.SetFuseColor(efuseNum);
-                    break;
+                    if (!hit.transform.GetChild(0).gameObject.activeSelf)
+                    {
+                        hit.transform.GetChild(0).gameObject.SetActive(true);
+                        fuse.SetFuseColor(efuseNum);
+                        fuse.GetSlot(this);
+                    }
+                    else
+                    {
+                        image.enabled = true;
+                    }
                 }
             }
+            else
+            {
+                image.enabled = true;
+            }
+        }
+        else
+        {
+            image.enabled = true;
         }
 
         dragfuse.gameObject.SetActive(false);
         isdragging = false;
     }
 
+
+    public FuseSlot ResultSaveSlot()
+    {
+        return this;
+    }
 
 }
