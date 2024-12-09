@@ -6,51 +6,56 @@ public class SlideObject : MonoBehaviour
 {
     private Vector3 initPosition;
     private Outline outLine;
-    private Collider objectCollider; // ÇöÀç ¿ÀºêÁ§Æ®ÀÇ Collider
-    public LayerMask overlapLayer;   // Ãæµ¹À» È®ÀÎÇÒ ·¹ÀÌ¾î ¼³Á¤
+    private Collider objectCollider; // í˜„ì¬ ì˜¤ë¸Œì íŠ¸ì˜ Collider
+    public LayerMask overlapLayer;   // ì¶©ëŒì„ í™•ì¸í•  ë ˆì´ì–´ ì„¤ì •
 
-    private void Awake()
+    private Vector3 initialObjectPosition; // í„°ì¹˜ ì‹œì‘ ì‹œ ì˜¤ë¸Œì íŠ¸ì˜ ì´ˆê¸° ìœ„ì¹˜
+    private Vector2 initialTouchPosition;  // í„°ì¹˜ ì‹œì‘ ì‹œ ì†ê°€ë½ ìœ„ì¹˜
+
+   
+
+    [Header("ê²°ê³¼ì™€ ìƒí˜¸ì‘ìš©í•˜ëŠ” ì˜¤ë¸Œì íŠ¸ëŠ” trueì™€ correctZoneì˜¤ë¸Œì íŠ¸ ì¶”ê°€")]
+    [SerializeField] private bool isCheckObj;
+    [SerializeField] private CorrectCheck correctZone;
+
+    protected virtual void Awake()
     {
         initPosition = transform.position;
-        outLine = GetComponent<Outline>();
+        TryGetComponent(out outLine);
         outLine.enabled = false;
+        TryGetComponent(out objectCollider);
 
-        objectCollider = GetComponent<Collider>();
-        if (objectCollider == null)
-        {
-            Debug.LogWarning("No Collider found on this object.");
-        }
     }
     
 
-    // ÇöÀç À§Ä¡¿¡¼­ ´Ù¸¥ ¿ÀºêÁ§Æ®¿Í °ãÄ¡´ÂÁö È®ÀÎÇÏ´Â ¸Ş¼­µå
+    // í˜„ì¬ ìœ„ì¹˜ì—ì„œ ë‹¤ë¥¸ ì˜¤ë¸Œì íŠ¸ì™€ ê²¹ì¹˜ëŠ”ì§€ í™•ì¸í•˜ëŠ” ë©”ì„œë“œ
     public bool IsOverlapping()
     {
         return IsOverlappingAtPosition(objectCollider.bounds.center);
     }
 
-    // Æ¯Á¤ À§Ä¡¿¡¼­ ´Ù¸¥ ¿ÀºêÁ§Æ®¿Í °ãÄ¡´ÂÁö È®ÀÎÇÏ´Â ¸Ş¼­µå
+    // íŠ¹ì • ìœ„ì¹˜ì—ì„œ ë‹¤ë¥¸ ì˜¤ë¸Œì íŠ¸ì™€ ê²¹ì¹˜ëŠ”ì§€ í™•ì¸í•˜ëŠ” ë©”ì„œë“œ
     public bool IsOverlappingAtPosition(Vector3 position)
     {
         if (objectCollider == null) return false;
 
-        // OverlapBox¸¦ »ç¿ëÇÏ¿© Æ¯Á¤ À§Ä¡¿¡¼­ °ãÄ§ ¿©ºÎ È®ÀÎ
+        // OverlapBoxë¥¼ ì‚¬ìš©í•˜ì—¬ íŠ¹ì • ìœ„ì¹˜ì—ì„œ ê²¹ì¹¨ ì—¬ë¶€ í™•ì¸
         Collider[] overlappingColliders = Physics.OverlapBox(
-            position,                      // °Ë»çÇÒ À§Ä¡
-            objectCollider.bounds.extents, // Collider Å©±â
-            Quaternion.identity,           // È¸Àü ¾øÀ½
-            overlapLayer                   // Ãæµ¹ È®ÀÎÇÒ ·¹ÀÌ¾î
+            position,                      // ê²€ì‚¬í•  ìœ„ì¹˜
+            objectCollider.bounds.extents, // Collider í¬ê¸°
+            Quaternion.identity,           // íšŒì „ ì—†ìŒ
+            overlapLayer                   // ì¶©ëŒ í™•ì¸í•  ë ˆì´ì–´
         );
 
-        // °ãÄ£ Collider°¡ ÀÖ´ÂÁö È®ÀÎ (ÀÚ±â ÀÚ½ÅÀº Á¦¿Ü)
+        // ê²¹ì¹œ Colliderê°€ ìˆëŠ”ì§€ í™•ì¸ (ìê¸° ìì‹ ì€ ì œì™¸)
         foreach (Collider collider in overlappingColliders)
         {
             if (collider.gameObject != gameObject)
             {
-                return true; // ´Ù¸¥ ¿ÀºêÁ§Æ®¿Í °ãÄ§
+                return true; // ë‹¤ë¥¸ ì˜¤ë¸Œì íŠ¸ì™€ ê²¹ì¹¨
             }
         }
-        return false; // °ãÄ£ ¿ÀºêÁ§Æ®°¡ ¾øÀ½
+        return false; // ê²¹ì¹œ ì˜¤ë¸Œì íŠ¸ê°€ ì—†ìŒ
     }
 
     public void InitPosition()

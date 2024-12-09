@@ -12,6 +12,9 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     [SerializeField] private Image image;
     private bool isDragging = false;
 
+    private HideSlide tempSlide = null;
+    
+
     public void SetinvenByID(int id, bool isInteraction = false)
     {
         if(!isInteraction)
@@ -52,7 +55,22 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             // 이건 끝나는 곳 확인 할 필요가 있음 
             UI_InvenManager.Instance.dragImage.transform.position = eventData.position;
+            //switch (id)
+            //{
+            //    case 5://큰 슬라이드퍼즐
+            //        DragRayToSlide(this.id, eventData, false);
+            //        break;
+            //    case 6:
+            //        DragRayToSlide(this.id, eventData, false);
+            //        break;
+            //    case 7:
+            //        DragRayToSlide(this.id, eventData, false);
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
+        
        
     }
 
@@ -97,6 +115,37 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     }
                 }
             }
+
+            //if(hit.collider.TryGetComponent(out HideSlide slide))
+            //{
+            //    if(slide.)
+            //}
         }
     }
+
+    //private void DragRayToSlide(int objId, PointerEventData eventData, bool touchEnd)
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+    //    if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+    //    {
+    //        if (hit.collider.TryGetComponent(out HideSlide slide))
+    //        {
+    //            if(tempSlide != null)
+    //            {
+    //                tempSlide.HideMaterial();
+    //                tempSlide = slide;
+    //            }
+    //            if()
+    //            if (slide.IsInteracted(id, touchEnd))
+    //            {
+
+    //            }
+    //        }
+    //        else
+    //        {
+    //            tempSlide.HideMaterial();
+    //            tempSlide = null;
+    //        }
+    //    }
+    //}
 }

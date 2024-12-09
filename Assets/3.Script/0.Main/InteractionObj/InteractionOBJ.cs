@@ -6,7 +6,7 @@ public class InteractionOBJ : MonoBehaviour
 {
     private Outline outline;
 
-    [Header("�⺻ Cinemachineī�޶�")]
+    [Header("기본 Cinemachine카메라")]
     [SerializeField] protected GameObject normalCamera;
 
 
@@ -20,7 +20,6 @@ public class InteractionOBJ : MonoBehaviour
     {
         if(TryGetComponent(out outline))
             outline.enabled = false;
-        Debug.Log("InteractionObj");
         
     }
 

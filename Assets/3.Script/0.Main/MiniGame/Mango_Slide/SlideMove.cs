@@ -3,37 +3,35 @@ using UnityEngine.InputSystem;
 
 public class SlideMove : MonoBehaviour
 {
-    public LayerMask touchableLayer; // ÅÍÄ¡ °¨ÁöÇÒ ·¹ÀÌ¾î ¼³Á¤
-    private GameObject selectedObject; // ÇöÀç ÅÍÄ¡µÈ ¿ÀºêÁ§Æ®
+    public LayerMask touchableLayer; // í„°ì¹˜ ê°ì§€í•  ë ˆì´ì–´ ì„¤ì •
+    private GameObject selectedObject; // í˜„ì¬ í„°ì¹˜ëœ ì˜¤ë¸Œì íŠ¸
     private bool isObjectSelected;
-    private Vector3 initialObjectPosition; // ÅÍÄ¡ ½ÃÀÛ ½Ã ¿ÀºêÁ§Æ®ÀÇ ÃÊ±â À§Ä¡
-    private Vector2 initialTouchPosition;  // ÅÍÄ¡ ½ÃÀÛ ½Ã ¼Õ°¡¶ô À§Ä¡
     public GameObject correctZone;
 
     private void Update()
     {
         if (isObjectSelected)
         {
-            // ¿ÀºêÁ§Æ®°¡ ¼±ÅÃµÈ »óÅÂ¿¡¼­ ¼Õ°¡¶ô ÀÌµ¿¿¡ µû¶ó ¿ÀºêÁ§Æ®¸¦ 0.5 ´ÜÀ§·Î ÀÌµ¿
+            // ì˜¤ë¸Œì íŠ¸ê°€ ì„ íƒëœ ìƒíƒœì—ì„œ ì†ê°€ë½ ì´ë™ì— ë”°ë¼ ì˜¤ë¸Œì íŠ¸ë¥¼ 0.5 ë‹¨ìœ„ë¡œ ì´ë™
             MoveObjectWithTouchX();
             MoveObjectWithTouchZ();
         }
         else
         {
-            // ÅÍÄ¡°¡ ½ÃÀÛµÇ¸é ¿ÀºêÁ§Æ® °¨Áö ¹× ÀÌµ¿ °¡´É ¿©ºÎ È®ÀÎ
+            // í„°ì¹˜ê°€ ì‹œì‘ë˜ë©´ ì˜¤ë¸Œì íŠ¸ ê°ì§€ ë° ì´ë™ ê°€ëŠ¥ ì—¬ë¶€ í™•ì¸
             if (DetectTouchStart())
             {
                 Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
-                if (DetectObjectAtTouch(touchPosition)) // °¨ÁöµÈ ¿ÀºêÁ§Æ®°¡ ÅÍÄ¡ °¡´ÉÇÑ ·¹ÀÌ¾î¿¡ ÀÖÀ» ¶§
+                if (DetectObjectAtTouch(touchPosition)) // ê°ì§€ëœ ì˜¤ë¸Œì íŠ¸ê°€ í„°ì¹˜ ê°€ëŠ¥í•œ ë ˆì´ì–´ì— ìˆì„ ë•Œ
                 {
                     isObjectSelected = true;
-                    initialTouchPosition = touchPosition; // ÅÍÄ¡ ½ÃÀÛ À§Ä¡ ÀúÀå
-                    initialObjectPosition = selectedObject.transform.position; // ¿ÀºêÁ§Æ®ÀÇ ÃÊ±â À§Ä¡ ÀúÀå
+                    initialTouchPosition = touchPosition; // í„°ì¹˜ ì‹œì‘ ìœ„ì¹˜ ì €ì¥
+                    initialObjectPosition = selectedObject.transform.position; // ì˜¤ë¸Œì íŠ¸ì˜ ì´ˆê¸° ìœ„ì¹˜ ì €ì¥
                 }
             }
         }
 
-        // ÅÍÄ¡°¡ Á¾·áµÇ¸é ¼±ÅÃ ÇØÁ¦
+        // í„°ì¹˜ê°€ ì¢…ë£Œë˜ë©´ ì„ íƒ í•´ì œ
         if (Touchscreen.current != null && Touchscreen.current.primaryTouch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Ended)
         {
             if (selectedObject != null)
@@ -72,23 +70,23 @@ public class SlideMove : MonoBehaviour
     {
         if (selectedObject == null) return;
 
-        // ÇöÀç ÅÍÄ¡ À§Ä¡ °¡Á®¿À±â
+        // í˜„ì¬ í„°ì¹˜ ìœ„ì¹˜ ê°€ì ¸ì˜¤ê¸°
         Vector2 currentTouchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 
-        // ÀÌµ¿ÇÒ X ¿ÀÇÁ¼Â °è»ê
+        // ì´ë™í•  X ì˜¤í”„ì…‹ ê³„ì‚°
         Vector3 moveOffset = CalculateMoveOffsetX(currentTouchPosition);
 
-        // X ¹æÇâÀ¸·Î ¸ñÇ¥ À§Ä¡ °è»ê
+        // X ë°©í–¥ìœ¼ë¡œ ëª©í‘œ ìœ„ì¹˜ ê³„ì‚°
         Vector3 targetPositionX = initialObjectPosition + new Vector3(moveOffset.x, 0, 0);
 
-        // SlideObject ÄÄÆ÷³ÍÆ® °¡Á®¿Í¼­ °ãÄ§ ¿©ºÎ È®ÀÎ
+        // SlideObject ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì™€ì„œ ê²¹ì¹¨ ì—¬ë¶€ í™•ì¸
         SlideObject slideObject = selectedObject.GetComponent<SlideObject>();
         if (slideObject != null && !slideObject.IsOverlappingAtPosition(targetPositionX))
         {
-            // °ãÄ¡Áö ¾ÊÀ» ¶§¸¸ XÃà ÀÌµ¿
+            // ê²¹ì¹˜ì§€ ì•Šì„ ë•Œë§Œ Xì¶• ì´ë™
             selectedObject.transform.position = targetPositionX;
-            initialObjectPosition = targetPositionX; // ÀÌµ¿ ÈÄ ÃÊ±â À§Ä¡ ¾÷µ¥ÀÌÆ®
-            Debug.Log("XÃà ÀÌµ¿");
+            initialObjectPosition = targetPositionX; // ì´ë™ í›„ ì´ˆê¸° ìœ„ì¹˜ ì—…ë°ì´íŠ¸
+            Debug.Log("Xì¶• ì´ë™");
         }
         else
         {
@@ -100,23 +98,23 @@ public class SlideMove : MonoBehaviour
     {
         if (selectedObject == null) return;
 
-        // ÇöÀç ÅÍÄ¡ À§Ä¡ °¡Á®¿À±â
+        // í˜„ì¬ í„°ì¹˜ ìœ„ì¹˜ ê°€ì ¸ì˜¤ê¸°
         Vector2 currentTouchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 
-        // ÀÌµ¿ÇÒ Z ¿ÀÇÁ¼Â °è»ê
+        // ì´ë™í•  Z ì˜¤í”„ì…‹ ê³„ì‚°
         Vector3 moveOffset = CalculateMoveOffsetZ(currentTouchPosition);
 
-        // Z ¹æÇâÀ¸·Î ¸ñÇ¥ À§Ä¡ °è»ê
+        // Z ë°©í–¥ìœ¼ë¡œ ëª©í‘œ ìœ„ì¹˜ ê³„ì‚°
         Vector3 targetPositionZ = initialObjectPosition + new Vector3(0, 0, moveOffset.z);
 
-        // SlideObject ÄÄÆ÷³ÍÆ® °¡Á®¿Í¼­ °ãÄ§ ¿©ºÎ È®ÀÎ
+        // SlideObject ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì™€ì„œ ê²¹ì¹¨ ì—¬ë¶€ í™•ì¸
         SlideObject slideObject = selectedObject.GetComponent<SlideObject>();
         if (slideObject != null && !slideObject.IsOverlappingAtPosition(targetPositionZ))
         {
-            // °ãÄ¡Áö ¾ÊÀ» ¶§¸¸ ZÃà ÀÌµ¿
+            // ê²¹ì¹˜ì§€ ì•Šì„ ë•Œë§Œ Zì¶• ì´ë™
             selectedObject.transform.position = targetPositionZ;
-            initialObjectPosition = targetPositionZ; // ÀÌµ¿ ÈÄ ÃÊ±â À§Ä¡ ¾÷µ¥ÀÌÆ®
-            Debug.Log("ZÃà ÀÌµ¿");
+            initialObjectPosition = targetPositionZ; // ì´ë™ í›„ ì´ˆê¸° ìœ„ì¹˜ ì—…ë°ì´íŠ¸
+            Debug.Log("Zì¶• ì´ë™");
         }
         else
         {
@@ -129,11 +127,11 @@ public class SlideMove : MonoBehaviour
         Vector3 moveOffset = Vector3.zero;
         Vector2 touchDelta = currentTouchPosition - initialTouchPosition;
 
-        // X ¹æÇâÀÇ ÀÌµ¿ ¼³Á¤
+        // X ë°©í–¥ì˜ ì´ë™ ì„¤ì •
         if (Mathf.Abs(touchDelta.y) >= 0.1f)
         {
             moveOffset.x = -Mathf.Sign(touchDelta.y) * 0.25f;
-            initialTouchPosition.y = currentTouchPosition.y; // ÀÌµ¿ ÈÄ »õ·Î¿î ±âÁØÁ¡ ¼³Á¤
+            initialTouchPosition.y = currentTouchPosition.y; // ì´ë™ í›„ ìƒˆë¡œìš´ ê¸°ì¤€ì  ì„¤ì •
         }
 
         return moveOffset;
@@ -144,11 +142,11 @@ public class SlideMove : MonoBehaviour
         Vector3 moveOffset = Vector3.zero;
         Vector2 touchDelta = currentTouchPosition - initialTouchPosition;
 
-        // Z ¹æÇâÀÇ ÀÌµ¿ ¼³Á¤
+        // Z ë°©í–¥ì˜ ì´ë™ ì„¤ì •
         if (Mathf.Abs(touchDelta.x) >= 0.1f)
         {
             moveOffset.z = Mathf.Sign(touchDelta.x) * 0.25f;
-            initialTouchPosition.x = currentTouchPosition.x; // ÀÌµ¿ ÈÄ »õ·Î¿î ±âÁØÁ¡ ¼³Á¤
+            initialTouchPosition.x = currentTouchPosition.x; // ì´ë™ í›„ ìƒˆë¡œìš´ ê¸°ì¤€ì  ì„¤ì •
         }
 
         return moveOffset;
