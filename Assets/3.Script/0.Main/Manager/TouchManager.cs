@@ -80,7 +80,7 @@ public class TouchManager : MonoBehaviour
 
     private bool isTouching;
 
-    private bool isTouchSupportEnabled = false; // EnhancedTouch 상태 관리
+    private bool isTouchSupportEnabled; // EnhancedTouch 상태 관리
 
     private int falseCount; //여러군데에서 터치를 막는 메서드가 불릴경우를 대비해 사용
 
@@ -90,7 +90,7 @@ public class TouchManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-
+            isTouchSupportEnabled = false;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -112,7 +112,10 @@ public class TouchManager : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         if (pause)
+        {
+            Debug.Log("sk");
             OnDisableTouchAction();
+        }
         else
             OnEnableTouchAction();
     }
@@ -124,7 +127,6 @@ public class TouchManager : MonoBehaviour
 
     private void OnTouchLoaded(Scene scene, LoadSceneMode mode)
     {
-        OnDisableTouchAction();
         eventSystem = EventSystem.current;
         eventSystem.enabled = true;
 
