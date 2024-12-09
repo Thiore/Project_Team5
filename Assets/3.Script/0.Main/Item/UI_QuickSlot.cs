@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    //private int id = -1;
+    private int id;
     //public int SlotID { get => id; }
     public Item item { get; private set; }
     [SerializeField] private Image image;
@@ -16,7 +16,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         if(!isInteraction)
         {
-            //this.id = id;
+            this.id = id;
             this.item = DataSaveManager.Instance.itemData[id];
             image.sprite = item.sprite;
             image.enabled = true;
@@ -63,35 +63,36 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             if (hit.collider.TryGetComponent(out TouchPuzzleCanvas toggle))
             {
-                for (int i = 0; i < toggle.getInteractionIndex.Length; i++)
+                for (int i = 0; i < toggle.getInteractionIndex.Count; i++)
                 {
                     if (item.id.Equals(toggle.getInteractionIndex[i]))
                     {
-                        toggle.isInteracted = true;
                         DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
-
+                       
                         if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
                         {
                             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
                         }
-                        SetinvenByID(toggle.getInteractionIndex[i],true);
+                        toggle.InteractionObject(item.id);
+                        SetinvenByID(id,true);
                         break;
                     }
                 }
             }
             if (hit.collider.TryGetComponent(out PlayOBJ puzzle))
             {
-                for (int i = 0; i < puzzle.getObjectIndex.Length; i++)
+                for (int i = 0; i < puzzle.getObjectIndex.Count; i++)
                 {
                     if (item.id.Equals(puzzle.getObjectIndex[i]))
                     {
-                        puzzle.InteractionCount();
                         DataSaveManager.Instance.UpdateGameState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
+                        
                         if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
                         {
                             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
                         }
-                        SetinvenByID(puzzle.getObjectIndex[i], true);
+                        puzzle.InteractionObject(item.id);
+                        SetinvenByID(id, true);
                         break;
                     }
                 }

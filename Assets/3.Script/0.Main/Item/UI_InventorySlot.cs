@@ -19,10 +19,6 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     public void SetinvenByItem(Item item)
     {
         this.item = item;
-        if(item.eItemType.Equals(eItemType.Clue))
-        {
-            this.item.isfix = true;
-        }
             
         image.sprite = item.sprite;
     }
@@ -38,7 +34,6 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     // ��, �ٿ� ���� �־�� ��� ��� ���� / eventsystem 50 ���� 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("���Ӥ���");
         if (!isDragging)
         {
             UI_InvenManager.Instance.iteminfo.SetInfoByItem(item);
@@ -47,7 +42,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("�ٿ�");
+        
     }
 
     public void OnBeginDrag(PointerEventData eventData)

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ToggleOBJ : InteractionOBJ, ITouchable
 {
-    [Header("SaveManager 참고")]
-    [SerializeField] protected int floorIndex;
-    [SerializeField] protected int objectIndex;
+    [Header("DataSaveManager 참고")]
+    [SerializeField] private int floorIndex;
+    [SerializeField] private int objectIndex;
+
+    [SerializeField] private int storyIndex;
 
     [Header("퍼즐 등 다른오브젝트와 상호작용이 필요하면 False")]
     [SerializeField] private bool isClear;
@@ -38,7 +40,7 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
             if (hit.collider.gameObject.Equals(gameObject))
             {
                 if(!isClear)
-                    isClear = SaveManager.Instance.PuzzleState(floorIndex, objectIndex);
+                    isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
                
                 if (isClear)
                 {
@@ -48,7 +50,7 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
                 else
                 {
                     //"잠겨있어"라는 독백 대사 출력
-                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                    DialogueManager.Instance.SetDialogue("Table_StoryB1", storyIndex);
                     Debug.Log("여기 안 들어오나?");
                 }
                 

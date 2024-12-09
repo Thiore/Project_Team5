@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class CloseDoor : MonoBehaviour,ITouchable
 {
-    [SerializeField] private int floorIndex;
-    [SerializeField] private int objectIndex;
 
     public void OnTouchEnd(Vector2 position)
     {
-        if (!SaveManager.Instance.PuzzleState(floorIndex, objectIndex))
-        {
-            DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
-        }
+        DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+        
     }
 
     public void OnTouchHold(Vector2 position)

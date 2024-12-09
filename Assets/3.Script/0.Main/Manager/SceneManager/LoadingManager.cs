@@ -122,8 +122,7 @@ public class LoadingManager : MonoBehaviour
                 
 
                 FadeOut(true);
-                yield return null;
-                while(isFadeOut.Equals(true))
+                while(isFadeOut)
                 {
                     yield return null;
                 }
@@ -143,8 +142,7 @@ public class LoadingManager : MonoBehaviour
             yield return null;
         }
         FadeIn(true);
-        yield return null;
-        while (isFadeIn.Equals(true))
+        while (isFadeIn)
         {
             yield return null;
         }        
@@ -191,7 +189,7 @@ public class LoadingManager : MonoBehaviour
     }
     private IEnumerator Fade_co(float isFade, bool isLoading)
     {
-        while (true)
+        while (isFadeIn||isFadeOut)
         {
             fade += isFade * Time.deltaTime / fadeTime;
             fade = Mathf.Clamp(fade, 0f, 1f);
@@ -199,7 +197,7 @@ public class LoadingManager : MonoBehaviour
 
             if (fade <= 0f && isFadeIn)
             {
-                isFadeIn = false;
+                
 
                 if (isLoadingScene&& isLoading)
                 {
@@ -210,11 +208,12 @@ public class LoadingManager : MonoBehaviour
                     if (!nextSceneName.Equals("LoadingScene"))
                         StartCoroutine(LoadNextScene(nextSceneName));
                 }
-                yield break;
+                isFadeIn = false;
+                
             }
             if (fade >= 1f && isFadeOut)
             {
-                isFadeOut = false;
+                
                 if(isLoading)
                 {
                     if (isLoadingScene)
@@ -228,8 +227,7 @@ public class LoadingManager : MonoBehaviour
                             loadingProgress.gameObject.SetActive(false);
                     }
                 }
-                
-                yield break;
+                isFadeOut = false;
             }
             yield return null;
         }

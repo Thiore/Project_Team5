@@ -14,15 +14,24 @@ public class UI_InvenManager : MonoBehaviour
     private Queue<UI_InventorySlot> invenSlots_Queue;
 
     [SerializeField] private Transform quickSlotList;
+    private RectTransform quickSlotRect;
     [SerializeField] private UI_QuickSlot quickSlotPrefabs;
     private List<UI_QuickSlot> quickSlots;
     private Queue<UI_QuickSlot> quickSlots_Queue;
+
+    private Coroutine quickSlot_co = null;
+    private float quickDir;
+    [Header("퀵슬롯 이동 속도")]
+    [Range(100f,200f)]
+    [SerializeField] private float quickSlotSpeed;
+    public bool isOpenQuick { get; private set; }
 
     [SerializeField] private Transform triggerSlotList;
     [SerializeField] private UI_TriggerSlot triggerSlotPrefabs;
     [SerializeField] private GameObject btnTrigger;
     [SerializeField] private TriggerButton triggerButton;
-    private List<UI_TriggerSlot> triggerSlots;
+    private List<UI_TriggerSlot> triggerSlots = null;
+
     
 
 
@@ -41,6 +50,7 @@ public class UI_InvenManager : MonoBehaviour
     
 
     [SerializeField] private FlashLight flashLight;
+    [SerializeField] private List<Item3D> items;
 
 
     private void Awake()
@@ -49,20 +59,30 @@ public class UI_InvenManager : MonoBehaviour
         getItemQueue = new Queue<Sprite>();
         waitForDelayTime = new WaitForSeconds(DelayTime);
         InitSlots();
+        quickSlotList.TryGetComponent(out quickSlotRect);
+        isOpenQuick = false;
 
     }
     private void Start()
     {
         OnOpenInventory();
-        var loadData = DataSaveManager.Instance.itemStateData;
-        foreach(KeyValuePair<int,bool> item in loadData)
+        if(GameManager.Instance.gameType.Equals(eGameType.LoadGame))
         {
-            if(!item.Value)
+            var loadData = DataSaveManager.Instance.itemStateData;
+            foreach (KeyValuePair<int, bool> item in loadData)
             {
-                Item data = DataSaveManager.Instance.itemData[item.Key];
-                GetItemByID(data, true);
+                if (!item.Value)
+                {
+                    Item data = DataSaveManager.Instance.itemData[item.Key];
+                    items[item.Key].GetItem();
+                }
+                else
+                {
+                    items[item.Key].UseItem();
+                }
             }
         }
+       
     }
     private void InitSlots()
     {
@@ -109,7 +129,6 @@ public class UI_InvenManager : MonoBehaviour
             GetItemByImage(item);
         }
         
-        iteminfo.SetInfoByItem(item);
         AddInventoryItem(item);
         
         switch (item.eItemType)
@@ -127,6 +146,7 @@ public class UI_InvenManager : MonoBehaviour
 
         }
 
+        iteminfo.SetInfoByItem(item);
 
     }
 
@@ -178,17 +198,19 @@ public class UI_InvenManager : MonoBehaviour
     {
         if(triggerSlots == null)
         {
-            triggerSlots = new List<UI_TriggerSlot>();
             btnTrigger.SetActive(true);
+            triggerSlots = new List<UI_TriggerSlot>();
             UI_TriggerSlot initSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
             initSlot.SetinvenByItem(item);
             triggerSlots.Add(initSlot);
-            
-            return;
         }
-        UI_TriggerSlot newSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
-        newSlot.SetinvenByItem(item);
-        triggerSlots.Add(newSlot);
+        else
+        {
+            UI_TriggerSlot newSlot = Instantiate(triggerSlotPrefabs, triggerSlotList);
+            newSlot.SetinvenByItem(item);
+            triggerSlots.Add(newSlot);
+        }
+       
 
     }
 
@@ -214,20 +236,17 @@ public class UI_InvenManager : MonoBehaviour
 
         if (firstelement.Equals(secondelement) && !slot.item.id.Equals(id))
         {
-            SortInvenSlot(slot.item.id);
-            SortInvenSlot(id);
             switch (firstelement)
             {
                 case 10:
-                    
-                    Item item = DataSaveManager.Instance.itemData[2];
-                    GetItemByID(item,true);
-                    DataSaveManager.Instance.UpdateItemState(item.id);
-                    AddTriggerItem(item);
-                    flashLight.SetUseFlashLight();
+                    items[2].GetItem();
+                    AddTriggerItem(items[2].item);
+                    //flashLight.SetUseFlashLight();
                     break;
 
             }
+            SortInvenSlot(slot.item.id);
+            SortInvenSlot(id);
 
             
             //OpenInventory();
@@ -240,7 +259,18 @@ public class UI_InvenManager : MonoBehaviour
         UI_InventorySlot slot = invenSlots.Find(x => x.item.id.Equals(id));
 
         DataSaveManager.Instance.UpdateItemState(id);
+        ClueItem.Instance.UseItem(id);
         //slot.SetInvenEmpty();
+        switch (slot.item.eItemType)
+        {
+            case eItemType.Quick:
+                UI_QuickSlot quickSlot = quickSlots.Find(x => x.item.id.Equals(slot.item.id));
+                quickSlots.Remove(quickSlot);
+                quickSlot.gameObject.SetActive(false);
+                quickSlots_Queue.Enqueue(quickSlot);
+                break;
+
+        }
         slot.transform.SetAsLastSibling();
         slot.gameObject.SetActive(false);
         invenSlots.Remove(slot);
@@ -288,5 +318,48 @@ public class UI_InvenManager : MonoBehaviour
             getItemQueue.Dequeue();
         }
         getItemImage_co = null;
+    }
+
+    public bool HaveItem(List<int> id)
+    {
+        for(int i = 0; i < id.Count;i++)
+        {
+            if (!quickSlots.Find(x => x.item.id == id[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void OpenQuickSlot()
+    {
+        if (quickSlot_co != null)
+            StopCoroutine(quickSlot_co);
+        isOpenQuick = true;
+        quickSlot_co = StartCoroutine(QuickSlot_co(1f));
+    }
+    public void CloseQuickSlot()
+    {
+        if (quickSlot_co != null)
+            StopCoroutine(quickSlot_co);
+        isOpenQuick = false;
+        quickSlot_co = StartCoroutine(QuickSlot_co(-1f));
+    }
+    private IEnumerator QuickSlot_co(float dir)
+    {
+        quickDir = quickSlotRect.anchoredPosition.y;
+        while (true)
+        {
+            quickDir += dir * Time.deltaTime* quickSlotSpeed;
+            quickDir = Mathf.Clamp(quickDir, -200f, 0f);
+            quickSlotRect.anchoredPosition = new Vector2(0,quickDir);
+            if (quickDir.Equals(-200f) || quickDir.Equals(0f))
+            {
+                quickSlot_co = null;
+                yield break;
+            }
+            yield return null;  
+        }
     }
 }
