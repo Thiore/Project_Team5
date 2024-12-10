@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Keypad_Btn : PlayOBJ
+public class Keypad_Btn : MonoBehaviour
 {
     [SerializeField] private InputField input;
     [SerializeField] private int answer;
@@ -35,11 +35,11 @@ public class Keypad_Btn : PlayOBJ
                 Debug.Log($"Answer is {input.text}");
                 if (input.text.Equals(answer.ToString()))
                 {
-                    SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
-                    puzzle.isClear = true;
+                    //SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
+                    //puzzle.isClear = true;
                 }
                 input.text = "";
-                puzzle.OffInteraction();
+                //puzzle.OffInteraction();
             }
             else
             {

@@ -18,7 +18,7 @@ public class TriggerList : MonoBehaviour
 
     float lerpTime;
 
-    public bool isOpen { get; private set; } = false;
+    public bool isOpen { get; private set; }
 
     private void OnEnable()
     {
@@ -27,6 +27,7 @@ public class TriggerList : MonoBehaviour
             TryGetComponent(out layoutGroup);
             TryGetComponent(out rect);
         }
+        layoutGroup.spacing = -100f;
         isOpen = true;
         lerpTime = 0f;
         openList_co = StartCoroutine(SetList_co());
@@ -41,37 +42,48 @@ public class TriggerList : MonoBehaviour
     public void CloseList()
     {
         isOpen = false;
+        if (openList_co != null)
+            StopCoroutine(openList_co);
         openList_co = StartCoroutine(SetList_co());
     }
     private IEnumerator SetList_co()
     {
-        lerpTime += Time.deltaTime;
-        if (isOpen)
+        while(true)
         {
-            while (lerpTime / lerpSpeed < 1f)
+            if (isOpen)
             {
-                float listX = Mathf.Lerp(50f, -100, lerpTime / lerpSpeed);
+
+                lerpTime += Time.deltaTime* lerpSpeed;
+                float listX = Mathf.Lerp(50f, -100f, Mathf.Clamp(lerpTime, 0f, 1f));
                 rect.anchoredPosition = new Vector2(listX, rect.anchoredPosition.y);
-                layoutGroup.spacing = Mathf.Lerp(-100f, 30f, lerpTime / lerpSpeed);
+                layoutGroup.spacing = Mathf.Lerp(-100f, 30f, Mathf.Clamp(lerpTime, 0f, 1f));
+                if (lerpTime >= 1f)
+                {
+                    openList_co = null;
+                    yield break;
+                }
                 yield return null;
             }
-            lerpTime = 0f;
-            openList_co = null;
-            yield break;
-        }
-        else
-        {
-            while (lerpTime / lerpSpeed < 1f || !isOpen)
+            else
             {
-                float listX = Mathf.Lerp(-100, 50f, lerpTime / lerpSpeed);
+
+                lerpTime -= Time.deltaTime* lerpSpeed;
+                float listX = Mathf.Lerp(50f, -100f, Mathf.Clamp(lerpTime, 0f, 1f));
                 rect.anchoredPosition = new Vector2(listX, rect.anchoredPosition.y);
-                layoutGroup.spacing = Mathf.Lerp(30f, -100f, lerpTime / lerpSpeed);
+                layoutGroup.spacing = Mathf.Lerp(-100f, 30f, Mathf.Clamp(lerpTime, 0f, 1f));
+                if (lerpTime <= 0f)
+                {
+                    gameObject.SetActive(false);
+                }
                 yield return null;
                 
+                
+
             }
+
+            
         }
         
-        gameObject.SetActive(false);
 
     }
 }

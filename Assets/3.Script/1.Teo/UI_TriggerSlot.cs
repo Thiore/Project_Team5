@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_TriggerSlot : MonoBehaviour, IPointerClickHandler
+public class UI_TriggerSlot : MonoBehaviour, IUITouchable
 {
     public Item item { get; private set; } = null;
     private Image image;
@@ -32,15 +32,20 @@ public class UI_TriggerSlot : MonoBehaviour, IPointerClickHandler
         this.item = item;
         image.sprite = item.sprite;
     }
-   
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (triggerList.openList_co == null)
-        {
-            triggerButton.SetTriggerByItem(item);
-            triggerList.CloseList();
-        }
-            
 
+    public void OnUIStarted(PointerEventData data)
+    {
+       
+    }
+
+    public void OnUIHold(PointerEventData data)
+    {
+        
+    }
+
+    public void OnUIEnd(PointerEventData data)
+    {
+        triggerButton.SetTriggerByItem(item);
+        triggerList.CloseList();
     }
 }

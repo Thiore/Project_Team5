@@ -4,26 +4,34 @@ using UnityEngine;
 
 public class HideSlide : SlideObject
 {
-
-    [Header("상호작용이 되어야하는 오브젝트는 true")]
-    [SerializeField] private bool isHideObj;
-
     public int floorIndex;
     [SerializeField] private int objIndex;
+    public int getObjIndex{get=>objIndex;}
     
-    private MeshRenderer renderer;
+    private MeshRenderer meshRenderer;
     
     private Color fillColor = Color.white;
     private Color hideColor = Color.clear;
     private Color halfColor = new Color(1f, 1f, 1f, 0.6f);
 
-    private bool isClear;
+    public bool isClear { get; private set; }
+
+
+    
 
     protected override void Awake()
     {
         base.Awake();
-        TryGetComponent(out renderer);
+        TryGetComponent(out meshRenderer);
         isClear = DataSaveManager.Instance.GetGameState(floorIndex, objIndex);
+        if(isClear)
+        {
+            meshRenderer.material.color = fillColor;
+        }
+        else
+        {
+            meshRenderer.material.color = hideColor;
+        }
     }
 
     public bool IsInteracted(int objId, bool touchEnd)
@@ -34,22 +42,33 @@ public class HideSlide : SlideObject
             {
                 if (touchEnd)
                 {
-                    renderer.material.color = fillColor;
+                    meshRenderer.material.color = fillColor;
                     isClear = true;
                 }
                 else
                 {
-                    renderer.material.color = halfColor;
+                    meshRenderer.material.color = halfColor;
                 }
                 return true;
             }
-            renderer.material.color = hideColor;
+            meshRenderer.material.color = hideColor;
         }
         return false;
     }
     public void HideMaterial()
     {
-        renderer.material.color = hideColor;
+        meshRenderer.material.color = hideColor;
     }
-
+    public override void OnTouchEnd(Vector2 position)
+    {
+        base.OnTouchEnd(position);
+        if(objIndex.Equals(5))
+        {
+            if(puzzleObj.CheckAllRays(this.gameObject))
+            {
+                DataSaveManager.Instance.UpdateGameState(floorIndex, puzzleObj.getObjectIndex);
+                puzzleObj.OffInteraction();
+            }
+        }
+    }
 }

@@ -33,8 +33,8 @@ public class StartPoint : MonoBehaviour, ITouchable,ISetColor
     [SerializeField]private Renderer render;
 
 
-    private Vector3 worldPosition; // ÅÍÄ¡ À§Ä¡ÀÇ ¿ùµå ÁÂÇ¥¸¦ ÀúÀåÇÒ º¯¼ö
-    private bool isTouching; // ÅÍÄ¡ ÁßÀÎÁö ¿©ºÎ È®ÀÎ
+    private Vector3 worldPosition; // í„°ì¹˜ ìœ„ì¹˜ì˜ ì›”ë“œ ì¢Œí‘œë¥¼ ì €ì¥í•  ë³€ìˆ˜
+    private bool isTouching; // í„°ì¹˜ ì¤‘ì¸ì§€ ì—¬ë¶€ í™•ì¸
     private bool isConnected;
     private GameObject connectedObject;
 
@@ -74,24 +74,26 @@ public class StartPoint : MonoBehaviour, ITouchable,ISetColor
     {
         Ray ray = Camera.main.ScreenPointToRay(position);
         RaycastHit hit;
-        // ·¹ÀÌÄ³½ºÆ®¸¦ ÅëÇØ ¿ùµå ÁÂÇ¥ °è»ê
+        // ë ˆì´ìºìŠ¤íŠ¸ë¥¼ í†µí•´ ì›”ë“œ ì¢Œí‘œ ê³„ì‚°
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, lineTouchLayer))
         {
-            worldPosition = hit.point; // Ãæµ¹ÇÑ ÁöÁ¡ÀÇ ÁÂÇ¥¸¦ »ç¿ë
+            worldPosition = hit.point; // ì¶©ëŒí•œ ì§€ì ì˜ ì¢Œí‘œë¥¼ ì‚¬ìš©
 
-            if(hit.collider.GetComponent<EndPoint>()!=null&&hit.collider.GetComponent<EndPoint>().color.Equals(color))
+            if(hit.collider.TryGetComponent(out EndPoint end))
             {
-                line.SetPosition(1, hit.collider.GetComponent<EndPoint>().lineEndPostion.position);
-                this.isConnected = true;
-                connectedObject = hit.collider.gameObject;
+                if(end.color.Equals(color))
+                {
+                    line.SetPosition(1, hit.collider.GetComponent<EndPoint>().lineEndPostion.position);
+                    this.isConnected = true;
+                    connectedObject = hit.collider.gameObject;
+                }
             }
             else
             {
-                line.SetPosition(1,worldPosition);
+                line.SetPosition(1, worldPosition);
                 this.isConnected = false;
                 connectedObject = null;
             }
-
         }
 
     }
@@ -112,7 +114,7 @@ public class StartPoint : MonoBehaviour, ITouchable,ISetColor
 
     public void setMaterial()
     {
-        if (render == null) Debug.Log("render°¡ null");
+        if (render == null) Debug.Log("renderê°€ null");
         switch (color)
         {
             case WireColor.Yellow:

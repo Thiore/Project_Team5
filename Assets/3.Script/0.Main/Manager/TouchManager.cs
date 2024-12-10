@@ -76,15 +76,18 @@ public class TouchManager : MonoBehaviour
     [SerializeReference] private float touchDistance;
     public float getTouchDistance { get => touchDistance; }
 
-    private bool isMoving; // 미니게임 등 이동을 막아야할때 사용
+    public bool isMoving { get; private set; } // 미니게임 등 이동을 막아야할때 사용
 
     private bool isTouching;
 
     private bool isTouchSupportEnabled; // EnhancedTouch 상태 관리
 
-    private int falseCount; //여러군데에서 터치를 막는 메서드가 불릴경우를 대비해 사용
+    private int falseMoveCount; //여러군데에서 터치를 막는 메서드가 불릴경우를 대비해 사용
 
+    private int falseTouchCount;//여러군데에서 터치를 막는 메서드가 불릴경우를 대비해 사용
 
+    private Dictionary<int, Coroutine> touchPerformed_co;//OnFingerMove가 움직일 때만 터치를 인식하기 때문에 구현
+ 
     private void Awake()
     {
         if (Instance == null)
@@ -99,13 +102,13 @@ public class TouchManager : MonoBehaviour
         }
 
     }
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         SceneManager.sceneLoaded += OnTouchLoaded;
     }
     private void OnDisable()
     {
-        
+
         SceneManager.sceneLoaded -= OnTouchLoaded;
 
     }
@@ -129,11 +132,58 @@ public class TouchManager : MonoBehaviour
     {
         eventSystem = EventSystem.current;
         eventSystem.enabled = true;
-
+        
 
         OnEnableTouchAction();
     }
+    /// <summary>
+    /// touch활성화
+    /// </summary>
+    public void OnEnableTouchAction()
+    {
+        if (isTouchSupportEnabled) return;
 
+        isTouchSupportEnabled = true;
+
+        Debug.Log("추가됨");
+        touchState = etouchState.Normal;
+
+
+        moveId = -1;
+        lookId = -1;
+        isMoving = true;
+        isTouching = true;
+        falseMoveCount = 0;
+        falseTouchCount = 0;
+        currentTouchDic = new Dictionary<int, ITouchable>();
+        currentUIDic = new Dictionary<int, IUITouchable>();
+
+        UIID = new HashSet<int>();
+
+        EnhancedTouchSupport.Enable();
+        ETouch.Touch.onFingerDown += OnTouchStarted;
+        ETouch.Touch.onFingerUp += OnTouchCanceled;
+        touchPerformed_co = new Dictionary<int, Coroutine>();
+    }
+    /// <summary>
+    /// touch비활성화
+    /// </summary>
+    public void OnDisableTouchAction()
+    {
+        if (!isTouchSupportEnabled) return;
+
+        isTouchSupportEnabled = false;
+
+        ETouch.Touch.onFingerDown -= OnTouchStarted;
+        ETouch.Touch.onFingerUp -= OnTouchCanceled;
+        foreach (var performed in touchPerformed_co)
+        {
+            StopCoroutine(performed.Value);
+            touchPerformed_co.Remove(performed.Key);
+        }
+       
+        EnhancedTouchSupport.Disable();
+    }
 
     private void OnTouchStarted(Finger finger)
     {
@@ -141,11 +191,9 @@ public class TouchManager : MonoBehaviour
         Vector2 position = finger.screenPosition;
         int touchId = finger.index;
 
-        if (IsTouchOnUI(touchId,position))
+        if ((touchState.Equals(etouchState.Normal)||touchState.Equals(etouchState.UI))&&IsTouchOnUI(touchId,position))
         {
             UIID.Add(touchId);
-            
-
             touchState = etouchState.UI;
         }
         else if(isTouching)
@@ -182,7 +230,7 @@ public class TouchManager : MonoBehaviour
                 if (touchState.Equals(etouchState.Normal))
                     touchState = etouchState.Object;
             }
-            else if (touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player) && isMoving)
+            else if ((touchState.Equals(etouchState.Normal) || touchState.Equals(etouchState.Player)) && isMoving)
             {
                 if (IsTouchOnLeftScreen(position) && moveId.Equals(-1))
                 {
@@ -218,47 +266,54 @@ public class TouchManager : MonoBehaviour
                 }
             }
         }
+        Coroutine performed = StartCoroutine(OnTouchPerformed(finger));
+        touchPerformed_co.Add(touchId, performed);
     }
-    private void OnTouchPerformed(Finger finger)
+    private IEnumerator OnTouchPerformed(Finger finger)
     {
-        Vector2 position = finger.screenPosition;
+        
         int touchId = finger.index;
-        if (touchState.Equals(etouchState.UI))
+        while(true)
         {
-            if (currentUIDic.TryGetValue(touchId, out IUITouchable touch))
+            Vector2 position = finger.screenPosition;
+            if (touchState.Equals(etouchState.UI))
             {
-                PointerEventData pointerData = new PointerEventData(eventSystem)
+                if (currentUIDic.TryGetValue(touchId, out IUITouchable touch))
                 {
-                    position = position
-                };
-                touch?.OnUIHold(pointerData);
-            }
-
-        }
-        if(isTouching)
-        {
-            
-            switch (touchState)
-            {
-                case etouchState.Player:
-                    if (isMoving)
+                    PointerEventData pointerData = new PointerEventData(eventSystem)
                     {
-                        if (moveId.Equals(touchId))
-                        {
-                            OnMoveHold?.Invoke(position);
-                        }
-                        if (lookId.Equals(touchId))
-                        {
-                            OnLookHold?.Invoke(position);
-                        }
-                    }
-                    break;
-                case etouchState.Object:
-                    if(currentTouchDic.TryGetValue(touchId,out ITouchable value))
-                        value?.OnTouchHold(position);
-                    break;
+                        position = position
+                    };
+                    touch?.OnUIHold(pointerData);
+                }
             }
+            if (isTouching)
+            {
+
+                switch (touchState)
+                {
+                    case etouchState.Player:
+                        if (isMoving)
+                        {
+                            if (moveId.Equals(touchId))
+                            {
+                                OnMoveHold?.Invoke(position);
+                            }
+                            if (lookId.Equals(touchId))
+                            {
+                                OnLookHold?.Invoke(position);
+                            }
+                        }
+                        break;
+                    case etouchState.Object:
+                        if (currentTouchDic.TryGetValue(touchId, out ITouchable value))
+                            value?.OnTouchHold(position);
+                        break;
+                }
+            }
+            yield return null;
         }
+        
     }
 
     private void OnTouchCanceled(Finger finger)
@@ -266,6 +321,10 @@ public class TouchManager : MonoBehaviour
 
         Vector2 position = finger.screenPosition;
         int touchId = finger.index;
+
+        StopCoroutine(touchPerformed_co[touchId]);
+        touchPerformed_co.Remove(touchId);
+
         switch (touchState)
         {
             case etouchState.Player:
@@ -316,13 +375,6 @@ public class TouchManager : MonoBehaviour
                 }
                 break;
         }
-        if(touchState.Equals(etouchState.Normal))
-        {
-            if (!isMoving)
-            {
-                EnableMoveHandler(true);
-            }
-        }
     }
     /// <summary>
     /// 
@@ -349,11 +401,6 @@ public class TouchManager : MonoBehaviour
                         currentUIDic.Add(touchId, touchUI);
                         currentUIDic[touchId].OnUIStarted(pointerData);
                     }
-
-                }
-                if (isMoving)
-                {
-                    EnableMoveHandler(false);
                 }
                 return true;
             }
@@ -403,10 +450,6 @@ public class TouchManager : MonoBehaviour
                     if (currentTouchDic.ContainsValue(touchable)) return false;
 
                     currentTouchDic.Add(touchId, touchable);
-                    if(isMoving)
-                    {
-                        EnableMoveHandler(false);
-                    }
                     return true;
                 }
             }
@@ -432,46 +475,13 @@ public class TouchManager : MonoBehaviour
     {
         return touchPosition.x >= Screen.width / 2;
     }
-    public void OnEnableTouchAction()
-    {
-        if (isTouchSupportEnabled) return;
-
-        isTouchSupportEnabled = true;
-
-        Debug.Log("추가됨");
-        touchState = etouchState.Normal;
-        
-
-        moveId = -1;
-        lookId = -1;
-        isMoving = true;
-        isTouching = true;
-        currentTouchDic = new Dictionary<int, ITouchable>();
-        currentUIDic = new Dictionary<int, IUITouchable>();
-        UIID = new HashSet<int>();
-
-        EnhancedTouchSupport.Enable();
-        ETouch.Touch.onFingerDown += OnTouchStarted;
-        ETouch.Touch.onFingerMove += OnTouchPerformed;
-        ETouch.Touch.onFingerUp += OnTouchCanceled;
-    }
-    public void OnDisableTouchAction()
-    {
-        if (!isTouchSupportEnabled) return;
-
-        isTouchSupportEnabled = false;
-
-        ETouch.Touch.onFingerDown -= OnTouchStarted;
-        ETouch.Touch.onFingerMove -= OnTouchPerformed;
-        ETouch.Touch.onFingerUp -= OnTouchCanceled;
-        EnhancedTouchSupport.Disable();
-    }
+    
 
     public void EnableMoveHandler(bool dontTouch)
     {
         if(dontTouch.Equals(false))
         {
-            if (falseCount.Equals(0))
+            if (falseMoveCount.Equals(0))
             {
                 isMoving = false;
                 if (touchState.Equals(etouchState.Player))
@@ -492,13 +502,13 @@ public class TouchManager : MonoBehaviour
                         touchState = etouchState.Normal;
                 }
             }
-            falseCount += 1;
+            falseMoveCount += 1;
             
         }
         else
         {
-            falseCount -= 1;
-            if(falseCount.Equals(0))
+            falseMoveCount -= 1;
+            if(falseMoveCount.Equals(0))
             {
                 isMoving = true;
             }
@@ -508,37 +518,38 @@ public class TouchManager : MonoBehaviour
 
     public void EnableTouchHandle(bool dontTouch)
     {
-        isTouching = dontTouch;
-        if(!isTouching)
+        if (dontTouch.Equals(false))
         {
-            switch(touchState)
+            if (falseTouchCount.Equals(0))
             {
-                case etouchState.Player:
-                    
-                    if (!moveId.Equals(-1))
-                    {
-                        OnMoveEnd?.Invoke(Vector2.zero);
-                        moveId = -1;
-                    }
-                    if (!lookId.Equals(-1))
-                    {
-                        OnLookEnd?.Invoke(Vector2.zero);
-                        lookId = -1;
-                    }
-                    eventSystem.enabled = true;
-                    touchState = etouchState.Normal;
-                    break;
-                case etouchState.Object:
-                    foreach(var touch in currentTouchDic.Values)
-                    {
-                        touch?.OnTouchEnd(Vector2.zero);
-                    }
-                    currentTouchDic.Clear();
-                    touchState = etouchState.Normal;
-                    eventSystem.enabled = true;
-                    break;
+                isTouching = false;
+                switch (touchState)
+                {
+                    case etouchState.Object:
+                        foreach (var touch in currentTouchDic.Values)
+                        {
+                            touch?.OnTouchEnd(Vector2.zero);
+                        }
+                        currentTouchDic.Clear();
+                        touchState = etouchState.Normal;
+                        eventSystem.enabled = true;
+                        break;
+                }
+
+            }
+            falseTouchCount += 1;
+            EnableMoveHandler(false);
+        }
+        else
+        {
+            falseTouchCount -= 1;
+            EnableMoveHandler(true);
+            if (falseTouchCount.Equals(0))
+            {
+                isTouching = true;
             }
         }
+
     }
 }
 

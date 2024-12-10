@@ -4,12 +4,92 @@ using UnityEngine;
 
 public class InteractionSlidePuzzle : TouchPuzzleCanvas
 {
-    private bool isOpen;
+    public GameObject selectedObject { get; private set; } // 현재 터치된 오브젝트
+
+    [SerializeField] private Transform correctZone;
+    private float rayDistance =0.15f; // Ray의 길이
+
+    private bool isTouching;
+    
+
+    [SerializeField]
+    private float rayOffset;// Ray 시작 위치의 오프셋 배열을 인스펙터에서 설정 가능하게 함
+    private Vector3[] rayOffsets = new Vector3[4];
 
     private void Awake()
     {
-        isOpen = false;
+        for (int i = 0; i < 4; ++i)
+        {
+            switch (i)
+            {
+                case 0:
+                    rayOffsets[0] = correctZone.position - correctZone.forward * rayOffset - correctZone.right * rayOffset;
+                    break;
+                case 1:
+                    rayOffsets[1] = correctZone.position - correctZone.forward * rayOffset + correctZone.right * rayOffset;
+                    break;
+                case 2:
+                    rayOffsets[2] = correctZone.position + correctZone.forward * rayOffset - correctZone.right * rayOffset;
+                    break;
+                case 3:
+                    rayOffsets[3] = correctZone.position + correctZone.forward * rayOffset + correctZone.right * rayOffset;
+                    break;
+            }
+        }
+        isTouching = false;
     }
+
+    public bool SetSelectObj(GameObject selected)
+    {
+        if (selectedObject != null)
+        {
+            return false;
+        }
+        else if (selected == null)
+        {
+            selectedObject = null;
+            return true;
+        }
+        else
+        {
+            selectedObject = selected;
+            return true;
+        }
+
+    }
+    public bool CheckAllRays(GameObject checkObj)
+    {
+        Vector3[] rayOffsets = new Vector3[4];
+        
+        foreach (Vector3 offset in rayOffsets)
+        {
+            // y 방향으로 Ray 발사
+            if (Physics.Raycast(offset, correctZone.up, out RaycastHit hit, rayDistance,LayerMask.NameToLayer("SlideObject")))
+            {
+                // 충돌한 오브젝트와 일치하지 않으면 false 반환
+                if (!hit.collider.gameObject.Equals(checkObj))
+                {
+                    Debug.Log($"Ray from {offset} did not hit target tag.");
+                    return false;
+                }
+            }
+            else
+            {
+                // Ray가 아무 오브젝트와도 충돌하지 않으면 false 반환
+                Debug.Log($"Ray from {offset} did not hit anything.");
+                return false;
+            }
+        }
+
+        // 모든 Ray가 지정된 태그의 오브젝트와 충돌하면 true 반환
+        Debug.Log("All rays hit the correct target.");
+        Debug.Log("Game Win");
+        Invoke("GameEnd", 2f);
+        return true;
+    }
+
+
+
     public override void OffInteraction()
     {
         base.OffInteraction();
@@ -22,6 +102,10 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
             }
             missionStart.SetActive(false);
             missionExit.SetActive(false);
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance.SetBtn(true);
+            }
             TouchManager.Instance.EnableMoveHandler(true);
         }
         else
@@ -37,13 +121,112 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
     }
     protected override void ClearEvent()
     {
-        throw new System.NotImplementedException();
+        if (anim != null)
+        {
+            anim.SetBool(openAnim, true);
+        }
+        Invoke("ResetCamera", 1f);
     }
 
     protected override void ResetCamera()
     {
-        throw new System.NotImplementedException();
+        mask.enabled = true;
+        missionExit.SetActive(false);
+        isTouching = true;
+        interactionCam.SetActive(true);
     }
 
-    
+    public override void OnTouchEnd(Vector2 position)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+        {
+            if (hit.collider.gameObject.Equals(gameObject))
+            {
+                if(!isClear)
+                {
+                    if (!isInteracted)
+                    {
+                        if (!UI_InvenManager.Instance.HaveItem(interactionIndex))
+                        {
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                            //Dialogue - 퍼즐이 필요합니다?
+                            return;
+                        }
+                        if (missionStart.activeInHierarchy)
+                        {
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                            //Dialogue - 퍼즐을 다 넣어야한다는거?
+                        }
+                        else
+                        {
+                            TouchManager.Instance.EnableMoveHandler(false);
+                            missionStart.SetActive(true);
+                            missionExit.SetActive(true);
+                            btnExit.SetActive(true);
+                            if (PlayerManager.Instance != null)
+                            {
+                                PlayerManager.Instance.SetBtn(false);
+                            }
+                            mask.enabled = false;
+                            UI_InvenManager.Instance.OpenQuickSlot();
+                        }
+                    }
+                    else
+                    {
+                        TouchManager.Instance.EnableMoveHandler(false);
+                        missionStart.SetActive(true);
+                        missionExit.SetActive(true);
+                        btnExit.SetActive(true);
+                        if (PlayerManager.Instance != null)
+                        {
+                            PlayerManager.Instance.SetBtn(false);
+                        }
+
+                        if (UI_InvenManager.Instance.isOpenQuick)
+                        {
+                            UI_InvenManager.Instance.CloseQuickSlot();
+                        }
+
+                        if (anim != null)
+                        {
+                            anim.SetBool(openAnim, true);
+                        }
+                    }
+                }
+                else
+                {
+                    isTouching = !isTouching;
+                    TouchManager.Instance.EnableMoveHandler(!isTouching);
+                    interactionCam.SetActive(isTouching);
+                    if (PlayerManager.Instance != null)
+                    {
+                        PlayerManager.Instance.SetBtn(!isTouching);
+                    }
+                }
+               
+            }
+        }
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+
+        // Gizmos를 사용해 Scene View에서 Ray를 시각적으로 확인
+        Gizmos.color = Color.green;
+        foreach (Vector3 offset in rayOffsets)
+        {
+            Gizmos.DrawRay(offset, correctZone.up * rayDistance);
+        }
+    }
+#endif
+    private void GameEnd()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
 }

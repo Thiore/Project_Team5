@@ -32,25 +32,33 @@ public class PlayerManager : MonoBehaviour
     public Transform mainPlayer;
     public Transform playerCam;
 
-    
+    private int btnCount;
 
     private void Awake()
     {
         Instance = this;
+        btnCount = 0;
     }
 
-    private void OnEnable()
+    public void SetBtn(bool isOn)
     {
-        DialogueManager.Instance.dialogEvent += SetBtn;
+        if(isOn)
+        {
+            if(btnCount.Equals(0))
+            {
+                btnList.SetActive(true);
+            }
+            btnCount += 1;
+        }
+        else
+        {
+            btnCount -= 1;
+            if(btnCount.Equals(0))
+            {
+                btnList.SetActive(false);
+            }
+        }
+        
     }
 
-    private void OnDisable()
-    {
-        DialogueManager.Instance.dialogEvent -= SetBtn;
-    }
-
-    private void SetBtn(bool isOn)
-    {
-        btnList.SetActive(isOn);
-    }
 }

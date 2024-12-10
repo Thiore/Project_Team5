@@ -5,6 +5,7 @@ using UnityEngine;
 public class EndPoint : MonoBehaviour,ISetColor
 {
     public WireColor color;
+    [HideInInspector]
     public bool isconnected;
     public Transform lineEndPostion;
 

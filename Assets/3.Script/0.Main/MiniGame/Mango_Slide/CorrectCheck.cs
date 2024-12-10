@@ -1,78 +1,75 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+//using UnityEngine.SceneManagement;
 
-public class CorrectCheck : MonoBehaviour
-{
-    public GameObject image;
-    public string targetTag = "TargetObject"; // ÁöÁ¤ÇÒ ÅÂ±× ÀÌ¸§
-    public float rayDistance = 1f;             // RayÀÇ ±æÀÌ
+//public class CorrectCheck : MonoBehaviour
+//{
+//    public GameObject image;
+    
+//    private float rayDistance = 1f; // Rayì˜ ê¸¸ì´
 
-    private void Awake()
-    {
-        image.SetActive(false);
-    }
+//    private void Awake()
+//    {
+//        image.SetActive(false);
+//    }
 
-    [SerializeField]
-    private Vector3[] rayOffsets = new Vector3[4]  // Ray ½ÃÀÛ À§Ä¡ÀÇ ¿ÀÇÁ¼Â ¹è¿­À» ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ °¡´ÉÇÏ°Ô ÇÔ
-    {
-        new Vector3(0.25f, 0.2f, 0),   // ±âº» °ª
-        new Vector3(-0.25f, 0.2f, 0),
-        new Vector3(0.25f, -0.2f, 0),
-        new Vector3(-0.25f, -0.2f, 0)
-    };
+//    [SerializeField]
+//    private Vector3[] rayOffsets;// Ray ì‹œì‘ ìœ„ì¹˜ì˜ ì˜¤í”„ì…‹ ë°°ì—´ì„ ì¸ìŠ¤í™í„°ì—ì„œ ì„¤ì • ê°€ëŠ¥í•˜ê²Œ í•¨
+    
 
-    public bool CheckAllRays()
-    {
-        foreach (Vector3 offset in rayOffsets)
-        {
-            // Quad Object ±âÁØÀ¸·Î Ray¸¦ ¹ß»çÇÒ ½ÃÀÛ À§Ä¡ ¼³Á¤
-            Vector3 rayOrigin = transform.position + offset;
+//    public bool CheckAllRays(GameObject checkObj)
+//    {
+//        foreach (Vector3 offset in rayOffsets)
+//        {
+//            // Quad Object ê¸°ì¤€ìœ¼ë¡œ Rayë¥¼ ë°œì‚¬í•  ì‹œì‘ ìœ„ì¹˜ ì„¤ì •
+//            Vector3 rayOrigin = transform.position + offset;
 
-            // y ¹æÇâÀ¸·Î Ray ¹ß»ç
-            if (Physics.Raycast(rayOrigin, transform.up, out RaycastHit hit, rayDistance))
-            {
-                // Ãæµ¹ÇÑ ¿ÀºêÁ§Æ®ÀÇ ÅÂ±×°¡ targetTag¿Í ÀÏÄ¡ÇÏÁö ¾ÊÀ¸¸é false ¹İÈ¯
-                if (hit.collider.CompareTag(targetTag) == false)
-                {
-                    Debug.Log($"Ray from {rayOrigin} did not hit target tag.");
-                    return false;
-                }
-            }
-            else
-            {
-                // Ray°¡ ¾Æ¹« ¿ÀºêÁ§Æ®¿Íµµ Ãæµ¹ÇÏÁö ¾ÊÀ¸¸é false ¹İÈ¯
-                Debug.Log($"Ray from {rayOrigin} did not hit anything.");
-                return false;
-            }
-        }
+//            // y ë°©í–¥ìœ¼ë¡œ Ray ë°œì‚¬
+//            if (Physics.Raycast(rayOrigin, transform.up, out RaycastHit hit, rayDistance))
+//            {
+//                // ì¶©ëŒí•œ ì˜¤ë¸Œì íŠ¸ì™€ ì¼ì¹˜í•˜ì§€ ì•Šìœ¼ë©´ false ë°˜í™˜
+//                if (!hit.collider.gameObject.Equals(checkObj))
+//                {
+//                    Debug.Log($"Ray from {rayOrigin} did not hit target tag.");
+//                    return false;
+//                }
+//            }
+//            else
+//            {
+//                // Rayê°€ ì•„ë¬´ ì˜¤ë¸Œì íŠ¸ì™€ë„ ì¶©ëŒí•˜ì§€ ì•Šìœ¼ë©´ false ë°˜í™˜
+//                Debug.Log($"Ray from {rayOrigin} did not hit anything.");
+//                return false;
+//            }
+//        }
 
-        // ¸ğµç Ray°¡ ÁöÁ¤µÈ ÅÂ±×ÀÇ ¿ÀºêÁ§Æ®¿Í Ãæµ¹ÇÏ¸é true ¹İÈ¯
-        Debug.Log("All rays hit the correct target.");
-        Debug.Log("Game Win");
-        image.SetActive(true);
-        Invoke("GameEnd", 3f);
-        return true;
-    }
+//        // ëª¨ë“  Rayê°€ ì§€ì •ëœ íƒœê·¸ì˜ ì˜¤ë¸Œì íŠ¸ì™€ ì¶©ëŒí•˜ë©´ true ë°˜í™˜
+//        Debug.Log("All rays hit the correct target.");
+//        Debug.Log("Game Win");
+//        image.SetActive(true);
+//        Invoke("GameEnd", 3f);
+//        return true;
+//    }
+//#if UNITY_EDITOR
+//    private void OnDrawGizmos()
+//    {
 
-    private void OnDrawGizmos()
-    {
-        // Gizmos¸¦ »ç¿ëÇØ Scene View¿¡¼­ Ray¸¦ ½Ã°¢ÀûÀ¸·Î È®ÀÎ
-        Gizmos.color = Color.green;
-        foreach (Vector3 offset in rayOffsets)
-        {
-            Vector3 rayOrigin = transform.position + offset;
-            Gizmos.DrawRay(rayOrigin, transform.up * rayDistance);
-        }
-    }
-    private void GameEnd()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-    Application.Quit();
-#endif
-    }
+//        // Gizmosë¥¼ ì‚¬ìš©í•´ Scene Viewì—ì„œ Rayë¥¼ ì‹œê°ì ìœ¼ë¡œ í™•ì¸
+//        Gizmos.color = Color.green;
+//        foreach (Vector3 offset in rayOffsets)
+//        {
+//            Vector3 rayOrigin = transform.position + offset;
+//            Gizmos.DrawRay(rayOrigin, transform.up * rayDistance);
+//        }
+//    }
+//#endif
+//    private void GameEnd()
+//    {
+//#if UNITY_EDITOR
+//        UnityEditor.EditorApplication.isPlaying = false;
+//#else
+//    Application.Quit();
+//#endif
+//    }
 
-}
+//}

@@ -15,7 +15,7 @@ public class Pin : MonoBehaviour, IUITouchable
     [SerializeField] private Image backGroundImage;
     private Image pinImage;
 
-    private readonly Color emptyColor = new Color(1f, 1f, 1f, 0f);
+    private readonly Color emptyColor = new Color(0.19f, 0.19f, 0.19f, 0f);
     private readonly Color fillColor = new Color(1f, 1f, 1f, 1f);
     
     private GameObject dontClue;
@@ -62,11 +62,11 @@ public class Pin : MonoBehaviour, IUITouchable
             dontClue.SetActive(false);
             pinImage.color = emptyColor;
             exitImage.color = emptyColor;
-            backGroundImage.color = emptyColor;
+            //backGroundImage.color = emptyColor;
             UICam_3D.targetTexture = renderTexture; // 3D UI카메라의 Output Texture 추가
             UICam_3D.Render(); // OutputTexture에 UICam 장면 출력
             UICam_3D.targetTexture = null; // OutputTexture 제거
-            backGroundImage.color = fillColor;
+            //backGroundImage.color = fillColor;
             pinImage.color = fillColor;
             exitImage.color = fillColor;
             keyClue.SetActive(true);

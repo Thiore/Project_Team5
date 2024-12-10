@@ -240,8 +240,6 @@ public class UI_InvenManager : MonoBehaviour
             {
                 case 10:
                     items[2].GetItem();
-                    AddTriggerItem(items[2].item);
-                    //flashLight.SetUseFlashLight();
                     break;
 
             }

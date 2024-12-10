@@ -55,20 +55,16 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             // 이건 끝나는 곳 확인 할 필요가 있음 
             UI_InvenManager.Instance.dragImage.transform.position = eventData.position;
-            //switch (id)
-            //{
-            //    case 5://큰 슬라이드퍼즐
-            //        DragRayToSlide(this.id, eventData, false);
-            //        break;
-            //    case 6:
-            //        DragRayToSlide(this.id, eventData, false);
-            //        break;
-            //    case 7:
-            //        DragRayToSlide(this.id, eventData, false);
-            //        break;
-            //    default:
-            //        break;
-            //}
+            switch (id)
+            {
+                case 5:
+                case 9:
+                case 10:
+                    DragRayToSlide(id, eventData, false);
+                    break;
+                default:
+                    break;
+            }
         }
         
        
@@ -81,71 +77,107 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             if (hit.collider.TryGetComponent(out TouchPuzzleCanvas toggle))
             {
-                for (int i = 0; i < toggle.getInteractionIndex.Count; i++)
+                switch(id)
                 {
-                    if (item.id.Equals(toggle.getInteractionIndex[i]))
-                    {
-                        DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
-                       
-                        if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
+                    case 5:
+                    case 9:
+                    case 10:
+                        if (Physics.Raycast(ray, out RaycastHit slideHit, TouchManager.Instance.getTouchDistance, LayerMask.NameToLayer("SlideObject")))
                         {
-                            UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
-                        }
-                        toggle.InteractionObject(item.id);
-                        SetinvenByID(id,true);
-                        break;
-                    }
-                }
-            }
-            if (hit.collider.TryGetComponent(out PlayOBJ puzzle))
-            {
-                for (int i = 0; i < puzzle.getObjectIndex.Count; i++)
-                {
-                    if (item.id.Equals(puzzle.getObjectIndex[i]))
-                    {
-                        DataSaveManager.Instance.UpdateGameState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
-                        
-                        if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
-                        {
-                            UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
-                        }
-                        puzzle.InteractionObject(item.id);
-                        SetinvenByID(id, true);
-                        break;
-                    }
-                }
-            }
+                            if (slideHit.collider.TryGetComponent(out HideSlide slide))
+                            {
+                                if (slide.IsInteracted(id, true))
+                                {
+                                    for (int i = 0; i < toggle.getInteractionIndex.Count; i++)
+                                    {
+                                        if (item.id.Equals(toggle.getInteractionIndex[i]))
+                                        {
+                                            DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
 
-            //if(hit.collider.TryGetComponent(out HideSlide slide))
+                                            if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
+                                            {
+                                                UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
+                                            }
+                                            toggle.InteractionObject(item.id);
+                                            SetinvenByID(id, true);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        for (int i = 0; i < toggle.getInteractionIndex.Count; i++)
+                        {
+                            if (item.id.Equals(toggle.getInteractionIndex[i]))
+                            {
+                                DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
+
+                                if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
+                                {
+                                    UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
+                                }
+                                toggle.InteractionObject(item.id);
+                                SetinvenByID(id, true);
+                                break;
+                            }
+                        }
+                        break;
+
+                }
+               
+            }
+            //if (hit.collider.TryGetComponent(out PlayOBJ puzzle))
             //{
-            //    if(slide.)
+            //    for (int i = 0; i < puzzle.getObjectIndex.Count; i++)
+            //    {
+            //        if (item.id.Equals(puzzle.getObjectIndex[i]))
+            //        {
+            //            DataSaveManager.Instance.UpdateGameState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
+                        
+            //            if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
+            //            {
+            //                UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
+            //            }
+            //            puzzle.InteractionObject(item.id);
+            //            SetinvenByID(id, true);
+            //            break;
+            //        }
+            //    }
             //}
         }
     }
 
-    //private void DragRayToSlide(int objId, PointerEventData eventData, bool touchEnd)
-    //{
-    //    Ray ray = Camera.main.ScreenPointToRay(eventData.position);
-    //    if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
-    //    {
-    //        if (hit.collider.TryGetComponent(out HideSlide slide))
-    //        {
-    //            if(tempSlide != null)
-    //            {
-    //                tempSlide.HideMaterial();
-    //                tempSlide = slide;
-    //            }
-    //            if()
-    //            if (slide.IsInteracted(id, touchEnd))
-    //            {
+    private void DragRayToSlide(int objId, PointerEventData eventData, bool touchEnd)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, LayerMask.NameToLayer("SlideObject")))
+        {
+            if (hit.collider.TryGetComponent(out HideSlide slide))
+            {
+                if (slide.isClear) return;
 
-    //            }
-    //        }
-    //        else
-    //        {
-    //            tempSlide.HideMaterial();
-    //            tempSlide = null;
-    //        }
-    //    }
-    //}
+                if (tempSlide != null&&!tempSlide.getObjIndex.Equals(id))
+                {
+                    tempSlide.HideMaterial();
+                    tempSlide = slide;
+                    tempSlide.IsInteracted(id, touchEnd);
+                    return;
+                }
+                if(tempSlide == null && tempSlide.getObjIndex.Equals(id))
+                {
+                    tempSlide = slide;
+                    tempSlide.IsInteracted(id, touchEnd);
+                    return;
+                }
+                
+            }
+            else
+            {
+                tempSlide.HideMaterial();
+                tempSlide = null;
+            }
+        }
+    }
 }

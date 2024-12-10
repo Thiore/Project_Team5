@@ -28,6 +28,18 @@ public class DoorBasic : InteractionOBJ, ITouchable
                 isTouching = !isTouching;
                 
                 anim.SetBool(openAnim, isTouching);
+                if(normalCamera!= null)
+                {
+                    normalCamera.SetActive(isTouching);
+                    if (PlayerManager.Instance != null)
+                    {
+                        PlayerManager.Instance.SetBtn(!isTouching);
+                    }
+                    if(TouchManager.Instance != null)
+                    {
+                        TouchManager.Instance.EnableMoveHandler(!isTouching);
+                    }
+                }
             }
         }
     }

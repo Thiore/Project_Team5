@@ -11,42 +11,43 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
     [SerializeField] protected GameObject btnExit;
 
-    [SerializeField] protected PlayOBJ playPuzzle;
-
     [Header("SaveManager 참고")]
     [SerializeField] protected int floorIndex;
     public int getFloorIndex { get => floorIndex; }
     [SerializeField] protected int objectIndex;
+    public int getObjectIndex { get => objectIndex; }
 
     [Header("퀵슬롯상호작용 아이템이 있다면 추가해주세요")]
     [SerializeField] protected List<int> interactionIndex;
     public List<int> getInteractionIndex { get => interactionIndex; }
 
-    protected Animator anim;
+    [SerializeField] protected Animator anim;
 
     [SerializeField] protected Animator[] interactionAnim;
     protected readonly int openAnim = Animator.StringToHash("Open");
 
-    protected Collider mask;
+    [SerializeField] protected Collider mask;
     [HideInInspector]
     public bool isClear;
     [HideInInspector]
     public bool isInteracted;
 
-    protected GameObject btnList;
-    //private UseButton quickSlot;
+    public bool isStarted { get; protected set; }
+
 
     protected Outline outline;
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         if (!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
         {
             isClear = false;
+            isStarted = true;
         }
         else
         {
             isClear = true;
+            isStarted = false;
             if (interactionAnim.Length > 0)
             {
                 for (int i = 0; i < interactionAnim.Length; i++)
@@ -83,8 +84,10 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     {
         if (TryGetComponent(out outline))
             outline.enabled = false;
-        TryGetComponent(out mask);
-        TryGetComponent(out anim);
+        if(mask == null)
+            TryGetComponent(out mask);
+        if(anim == null)
+            TryGetComponent(out anim);
     }
 
     
@@ -108,12 +111,7 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     { 
     }
 
-    public virtual void OnTouchEnd(Vector2 position)
-    {
-
-        if (isClear) return;
-        
-    }
+    public abstract void OnTouchEnd(Vector2 position);
 
     protected void OnTriggerExit(Collider other)
     {
@@ -131,6 +129,7 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         if(interactionIndex.Count.Equals(0))
         {
             isInteracted = true;
+            
             if (UI_InvenManager.Instance.isOpenQuick)
             {
                 UI_InvenManager.Instance.CloseQuickSlot();

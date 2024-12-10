@@ -16,26 +16,21 @@ public class Joystick : MonoBehaviour, ITouchable
     public float maxDistance = 70f; // 핸들이 움직일 수 있는 최대 거리
 
 
-    private void Start()
+    private void Awake()
     {
         TryGetComponent(out panel);
-        //TryGetComponent(out canvas);
-        
-    }
-    private void OnEnable()
-    {
         TouchManager.Instance.OnMoveStarted += OnTouchStarted;
         TouchManager.Instance.OnMoveHold += OnTouchHold;
         TouchManager.Instance.OnMoveEnd += OnTouchEnd;
+
     }
-    private void OnDisable()
+
+    private void OnDestroy()
     {
         TouchManager.Instance.OnMoveStarted -= OnTouchStarted;
         TouchManager.Instance.OnMoveHold -= OnTouchHold;
         TouchManager.Instance.OnMoveEnd -= OnTouchEnd;
     }
-
-
 
 
 

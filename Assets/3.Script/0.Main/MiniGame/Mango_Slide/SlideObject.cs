@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlideObject : MonoBehaviour
+public class SlideObject : MonoBehaviour, ITouchable
 {
     private Vector3 initPosition;
     private Outline outLine;
@@ -12,12 +12,11 @@ public class SlideObject : MonoBehaviour
     private Vector3 initialObjectPosition; // 터치 시작 시 오브젝트의 초기 위치
     private Vector2 initialTouchPosition;  // 터치 시작 시 손가락 위치
 
+    [Header("SlidePuzzle최상위 오브젝트 추가")]
+    [SerializeField] protected InteractionSlidePuzzle puzzleObj;
+
+    private bool isSelected = true;
    
-
-    [Header("결과와 상호작용하는 오브젝트는 true와 correctZone오브젝트 추가")]
-    [SerializeField] private bool isCheckObj;
-    [SerializeField] private CorrectCheck correctZone;
-
     protected virtual void Awake()
     {
         initPosition = transform.position;
@@ -58,8 +57,125 @@ public class SlideObject : MonoBehaviour
         return false; // 겹친 오브젝트가 없음
     }
 
+
+    /// <summary>
+    /// 초기화시에 퍼즐 위치 초기화
+    /// </summary>
     public void InitPosition()
     {
         transform.position = initPosition;
+    }
+
+    public void OnTouchStarted(Vector2 position)
+    {
+        if(puzzleObj.SetSelectObj(this.gameObject))
+        {
+            isSelected = true;
+            outLine.enabled = true;
+            initialTouchPosition = position; // 터치 시작 위치 저장
+            initialObjectPosition = transform.position; // 오브젝트의 초기 위치 저장
+        }
+        else
+        {
+            isSelected = false;
+        }
+    }
+
+    public void OnTouchHold(Vector2 position)
+    {
+        if(isSelected)
+        {
+            MoveObjectWithTouchX(position);
+            MoveObjectWithTouchZ(position);
+        }
+    }
+
+    public virtual void OnTouchEnd(Vector2 position)
+    {
+        if(isSelected)
+        {
+            outLine.enabled = false;
+            puzzleObj.SetSelectObj(null);
+            isSelected = false;
+        }
+    }
+    private void MoveObjectWithTouchX(Vector2 position)
+    {
+        // 현재 터치 위치 가져오기
+        Vector2 currentTouchPosition = position;
+
+        // 이동할 X 오프셋 계산
+        Vector3 moveOffset = CalculateMoveOffsetX(currentTouchPosition);
+
+        // X 방향으로 목표 위치 계산
+        Vector3 targetPositionX = initialObjectPosition + new Vector3(moveOffset.x, 0, 0);
+
+        if (IsOverlappingAtPosition(targetPositionX))
+        {
+            // 겹치지 않을 때만 X축 이동
+            transform.position = targetPositionX;
+            initialObjectPosition = targetPositionX; // 이동 후 초기 위치 업데이트
+            Debug.Log("X축 이동");
+        }
+        else
+        {
+            initialTouchPosition.y = currentTouchPosition.y;
+        }
+    }
+
+    private void MoveObjectWithTouchZ(Vector2 position)
+    {
+
+        // 현재 터치 위치 가져오기
+        Vector2 currentTouchPosition = position;
+
+        // 이동할 Z 오프셋 계산
+        Vector3 moveOffset = CalculateMoveOffsetZ(currentTouchPosition);
+
+        // Z 방향으로 목표 위치 계산
+        Vector3 targetPositionZ = initialObjectPosition + new Vector3(0, 0, moveOffset.z);
+
+        
+        if (IsOverlappingAtPosition(targetPositionZ))
+        {
+            // 겹치지 않을 때만 Z축 이동
+            transform.position = targetPositionZ;
+            initialObjectPosition = targetPositionZ; // 이동 후 초기 위치 업데이트
+            Debug.Log("Z축 이동");
+        }
+        else
+        {
+            initialTouchPosition.x = currentTouchPosition.x;
+        }
+    }
+
+    private Vector3 CalculateMoveOffsetX(Vector2 currentTouchPosition)
+    {
+        Vector3 moveOffset = Vector3.zero;
+        Vector2 touchDelta = currentTouchPosition - initialTouchPosition;
+
+        // X 방향의 이동 설정
+        if (Mathf.Abs(touchDelta.y) >= 0.1f)
+        {
+            moveOffset.x = -Mathf.Sign(touchDelta.y) * 0.25f;
+            initialTouchPosition.y = currentTouchPosition.y; // 이동 후 새로운 기준점 설정
+        }
+
+        return moveOffset;
+    }
+
+    private Vector3 CalculateMoveOffsetZ(Vector2 currentTouchPosition)
+    {
+        Vector3 moveOffset = Vector3.zero;
+        Vector2 touchDelta = currentTouchPosition - initialTouchPosition;
+
+        // Z 방향의 이동 설정
+        if (Mathf.Abs(touchDelta.x) >= 0.1f)
+        {
+            moveOffset.z = Mathf.Sign(touchDelta.x) * 0.25f;
+            initialTouchPosition.x = currentTouchPosition.x; // 이동 후 새로운 기준점 설정
+        }
+
+        return moveOffset;
     }
 }

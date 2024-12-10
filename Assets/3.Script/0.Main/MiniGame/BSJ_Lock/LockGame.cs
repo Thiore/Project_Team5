@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class LockGame : PlayOBJ
+public class LockGame : MonoBehaviour
 {
 
     private int[] correctNumber = { 1, 3, 0, 4 }; //정답 번호
@@ -153,11 +153,11 @@ public class LockGame : PlayOBJ
         }
 
         //번호가 맞으면 상태(true) 저장
-        SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
+        //SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
         isAnswer = true;
         canvas.gameObject.SetActive(false);
         //번호가 맞으면 자물쇠 열리는 애니메이션 실행
-        puzzle.OffInteraction();
+        //puzzle.OffInteraction();
     }
 
 

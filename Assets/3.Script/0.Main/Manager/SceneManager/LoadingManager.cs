@@ -167,8 +167,6 @@ public class LoadingManager : MonoBehaviour
             loadingProgress.text = "0%";
             loadingProgress.gameObject.SetActive(true);
         }
-        if (TouchManager.Instance != null)
-            TouchManager.Instance.EnableMoveHandler(true);
 
         fade_co = StartCoroutine(Fade_co(-1f, isLoading));
     }
@@ -182,8 +180,6 @@ public class LoadingManager : MonoBehaviour
         
         isFadeOut = true;
 
-        if (TouchManager.Instance != null)
-            TouchManager.Instance.EnableMoveHandler(false);
 
         fade_co = StartCoroutine(Fade_co(1f, isLoading));
     }
