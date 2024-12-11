@@ -7,6 +7,7 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
     public GameObject selectedObject { get; private set; } // 현재 터치된 오브젝트
 
     [SerializeField] private Transform correctZone;
+    [SerializeField] private Transform slidePuzzle;
     private float rayDistance =0.15f; // Ray의 길이
 
     private bool isTouching;
@@ -45,19 +46,17 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
         {
             return false;
         }
-        else if (selected == null)
-        {
-            selectedObject = null;
-            return true;
-        }
         else
         {
             selectedObject = selected;
             return true;
         }
-
     }
-    public bool CheckAllRays(GameObject checkObj)
+    public void ResetSelectObj()
+    {
+        selectedObject = null;
+    }
+    public void CheckAllRays(GameObject checkObj)
     {
         Vector3[] rayOffsets = new Vector3[4];
         
@@ -70,22 +69,23 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
                 if (!hit.collider.gameObject.Equals(checkObj))
                 {
                     Debug.Log($"Ray from {offset} did not hit target tag.");
-                    return false;
+                    return;
                 }
             }
             else
             {
                 // Ray가 아무 오브젝트와도 충돌하지 않으면 false 반환
                 Debug.Log($"Ray from {offset} did not hit anything.");
-                return false;
+                return;
             }
         }
 
         // 모든 Ray가 지정된 태그의 오브젝트와 충돌하면 true 반환
-        Debug.Log("All rays hit the correct target.");
-        Debug.Log("Game Win");
-        Invoke("GameEnd", 2f);
-        return true;
+        DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex, true);
+        isClear = true;
+        btnExit.SetActive(false);
+        OffInteraction();
+        return;
     }
 
 
@@ -110,7 +110,7 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
         }
         else
         {
-
+            slidePuzzle.SetParent(transform);
             missionStart.SetActive(false);
             if (anim != null)
             {
@@ -134,6 +134,16 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
         missionExit.SetActive(false);
         isTouching = true;
         interactionCam.SetActive(true);
+
+    }
+
+    public override void InteractionObject(int id)
+    {
+        base.InteractionObject(id);
+        if(isInteracted)
+        {
+            mask.enabled = false;
+        }
     }
 
     public override void OnTouchEnd(Vector2 position)
@@ -168,7 +178,6 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
                             {
                                 PlayerManager.Instance.SetBtn(false);
                             }
-                            mask.enabled = false;
                             UI_InvenManager.Instance.OpenQuickSlot();
                         }
                     }
@@ -178,6 +187,8 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
                         missionStart.SetActive(true);
                         missionExit.SetActive(true);
                         btnExit.SetActive(true);
+
+                        mask.enabled = false;
                         if (PlayerManager.Instance != null)
                         {
                             PlayerManager.Instance.SetBtn(false);
@@ -187,21 +198,23 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
                         {
                             UI_InvenManager.Instance.CloseQuickSlot();
                         }
-
-                        if (anim != null)
-                        {
-                            anim.SetBool(openAnim, true);
-                        }
                     }
                 }
                 else
                 {
                     isTouching = !isTouching;
-                    TouchManager.Instance.EnableMoveHandler(!isTouching);
+                    
                     interactionCam.SetActive(isTouching);
                     if (PlayerManager.Instance != null)
                     {
                         PlayerManager.Instance.SetBtn(!isTouching);
+                    }
+                    TouchManager.Instance.EnableMoveHandler(!isTouching);
+
+
+                    if (anim != null)
+                    {
+                        anim.SetBool(openAnim, true);
                     }
                 }
                

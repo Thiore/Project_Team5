@@ -17,9 +17,9 @@ public class ClueItem : MonoBehaviour
         Instance = this;
         childItem = new Dictionary<int, Item3D>();
     }
-    public void GetItem(int id, Item3D item)
+    public void GetItem(Item3D item)
     {
-        childItem.Add(id, item);
+        childItem.Add(item.ID, item);
     }
     public void UseItem(int id)
     {
@@ -31,6 +31,10 @@ public class ClueItem : MonoBehaviour
     }
     public void SetPin(int id)
     {
+        if(activeItem != null)
+        {
+            activeItem.gameObject.SetActive(false);
+        }
         activeItem = childItem[id];
         activeItem.gameObject.SetActive(true);
         if(activeItem.item.eItemType.Equals(eItemType.Clue))

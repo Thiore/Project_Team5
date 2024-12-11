@@ -122,13 +122,13 @@ public class UI_InvenManager : MonoBehaviour
     /// </summary>
     /// <param name="item">획득한 아이템을 추가해주세요</param>
     /// <param name="isGetItemImage">처음 로딩할 때와 조합아이템은 true값을 입력하시면 획득 이미지가 나타나지 않습니다.</param>
-    public void GetItemByID(Item item, bool isGetItemImage = false)
+    public void GetItemByID(Item item, bool isGetItemImage = false, Item3D obj = null)
     {
         if(!isGetItemImage)
         {
             GetItemByImage(item);
         }
-        
+        ClueItem.Instance.GetItem(obj);
         AddInventoryItem(item);
         
         switch (item.eItemType)
@@ -255,16 +255,14 @@ public class UI_InvenManager : MonoBehaviour
     public void SortInvenSlot(int id)
     {
         UI_InventorySlot slot = invenSlots.Find(x => x.item.id.Equals(id));
-
-        DataSaveManager.Instance.UpdateItemState(id);
-        ClueItem.Instance.UseItem(id);
+        
         //slot.SetInvenEmpty();
         switch (slot.item.eItemType)
         {
             case eItemType.Quick:
-                UI_QuickSlot quickSlot = quickSlots.Find(x => x.item.id.Equals(slot.item.id));
+                UI_QuickSlot quickSlot = quickSlots.Find(x => x.slotID.Equals(slot.item.id));
                 quickSlots.Remove(quickSlot);
-                quickSlot.gameObject.SetActive(false);
+                
                 quickSlots_Queue.Enqueue(quickSlot);
                 break;
 
@@ -273,6 +271,12 @@ public class UI_InvenManager : MonoBehaviour
         slot.gameObject.SetActive(false);
         invenSlots.Remove(slot);
         invenSlots_Queue.Enqueue(slot);
+        if (iteminfo.ID.Equals(id))
+        {
+            iteminfo.SetInfoByItem(invenSlots[invenSlots.Count - 1].item);
+        }
+        DataSaveManager.Instance.UpdateItemState(id);
+        ClueItem.Instance.UseItem(id);
     }
 
     private void GetItemByImage(Item item)
@@ -326,6 +330,14 @@ public class UI_InvenManager : MonoBehaviour
             {
                 return false;
             }
+        }
+        return true;
+    }
+    public bool HaveItem(int id)
+    {
+        if (!quickSlots.Find(x => x.item.id == id))
+        {
+            return false;
         }
         return true;
     }

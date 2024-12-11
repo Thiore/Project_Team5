@@ -42,20 +42,21 @@ public class PlayerManager : MonoBehaviour
 
     public void SetBtn(bool isOn)
     {
-        if(isOn)
+        if(!isOn)
         {
-            if(btnCount.Equals(0))
+            if (btnCount.Equals(0))
             {
-                btnList.SetActive(true);
+                btnList.SetActive(false);
             }
+           
             btnCount += 1;
         }
         else
         {
             btnCount -= 1;
-            if(btnCount.Equals(0))
+            if (btnCount.Equals(0))
             {
-                btnList.SetActive(false);
+                btnList.SetActive(true);
             }
         }
         

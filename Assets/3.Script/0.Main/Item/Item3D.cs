@@ -67,13 +67,13 @@ public class Item3D : MonoBehaviour, ITouchable
             transform.SetParent(ClueItem.Instance.transform);
             transform.localPosition = Vector3.zero;
         }
-        ClueItem.Instance.GetItem(id, this);
+        
 
         isGet = true;
         if(!isLoading)
             DataSaveManager.Instance.UpdateItemState(id);
 
-        UI_InvenManager.Instance.GetItemByID(item, isLoading);
+        UI_InvenManager.Instance.GetItemByID(item, isLoading,this);
     }
     public void UseItem()
     {

@@ -99,7 +99,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
             {
                 if (!isInteracted && !UI_InvenManager.Instance.HaveItem(interactionIndex))
                 {
-                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 7);
                 }
                 else if (!isInteracted)
                 {
@@ -113,7 +113,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
                         missionStart.SetActive(true);
                         missionExit.SetActive(true);
                         btnExit.SetActive(true);
-                        mask.enabled = false;
+
                         if (PlayerManager.Instance != null)
                         {
                             PlayerManager.Instance.SetBtn(false);
@@ -142,6 +142,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
                     if (anim != null)
                     {
                         anim.SetBool(openAnim, true);
+                       
                     }
                 }
             }

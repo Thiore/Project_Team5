@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InteractionPadLock : TouchPuzzleCanvas
 {
-    private int[] correctNumber = { 1, 3, 0, 4 }; //정답 번호
+    private int[] correctNumber = { 1, 1, 4, 0 }; //정답 번호
     private int[] currentNumber = { 0, 0, 0, 0 }; //현재 번호
     
     //회전중인 휠 코루틴
@@ -42,7 +42,7 @@ public class InteractionPadLock : TouchPuzzleCanvas
             }
 
             //회전코루틴 초기화
-            rotation_co = new Coroutine[4];
+            rotation_co = new Coroutine[numberWheels.Length];
             
             //번호 리셋
             ResetLock();
@@ -51,14 +51,14 @@ public class InteractionPadLock : TouchPuzzleCanvas
 
     public void ResetLock()
     {
-        for (int i = 0; i < currentNumber.Length; i++)
+        for (int i = 0; i < numberWheels.Length; i++)
         {
             if (rotation_co[i] != null)
             {
                 StopCoroutine(rotation_co[i]);
-                rotation_co[i] = null;
+                
             }
-
+            rotation_co[i] = null;
             currentNumber[i] = 0;
             numberWheels[i].localRotation = Quaternion.Euler(0f, 0f, -180f);
         }
@@ -101,20 +101,19 @@ public class InteractionPadLock : TouchPuzzleCanvas
     {
         float rotationTime = 0f;
 
-        while (rotationTime / rotationSpeed < 1f)
+        while (rotationTime < 1f)
         {
-            Debug.Log(rotationTime);
-            rotationTime += Time.deltaTime;
+            rotationTime += Time.deltaTime * rotationSpeed;
             //목표 회전 각도까지 부드럽게
             numberWheels[wheelIndex].localRotation =
                 Quaternion.Lerp(numberWheels[wheelIndex].localRotation,
                                  targetRotations[wheelIndex],
-                                 rotationTime / rotationSpeed);
+                                 Mathf.Clamp(rotationTime,0f,1f));
             yield return null;
         }
         //정답 확인
         CheckNumber();
-        rotation_co = null;
+        rotation_co[wheelIndex] = null;
         yield break;
 
     }
@@ -153,27 +152,29 @@ public class InteractionPadLock : TouchPuzzleCanvas
         }
         else
         {
-            missionStart.SetActive(false);
-            Invoke("ClearEvent", 2f);
+            interactionAnim[0].SetBool(openAnim, true);
+            
+            isOpen = true;
+            Invoke("ClearEvent", 1f);
         }
     }
     protected override void ClearEvent()
     {
+        missionStart.SetActive(false);
         if (anim != null)
         {
             anim.SetBool(openAnim, true);
         }
         Invoke("ResetCamera", 1f);
     }
+
     protected override void ResetCamera()
     {
         mask.enabled = true;
+        outline.enabled = true;
+        interactionCam.SetActive(true);
         missionExit.SetActive(false);
-        TouchManager.Instance.EnableMoveHandler(true);
-        if (PlayerManager.Instance != null)
-        {
-            PlayerManager.Instance.SetBtn(true);
-        }
+        
     }
     public override void OnTouchEnd(Vector2 position)
     {
@@ -185,18 +186,16 @@ public class InteractionPadLock : TouchPuzzleCanvas
             {
                 if (hit.collider.gameObject.Equals(gameObject))
                 {
-                    TouchManager.Instance.EnableMoveHandler(false);
                     missionStart.SetActive(true);
                     missionExit.SetActive(true);
                     if (PlayerManager.Instance != null)
                     {
                         PlayerManager.Instance.SetBtn(false);
                     }
+                    TouchManager.Instance.EnableMoveHandler(false);
                     btnExit.SetActive(true);
                     mask.enabled = false;
-
-                   
-
+                    outline.enabled = false;
                 }
             }
         }
@@ -210,13 +209,13 @@ public class InteractionPadLock : TouchPuzzleCanvas
                     if (anim != null)
                     {
                         isOpen = !isOpen;
-                        TouchManager.Instance.EnableMoveHandler(!isOpen);
                         if (PlayerManager.Instance != null)
                         {
-                            PlayerManager.Instance.SetBtn(false);
+                            PlayerManager.Instance.SetBtn(!isOpen);
                         }
                         interactionCam.SetActive(isOpen);
                         anim.SetBool(openAnim, isOpen);
+                        TouchManager.Instance.EnableMoveHandler(!isOpen);
                     }
                 }
             }
@@ -231,5 +230,8 @@ public class InteractionPadLock : TouchPuzzleCanvas
         }
 
     }
+
+    
+
 
 }

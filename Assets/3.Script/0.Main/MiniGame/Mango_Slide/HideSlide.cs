@@ -9,10 +9,11 @@ public class HideSlide : SlideObject
     public int getObjIndex{get=>objIndex;}
     
     private MeshRenderer meshRenderer;
-    
-    private Color fillColor = Color.white;
+
+    private float cubeColor;
+    private Color fillColor;
     private Color hideColor = Color.clear;
-    private Color halfColor = new Color(1f, 1f, 1f, 0.6f);
+    private Color halfColor;
 
     public bool isClear { get; private set; }
 
@@ -23,6 +24,9 @@ public class HideSlide : SlideObject
     {
         base.Awake();
         TryGetComponent(out meshRenderer);
+        cubeColor = meshRenderer.material.color.r;
+        fillColor = new Color(cubeColor, cubeColor, cubeColor, 1f);
+        halfColor = new Color(cubeColor, cubeColor, cubeColor, 0.6f);
         isClear = DataSaveManager.Instance.GetGameState(floorIndex, objIndex);
         if(isClear)
         {
@@ -43,13 +47,14 @@ public class HideSlide : SlideObject
                 if (touchEnd)
                 {
                     meshRenderer.material.color = fillColor;
-                    isClear = true;
+                    return true;
                 }
                 else
                 {
                     meshRenderer.material.color = halfColor;
+                    return false;
                 }
-                return true;
+                
             }
             meshRenderer.material.color = hideColor;
         }
@@ -64,11 +69,8 @@ public class HideSlide : SlideObject
         base.OnTouchEnd(position);
         if(objIndex.Equals(5))
         {
-            if(puzzleObj.CheckAllRays(this.gameObject))
-            {
-                DataSaveManager.Instance.UpdateGameState(floorIndex, puzzleObj.getObjectIndex);
-                puzzleObj.OffInteraction();
-            }
+            puzzleObj.CheckAllRays(this.gameObject);
+            
         }
     }
 }

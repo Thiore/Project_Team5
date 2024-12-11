@@ -53,9 +53,9 @@ public class UseClue : MonoBehaviour, IUITouchable
             
             if(isOpen)
             {
-                scaleTime += Time.deltaTime;
+                scaleTime += Time.deltaTime*2f;
                 scaleTime = Mathf.Clamp(scaleTime, 0f, 1f);
-                transform.localScale = Vector3.one * (1f + scaleTime * 4f);
+                transform.localScale = Vector3.one * (1f + scaleTime * 3f);
                 yield return null;
                 if (scaleTime>=1f)
                 {
@@ -66,9 +66,9 @@ public class UseClue : MonoBehaviour, IUITouchable
             }
             else
             {
-                scaleTime -= Time.deltaTime;
+                scaleTime -= Time.deltaTime*2f;
                 scaleTime = Mathf.Clamp(scaleTime, 0f, 1f);
-                transform.localScale = Vector3.one * (1f + scaleTime * 4f);
+                transform.localScale = Vector3.one * (1f + scaleTime * 3f);
                 yield return null;
                 if (scaleTime<=0f)
                 {

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private int id;
-    //public int SlotID { get => id; }
+    public int slotID { get => id; }
     public Item item { get; private set; }
     [SerializeField] private Image image;
     private bool isDragging = false;
@@ -26,11 +26,12 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
         else
         {
-            UI_InvenManager.Instance.SortInvenSlot(id);
-            //this.id = -1;
-            this.item = null;
+            
             image.sprite = null;
             image.enabled = false;
+            UI_InvenManager.Instance.SortInvenSlot(id);
+            this.item = null;
+            gameObject.SetActive(false);
         }
        
     }
@@ -44,7 +45,8 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             isDragging = true;
             UI_InvenManager.Instance.dragImage.sprite = image.sprite;
             UI_InvenManager.Instance.dragImage.transform.position = eventData.position;
-            UI_InvenManager.Instance.dragImage.gameObject.SetActive(true);
+            if(!UI_InvenManager.Instance.dragImage.gameObject.activeInHierarchy)
+                UI_InvenManager.Instance.dragImage.gameObject.SetActive(true);
         }
         
     }
@@ -58,7 +60,11 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             switch (id)
             {
                 case 5:
+                    DragRayToSlide(id, eventData, false);
+                    break;
                 case 9:
+                    DragRayToSlide(id, eventData, false);
+                    break;
                 case 10:
                     DragRayToSlide(id, eventData, false);
                     break;
@@ -72,53 +78,72 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (UI_InvenManager.Instance.dragImage.gameObject.activeInHierarchy)
+        {
+            UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
+        }
+        isDragging = false;
         Ray ray = Camera.main.ScreenPointToRay(eventData.position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            if (hit.collider.TryGetComponent(out TouchPuzzleCanvas toggle))
+            if (hit.collider.TryGetComponent(out ToggleOBJ toggle))
             {
-                switch(id)
+                if (id.Equals(toggle.getObjectIndex))
+                {
+                    toggle.InteractionObject();
+                    SetinvenByID(id, true);
+                }
+            }
+            if (hit.collider.TryGetComponent(out TouchPuzzleCanvas puzzle))
+            {
+                switch (id)
                 {
                     case 5:
-                    case 9:
-                    case 10:
-                        if (Physics.Raycast(ray, out RaycastHit slideHit, TouchManager.Instance.getTouchDistance, LayerMask.NameToLayer("SlideObject")))
+                        if(DragRayToSlide(id, eventData, true))
                         {
-                            if (slideHit.collider.TryGetComponent(out HideSlide slide))
-                            {
-                                if (slide.IsInteracted(id, true))
-                                {
-                                    for (int i = 0; i < toggle.getInteractionIndex.Count; i++)
-                                    {
-                                        if (item.id.Equals(toggle.getInteractionIndex[i]))
-                                        {
-                                            DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
-
-                                            if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
-                                            {
-                                                UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
-                                            }
-                                            toggle.InteractionObject(item.id);
-                                            SetinvenByID(id, true);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+                            puzzle.InteractionObject(item.id);
+                            SetinvenByID(id, true);
                         }
                         break;
-                    default:
-                        for (int i = 0; i < toggle.getInteractionIndex.Count; i++)
+                    case 9:
+                        if (DragRayToSlide(id, eventData, true))
                         {
-                            if (item.id.Equals(toggle.getInteractionIndex[i]))
+                            puzzle.InteractionObject(item.id);
+                            SetinvenByID(id, true);
+                        }
+                        break;
+                    case 10:
+                        if (DragRayToSlide(id, eventData, true))
+                        {
+                            puzzle.InteractionObject(item.id);
+                            SetinvenByID(id, true);
+                        }
+                        break;
+                        //if (Physics.Raycast(ray, out RaycastHit slideHit, TouchManager.Instance.getTouchDistance, LayerMask.NameToLayer("SlideObject")))
+                        //{
+                        //    if (slideHit.collider.TryGetComponent(out HideSlide slide))
+                        //    {
+                        //        if (slide.IsInteracted(id, true))
+                        //        {
+                        //            for (int i = 0; i < puzzle.getInteractionIndex.Count; i++)
+                        //            {
+                        //                if (item.id.Equals(puzzle.getInteractionIndex[i]))
+                        //                {
+                        //                    puzzle.InteractionObject(item.id);
+                        //                    SetinvenByID(id, true);
+                        //                    break;
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
+                        //break;
+                    default:
+                        for (int i = 0; i < puzzle.getInteractionIndex.Count; i++)
+                        {
+                            if (item.id.Equals(puzzle.getInteractionIndex[i]))
                             {
-                                DataSaveManager.Instance.UpdateGameState(toggle.getFloorIndex, toggle.getInteractionIndex[i], true);
-
-                                if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
-                                {
-                                    UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
-                                }
-                                toggle.InteractionObject(item.id);
+                                puzzle.InteractionObject(item.id);
                                 SetinvenByID(id, true);
                                 break;
                             }
@@ -126,58 +151,61 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         break;
 
                 }
-               
+
             }
-            //if (hit.collider.TryGetComponent(out PlayOBJ puzzle))
-            //{
-            //    for (int i = 0; i < puzzle.getObjectIndex.Count; i++)
-            //    {
-            //        if (item.id.Equals(puzzle.getObjectIndex[i]))
-            //        {
-            //            DataSaveManager.Instance.UpdateGameState(puzzle.getFloorIndex, puzzle.getObjectIndex[i], true);
-                        
-            //            if (UI_InvenManager.Instance.dragImage.gameObject.activeSelf)
-            //            {
-            //                UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
-            //            }
-            //            puzzle.InteractionObject(item.id);
-            //            SetinvenByID(id, true);
-            //            break;
-            //        }
-            //    }
-            //}
         }
+        
     }
 
-    private void DragRayToSlide(int objId, PointerEventData eventData, bool touchEnd)
+    private bool DragRayToSlide(int objId, PointerEventData eventData, bool touchEnd)
     {
         Ray ray = Camera.main.ScreenPointToRay(eventData.position);
-        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, LayerMask.NameToLayer("SlideObject")))
+        LayerMask slideLayerMask = LayerMask.GetMask("SlideObject");
+        if (Physics.Raycast(ray, out RaycastHit hit, 5f, slideLayerMask))
         {
+            
             if (hit.collider.TryGetComponent(out HideSlide slide))
             {
-                if (slide.isClear) return;
+                if (slide.isClear) return false;
 
-                if (tempSlide != null&&!tempSlide.getObjIndex.Equals(id))
+                if (tempSlide != null)
                 {
-                    tempSlide.HideMaterial();
-                    tempSlide = slide;
-                    tempSlide.IsInteracted(id, touchEnd);
-                    return;
+                    if (touchEnd)
+                    {
+                        if(tempSlide.IsInteracted(id, touchEnd))
+                        {
+                            tempSlide = null;
+                            return true;
+                        }
+                        else
+                        {
+                            tempSlide = null;
+                            return false;
+                        }
+
+                    }
+                    else
+                    {
+                        if (!slide.Equals(tempSlide))
+                        {
+                            tempSlide.HideMaterial();
+                            tempSlide = slide;
+                            tempSlide.IsInteracted(id, touchEnd);
+                        }
+                    }
+                    return false;
                 }
-                if(tempSlide == null && tempSlide.getObjIndex.Equals(id))
+                else
                 {
-                    tempSlide = slide;
-                    tempSlide.IsInteracted(id, touchEnd);
-                    return;
+                    if (slide.getObjIndex.Equals(id))
+                    {
+                        tempSlide = slide;
+                        tempSlide.IsInteracted(id, touchEnd);
+                    }
                 }
-                
             }
-            else
-            {
-                tempSlide.HideMaterial();
-                tempSlide = null;
-            }
+           
         }
+        return false;
     }
 }

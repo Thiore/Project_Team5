@@ -6,11 +6,13 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
 {
     [Header("DataSaveManager 참고")]
     [SerializeField] private int floorIndex;
+    public int getFloorIndex { get => floorIndex; }
     [SerializeField] private int objectIndex;
+    public int getObjectIndex { get => objectIndex; }
 
-    [SerializeField] private int storyIndex;
+    [SerializeField] private int lockIndex;
+    [SerializeField] private int dontInteractionIndex;
 
-    private bool isInteracted = true;
 
     [Header("퍼즐 또는 퀵슬롯의 다른오브젝트와 상호작용이 필요하면 False")]
     [SerializeField] private bool isClear;
@@ -25,7 +27,7 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
         if (!isClear)
         {
             isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
-            isInteracted = false;
+            
         }
     }
 
@@ -49,37 +51,57 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
 
                     if (isClear)
                     {
+                        isTouching = !isTouching;
                         if (normalCamera != null)
                         {
-                            if (!normalCamera.activeInHierarchy || isInteracted)
+                            normalCamera.SetActive(isTouching);
+                            anim.SetBool(openAnim, isTouching);
+                            if (PlayerManager.Instance != null)
                             {
-                                isTouching = !isTouching;
-                                normalCamera.SetActive(isTouching);
-                                anim.SetBool(openAnim, isTouching);
+                                PlayerManager.Instance.SetBtn(!isTouching);
                             }
-                            else
+                            if (TouchManager.Instance != null)
                             {
-                                isInteracted = true;
-                                anim.SetBool(openAnim, isTouching);
+                                TouchManager.Instance.EnableMoveHandler(!isTouching);
                             }
-
+                        }
+                        else
+                        {
+                            anim.SetBool(openAnim, isTouching);
                         }
                     }
                     else
                     {
                         if (normalCamera != null)
                         {
-                            if (!normalCamera.activeInHierarchy)
+                            if (UI_InvenManager.Instance.HaveItem(objectIndex))
                             {
-                                normalCamera.SetActive(true);
-                                isTouching = true;
+                                if (!normalCamera.activeInHierarchy)
+                                {
+                                    normalCamera.SetActive(true);
+                                    if (PlayerManager.Instance != null)
+                                    {
+                                        PlayerManager.Instance.SetBtn(false);
+                                    }
+                                    if (TouchManager.Instance != null)
+                                    {
+                                        TouchManager.Instance.EnableMoveHandler(false);
+                                    }
+
+                                    UI_InvenManager.Instance.OpenQuickSlot();
+                                }
+                                else
+                                {
+                                    //"잠겨있어"라는 독백 대사 출력
+                                    DialogueManager.Instance.SetDialogue("Table_StoryB1", lockIndex);
+                                    closeCam_co = StartCoroutine(CloseInteractionCam_co());
+                                }
                             }
                             else
                             {
-                                //"잠겨있어"라는 독백 대사 출력
-                                DialogueManager.Instance.SetDialogue("Table_StoryB1", storyIndex);
-                                closeCam_co = StartCoroutine(CloseInteractionCam_co());
+                                DialogueManager.Instance.SetDialogue("Table_StoryB1", dontInteractionIndex);
                             }
+                               
 
                         }
                     }
@@ -96,8 +118,38 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
             yield return null;
         }
         normalCamera.SetActive(false);
-        isTouching = false;
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(true);
+        }
+        if (TouchManager.Instance != null)
+        {
+            TouchManager.Instance.EnableMoveHandler(true);
+        }
+
+        if (UI_InvenManager.Instance.isOpenQuick)
+        {
+            UI_InvenManager.Instance.CloseQuickSlot();
+        }
         closeCam_co = null;
+    }
+
+    public void InteractionObject()
+    {
+        DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex, true);
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(true);
+        }
+        if (TouchManager.Instance != null)
+        {
+            TouchManager.Instance.EnableMoveHandler(true);
+        }
+        if (UI_InvenManager.Instance.isOpenQuick)
+        {
+            UI_InvenManager.Instance.CloseQuickSlot();
+        }
+        normalCamera.SetActive(false);
     }
     
 }

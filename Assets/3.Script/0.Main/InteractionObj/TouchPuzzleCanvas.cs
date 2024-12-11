@@ -42,12 +42,13 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         if (!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
         {
             isClear = false;
-            isStarted = true;
+            isStarted = false;
         }
         else
         {
             isClear = true;
             isStarted = false;
+            isInteracted = true;
             if (interactionAnim.Length > 0)
             {
                 for (int i = 0; i < interactionAnim.Length; i++)
@@ -80,7 +81,7 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         }
     }
 
-    protected void Start()
+    protected virtual void Start()
     {
         if (TryGetComponent(out outline))
             outline.enabled = false;
@@ -123,9 +124,10 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
 
 
-    public void InteractionObject(int obj)
+    public virtual void InteractionObject(int id)
     {
-        interactionIndex.Remove(obj);
+        DataSaveManager.Instance.UpdateGameState(floorIndex, id, true);
+        interactionIndex.Remove(id);
         if(interactionIndex.Count.Equals(0))
         {
             isInteracted = true;

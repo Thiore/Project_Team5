@@ -19,11 +19,6 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
             gameObject.SetActive(true);
 
         }
-        else
-        {
-            ClueItem.Instance.childItem[id].gameObject.SetActive(false);
-        }
-
         this.id = item.id;
         ClueItem.Instance.SetPin(id);
             
