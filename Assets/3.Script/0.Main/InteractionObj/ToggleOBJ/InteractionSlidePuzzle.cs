@@ -110,7 +110,7 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
         }
         else
         {
-            slidePuzzle.SetParent(transform);
+            //slidePuzzle.SetParent(transform);
             missionStart.SetActive(false);
             if (anim != null)
             {
