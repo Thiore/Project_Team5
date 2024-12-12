@@ -9,11 +9,16 @@ public class Item3D : MonoBehaviour, ITouchable
 
     public Item item { get; protected set; }
 
+    [Header("확대시 기본 사이즈를 정해주세요")]
+    [Range(1f,50f)]
+    [SerializeField] private int scaling;
     [Header("조합아이템이 아니라면 0으로 해주세요")]
     [SerializeField] private int combineItem;
     [SerializeField] private GameObject combineObj;
 
     protected bool isGet;
+
+    
 
     private void Awake()
     {
@@ -66,6 +71,7 @@ public class Item3D : MonoBehaviour, ITouchable
         {
             transform.SetParent(ClueItem.Instance.transform);
             transform.localPosition = Vector3.zero;
+            transform.localScale *= scaling;
         }
         
 

@@ -2,45 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum eBallType
+{
+    Normal = 0,
+    Blue,
+    Red,
+    Green
+}
 public class BallObj : MonoBehaviour
 {
+    [SerializeField] private Transform startValue;
+    [SerializeField] private Transform endValue;
     public WallColor recentPassWall;
-    public Vector3 startPos;
+    public eBallType ballType;
     private bool isStart;
     private void Awake()
     {
         isStart = false;
+        
     }
 
-    private void OnTriggerExit(Collider wall)
+    private void OnEnable()
     {
-        if (wall.GetComponent<MazeWall>() != null)
+        transform.position = startValue.position;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("GameController"))
         {
-            if (recentPassWall.Equals(wall.GetComponent<MazeWall>().color)&&isStart)
+            Debug.Log("클리어");
+        }
+    }
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.TryGetComponent(out MazeWall wall))
+        {
+            if (recentPassWall.Equals(wall.color)&&isStart)
             {
-                if (wall.GetComponent<MazeWall>().GetExitDirection(this.transform))
+                if (wall.GetExitDirection(this.transform))
                 {
-                    recentPassWall = wall.GetComponent<MazeWall>().color;
+                    recentPassWall = wall.color;
                 }
                 else
                 {
-                    transform.position = startPos;
+                    transform.position = startValue.position;
                     isStart = false;
                 }
             }
             else
             {
                 isStart = true;
-                recentPassWall = wall.GetComponent<MazeWall>().color;
+                recentPassWall = wall.color;
             }
         }
     }
-}
-
-public enum WallColor
-{
-    Blue,
-    Red,
-    Green
 }
 

@@ -11,17 +11,17 @@ public class MazeBtn : MonoBehaviour
     public void enablePlane()
     {
         plane.SetActive(true);
-        plane.GetComponent<PlaneTiltController>().GetAccelerometer();
+        //plane.GetComponent<PlaneTiltController>().GetAccelerometer();
 
-        // ±ÇÇÑÀÌ ÀÖ´ÂÁö È®ÀÎ
+        // ê¶Œí•œì´ ìˆëŠ”ì§€ í™•ì¸
         if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(BodySensorsPermission))
         {
-            Debug.Log("BODY_SENSORS ±ÇÇÑÀÌ ¾ø½À´Ï´Ù. ¿äÃ» Áß...");
+            Debug.Log("BODY_SENSORS ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤. ìš”ì²­ ì¤‘...");
             UnityEngine.Android.Permission.RequestUserPermission(BodySensorsPermission);
         }
         else
         {
-            Debug.Log("BODY_SENSORS ±ÇÇÑÀÌ ÀÌ¹Ì ºÎ¿©µÇ¾ú½À´Ï´Ù.");
+            Debug.Log("BODY_SENSORS ê¶Œí•œì´ ì´ë¯¸ ë¶€ì—¬ë˜ì—ˆìŠµë‹ˆë‹¤.");
         }
     }
     

@@ -5,13 +5,13 @@ using UnityEngine.InputSystem;
 
 public class PlaneTiltController : MonoBehaviour
 {
-    [SerializeField] private float tiltMultiplier = 90f; // ±â¿ï±â Á¤µµ¸¦ Á¶ÀıÇÏ´Â ¹èÀ²
-    //[SerializeField] private float smoothSpeed = 0.5f; // È¸ÀüÀÇ ºÎµå·¯¿òÀ» Á¶ÀıÇÏ´Â ¼Óµµ
+    [SerializeField] private float tiltMultiplier = 90f; // ê¸°ìš¸ê¸° ì •ë„ë¥¼ ì¡°ì ˆí•˜ëŠ” ë°°ìœ¨
+    //[SerializeField] private float smoothSpeed = 0.5f; // íšŒì „ì˜ ë¶€ë“œëŸ¬ì›€ì„ ì¡°ì ˆí•˜ëŠ” ì†ë„
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject ball;
 
-    private Vector3 startTilt; // ÃÊ±â ±â¿ï±â °ª
-    private Quaternion targetRotation; // ¸ñÇ¥ È¸Àü °ª
+    private Vector3 startTilt; // ì´ˆê¸° ê¸°ìš¸ê¸° ê°’
+    private Quaternion targetRotation; // ëª©í‘œ íšŒì „ ê°’
     private InputAction planeAction;
 
     private void Awake()
@@ -43,7 +43,7 @@ public class PlaneTiltController : MonoBehaviour
     //{
     //    if (Accelerometer.current != null)
     //    {
-    //        // ½ÃÀÛ ½ÃÁ¡ÀÇ ±â¿ï±â °ªÀ» ÀúÀåÇÏ¿© ±âÁØÁ¡À¸·Î »ç¿ë
+    //        // ì‹œì‘ ì‹œì ì˜ ê¸°ìš¸ê¸° ê°’ì„ ì €ì¥í•˜ì—¬ ê¸°ì¤€ì ìœ¼ë¡œ ì‚¬ìš©
     //        startTilt = Accelerometer.current.acceleration.ReadValue();
     //    }
     //    else
@@ -54,17 +54,18 @@ public class PlaneTiltController : MonoBehaviour
 
     private void OnTiltStarted(InputAction.CallbackContext context)
     {
+        InputSystem.EnableDevice(Accelerometer.current);
         Debug.Log("start"+startTilt);
         startTilt = context.ReadValue<Vector3>();
         Debug.Log("start" + startTilt);
-        // ÇöÀç °¡¼Óµµ°è µ¥ÀÌÅÍ °¡Á®¿À±â
+        // í˜„ì¬ ê°€ì†ë„ê³„ ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
         Vector3 currentTilt = context.ReadValue<Vector3>();
         Vector3 tiltDelta = currentTilt - startTilt;
 
-        // ¸ñÇ¥ È¸Àü °ª ¼³Á¤
+        // ëª©í‘œ íšŒì „ ê°’ ì„¤ì •
         SetTargetRotation(tiltDelta);
 
-        // ¸ñÇ¥ È¸Àü °ªÀ¸·Î ºÎµå·´°Ô È¸Àü
+        // ëª©í‘œ íšŒì „ ê°’ìœ¼ë¡œ ë¶€ë“œëŸ½ê²Œ íšŒì „
         transform.rotation = targetRotation;
         ball.SetActive(true);
     }
@@ -72,14 +73,14 @@ public class PlaneTiltController : MonoBehaviour
     private void OnTiltPerformed(InputAction.CallbackContext context)
     {
         Debug.Log("performed" + startTilt);
-        // ÇöÀç °¡¼Óµµ°è µ¥ÀÌÅÍ °¡Á®¿À±â
+        // í˜„ì¬ ê°€ì†ë„ê³„ ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
         Vector3 currentTilt = context.ReadValue<Vector3>();
         Vector3 tiltDelta = currentTilt - startTilt;
 
-        // ¸ñÇ¥ È¸Àü °ª ¼³Á¤
+        // ëª©í‘œ íšŒì „ ê°’ ì„¤ì •
         SetTargetRotation(tiltDelta);
 
-        // ¸ñÇ¥ È¸Àü °ªÀ¸·Î ºÎµå·´°Ô È¸Àü
+        // ëª©í‘œ íšŒì „ ê°’ìœ¼ë¡œ ë¶€ë“œëŸ½ê²Œ íšŒì „
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime*0.6f);
         //cam.Render();
     }
@@ -94,30 +95,30 @@ public class PlaneTiltController : MonoBehaviour
 
     //    if (Accelerometer.current != null)
     //    {
-    //         ÇöÀç °¡¼Óµµ°è µ¥ÀÌÅÍ °¡Á®¿À±â
+    //         í˜„ì¬ ê°€ì†ë„ê³„ ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
     //        Vector3 currentTilt = Accelerometer.current.acceleration.ReadValue();
 
-    //         ÃÊ±â ±â¿ï±â¿ÍÀÇ Â÷ÀÌ°ª °è»ê
+    //         ì´ˆê¸° ê¸°ìš¸ê¸°ì™€ì˜ ì°¨ì´ê°’ ê³„ì‚°
     //        Vector2 tiltDelta = currentTilt - startTilt;
 
     //        x.text = "tilt X value : "+tiltDelta.x.ToString();
     //        y.text = "tile Z value : "+tiltDelta.y.ToString();
 
-    //         ¸ñÇ¥ È¸Àü °ª ¼³Á¤
+    //         ëª©í‘œ íšŒì „ ê°’ ì„¤ì •
     //        SetTargetRotation(tiltDelta);
 
-    //         ¸ñÇ¥ È¸Àü °ªÀ¸·Î ºÎµå·´°Ô È¸Àü
+    //         ëª©í‘œ íšŒì „ ê°’ìœ¼ë¡œ ë¶€ë“œëŸ½ê²Œ íšŒì „
     //        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
     //    }
     //}
 
     private void SetTargetRotation(Vector3 tiltDelta)
     {
-        // X¿Í ZÃà¿¡ ´ëÇØ ¸ñÇ¥ È¸Àü °ª °è»ê
+        // Xì™€ Zì¶•ì— ëŒ€í•´ ëª©í‘œ íšŒì „ ê°’ ê³„ì‚°
         float tiltX = Mathf.Clamp(-tiltDelta.x * tiltMultiplier, -15f, 15f);
         float tiltZ = Mathf.Clamp(-tiltDelta.y * tiltMultiplier, -15f, 15f);
 
-        // ¸ñÇ¥ È¸Àü °ªÀ» ¼³Á¤
+        // ëª©í‘œ íšŒì „ ê°’ì„ ì„¤ì •
         targetRotation = Quaternion.Euler(tiltX, 0, tiltZ);
     }
 

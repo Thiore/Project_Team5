@@ -2,36 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WallNode
+{
+    None,
+    Top,
+    Bottom,
+    Left,
+    Right
+}
+public enum WallColor
+{
+    Blue,
+    Red,
+    Green
+}
 public class MazeWall : MonoBehaviour
 {
-    public WallColor color;
-    public WallNode enterDirection;
-    public BallObj ball;
+    [SerializeField] private WallColor setColor;
+    public WallColor color { get => setColor; }
+    private WallNode enterDirection;
 
 
 
 
     private void OnTriggerEnter(Collider Ball)
     {
-        Vector3 direction = Ball.transform.position - transform.position; // »ó´ë À§Ä¡ °è»ê
-
-        // ¹æÇâ °áÁ¤
-        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z)) // xÃà ±âÁØÀ¸·Î ¹æÇâ ÆÇ´Ü
+        if(Ball.CompareTag("Ball"))
         {
-            if (direction.x > 0)
-                enterDirection = WallNode.Right;
-            else
-                enterDirection = WallNode.Left;
-        }
-        else // zÃà ±âÁØÀ¸·Î ¹æÇâ ÆÇ´Ü
-        {
-            if (direction.z > 0)
-                enterDirection = WallNode.Top;
-            else
-                enterDirection = WallNode.Bottom;
-        }
+            Vector3 direction = Ball.transform.position - transform.position; // ìƒëŒ€ ìœ„ì¹˜ ê³„ì‚°
 
-        Debug.Log("µé¾î¿Â ¹æÇâ: " + enterDirection);
+            // ë°©í–¥ ê²°ì •
+            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z)) // xì¶• ê¸°ì¤€ìœ¼ë¡œ ë°©í–¥ íŒë‹¨
+            {
+                if (direction.x > 0)
+                    enterDirection = WallNode.Right;
+                else
+                    enterDirection = WallNode.Left;
+            }
+            else // zì¶• ê¸°ì¤€ìœ¼ë¡œ ë°©í–¥ íŒë‹¨
+            {
+                if (direction.z > 0)
+                    enterDirection = WallNode.Top;
+                else
+                    enterDirection = WallNode.Bottom;
+            }
+        }
     }
 
     public bool GetExitDirection(Transform ball)
@@ -53,29 +68,20 @@ public class MazeWall : MonoBehaviour
                 exitDirection = WallNode.Bottom;
         }
 
-        Debug.Log("³ª°£ ¹æÇâ: " + exitDirection);
+        Debug.Log("ë‚˜ê°„ ë°©í–¥: " + exitDirection);
 
-        // µé¾î¿Â ¹æÇâ°ú ³ª°£ ¹æÇâ ºñ±³
+        // ë“¤ì–´ì˜¨ ë°©í–¥ê³¼ ë‚˜ê°„ ë°©í–¥ ë¹„êµ
         if (exitDirection == enterDirection)
         {
-            Debug.Log("°°Àº ¹æÇâÀ¸·Î ³ª°¨");
+            Debug.Log("ê°™ì€ ë°©í–¥ìœ¼ë¡œ ë‚˜ê°");
             return true;
         }
         else
         {
-            Debug.Log("´Ù¸¥ ¹æÇâÀ¸·Î ³ª°¨");
+            Debug.Log("ë‹¤ë¥¸ ë°©í–¥ìœ¼ë¡œ ë‚˜ê°");
             return false;
         }
 
 
     }
-}
-
-public enum WallNode
-{
-    None,
-    Top,
-    Bottom,
-    Left,
-    Right
 }
