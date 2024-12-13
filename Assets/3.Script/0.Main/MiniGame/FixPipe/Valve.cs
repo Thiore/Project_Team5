@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder.Shapes;
 
 
 
@@ -15,13 +16,13 @@ public class Valve : MonoBehaviour, ITouchable
     private float angle = 90f; // 90도 회전
     private bool isRotating;
 
-    private Valve nextValve;
-    private Pipe directionPipe;
+    [SerializeField] private Valve nextValve;
+    [SerializeField] private Pipe directionPipe;
     public Pipe DirectionPipe { get => directionPipe; }
 
-
-
-
+    private List<Pipe> pipes = new List<Pipe>();
+    private List<Valve> valves = new List<Valve>();
+   
     //angler z 받아서 enum 으로 방향판단?
     // 90 180 -90 0 
     public void OnTouchEnd(Vector2 position)
@@ -40,15 +41,51 @@ public class Valve : MonoBehaviour, ITouchable
     {
         if (other.gameObject.TryGetComponent(out Pipe pipe))
         {
-            pipe.SetIsImageready();
-            directionPipe = pipe;
- 
+            pipes.Add(pipe);
+
+            float Maxdistance = Mathf.Infinity;
+            if (pipes.Count > 0)
+            {
+                foreach (var pipeindex in pipes)
+                {
+                    float distance = Vector3.Distance(transform.position, pipeindex.transform.position);
+                    //float sqrDistance = (transform.position - pipeindex.transform.position).sqrMagnitude;
+                    if (distance < Maxdistance)
+                    {
+                        Maxdistance = distance;
+                        directionPipe = pipeindex;
+                    }
+
+                }
+            }
+
+            directionPipe.SetIsImageready();
+
         }
 
         if (other.gameObject.TryGetComponent(out Valve valve))
         {
-            nextValve = valve;
-            Debug.Log(nextValve.gameObject.name);
+            valves.Add(valve);
+
+            float Maxdistance = Mathf.Infinity;
+            if (valves.Count > 1)
+            {
+                foreach (var valvesindex in valves)
+                {
+                    float distance = Vector3.Distance(transform.position, valvesindex.transform.position);
+                    //float sqrDistance = (transform.position - pipeindex.transform.position).sqrMagnitude;
+                    if (distance < Maxdistance)
+                    {
+                        Maxdistance = distance;
+                        nextValve = valvesindex;
+                    }
+
+                }
+            }
+            else
+            {
+                nextValve = valve;
+            }
         }
     }
 
@@ -56,14 +93,18 @@ public class Valve : MonoBehaviour, ITouchable
     {
         if (other.gameObject.TryGetComponent(out Pipe pipe))
         {
-            pipe.SetIsImageready();
             directionPipe = null;
+            pipes.Remove(pipe);
+            pipe.SetIsImageready();
         }
+
         if (other.gameObject.TryGetComponent(out Valve valve))
         {
+            valves.Remove(valve);
             nextValve = null;
         }
     }
+
 
     public void RotateValve()
     {
@@ -89,6 +130,8 @@ public class Valve : MonoBehaviour, ITouchable
 
         pipegameManager.FindPath();
     }
+
+
 
 
     public void OnTouchHold(Vector2 position)

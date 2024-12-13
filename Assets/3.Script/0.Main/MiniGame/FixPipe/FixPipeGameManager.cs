@@ -33,13 +33,14 @@ public class FixPipeGameManager : MonoBehaviour
         // 이미 방문한거면 XXX
         if (!visitedValves.Add(valve)) return;
 
+        Valve nextvalve = valve.FindNextValve();
         // 현재 Vale 에 따른 Pipe 등록
-        if (valve.DirectionPipe != null)
+        if (nextvalve != null && valve.DirectionPipe != null)
         {
             pipes.Add(valve.DirectionPipe);
         }
 
-        Valve nextvalve = valve.FindNextValve();
+      
         if (nextvalve == null)
         {
             if(pipes.Count > 0)
@@ -63,7 +64,9 @@ public class FixPipeGameManager : MonoBehaviour
     {
         foreach (var pipe in pipes)
         {
+            if (pipe.IsImageReady.Equals(false)) break;
             pipe.PipeImageSet();
+            
         }
         pipes.Clear();
     }
