@@ -5,6 +5,7 @@ using UnityEngine;
 public class ForkLiftAnswer : MonoBehaviour
 {
     [SerializeField] private List<ForkLiftCollect> allCollectZones; //모든 정답 구역
+    
     private void Start()
     {
         //정답 상태 초기화
@@ -28,4 +29,6 @@ public class ForkLiftAnswer : MonoBehaviour
         //모든 구역이 정답 상태일 때
         Debug.Log("Finish All"); 
     }
+
+    
 }

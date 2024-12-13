@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ForkLiftTouch : MonoBehaviour, ITouchable
 {
@@ -60,6 +61,9 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
 
         if (hits.Length > 0)
         {
+            // Array.Sort를 사용하여 거리 기준으로 정렬
+            System.Array.Sort(hits, (a, b) => b.distance.CompareTo(a.distance));
+
             List<int> detectedIndices = new List<int>();
             ForkLiftCollect forkLiftCollect = null;
 
@@ -84,7 +88,8 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
 
             if (forkLiftCollect != null)
             {
-                forkLiftCollect.CheckCompletion(detectedIndices);
+                // 정렬된 인덱스 리스트를 ForkLiftCollect에 전달
+                forkLiftCollect.CheckCompletion(detectedIndices, detectedIndices.Last());
             }
         }
         else
@@ -93,7 +98,7 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
         }
     }
 
-    public void ResetPosition()
+    public void MyPosition()
     {
         transform.position = myPosition;
     }
