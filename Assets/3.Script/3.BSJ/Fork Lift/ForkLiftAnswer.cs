@@ -37,8 +37,7 @@ public class ForkLiftAnswer : MonoBehaviour
         //모든 구역이 정답 상태일 때
         Debug.Log("Finish All");
         cutScene.SetActive(true);
-        gameObject.SetActive(false);
-        originalobj.SetActive(true);
+        Invoke("ObjTiem", 2f);
     }
 
 
@@ -57,7 +56,7 @@ public class ForkLiftAnswer : MonoBehaviour
             cam_3D.Priority = 10;
 
             // 3D 카메라를 Perspective로 설정
-            cam_3D.m_Lens.Orthographic = false;
+            //cam_3D.m_Lens.Orthographic = false;
 
         }
         // 3D 카메라가 활성화 상태일 때 2D로 전환
@@ -68,9 +67,17 @@ public class ForkLiftAnswer : MonoBehaviour
             cam_2D.Priority = 10;
 
             // 2D 카메라를 Orthographic으로 설정
-            cam_2D.m_Lens.Orthographic = true;
+            //cam_2D.m_Lens.Orthographic = true;
 
             Debug.Log("2D 카메라로 전환됨 (Orthographic 모드)");
         }
+    }
+
+    //활성화 / 비활성화 Invoke용 메서드
+    public void ObjTiem()
+    {
+        Debug.Log("인보크 안 들어와유");
+        gameObject.SetActive(false);
+        originalobj.SetActive(true);
     }
 }
