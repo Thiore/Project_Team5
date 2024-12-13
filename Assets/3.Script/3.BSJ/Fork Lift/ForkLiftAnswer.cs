@@ -8,6 +8,7 @@ public class ForkLiftAnswer : MonoBehaviour
     [SerializeField] private List<ForkLiftCollect> allCollectZones; //모든 정답 구역
     [SerializeField] private CinemachineVirtualCamera cam_2D; //파레트를 옮기는 2D 카메라
     [SerializeField] private CinemachineVirtualCamera cam_3D; //정답 구역 앞 카메라
+    [SerializeField] private CinemachineBrain cinemachineBrain; //Blend 변경을 위한 참조
 
 
     private void Start()
@@ -40,6 +41,9 @@ public class ForkLiftAnswer : MonoBehaviour
     //퍼즐 카메라 바꾸기
     public void SwitchCam()
     {
+        //Blend 시간 설정 (시네머신 변환 간 딜레이 없애기 위해 사용)
+        cinemachineBrain.m_DefaultBlend.m_Time = 0;
+
         //2D가 켜져 있고 3D가 꺼져 있을 때 (정답 구역 앞 카메라로 전환 시)
         if (cam_2D.Priority > cam_3D.Priority)
         {
