@@ -9,7 +9,8 @@ public class ForkLiftAnswer : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera cam_2D; //파레트를 옮기는 2D 카메라
     [SerializeField] private CinemachineVirtualCamera cam_3D; //정답 구역 앞 카메라
     [SerializeField] private CinemachineBrain cinemachineBrain; //Blend 변경을 위한 참조
-
+    [SerializeField] private GameObject cutScene; //정답일 때, 컷씬 재생
+    [SerializeField] private GameObject originalobj; //퍼즐 완료 후, 미리 배치 해놨던 탑
 
     private void Start()
     {
@@ -34,7 +35,10 @@ public class ForkLiftAnswer : MonoBehaviour
             }
         }
         //모든 구역이 정답 상태일 때
-        Debug.Log("Finish All"); 
+        Debug.Log("Finish All");
+        cutScene.SetActive(true);
+        gameObject.SetActive(false);
+        originalobj.SetActive(true);
     }
 
 
