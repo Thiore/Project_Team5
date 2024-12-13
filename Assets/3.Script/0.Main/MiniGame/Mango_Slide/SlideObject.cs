@@ -19,7 +19,7 @@ public class SlideObject : MonoBehaviour, ITouchable
 
     [SerializeField] private int boxIndex;
 
-    [Range(0.0001f,0.1f)]
+    [Range(0.001f,0.1f)]
     [SerializeField] private float moveSpeed;
     protected virtual void Awake()
     {
@@ -43,7 +43,7 @@ public class SlideObject : MonoBehaviour, ITouchable
         switch (boxIndex)
         {
             case 0:
-                Vector3 bigBoxSize = new Vector3(2.1f, 1f, 2.1f)*0.5f;
+                Vector3 bigBoxSize = new Vector3(2.1f, 1f, 2.1f)*0.49f;
                 bigBoxSize = Vector3.Scale(bigBoxSize, transform.lossyScale);
                 // OverlapBox를 사용하여 특정 위치에서 겹침 여부 확인
                 overlappingColliders = Physics.OverlapBox(
@@ -54,7 +54,7 @@ public class SlideObject : MonoBehaviour, ITouchable
                 );
                 break;
             case 1:
-                Vector3 longBoxSize = new Vector3(2.1f, 1f, 1f) * 0.5f;
+                Vector3 longBoxSize = new Vector3(2.1f, 1f, 1f) * 0.49f;
                 longBoxSize = Vector3.Scale(longBoxSize, transform.lossyScale);
                 // OverlapBox를 사용하여 특정 위치에서 겹침 여부 확인
                 overlappingColliders = Physics.OverlapBox(
@@ -65,7 +65,7 @@ public class SlideObject : MonoBehaviour, ITouchable
                 );
                 break;
             case 2:
-                Vector3 smallBoxSize = new Vector3(1f, 1f, 1f) * 0.5f;
+                Vector3 smallBoxSize = new Vector3(1f, 1f, 1f) * 0.49f;
                 smallBoxSize = Vector3.Scale(smallBoxSize, transform.lossyScale);
                 // OverlapBox를 사용하여 특정 위치에서 겹침 여부 확인
                 overlappingColliders = Physics.OverlapBox(

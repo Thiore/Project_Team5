@@ -13,6 +13,7 @@ public enum eBallType
 public class BallObj : MonoBehaviour
 {
     [SerializeField] private Transform startValue;
+    public Transform getStartValue { get => startValue; }
     [SerializeField] private Transform endValue;
     public WallColor recentPassWall;
     public eBallType ballType;
@@ -23,10 +24,6 @@ public class BallObj : MonoBehaviour
         
     }
 
-    private void OnEnable()
-    {
-        transform.position = startValue.position;
-    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("GameController"))

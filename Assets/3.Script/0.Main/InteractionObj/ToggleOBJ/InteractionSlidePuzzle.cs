@@ -7,11 +7,11 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
     public GameObject selectedObject { get; private set; } // 현재 터치된 오브젝트
 
     [SerializeField] private Transform correctZone;
-    [SerializeField] private Transform slidePuzzle;
-    private float rayDistance =0.15f; // Ray의 길이
+    [SerializeField] private Transform cubeParents;
+    private float rayDistance =0.2f; // Ray의 길이
 
     private bool isTouching;
-    
+    LayerMask checkLayer;
 
     [SerializeField]
     private float rayOffset;// Ray 시작 위치의 오프셋 배열을 인스펙터에서 설정 가능하게 함
@@ -37,6 +37,7 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
                     break;
             }
         }
+        checkLayer = LayerMask.GetMask("SlideObject");
         isTouching = false;
     }
 
@@ -56,14 +57,21 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
     {
         selectedObject = null;
     }
+    public void ResetPuzzle()
+    {
+        for(int i = 0; i < cubeParents.transform.childCount;++i)
+        {
+            cubeParents.transform.GetChild(i).TryGetComponent(out SlideObject obj);
+            obj.InitPosition();
+        }
+    }
     public void CheckAllRays(GameObject checkObj)
     {
-        Vector3[] rayOffsets = new Vector3[4];
         
         foreach (Vector3 offset in rayOffsets)
         {
             // y 방향으로 Ray 발사
-            if (Physics.Raycast(offset, correctZone.up, out RaycastHit hit, rayDistance,LayerMask.NameToLayer("SlideObject")))
+            if (Physics.Raycast(offset, correctZone.up, out RaycastHit hit, rayDistance, checkLayer))
             {
                 // 충돌한 오브젝트와 일치하지 않으면 false 반환
                 if (!hit.collider.gameObject.Equals(checkObj))
@@ -214,7 +222,7 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
 
                     if (anim != null)
                     {
-                        anim.SetBool(openAnim, true);
+                        anim.SetBool(openAnim, isTouching);
                     }
                 }
                

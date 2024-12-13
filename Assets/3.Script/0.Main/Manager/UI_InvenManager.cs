@@ -240,11 +240,13 @@ public class UI_InvenManager : MonoBehaviour
             {
                 case 10:
                     items[2].GetItem();
+                    DataSaveManager.Instance.UpdateItemState(2);
+                    SortInvenSlot(slot.item.id);
+                    SortInvenSlot(id);
                     break;
 
             }
-            SortInvenSlot(slot.item.id);
-            SortInvenSlot(id);
+            
 
             
             //OpenInventory();
@@ -335,7 +337,7 @@ public class UI_InvenManager : MonoBehaviour
     }
     public bool HaveItem(int id)
     {
-        if (!quickSlots.Find(x => x.item.id == id))
+        if (!invenSlots.Find(x => x.item.id == id))
         {
             return false;
         }

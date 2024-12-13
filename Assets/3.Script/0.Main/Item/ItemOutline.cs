@@ -32,11 +32,15 @@ public class ItemOutline : MonoBehaviour
         {
             if (cam != null)
             {
-                if (cam.activeSelf)
+                if (cam.activeInHierarchy)
                 {
                     if (outline != null)
                     {
                         outline.enabled = true;
+                    }
+                    else
+                    {
+                        outline.enabled = false;
                     }
                 }
 

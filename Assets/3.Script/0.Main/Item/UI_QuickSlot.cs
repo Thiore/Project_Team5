@@ -13,6 +13,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private bool isDragging = false;
 
     private HideSlide tempSlide = null;
+    private int donInteractionIndex = 37;
     
 
     public void SetinvenByID(int id, bool isInteraction = false)
@@ -93,6 +94,11 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     toggle.InteractionObject();
                     SetinvenByID(id, true);
                 }
+                else
+                {
+                    DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
+                    return;
+                }
             }
             if (hit.collider.TryGetComponent(out TouchPuzzleCanvas puzzle))
             {
@@ -103,6 +109,11 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         {
                             puzzle.InteractionObject(item.id);
                             SetinvenByID(id, true);
+                            return;
+                        }
+                        else
+                        {
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
                         }
                         break;
                     case 9:
@@ -110,6 +121,11 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         {
                             puzzle.InteractionObject(item.id);
                             SetinvenByID(id, true);
+                            return;
+                        }
+                        else
+                        {
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
                         }
                         break;
                     case 10:
@@ -117,27 +133,13 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         {
                             puzzle.InteractionObject(item.id);
                             SetinvenByID(id, true);
+                            return;
+                        }
+                        else
+                        {
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
                         }
                         break;
-                        //if (Physics.Raycast(ray, out RaycastHit slideHit, TouchManager.Instance.getTouchDistance, LayerMask.NameToLayer("SlideObject")))
-                        //{
-                        //    if (slideHit.collider.TryGetComponent(out HideSlide slide))
-                        //    {
-                        //        if (slide.IsInteracted(id, true))
-                        //        {
-                        //            for (int i = 0; i < puzzle.getInteractionIndex.Count; i++)
-                        //            {
-                        //                if (item.id.Equals(puzzle.getInteractionIndex[i]))
-                        //                {
-                        //                    puzzle.InteractionObject(item.id);
-                        //                    SetinvenByID(id, true);
-                        //                    break;
-                        //                }
-                        //            }
-                        //        }
-                        //    }
-                        //}
-                        //break;
                     default:
                         for (int i = 0; i < puzzle.getInteractionIndex.Count; i++)
                         {
@@ -145,9 +147,10 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                             {
                                 puzzle.InteractionObject(item.id);
                                 SetinvenByID(id, true);
-                                break;
+                                return;
                             }
                         }
+                        DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
                         break;
 
                 }

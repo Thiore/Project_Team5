@@ -11,7 +11,16 @@ public class Item3D : MonoBehaviour, ITouchable
 
     [Header("확대시 기본 사이즈를 정해주세요")]
     [Range(1f,50f)]
-    [SerializeField] private int scaling;
+    [SerializeField] private float scaling;
+    [Header("확대시의 Pivot을 정해주세요")]
+    [Range(-2f, 2f)]
+    [SerializeField] private float pivotX;
+    [Range(-2f, 2f)]
+    [SerializeField] private float pivotY;
+    [Range(-2f, 2f)]
+    [SerializeField] private float pivotZ;
+    private Vector3 scalingPivot;
+
     [Header("조합아이템이 아니라면 0으로 해주세요")]
     [SerializeField] private int combineItem;
     [SerializeField] private GameObject combineObj;
@@ -24,6 +33,7 @@ public class Item3D : MonoBehaviour, ITouchable
     {
         isGet = false;
         item = DataSaveManager.Instance.itemData[id];
+        scalingPivot = new Vector3(pivotX, pivotY, pivotZ);
         
     }
     private void Start()
@@ -71,13 +81,15 @@ public class Item3D : MonoBehaviour, ITouchable
         {
             transform.SetParent(ClueItem.Instance.transform);
             transform.localPosition = Vector3.zero;
+            transform.Translate(scalingPivot);
             transform.localScale *= scaling;
+            if (!isLoading)
+                DataSaveManager.Instance.UpdateItemState(id);
         }
         
 
         isGet = true;
-        if(!isLoading)
-            DataSaveManager.Instance.UpdateItemState(id);
+        
 
         UI_InvenManager.Instance.GetItemByID(item, isLoading,this);
     }

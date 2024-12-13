@@ -40,7 +40,8 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
         if (eventData.pointerDrag.gameObject.TryGetComponent(out UI_InventorySlot item))
         {
             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
-            UI_InvenManager.Instance.Combine(item, id);
+            if(item.item.elementindex>0)
+                UI_InvenManager.Instance.Combine(item, id);
 
         }
     }
