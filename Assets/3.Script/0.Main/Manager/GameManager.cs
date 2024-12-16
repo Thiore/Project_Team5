@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public enum eGameType
 {
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private string B1F;
 
-
+    private CinemachineBrain brain;
     private void Awake()
     {
 
@@ -43,18 +44,37 @@ public class GameManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        //SceneManager.sceneLoaded += OnGameManagerLoaded;
+        SceneManager.sceneLoaded += OnGameManagerLoaded;
         //FadeIn();  
     }
     private void OnApplicationQuit()
     {
-        //SceneManager.sceneLoaded -= OnGameManagerLoaded;
+        SceneManager.sceneLoaded -= OnGameManagerLoaded;
     }
 
-    //private void OnGameManagerLoaded(Scene scene, LoadSceneMode mode)
-    //{
-        
-    //}
+    private void OnGameManagerLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Camera.main.TryGetComponent(out brain);
+    }
+
+    public void NextFrameChangeBlendTime(float blendTime)
+    {
+        StartCoroutine(ChangeBlendTime_co(blendTime));
+    }
+    public void CurrentFrameChangeBlendTime(float blendTime)
+    {
+        brain.m_DefaultBlend.m_Time = blendTime;
+    }
+    public void ResetBlendTime()
+    {
+        StartCoroutine(ChangeBlendTime_co(2f));
+    }
+    private IEnumerator ChangeBlendTime_co(float blendTime)
+    {
+        yield return null;
+        brain.m_DefaultBlend.m_Time = blendTime;
+        yield break;
+    }
     public void LoadGame()
     {
         gameType = eGameType.LoadGame;

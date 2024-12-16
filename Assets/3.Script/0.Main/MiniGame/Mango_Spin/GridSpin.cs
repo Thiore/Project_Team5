@@ -1,57 +1,81 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
-public class GridSpin : MonoBehaviour
+public class GridSpin : MonoBehaviour, ITouchable
 {
-    public float rotationSpeed = 2f; // È¸Àü ¼Óµµ
-    private Quaternion targetRotation; // ¸ñÇ¥ È¸Àü°ª
-    private ReadInputData readInput;
-    private bool isRotating = false; // È¸Àü Áß ¿©ºÎ È®ÀÎ
-    public bool couldRotate = true;
+    public float rotationSpeed = 2f; // íšŒì „ ì†ë„
+    private Vector3 targetRotation; // ëª©í‘œ íšŒì „ê°’
 
-    // È¸Àü ¿Ï·á ½Ã ½ÇÇàÇÒ ÀÌº¥Æ®
+    // íšŒì „ ì™„ë£Œ ì‹œ ì‹¤í–‰í•  ì´ë²¤íŠ¸
     public event Action OnRotationComplete;
+
+    private Coroutine rotate_co = null; // íšŒì „ ì¤‘ ì—¬ë¶€ í™•ì¸
 
     private void Start()
     {
-        readInput = GetComponent<ReadInputData>();
-        if (readInput == null) Debug.Log("readinput null");
-        targetRotation = transform.rotation; // ÇöÀç È¸ÀüÀ» ÃÊ±â ¸ñÇ¥°ªÀ¸·Î ¼³Á¤
+        targetRotation = transform.localEulerAngles; // í˜„ì¬ íšŒì „ì„ ì´ˆê¸° ëª©í‘œê°’ìœ¼ë¡œ ì„¤ì •
     }
 
-    private void Update()
+    private IEnumerator Rotate_co()
     {
-        // È¸Àü ÁßÀÌ ¾Æ´Ò ¶§¸¸ ÅÍÄ¡ °¨Áö
-        if (!isRotating && readInput.isTouch && couldRotate)
-        {
-            Rotate();
-            //readInput.TouchTap();
-        }
+        float rotationTime = 0f;
 
-        // ¸ñÇ¥ È¸ÀüÀ¸·Î ºÎµå·´°Ô È¸Àü
-        if (isRotating)
-        {
-            transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        Vector3 curRotation = transform.localEulerAngles;
 
-            // ¸ñÇ¥ È¸Àü¿¡ ±Ù»çÇÏ¸é Á¤È®È÷ ¸ñÇ¥ È¸ÀüÀ¸·Î ¼³Á¤
-            if (Quaternion.Angle(transform.rotation, targetRotation) < 0.1f)
+        // ëª©í‘œ íšŒì „ìœ¼ë¡œ ë¶€ë“œëŸ½ê²Œ íšŒì „
+        while(true)
+        {
+            rotationTime += Time.deltaTime * rotationSpeed;
+            transform.localEulerAngles = Vector3.Lerp(curRotation, targetRotation, Mathf.Clamp(rotationTime,0f,1f));
+            if (rotationTime >= 1f)
             {
-                transform.rotation = targetRotation;
-                transform.position = new Vector3(transform.position.x, 0.25f, transform.position.z);
-                isRotating = false;
-
-                // È¸Àü ¿Ï·á ½Ã ÀÌº¥Æ® È£Ãâ
+                // ëª©í‘œ íšŒì „ì— ê·¼ì‚¬í•˜ë©´ ì •í™•íˆ ëª©í‘œ íšŒì „ìœ¼ë¡œ ì„¤ì •
+                transform.localEulerAngles = targetRotation;
+               
+                // íšŒì „ ì™„ë£Œ ì‹œ ì´ë²¤íŠ¸ í˜¸ì¶œ
                 OnRotationComplete?.Invoke();
+                break;
             }
+            yield return null;
         }
+        rotate_co = null;
+        yield break;
+
+        
+
     }
 
-    // 90µµ È¸Àü ¼³Á¤
+    // 90ë„ íšŒì „ ì„¤ì •
     private void Rotate()
     {
-        targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + 90, 0);
-        isRotating = true; // È¸Àü ½ÃÀÛ
+        targetRotation = transform.localEulerAngles + new Vector3(0f, 90f, 0f);
     }
 
+    public void OnTouchStarted(Vector2 position)
+    {
     }
+
+    public void OnTouchHold(Vector2 position)
+    {
+    }
+
+    public void OnTouchEnd(Vector2 position)
+    {
+        // íšŒì „ ì¤‘ì´ ì•„ë‹ ë•Œë§Œ í„°ì¹˜ ê°ì§€
+        if (rotate_co == null)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(position);
+            if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+            {
+                if (hit.collider.gameObject.Equals(gameObject))
+                {
+                    Rotate();
+                    rotate_co = StartCoroutine(Rotate_co());
+                }
+                    
+            }
+                
+        }
+    }
+}

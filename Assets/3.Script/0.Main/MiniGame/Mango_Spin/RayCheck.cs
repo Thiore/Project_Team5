@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class RayCheck : MonoBehaviour
 {
-    public TileRay startingTileRay; // ½ÃÀÛ ¿ÀºêÁ§Æ®ÀÇ TileRay ÄÄÆ÷³ÍÆ®
-    public List<GameObject> targetObjects; // ¸ğµç Å¸°Ù ¿ÀºêÁ§Æ® ¸®½ºÆ®
-    public bool isComplete;
+    public TileRay startingTileRay; // ì‹œì‘ ì˜¤ë¸Œì íŠ¸ì˜ TileRay ì»´í¬ë„ŒíŠ¸
+    public List<GameObject> targetObjects; // ëª¨ë“  íƒ€ê²Ÿ ì˜¤ë¸Œì íŠ¸ ë¦¬ìŠ¤íŠ¸
+    public bool isComplete { get; private set; }
     public List<GameObject> connectedObjects;
 
-    // ¿¬°á »óÅÂ¸¦ È®ÀÎÇÏ´Â ¸Ş¼­µå
+    // ì—°ê²° ìƒíƒœë¥¼ í™•ì¸í•˜ëŠ” ë©”ì„œë“œ
     public bool CheckConnections()
     {
         if (startingTileRay == null)
@@ -18,30 +18,30 @@ public class RayCheck : MonoBehaviour
             return false;
         }
 
-        connectedObjects.Clear(); // Å¬·¡½º º¯¼ö ¿¬°á ¸ñ·ÏÀ» ÃÊ±âÈ­
+        connectedObjects.Clear(); // í´ë˜ìŠ¤ ë³€ìˆ˜ ì—°ê²° ëª©ë¡ì„ ì´ˆê¸°í™”
         RecursiveConnectionCheck(startingTileRay, null, connectedObjects);
 
-        // ½ÃÀÛ Å¸ÀÏÀÇ ¿¬°áÀ» È®ÀÎ
+        // ì‹œì‘ íƒ€ì¼ì˜ ì—°ê²°ì„ í™•ì¸
         isComplete = AreAllTargetsConnected(connectedObjects);
         return isComplete;
     }
 
-    // Àç±ÍÀûÀ¸·Î ¿¬°á »óÅÂ È®ÀÎ (¾ç¹æÇâ ¿¬°á ÇÊ¼ö)
+    // ì¬ê·€ì ìœ¼ë¡œ ì—°ê²° ìƒíƒœ í™•ì¸ (ì–‘ë°©í–¥ ì—°ê²° í•„ìˆ˜)
     private void RecursiveConnectionCheck(TileRay tileRay, GameObject previousObject, List<GameObject> connectedObjects)
     {
-        connectedObjects.Add(tileRay.gameObject); // ÇöÀç ¿ÀºêÁ§Æ®¸¦ ¿¬°á ¸ñ·Ï¿¡ Ãß°¡
+        connectedObjects.Add(tileRay.gameObject); // í˜„ì¬ ì˜¤ë¸Œì íŠ¸ë¥¼ ì—°ê²° ëª©ë¡ì— ì¶”ê°€
 
-        List<GameObject> hitObjects = tileRay.GetHitObject(); // ÇöÀç ¿ÀºêÁ§Æ®°¡ °¨ÁöÇÑ ¿¬°áµÈ ¿ÀºêÁ§Æ® ¸ñ·Ï
+        List<GameObject> hitObjects = tileRay.GetHitObject(); // í˜„ì¬ ì˜¤ë¸Œì íŠ¸ê°€ ê°ì§€í•œ ì—°ê²°ëœ ì˜¤ë¸Œì íŠ¸ ëª©ë¡
 
         foreach (var hitObject in hitObjects)
         {
             Debug.Log($"hit object : {hitObject.name}");
-            // ÇöÀç hitObject°¡ ÀÌÀü ¿ÀºêÁ§Æ®¿ÍÀÇ ¾ç¹æÇâ ¿¬°áÀ» È®ÀÎ
+            // í˜„ì¬ hitObjectê°€ ì´ì „ ì˜¤ë¸Œì íŠ¸ì™€ì˜ ì–‘ë°©í–¥ ì—°ê²°ì„ í™•ì¸
             TileRay hitTileRay = hitObject.GetComponent<TileRay>();
 
             if (hitTileRay != null && !connectedObjects.Contains(hitObject))
             {
-                // hitObject°¡ ÀÌÀü ¿ÀºêÁ§Æ®¿Í ¿¬°áÀÌ µÇ¾î ÀÖ´ÂÁö È®ÀÎ
+                // hitObjectê°€ ì´ì „ ì˜¤ë¸Œì íŠ¸ì™€ ì—°ê²°ì´ ë˜ì–´ ìˆëŠ”ì§€ í™•ì¸
                 if (previousObject == null || IsMutuallyConnected(hitTileRay, tileRay.gameObject))
                 {
                     RecursiveConnectionCheck(hitTileRay, tileRay.gameObject, connectedObjects);
@@ -50,14 +50,14 @@ public class RayCheck : MonoBehaviour
         }
     }
 
-    // ¾ç¹æÇâ ¿¬°á È®ÀÎ
+    // ì–‘ë°©í–¥ ì—°ê²° í™•ì¸
     private bool IsMutuallyConnected(TileRay tileRay, GameObject targetObject)
     {
         List<GameObject> hitObjects = tileRay.GetHitObject();
         return hitObjects.Contains(targetObject);
     }
 
-    // ¿¬°áµÈ ¿ÀºêÁ§Æ®°¡ ¸ğµç Å¸°Ù ¿ÀºêÁ§Æ®¿Í ÀÏÄ¡ÇÏ´ÂÁö È®ÀÎ
+    // ì—°ê²°ëœ ì˜¤ë¸Œì íŠ¸ê°€ ëª¨ë“  íƒ€ê²Ÿ ì˜¤ë¸Œì íŠ¸ì™€ ì¼ì¹˜í•˜ëŠ”ì§€ í™•ì¸
     private bool AreAllTargetsConnected(List<GameObject> connectedObjects)
     {
         foreach (var target in targetObjects)
@@ -66,13 +66,13 @@ public class RayCheck : MonoBehaviour
             {
                 //Debug.Log("Not all target objects are connected.");
                 isComplete = false;
-                return false; // Å¸°Ù ¿ÀºêÁ§Æ® Áß ¿¬°áµÇÁö ¾ÊÀº °ÍÀÌ ÀÖÀ½
+                return false; // íƒ€ê²Ÿ ì˜¤ë¸Œì íŠ¸ ì¤‘ ì—°ê²°ë˜ì§€ ì•Šì€ ê²ƒì´ ìˆìŒ
             }
         }
 
         Debug.Log("All target objects are successfully connected!");
         this.connectedObjects = connectedObjects;
         isComplete = true;
-        return true; // ¸ğµç Å¸°Ù ¿ÀºêÁ§Æ®°¡ ¿¬°áµÊ
+        return true; // ëª¨ë“  íƒ€ê²Ÿ ì˜¤ë¸Œì íŠ¸ê°€ ì—°ê²°ë¨
     }
 }

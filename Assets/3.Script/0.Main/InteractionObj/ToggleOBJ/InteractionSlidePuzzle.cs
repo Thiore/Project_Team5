@@ -142,7 +142,6 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
         missionExit.SetActive(false);
         isTouching = true;
         interactionCam.SetActive(true);
-
     }
 
     public override void InteractionObject(int id)

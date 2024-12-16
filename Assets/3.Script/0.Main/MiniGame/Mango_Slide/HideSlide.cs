@@ -47,6 +47,7 @@ public class HideSlide : SlideObject
                 if (touchEnd)
                 {
                     meshRenderer.material.color = fillColor;
+                    isClear = true;
                     return true;
                 }
                 else
@@ -57,8 +58,10 @@ public class HideSlide : SlideObject
                 
             }
             meshRenderer.material.color = hideColor;
+            return false;
         }
-        return false;
+        return true;
+        
     }
     public void HideMaterial()
     {

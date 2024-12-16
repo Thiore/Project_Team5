@@ -31,15 +31,15 @@ public class TileRay : MonoBehaviour
     }
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        foreach(var ray in rayList)
-        {
-            Vector3 direction = GetRayDirection(ray);
-            Gizmos.DrawRay(origin+new Vector3(0,0.25f,0), direction.normalized * 1f);
-        }
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    foreach (var ray in rayList)
+    //    {
+    //        Vector3 direction = GetRayDirection(ray);
+    //        Gizmos.DrawRay(origin + transform.up*0.1f, direction.normalized * 0.1f);
+    //    }
+    //}
 
     public List<GameObject> GetHitObject()
     {
@@ -47,12 +47,12 @@ public class TileRay : MonoBehaviour
         foreach (var ray in rayList)
         {
             Vector3 direction = GetRayDirection(ray);
-            // Raycast ½ÇÇàÇÏ¿© Ãæµ¹ÇÑ °´Ã¼°¡ ÀÖ´ÂÁö È®ÀÎ
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, 1f))
+            // Raycast ì‹¤í–‰í•˜ì—¬ ì¶©ëŒí•œ ê°ì²´ê°€ ìˆëŠ”ì§€ í™•ì¸
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, 0.06f))
             {
                 if (hit.collider != null)
                 {
-                    // Ãæµ¹ÇÑ ¿ÀºêÁ§Æ®¸¦ ¸®½ºÆ®¿¡ Ãß°¡
+                    // ì¶©ëŒí•œ ì˜¤ë¸Œì íŠ¸ë¥¼ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
                     hitObjects.Add(hit.collider.gameObject);
                 }
             }

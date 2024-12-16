@@ -83,6 +83,7 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
                 isInteracted = true;
             }
         }
+       
     }
 
     protected virtual void Start()

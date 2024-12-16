@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,15 +6,11 @@ public class RedConnection : MonoBehaviour, ITouchable
 {
     [SerializeField] private LayerMask layer_mask; // Raycast에 사용할 레이어 마스크
 
-    public UnityEvent<Vector2> onTouchStarted; // 터치 시작 이벤트
-    public UnityEvent<Vector2> onTouchHold;    // 터치 유지 이벤트
-    public UnityEvent<Vector2> onTouchEnd;     // 터치 종료 이벤트
-
     private Ray ray;               // 화면 좌표를 월드 좌표로 변환하는 Ray
     private RaycastHit hit;        // Ray가 맞은 대상 정보
     private LineRenderer line_renderer = null; // LineRenderer 컴포넌트
 
-    private bool drag_state = false; // 드래그 중인지 여부를 확인하는 플래그
+    private bool dragState = false; // 드래그 중인지 여부를 확인하는 플래그
 
     private void Awake()
     {
@@ -24,8 +20,6 @@ public class RedConnection : MonoBehaviour, ITouchable
 
     public void OnTouchStarted(Vector2 position)
     {
-        onTouchStarted?.Invoke(position); // 터치 시작 시 이벤트 실행
-
         // 현재 오브젝트의 태그가 "RedConnection"인 경우에만 실행
         if (CompareTag("RedConnection"))
         {
@@ -45,15 +39,13 @@ public class RedConnection : MonoBehaviour, ITouchable
             line_renderer.SetPosition(0, transform.position);
             line_renderer.SetPosition(1, transform.position);
 
-            drag_state = true; // 드래그 상태 활성화
+            dragState = true; // 드래그 상태 활성화
         }
     }
 
     public void OnTouchHold(Vector2 position)
     {
-        onTouchHold?.Invoke(position); // 터치 유지 시 이벤트 실행
-
-        if (drag_state)
+        if (dragState)
         {
             // 화면 좌표를 월드 좌표로 변환하여 Ray 생성
             ray = Camera.main.ScreenPointToRay(position);
@@ -73,16 +65,14 @@ public class RedConnection : MonoBehaviour, ITouchable
 
                 // LineRenderer 비활성화 및 드래그 상태 종료
                 line_renderer.enabled = false;
-                drag_state = false;
+                dragState = false;
             }
         }
     }
 
     public void OnTouchEnd(Vector2 position)
     {
-        onTouchEnd?.Invoke(position); // 터치 종료 시 이벤트 실행
-
-        if (drag_state)
+        if (dragState)
         {
             // Ray가 "Black" 태그를 가진 오브젝트와 충돌했으면
             if (hit.collider.CompareTag("Black"))
@@ -96,7 +86,7 @@ public class RedConnection : MonoBehaviour, ITouchable
             {
                 // LineRenderer 비활성화 및 드래그 상태 종료
                 line_renderer.enabled = false;
-                drag_state = false;
+                dragState = false;
             }
         }
     }

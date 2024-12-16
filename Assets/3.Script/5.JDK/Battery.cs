@@ -1,33 +1,43 @@
-
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Battery : MonoBehaviour, ITouchable
 {
-    public UnityEvent<Vector2> onTouchStarted;
-    public UnityEvent<Vector2> onTouchHold;
-    public UnityEvent<Vector2> onTouchEnd;
-
+    [SerializeField] private bool isConnection;
+    public bool isRed;
+    public bool isBlack;
     public void OnTouchStarted(Vector2 position)
     {
-        onTouchStarted?.Invoke(position);
     }
 
     public void OnTouchHold(Vector2 position)
     {
-        onTouchHold?.Invoke(position);
     }
 
     public void OnTouchEnd(Vector2 position)
     {
-        onTouchEnd?.Invoke(position);
-    }
-
-    public void Turn()
-    {
-        if (transform.GetChild(0).gameObject.activeInHierarchy && transform.GetChild(1).gameObject.activeInHierarchy)
+        if (!isConnection&&!isRed && !isBlack)
         {
-            transform.Rotate(Vector3.up, 90, Space.Self);
+            Ray ray = Camera.main.ScreenPointToRay(position);
+            if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+            {
+                if (hit.collider.gameObject.Equals(gameObject))
+                {
+                    transform.Rotate(Vector3.up, 90f, Space.Self);
+                }
+            }
+        }
+    }
+    public void ConnectingColor(eConnection connectingColor, bool isConnect = false)
+    {
+        switch (connectingColor)
+        {
+            case eConnection.Red:
+                isRed = isConnect;
+                break;
+            case eConnection.Black:
+                isBlack = isConnect;
+                break;
         }
     }
 }
