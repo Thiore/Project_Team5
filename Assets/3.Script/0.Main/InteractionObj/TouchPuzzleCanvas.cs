@@ -104,7 +104,9 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         if(btnExit != null)
             btnExit.SetActive(false);
 
-        isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
+        if(!isClear)
+            isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
+
         if (isClear && isRemoveClue)
         {
             if (UI_InvenManager.Instance.HaveItem(removeClueId))

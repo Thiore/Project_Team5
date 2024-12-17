@@ -41,6 +41,10 @@ public class InteractionPowerBox : TouchPuzzleCanvas
                 PlayerManager.Instance.SetBtn(true);
             }
             TouchManager.Instance.EnableMoveHandler(true);
+            if (anim != null)
+            {
+                anim.SetBool(openAnim, false);
+            }
         }
         else
         {

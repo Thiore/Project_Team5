@@ -10,62 +10,83 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] private Fuse dragfuse;
     [SerializeField] private Image image;
     public Image Image { get => image; }
-    private bool isdragging;
+    private bool isDragging;
     private Vector3 tartgetpos;
+
+    private void Awake()
+    {
+        isDragging = false;
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        dragfuse.gameObject.SetActive(true);
-        dragfuse.SetFuseColor(efuseNum);
-        image.enabled = false;
+        if(!isDragging)
+        {
+            dragfuse.gameObject.SetActive(true);
+            dragfuse.SetFuseColor(efuseNum);
+            image.enabled = false;
+            isDragging = true;
+        }
+        
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        isdragging = true;
-        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
-        if (Physics.Raycast(ray, out RaycastHit hit, 50f, LayerMask.GetMask("SlideWall")))
+        if(isDragging)
         {
-            tartgetpos = hit.point;
-            dragfuse.gameObject.transform.position = tartgetpos;
+            Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+            if (Physics.Raycast(ray, out RaycastHit hit, 50f, LayerMask.GetMask("Area")))
+            {
+                tartgetpos = hit.point;
+                dragfuse.gameObject.transform.position = tartgetpos;
+            }
+            else
+            {
+                image.enabled = true;
+                dragfuse.gameObject.SetActive(false);
+                isDragging = false;
+            }
         }
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("EndDrag");
-        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
-        if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~(LayerMask.GetMask("SlideWall"))))
+        if(isDragging)
         {
-            //Debug.Log(hit.collider.gameObject.name);
-            if (hit.collider.gameObject.name.Equals("EmptyFuse"))
+            Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+            if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~(LayerMask.GetMask("Area"))))
             {
-                if (hit.transform.GetChild(0).TryGetComponent(out ResultFuse fuse))
+                if (hit.collider.CompareTag("EmptyFuse"))
                 {
-                    if (!hit.transform.GetChild(0).gameObject.activeSelf)
+                    if (hit.transform.GetChild(0).TryGetComponent(out ResultFuse fuse))
                     {
-                        hit.transform.GetChild(0).gameObject.SetActive(true);
-                        fuse.SetFuseColor(efuseNum);
-                        fuse.GetSlot(this);
+                        if (!hit.transform.GetChild(0).gameObject.activeInHierarchy)
+                        {
+                            hit.transform.GetChild(0).gameObject.SetActive(true);
+                            fuse.SetFuseColor(efuseNum);
+                            fuse.GetSlot(this);
+                        }
+                        else
+                        {
+                            image.enabled = true;
+                        }
                     }
-                    else
-                    {
-                        image.enabled = true;
-                    }
+                }
+                else
+                {
+                    image.enabled = true;
                 }
             }
             else
             {
                 image.enabled = true;
             }
-        }
-        else
-        {
-            image.enabled = true;
-        }
 
-        dragfuse.gameObject.SetActive(false);
-        isdragging = false;
+            dragfuse.gameObject.SetActive(false);
+            isDragging = false;
+        }
+        
     }
 
 

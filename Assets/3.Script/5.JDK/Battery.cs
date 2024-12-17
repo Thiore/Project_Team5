@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,13 @@ public class Battery : MonoBehaviour, ITouchable
     [SerializeField] private bool isConnection;
     public bool isRed;
     public bool isBlack;
+
+    public bool isStart;
+
+
+    public event Action CheckBattery;
+
+    
     public void OnTouchStarted(Vector2 position)
     {
     }
@@ -39,5 +47,11 @@ public class Battery : MonoBehaviour, ITouchable
                 isBlack = isConnect;
                 break;
         }
+        if(isBlack&&isRed)
+        {
+            CheckBattery?.Invoke();
+        }
     }
+
+    
 }

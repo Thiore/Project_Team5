@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FuseResultBtn : MonoBehaviour, ITouchable
 {
-    [SerializeField] FuseSwithManager fuseSwithManager;
+    [SerializeField] private InteractionFuseBox fuseSwithManager;
 
     public void OnTouchEnd(Vector2 position)
     {

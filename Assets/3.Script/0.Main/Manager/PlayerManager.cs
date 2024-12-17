@@ -32,12 +32,18 @@ public class PlayerManager : MonoBehaviour
     public Transform mainPlayer;
     public Transform playerCam;
 
+    [SerializeField] private GameObject opening;
+
     private int btnCount;
 
     private void Awake()
     {
         Instance = this;
         btnCount = 0;
+        if(GameManager.Instance.gameType.Equals(eGameType.NewGame))
+        {
+            opening.SetActive(true);
+        }
     }
 
     public void SetBtn(bool isOn)

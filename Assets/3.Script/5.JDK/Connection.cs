@@ -24,11 +24,14 @@ public class Connection : MonoBehaviour, ITouchable
 
     private LineCollider childCollider;
 
+    public bool isStart;
+
     private void Awake()
     {
         isDrag = false;
         TryGetComponent(out line);
         transform.parent.TryGetComponent(out battery);
+        
         transform.GetChild(0).TryGetComponent(out childCollider);
         line.enabled = false;
         connectingObj = null;
@@ -36,30 +39,34 @@ public class Connection : MonoBehaviour, ITouchable
     }
     public void OnTouchStarted(Vector2 position)
     {
-        if(!isDrag)
+        if(battery.isStart)
         {
-            if (connectingObj != null)
+            if (!isDrag)
             {
-                if (connectingObj.line.enabled)
+                if (connectingObj != null)
                 {
-                    connectingObj.line.enabled = false;
-                    connectingObj.transform.GetChild(0).gameObject.SetActive(false);
-                    connectingObj.getBattery.ConnectingColor(connectingObj.getConnectionColor, false);
+                    if (connectingObj.line.enabled)
+                    {
+                        connectingObj.line.enabled = false;
+                        connectingObj.transform.GetChild(0).gameObject.SetActive(false);
+                        connectingObj.getBattery.ConnectingColor(connectingObj.getConnectionColor, false);
+                    }
+
+                    connectingObj.connectingObj = null;
+                    connectingObj = null;
                 }
-                    
-                connectingObj.connectingObj = null;
-                connectingObj = null;
+                // LineRenderer 활성화
+                line.enabled = true;
+                battery.ConnectingColor(connectionColor, false);
+                // LineRenderer의 시작 위치를 현재 오브젝트의 위치로 설정
+                line.SetPosition(0, transform.position);
+                line.SetPosition(1, transform.position);
+                //LineRenderer의 충돌체 활성화
+                childCollider.gameObject.SetActive(true);
+                isDrag = true;// 드래그 상태 활성화
             }
-            // LineRenderer 활성화
-            line.enabled = true;
-            battery.ConnectingColor(connectionColor, false);
-            // LineRenderer의 시작 위치를 현재 오브젝트의 위치로 설정
-            line.SetPosition(0, transform.position);
-            line.SetPosition(1, transform.position);
-            //LineRenderer의 충돌체 활성화
-            childCollider.gameObject.SetActive(true);
-            isDrag = true;// 드래그 상태 활성화
         }
+        
         
     }
     public void OnTouchHold(Vector2 position)
