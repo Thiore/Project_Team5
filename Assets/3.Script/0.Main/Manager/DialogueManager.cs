@@ -154,9 +154,9 @@ public class DialogueManager : MonoBehaviour
         UpdateSpeaker();
 
         // 버튼 상태를 처리
-        StartCoroutine(HandleDialogueButton());
+        StartCoroutine(HandleDialogueButton_co());
     }
-    private IEnumerator HandleDialogueButton()
+    private IEnumerator HandleDialogueButton_co()
     {
         // 버튼 및 움직임 비활성화
         if (PlayerManager.Instance != null)
