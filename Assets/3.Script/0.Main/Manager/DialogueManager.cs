@@ -21,6 +21,7 @@ public class DialogueManager : MonoBehaviour
     //스토리 관련 UI Text
     public Button dialogueButton; //대사 버튼 (터치 시, 사라지게 하기 위함)
     public TMP_Text dialogueText; //대사 표시할 TextMeshPro
+    public int currentIndex = 0; //현재 인덱스 추적 변수
     
     //인벤토리 관련 Text
     private TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
@@ -86,12 +87,14 @@ public class DialogueManager : MonoBehaviour
 
         StartCoroutine(StoryBottonState_co());
     }
+
+    //대사 Text 업데이트
     private void UpdateDialogueText(string text)
     {
         dialogueText.text = text;
 
     }
-
+    //대화창 활성/비활성화
     private IEnumerator StoryBottonState_co()
     {
         if (PlayerManager.Instance != null)
@@ -116,6 +119,36 @@ public class DialogueManager : MonoBehaviour
         //7초 후 자동 비활성화(터치로 비활성화되지 않았을 경우)
         //yield return new WaitForSeconds(4f); //3초 대기 후 4초 더 대기
         //dialogueButton.gameObject.SetActive(false);
+    }
+
+    //플레이어와 AI간 대화
+    public void TalkStoryStart(int startIndex, int endIndex, string tableName, int aiIndex)
+    {
+        // 대사 시작 인덱스로 초기화
+        currentIndex = startIndex;
+
+        for (int i = startIndex; i <= endIndex; i++)
+        {
+            // 짝수 인덱스 => AI
+            if (i % 2 == aiIndex)
+            {
+                //AI 대사 처리
+                SetDialogue(tableName, i);
+            }
+            else // 홀수 인덱스 => 플레이어
+            {
+                SetDialogue(tableName, i);
+            }
+            //진행 중인 인덱스 업데이트
+            currentIndex = i;
+            
+        }
+    }
+
+    //현재 대화의 인덱스를 반환
+    public int GetCurrentIndex()
+    {
+        return currentIndex;
     }
 
     private void OnButtonClicked()
