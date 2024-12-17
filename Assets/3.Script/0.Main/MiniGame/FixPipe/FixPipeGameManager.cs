@@ -8,6 +8,7 @@ public class FixPipeGameManager : MonoBehaviour
     [SerializeField] HashSet<Valve> visitedValves;
     [SerializeField] private Valve startvalve;
     [SerializeField] private Valve endvalve;
+    [SerializeField] private GameObject imageobj;
 
     private List<Pipe> pipes;
 
@@ -15,59 +16,61 @@ public class FixPipeGameManager : MonoBehaviour
     {
         visitedValves = new HashSet<Valve>();
         pipes = new List<Pipe>();
-
     }
 
     public void FindPath()
     {
+        //다 지우고 다시 그리는 작업 
         visitedValves.Clear();
         pipes.Clear();
-        FindPath(startvalve);
-    }
-    // 처음부터 벨브를 지나가며 확인
-
-    public void FindPath(Valve valve)
-    {
-        if (valve == null) return; // 초기 조건 확인
-
-        // 이미 방문한거면 XXX
-        if (!visitedValves.Add(valve)) return;
-
-        Valve nextvalve = valve.FindNextValve();
-        // 현재 Vale 에 따른 Pipe 등록
-        if (nextvalve != null && valve.DirectionPipe != null)
+        for (int i = 0; i < imageobj.transform.childCount; i++)
         {
-            pipes.Add(valve.DirectionPipe);
-        }
-
-      
-        if (nextvalve == null)
-        {
-            if(pipes.Count > 0)
+            if (imageobj.transform.GetChild(i).gameObject.activeSelf)
             {
-                PipesDrawAndClear();
-                return;
+                imageobj.transform.GetChild(i).gameObject.SetActive(false);
             }
         }
-        else
-        {
-            //파이프 리무브도 생각
-            pipes.Add(valve.DirectionPipe);
-        }
-   
 
+        FindPath(startvalve);
+    }
+
+    // 다음 밸브를 확인하며 연속되게 되는지 확인 
+
+    // 이미지를 그리는건 어쨋든 다음 벨브
+    public void FindPath(Valve valve)
+    {
+        if (!visitedValves.Add(valve)) return;
+        if (valve == null) return;
+
+        valve.ShootRay();
+        Valve nextvalve = valve.FindNextValve();
+        
+        if (valve.DirectionPipe != null)
+        {
+            if(valve.DirectionPipe.gameObject.TryGetComponent(out ConnectPipe conpipe))
+            {
+                if (!conpipe.IsConnect)
+                {
+                    conpipe.ShotPipeImageSet();
+                    return;
+                }
+            }
+            valve.DirectionPipe.PipeImageSet();
+        }
+
+        Debug.Log("호출");
         FindPath(nextvalve);
     }
 
 
-    private void PipesDrawAndClear()
+    private void PipesDraw()
     {
-        foreach (var pipe in pipes)
+        if (pipes.Count > 0)
         {
-            if (pipe.IsImageReady.Equals(false)) break;
-            pipe.PipeImageSet();
-            
+            foreach (var pipe in pipes)
+            {
+                pipe.PipeImageSet();
+            }
         }
-        pipes.Clear();
     }
 }

@@ -12,7 +12,7 @@ public class Pipe : MonoBehaviour
     [SerializeField] protected Image pipeimage;
     [SerializeField] protected MeshRenderer render;
 
-    protected bool isImageready;
+    [SerializeField] protected bool isImageready;
     public bool IsImageReady => isImageready;
 
     public void SetIsImageready()
@@ -22,18 +22,15 @@ public class Pipe : MonoBehaviour
 
     private void Awake()
     {
-        TryGetComponent(out render);   
+        TryGetComponent(out render);
     }
 
     public virtual void PipeImageSet()
     {
-        if (isImageready && render.enabled)
+        if (!pipeimage.gameObject.activeSelf)
         {
             pipeimage.gameObject.SetActive(true);
         }
-        else
-        {
-            pipeimage.gameObject.SetActive(false);
-        }
     }
+
 }

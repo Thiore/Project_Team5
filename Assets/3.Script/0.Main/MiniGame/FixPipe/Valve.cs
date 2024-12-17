@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
-
-
+using static UnityEngine.UI.Image;
 
 public class Valve : MonoBehaviour, ITouchable
 {
@@ -20,11 +18,22 @@ public class Valve : MonoBehaviour, ITouchable
     [SerializeField] private Pipe directionPipe;
     public Pipe DirectionPipe { get => directionPipe; }
 
-    private List<Pipe> pipes = new List<Pipe>();
-    private List<Valve> valves = new List<Valve>();
-   
-    //angler z 받아서 enum 으로 방향판단?
-    // 90 180 -90 0 
+    // Ray 관련 변수
+    [SerializeField] private float rayDistance = 2.5f; // Ray 거리
+    [SerializeField] LayerMask targetLayer;
+
+    [SerializeField] private GameObject parentpipe;
+
+    private void Awake()
+    {
+        parentpipe = gameObject.transform.parent.parent.gameObject;
+    }
+
+    private void Start()
+    {
+        ShootRay();
+    }
+
     public void OnTouchEnd(Vector2 position)
     {
         Ray ray = Camera.main.ScreenPointToRay(position);
@@ -37,78 +46,65 @@ public class Valve : MonoBehaviour, ITouchable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.TryGetComponent(out Pipe pipe))
-        {
-            pipes.Add(pipe);
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.TryGetComponent(out Pipe pipe))
+    //    {
+    //        directionPipe = pipe;
+    //        pipes.Add(pipe);
 
-            float Maxdistance = Mathf.Infinity;
-            if (pipes.Count > 0)
-            {
-                foreach (var pipeindex in pipes)
-                {
-                    float distance = Vector3.Distance(transform.position, pipeindex.transform.position);
-                    //float sqrDistance = (transform.position - pipeindex.transform.position).sqrMagnitude;
-                    if (distance < Maxdistance)
-                    {
-                        Maxdistance = distance;
-                        directionPipe = pipeindex;
-                    }
+    //        float Maxdistance = Mathf.Infinity;
+    //        if (pipes.Count > 1)
+    //        {
+    //            foreach (Pipe pipeindex in pipes)
+    //            {
+    //                float sqrDistance = (transform.position - pipeindex.transform.position).sqrMagnitude;
+    //                if (sqrDistance < Maxdistance)
+    //                {
+    //                    Maxdistance = sqrDistance;
+    //                    directionPipe = pipeindex;
 
-                }
-            }
+    //                }
+    //            }
+    //            pipes.Clear();
+    //        }
+    //    }
 
-            directionPipe.SetIsImageready();
+    //    if (other.gameObject.TryGetComponent(out Valve valve))
+    //    {
+    //        nextValve = valve;
+    //        valves.Add(valve);
 
-        }
-
-        if (other.gameObject.TryGetComponent(out Valve valve))
-        {
-            valves.Add(valve);
-
-            float Maxdistance = Mathf.Infinity;
-            if (valves.Count > 1)
-            {
-                foreach (var valvesindex in valves)
-                {
-                    float distance = Vector3.Distance(transform.position, valvesindex.transform.position);
-                    //float sqrDistance = (transform.position - pipeindex.transform.position).sqrMagnitude;
-                    if (distance < Maxdistance)
-                    {
-                        Maxdistance = distance;
-                        nextValve = valvesindex;
-                    }
-
-                }
-            }
-            else
-            {
-                nextValve = valve;
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.TryGetComponent(out Pipe pipe))
-        {
-            directionPipe = null;
-            pipes.Remove(pipe);
-            pipe.SetIsImageready();
-        }
-
-        if (other.gameObject.TryGetComponent(out Valve valve))
-        {
-            valves.Remove(valve);
-            nextValve = null;
-        }
-    }
-
+    //        float Maxdistance = Mathf.Infinity;
+    //        if (valves.Count > 1)
+    //        {
+    //            foreach (Valve valvesindex in valves)
+    //            {
+    //                float sqrDistance = (transform.position - valvesindex.transform.position).sqrMagnitude;
+    //                if (sqrDistance < Maxdistance)
+    //                {
+    //                    Maxdistance = sqrDistance;
+    //                    nextValve = valvesindex;                       
+    //                }
+    //            }
+    //            valves.Clear();
+    //        }
+    //    }
+    //}
 
     public void RotateValve()
     {
-        StartCoroutine(RotateValve_co());
+        StartCoroutine(RotataAndRay());
+        pipegameManager.FindPath();
+    }
+
+    private IEnumerator RotataAndRay()
+    {
+        // 회전 코루틴 실행 및 완료 대기
+        yield return StartCoroutine(RotateValve_co());
+
+        // 코루틴이 끝난 후 Ray 실행
+        pipegameManager.FindPath();
     }
 
     private IEnumerator RotateValve_co()
@@ -127,10 +123,59 @@ public class Valve : MonoBehaviour, ITouchable
 
         transform.rotation = endRotation; // 정확한 최종 값 설정
         isRotating = false;
-
-        pipegameManager.FindPath();
     }
 
+    public void ShootRay()
+    {
+        if(nextValve != null) nextValve = null;
+        if(directionPipe != null) directionPipe = null;
+        // Ray 방향을 객체의 로컬 방향으로 설정
+        Vector3 direction = transform.right; // Raycast 방향
+
+        // Ray 생성 및 발사
+        Ray ray = new Ray(parentpipe.transform.position, direction);
+
+        RaycastHit[] hits = Physics.RaycastAll(parentpipe.transform.position, direction, rayDistance, targetLayer);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject.TryGetComponent(out Pipe pipe))
+            {
+                directionPipe = pipe;
+
+                if (directionPipe != null)
+                {
+                    float pipesqrDistance = (parentpipe.transform.position - pipe.transform.position).sqrMagnitude;
+                    float directsqrDistance1 = (parentpipe.transform.position - directionPipe.transform.position).sqrMagnitude;
+                    if (pipesqrDistance < directsqrDistance1)
+                    {
+                        directionPipe = pipe;
+                    }
+                }
+            }
+
+            if (hit.collider.gameObject.TryGetComponent(out Valve valve))
+            {
+                if (nextValve == null)
+                {
+                    nextValve = valve;
+                }
+                else
+                {
+                    float valvesqrDistance = (transform.position - valve.transform.position).sqrMagnitude;
+                    float nextvalvesqrDistance1 = (transform.position - nextValve.transform.position).sqrMagnitude;
+                    if (valvesqrDistance < nextvalvesqrDistance1)
+                    {
+                        nextValve = valve;
+                    }
+                }
+            }
+        }
+
+        // 디버그용 SphereCast 시각화
+        Debug.DrawRay(parentpipe.transform.position, direction * 2f, Color.red); // 중심선
+
+    }
 
 
 

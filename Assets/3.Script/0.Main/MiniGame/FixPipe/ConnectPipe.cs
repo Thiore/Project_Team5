@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ConnectPipe : Pipe, ITouchable
 {
     private bool isconnect = false;
+    public bool IsConnect { get => isconnect; }
     [SerializeField] private Image monitorImage;
     [SerializeField] private Image shortpipeimage;
 
@@ -43,6 +44,11 @@ public class ConnectPipe : Pipe, ITouchable
         if (isconnect)
         {
             base.PipeImageSet();
+
+            if (shortpipeimage.gameObject.activeSelf)
+            {
+                shortpipeimage.gameObject.SetActive(false);
+            }
         }
         else
         {
@@ -50,11 +56,14 @@ public class ConnectPipe : Pipe, ITouchable
             {
                 shortpipeimage.gameObject.SetActive(true);
             }
-            else
-            {
-                shortpipeimage.gameObject.SetActive(false);
-            }
-                           
+        }
+    }
+
+    public void ShotPipeImageSet()
+    {
+        if (!shortpipeimage.gameObject.activeSelf)
+        {
+            shortpipeimage.gameObject.SetActive(true);
         }
     }
 
