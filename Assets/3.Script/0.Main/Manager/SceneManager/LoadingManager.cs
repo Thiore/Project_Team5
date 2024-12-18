@@ -15,7 +15,8 @@ public class LoadingManager : MonoBehaviour
 
     private bool isDataLoaded;
 
-    [SerializeField] private TMP_Text loadingProgress;
+    [SerializeField] private TMP_Text loadingProgressText;
+    [SerializeField] private Slider loadingProgressSlide;
 
     [SerializeField] private Image fadePanel;
     [Range(0.1f, 5f)]
@@ -108,13 +109,15 @@ public class LoadingManager : MonoBehaviour
             if (asyncLoad.progress >= 0.9f)
             {
                 int delayTime = 0;
-                loadingProgress.text = "90%";
-                while (delayTime < 10)
+                loadingProgressText.text = "70%";
+                loadingProgressSlide.value = 70f;
+                while (delayTime < 30)
                 {
                     // 추가 딜레이를 주고 allowSceneActivation 설정
                     yield return new WaitForSeconds(0.1f); // 최소 대기 시간
-                    delayTime += 1;
-                    loadingProgress.text = $"{90 + delayTime}%";
+                    delayTime += UnityEngine.Random.Range(0, 3);
+                    loadingProgressText.text = $"{70 + delayTime}%";
+                    loadingProgressSlide.value = 70f + delayTime;
 
                 }
                 isLoadingScene = false;
@@ -136,7 +139,8 @@ public class LoadingManager : MonoBehaviour
             }
             else
             {
-                loadingProgress.text = $"{asyncLoad.progress * 100:F0}%";
+                loadingProgressText.text = $"{asyncLoad.progress * 100:F0}%";
+                loadingProgressSlide.value = asyncLoad.progress * 100f;
             }
 
             yield return null;
@@ -164,8 +168,10 @@ public class LoadingManager : MonoBehaviour
         isFadeIn = true;
         if (isLoadingScene&&isLoading)
         {
-            loadingProgress.text = "0%";
-            loadingProgress.gameObject.SetActive(true);
+            loadingProgressText.text = "0%";
+            loadingProgressSlide.value = 0f;
+            loadingProgressText.gameObject.SetActive(true);
+            loadingProgressSlide.gameObject.SetActive(true);
         }
 
         fade_co = StartCoroutine(Fade_co(-1f, isLoading));
@@ -219,8 +225,10 @@ public class LoadingManager : MonoBehaviour
                     }
                     else
                     {
-                        if (loadingProgress.gameObject.activeSelf)
-                            loadingProgress.gameObject.SetActive(false);
+                        if (loadingProgressText.gameObject.activeInHierarchy)
+                            loadingProgressText.gameObject.SetActive(false);
+                        if (loadingProgressSlide.gameObject.activeInHierarchy)
+                            loadingProgressSlide.gameObject.SetActive(false);
                     }
                 }
                 isFadeOut = false;

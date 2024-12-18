@@ -33,6 +33,8 @@ public class Connection : MonoBehaviour, ITouchable
         transform.parent.TryGetComponent(out battery);
         
         transform.GetChild(0).TryGetComponent(out childCollider);
+        Debug.Log(line.endWidth);
+        Debug.Log(line.startWidth);
         line.enabled = false;
         connectingObj = null;
 
