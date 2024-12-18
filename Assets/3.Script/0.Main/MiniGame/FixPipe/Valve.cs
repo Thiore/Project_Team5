@@ -147,8 +147,6 @@ public class Valve : MonoBehaviour, ITouchable
         {
             if (hit.collider.gameObject.TryGetComponent(out Pipe pipe))
             {
-                directionPipe = pipe;
-
                 if (directionPipe != null)
                 {
                     float pipesqrDistance = (parentpipe.transform.position - pipe.transform.position).sqrMagnitude;
@@ -158,12 +156,14 @@ public class Valve : MonoBehaviour, ITouchable
                         directionPipe = pipe;
                     }
                 }
+                else
+                {
+                    directionPipe = pipe;
+                }
             }
 
             if (hit.collider.gameObject.TryGetComponent(out Valve valve))
             {
-                nextValve = valve;
-
                 if(nextValve != null)
                 {
                     var newvaledistran = Vector3.Distance(transform.position, valve.transform.position);
@@ -175,6 +175,10 @@ public class Valve : MonoBehaviour, ITouchable
                         nextValve = valve;
                         Debug.Log("바뀌었고");
                     }
+                }
+                else
+                {
+                    nextValve = valve;
                 }
             }
         }

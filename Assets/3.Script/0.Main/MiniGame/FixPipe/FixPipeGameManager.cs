@@ -39,6 +39,10 @@ public class FixPipeGameManager : MonoBehaviour
     // 이미지를 그리는건 어쨋든 다음 벨브
     public void FindPath(Valve valve)
     {
+        if (valve.Equals(endvalve)) // && 필수 경로 추가 
+        {
+            // 최종 종료 조건 
+        }
         if (!visitedValves.Add(valve)) return;
         if (valve == null) return;
 
