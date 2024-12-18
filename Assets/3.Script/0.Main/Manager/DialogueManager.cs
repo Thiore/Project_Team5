@@ -347,4 +347,32 @@ public class DialogueManager : MonoBehaviour
                 return "ko"; // 기본값 (영어)
         }
     }
+
+
+    /// <summary>
+    /// 한글자씩 출력되는 메서드
+    /// </summary>
+    /// <param name="tmp">사용할 TextMeshPro를 넣어주세요</param>
+    /// <param name="text">text를 입력해주세요</param>
+    /// <param name="waitSecond">시간초를 입력해주세요
+    /// <para>기본값 : 0.1f, 0 : null</para></param>
+    /// <returns></returns>
+    public IEnumerator ReavealText(TMP_Text tmp, string text, float waitSecond = 0.1f)
+    {
+        WaitForSeconds wait;
+        if (waitSecond.Equals(0f))
+        {
+            wait = null;
+        }
+        else
+        {
+            wait = new WaitForSeconds(waitSecond);
+        }
+        tmp.text = string.Empty;
+        for(int i = 0; i < text.Length;++i)
+        {
+            tmp.text += text[i];
+            yield return wait;
+        }
+    }
 }
