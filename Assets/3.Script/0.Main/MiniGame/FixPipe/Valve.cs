@@ -34,6 +34,12 @@ public class Valve : MonoBehaviour, ITouchable
         ShootRay();
     }
 
+    private void Update()
+    {
+        Vector3 direction = transform.right;
+        Debug.DrawRay(parentpipe.transform.position, direction * rayDistance, Color.red); // 중심선
+    }
+
     public void OnTouchEnd(Vector2 position)
     {
         Ray ray = Camera.main.ScreenPointToRay(position);
@@ -156,17 +162,18 @@ public class Valve : MonoBehaviour, ITouchable
 
             if (hit.collider.gameObject.TryGetComponent(out Valve valve))
             {
-                if (nextValve == null)
+                nextValve = valve;
+
+                if(nextValve != null)
                 {
-                    nextValve = valve;
-                }
-                else
-                {
-                    float valvesqrDistance = (transform.position - valve.transform.position).sqrMagnitude;
-                    float nextvalvesqrDistance1 = (transform.position - nextValve.transform.position).sqrMagnitude;
-                    if (valvesqrDistance < nextvalvesqrDistance1)
+                    var newvaledistran = Vector3.Distance(transform.position, valve.transform.position);
+                    var nextdistran = Vector3.Distance(transform.position, nextValve.transform.position);
+                    //float valvesqrDistance = (transform.position - valve.transform.position).sqrMagnitude;
+                    //float nextvalvesqrDistance1 = (transform.position - nextValve.transform.position).sqrMagnitude;
+                    if (newvaledistran < nextdistran)
                     {
                         nextValve = valve;
+                        Debug.Log("바뀌었고");
                     }
                 }
             }
