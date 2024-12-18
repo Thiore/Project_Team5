@@ -12,7 +12,19 @@ public class InteractionFuseBox : TouchPuzzleCanvas
 
     [SerializeField] private GameObject clearObj;
 
+    [SerializeField] private Outline resetBtnOutline;
+
+    [SerializeField] private Outline[] emptyFuses;
+
     private int[] result = new int[] { 0, 2, 1, 0, 1, 2 };
+
+    private void Awake()
+    {
+        foreach (Outline outline in emptyFuses)
+        {
+            outline.enabled = false;
+        }
+    }
 
     public void CheckResult()
     {
@@ -64,6 +76,7 @@ public class InteractionFuseBox : TouchPuzzleCanvas
 
         if (samecount.Equals(5))
         {
+            DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
             OffInteraction();
         }
         else
@@ -96,6 +109,11 @@ public class InteractionFuseBox : TouchPuzzleCanvas
     public override void OffInteraction()
     {
         base.OffInteraction();
+        resetBtnOutline.enabled = false;
+        foreach (Outline outline in emptyFuses)
+        {
+            outline.enabled = false;
+        }
         if (!isClear)
         {
             mask.enabled = true;
@@ -151,6 +169,8 @@ public class InteractionFuseBox : TouchPuzzleCanvas
 
                     }
                     mask.enabled = false;
+                    outline.enabled = false;
+                    resetBtnOutline.enabled = true;
                 }
 
             }
@@ -191,6 +211,7 @@ public class InteractionFuseBox : TouchPuzzleCanvas
             outline.enabled = true;
         }
     }
+    
 
 }
     

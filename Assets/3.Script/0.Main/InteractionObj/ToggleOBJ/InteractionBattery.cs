@@ -6,9 +6,12 @@ public class InteractionBattery : TouchPuzzleCanvas
 {
     [SerializeField] private Battery[] batterys;
 
-    protected override void OnEnable()
+    //성공한 이후 게임을 불러왔을때 보여주기 위해 사용
+    [SerializeField] private Connection[] clearRedConnect;
+    [SerializeField] private Connection[] clearBlackConnect;
+
+    protected override void Start()
     {
-        base.OnEnable();
         if(!isClear)
         {
             foreach(var battery in batterys)
@@ -16,6 +19,10 @@ public class InteractionBattery : TouchPuzzleCanvas
                 battery.CheckBattery += CheckConnecting;
                 battery.isStart = false;
             }
+        }
+        else
+        {
+            FinishBattery();
         }
     }
     public override void OffInteraction()
@@ -52,15 +59,19 @@ public class InteractionBattery : TouchPuzzleCanvas
                         PlayerManager.Instance.SetBtn(false);
                     }
                     mask.enabled = false;
-                    foreach (var battery in batterys)
-                    {
-                        battery.isStart = true;
-                    }
+                    
                 }
 
                 if(!isInteracted)
                     UI_InvenManager.Instance.OpenQuickSlot();
             }
+        }
+    }
+    private void GameStart()
+    {
+        foreach (var battery in batterys)
+        {
+            battery.isStart = true;
         }
     }
 
@@ -94,6 +105,20 @@ public class InteractionBattery : TouchPuzzleCanvas
         if (other.CompareTag("MainCamera") && outline != null)
         {
             outline.enabled = true;
+        }
+    }
+
+    private void FinishBattery()
+    {
+        batterys[5].transform.rotation = Quaternion.identity;
+        batterys[3].transform.eulerAngles = new Vector3(0f, 180f, 0f);
+        batterys[2].transform.eulerAngles = new Vector3(0f, 90f, 0f);
+
+        for(int i = 0; i < clearRedConnect.Length;++i)
+        {
+            clearRedConnect[i].line.enabled = true;
+            clearRedConnect[i].line.SetPosition(0, clearRedConnect[i].transform.position);
+            clearRedConnect[i].line.SetPosition(1, clearBlackConnect[i].transform.position);
         }
     }
 }

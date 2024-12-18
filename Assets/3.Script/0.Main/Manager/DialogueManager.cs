@@ -47,6 +47,8 @@ public class DialogueManager : MonoBehaviour
         {
             Instance = this;
             WaitForLocalizationInitialization();
+            if (dialogueButton.gameObject.activeInHierarchy)
+                dialogueButton.gameObject.SetActive(false);
             DontDestroyOnLoad(gameObject);
         }
         else

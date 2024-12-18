@@ -13,6 +13,8 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private bool isDragging;
     private Vector3 tartgetpos;
 
+    [SerializeField] private Outline[] emptyFuses;
+
     private void Awake()
     {
         isDragging = false;
@@ -25,6 +27,13 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             dragfuse.gameObject.SetActive(true);
             dragfuse.SetFuseColor(efuseNum);
             image.enabled = false;
+            foreach(Outline outline in emptyFuses)
+            {
+                if(!outline.transform.GetChild(0).gameObject.activeInHierarchy)
+                {
+                    outline.enabled = true;
+                }
+            }
             isDragging = true;
         }
         
@@ -84,6 +93,11 @@ public class FuseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             }
 
             dragfuse.gameObject.SetActive(false);
+            foreach (Outline outline in emptyFuses)
+            {
+                outline.enabled = false;
+
+            }
             isDragging = false;
         }
         

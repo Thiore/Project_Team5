@@ -9,9 +9,11 @@ public class Movement : MonoBehaviour, ITouchable
 
     
     [SerializeField] private float speed;
-
+    
     private Vector2 startValue;
     private Vector2 value;
+    private Rigidbody rigid;
+    
     
     Vector3 moveDir;
 
@@ -25,7 +27,7 @@ public class Movement : MonoBehaviour, ITouchable
         {
             transform.localPosition = DataSaveManager.Instance.NewGamePlayerPosition();
         }
-
+        TryGetComponent(out rigid);
         playerCamera.transform.localPosition = transform.localPosition + Vector3.up * 0.75f;
 
         moveDir = Vector3.zero;
@@ -80,5 +82,13 @@ public class Movement : MonoBehaviour, ITouchable
         startValue = Vector2.zero;
         value = Vector2.zero;
         moveDir = Vector3.zero;        
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if(collision.collider.CompareTag("Stair"))
+        {
+            rigid.AddForce(Vector3.down*speed,ForceMode.VelocityChange);
+        }
     }
 }

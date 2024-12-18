@@ -6,6 +6,12 @@ public class FuseResultBtn : MonoBehaviour, ITouchable
 {
     [SerializeField] private InteractionFuseBox fuseSwithManager;
 
+    private Outline outline;
+    private void Awake()
+    {
+        TryGetComponent(out outline);
+        outline.enabled = false;
+    }
     public void OnTouchEnd(Vector2 position)
     {
         Ray ray = Camera.main.ScreenPointToRay(position);

@@ -13,7 +13,8 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private bool isDragging = false;
 
     private HideSlide tempSlide = null;
-    private int donInteractionIndex = 37;
+    private HideBattery tempBattery = null;
+    private readonly int donInteractionIndex = 37; // '이 아이템이 아닌것같아'
     
 
     public void SetinvenByID(int id, bool isInteraction = false)
@@ -61,13 +62,16 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             switch (id)
             {
                 case 5:
-                    DragRayToSlide(id, eventData, false);
+                    DragRayToSlide(eventData, false);
                     break;
                 case 9:
-                    DragRayToSlide(id, eventData, false);
+                    DragRayToSlide(eventData, false);
                     break;
                 case 10:
-                    DragRayToSlide(id, eventData, false);
+                    DragRayToSlide(eventData, false);
+                    break;
+                case 17:
+                    DrawRayToBattery(eventData, false);
                     break;
                 default:
                     break;
@@ -84,6 +88,11 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
         }
         isDragging = false;
+        if(id.Equals(17)&&DrawRayToBattery(eventData,true))
+        {
+            SetinvenByID(id, true);
+            return;
+        }
         Ray ray = Camera.main.ScreenPointToRay(eventData.position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
@@ -93,6 +102,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 {
                     toggle.InteractionObject();
                     SetinvenByID(id, true);
+                    return;
                 }
                 else
                 {
@@ -100,12 +110,22 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     return;
                 }
             }
+            else
+            {
+                if (tempBattery != null)
+                {
+                    tempBattery.HideMaterial();
+                    return;
+                }
+                    
+
+            }
             if (hit.collider.TryGetComponent(out TouchPuzzleCanvas puzzle))
             {
                 switch (id)
                 {
                     case 5:
-                        if(DragRayToSlide(id, eventData, true))
+                        if(DragRayToSlide(eventData, true))
                         {
                             puzzle.InteractionObject(item.id);
                             SetinvenByID(id, true);
@@ -117,7 +137,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         }
                         break;
                     case 9:
-                        if (DragRayToSlide(id, eventData, true))
+                        if (DragRayToSlide(eventData, true))
                         {
                             puzzle.InteractionObject(item.id);
                             SetinvenByID(id, true);
@@ -129,7 +149,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         }
                         break;
                     case 10:
-                        if (DragRayToSlide(id, eventData, true))
+                        if (DragRayToSlide(eventData, true))
                         {
                             puzzle.InteractionObject(item.id);
                             SetinvenByID(id, true);
@@ -160,7 +180,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         
     }
 
-    private bool DragRayToSlide(int objId, PointerEventData eventData, bool touchEnd)
+    private bool DragRayToSlide(PointerEventData eventData, bool touchEnd)
     {
         Ray ray = Camera.main.ScreenPointToRay(eventData.position);
         LayerMask slideLayerMask = LayerMask.GetMask("SlideObject");
@@ -207,7 +227,47 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     }
                 }
             }
+            else
+            {
+                if(tempSlide != null)
+                {
+                    tempSlide.HideMaterial();
+                    tempSlide = null;
+                }
+            }
            
+        }
+        return false;
+    }
+
+    private bool DrawRayToBattery(PointerEventData eventData, bool touchEnd)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+        if (Physics.Raycast(ray, out RaycastHit hit, 3f, TouchManager.Instance.getTouchableLayer))
+        {
+
+            if (hit.collider.TryGetComponent(out HideBattery battery))
+            {
+                if (tempBattery != null)
+                {
+                    if (touchEnd)
+                    {
+                        tempBattery.IsInteracted(touchEnd);
+                        tempBattery = null;
+                    }
+                }
+                else
+                {
+                    tempBattery = battery;
+                    tempBattery.IsInteracted(touchEnd);
+                }
+                return true;
+            }
+        }
+        if (tempBattery != null)
+        {
+            tempBattery.HideMaterial();
+            tempBattery = null;
         }
         return false;
     }

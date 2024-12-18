@@ -3,8 +3,8 @@ using UnityEditor;
 
 public class LayerTagFinder : EditorWindow
 {
-    private string searchTag = "";
-    private int searchLayer = -1;
+    private string searchTag = "Untagged";
+    private int searchLayer = 2;
 
     [MenuItem("Tools/Layer and Tag Finder")]
     static void Init()
@@ -46,7 +46,7 @@ public class LayerTagFinder : EditorWindow
             }
 
             // 레이어 매칭
-            if (searchLayer != -1 && obj.layer == searchLayer)
+            if (obj.layer == searchLayer)
             {
                 Debug.Log($"[Layer] Found Object: {obj.name}", obj);
             }
