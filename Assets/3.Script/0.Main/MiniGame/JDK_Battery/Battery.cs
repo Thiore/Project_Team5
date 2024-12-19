@@ -24,7 +24,7 @@ public class Battery : MonoBehaviour, ITouchable
 
     public void OnTouchEnd(Vector2 position)
     {
-        if (!isConnection&&!isRed && !isBlack)
+        if (isStart&&!isConnection&&!isRed && !isBlack)
         {
             Ray ray = Camera.main.ScreenPointToRay(position);
             if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))

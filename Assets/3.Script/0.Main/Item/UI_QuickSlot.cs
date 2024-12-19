@@ -14,6 +14,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     private HideSlide tempSlide = null;
     private HideBattery tempBattery = null;
+    private HideTile tempTile = null;
     private readonly int donInteractionIndex = 37; // '이 아이템이 아닌것같아'
     
 
@@ -70,8 +71,11 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 case 10:
                     DragRayToSlide(eventData, false);
                     break;
+                case 12:
+                    DragRayToObj(eventData, false);
+                    break;
                 case 17:
-                    DrawRayToBattery(eventData, false);
+                    DragRayToObj(eventData, false);
                     break;
                 default:
                     break;
@@ -88,96 +92,112 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);
         }
         isDragging = false;
-        if(id.Equals(17)&&DrawRayToBattery(eventData,true))
+        switch(id)
         {
-            SetinvenByID(id, true);
-            return;
-        }
-        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
-        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
-        {
-            if (hit.collider.TryGetComponent(out ToggleOBJ toggle))
-            {
-                if (id.Equals(toggle.getObjectIndex))
+            case 12:
+                if(DragRayToObj(eventData,true))
                 {
-                    toggle.InteractionObject();
                     SetinvenByID(id, true);
-                    return;
-                }
-                else
-                {
-                    DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
-                    return;
-                }
-            }
-            else
-            {
-                if (tempBattery != null)
-                {
-                    tempBattery.HideMaterial();
-                    return;
-                }
                     
-
-            }
-            if (hit.collider.TryGetComponent(out TouchPuzzleCanvas puzzle))
-            {
-                switch (id)
-                {
-                    case 5:
-                        if(DragRayToSlide(eventData, true))
-                        {
-                            puzzle.InteractionObject(item.id);
-                            SetinvenByID(id, true);
-                            return;
-                        }
-                        else
-                        {
-                            DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
-                        }
-                        break;
-                    case 9:
-                        if (DragRayToSlide(eventData, true))
-                        {
-                            puzzle.InteractionObject(item.id);
-                            SetinvenByID(id, true);
-                            return;
-                        }
-                        else
-                        {
-                            DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
-                        }
-                        break;
-                    case 10:
-                        if (DragRayToSlide(eventData, true))
-                        {
-                            puzzle.InteractionObject(item.id);
-                            SetinvenByID(id, true);
-                            return;
-                        }
-                        else
-                        {
-                            DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
-                        }
-                        break;
-                    default:
-                        for (int i = 0; i < puzzle.getInteractionIndex.Count; i++)
-                        {
-                            if (item.id.Equals(puzzle.getInteractionIndex[i]))
-                            {
-                                puzzle.InteractionObject(item.id);
-                                SetinvenByID(id, true);
-                                return;
-                            }
-                        }
-                        DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
-                        break;
-
                 }
+                break;
+            case 17:
+                if (DragRayToObj(eventData, true))
+                {
+                    SetinvenByID(id, true);
+                    
+                }
+                break;
+            default:
+                Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+                if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+                {
+                    if (hit.collider.TryGetComponent(out ToggleOBJ toggle))
+                    {
+                        if (id.Equals(toggle.getObjectIndex))
+                        {
+                            toggle.InteractionObject();
+                            SetinvenByID(id, true);
+                            return;
+                        }
+                        else
+                        {
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (tempBattery != null)
+                        {
+                            tempBattery.HideMaterial();
+                            return;
+                        }
 
-            }
+
+                    }
+                    if (hit.collider.TryGetComponent(out TouchPuzzleCanvas puzzle))
+                    {
+                        switch (id)
+                        {
+                            case 5:
+                                if (DragRayToSlide(eventData, true))
+                                {
+                                    puzzle.InteractionObject(item.id);
+                                    SetinvenByID(id, true);
+                                    
+                                }
+                                else
+                                {
+                                    DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
+                                    
+                                }
+                                return;
+                            case 9:
+                                if (DragRayToSlide(eventData, true))
+                                {
+                                    puzzle.InteractionObject(item.id);
+                                    SetinvenByID(id, true);
+                                    
+                                }
+                                else
+                                {
+                                    DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
+                                }
+                                return;
+                            case 10:
+                                if (DragRayToSlide(eventData, true))
+                                {
+                                    puzzle.InteractionObject(item.id);
+                                    SetinvenByID(id, true);
+                                    
+                                }
+                                else
+                                {
+                                    DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
+                                }
+                                return;
+                            default:
+                                for (int i = 0; i < puzzle.getInteractionIndex.Count; i++)
+                                {
+                                    if (item.id.Equals(puzzle.getInteractionIndex[i]))
+                                    {
+                                        puzzle.InteractionObject(item.id);
+                                        SetinvenByID(id, true);
+                                        return;
+                                    }
+                                }
+                                DialogueManager.Instance.SetDialogue("Table_StoryB1", donInteractionIndex);
+                                return;
+
+                        }
+
+                    }
+                }
+                return;
         }
-        
+        return;
+
     }
 
     private bool DragRayToSlide(PointerEventData eventData, bool touchEnd)
@@ -240,34 +260,61 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         return false;
     }
 
-    private bool DrawRayToBattery(PointerEventData eventData, bool touchEnd)
+    private bool DragRayToObj(PointerEventData eventData, bool touchEnd)
     {
         Ray ray = Camera.main.ScreenPointToRay(eventData.position);
         if (Physics.Raycast(ray, out RaycastHit hit, 3f, TouchManager.Instance.getTouchableLayer))
         {
-
-            if (hit.collider.TryGetComponent(out HideBattery battery))
+            switch(id)
             {
-                if (tempBattery != null)
-                {
-                    if (touchEnd)
+                case 12:
+                    if (hit.collider.TryGetComponent(out HideTile tile))
                     {
-                        tempBattery.IsInteracted(touchEnd);
-                        tempBattery = null;
+                        if (tempTile != null)
+                        {
+                            if (touchEnd)
+                            {
+                                tempTile.IsInteracted(touchEnd);
+                                tempTile = null;
+                            }
+                        }
+                        else
+                        {
+                            tempTile = tile;
+                            tempTile.IsInteracted(touchEnd);
+                        }
                     }
-                }
-                else
-                {
-                    tempBattery = battery;
-                    tempBattery.IsInteracted(touchEnd);
-                }
-                return true;
+                    return true;
+                case 17:
+                    if (hit.collider.TryGetComponent(out HideBattery battery))
+                    {
+                        if (tempBattery != null)
+                        {
+                            if (touchEnd)
+                            {
+                                tempBattery.IsInteracted(touchEnd);
+                                tempBattery = null;
+                            }
+                        }
+                        else
+                        {
+                            tempBattery = battery;
+                            tempBattery.IsInteracted(touchEnd);
+                        }
+                    }
+                    return true;
             }
+            
         }
         if (tempBattery != null)
         {
             tempBattery.HideMaterial();
             tempBattery = null;
+        }
+        if(tempTile != null)
+        {
+            tempTile.HideMaterial();
+            tempTile = null;
         }
         return false;
     }

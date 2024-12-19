@@ -33,12 +33,13 @@ public class GridSpin : MonoBehaviour, ITouchable
                 // 목표 회전에 근사하면 정확히 목표 회전으로 설정
                 transform.localEulerAngles = targetRotation;
                
-                // 회전 완료 시 이벤트 호출
-                OnRotationComplete?.Invoke();
+                
                 break;
             }
             yield return null;
         }
+        // 회전 완료 시 이벤트 호출
+        OnRotationComplete?.Invoke();
         rotate_co = null;
         yield break;
 

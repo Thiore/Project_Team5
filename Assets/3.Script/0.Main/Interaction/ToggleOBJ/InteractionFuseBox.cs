@@ -16,6 +16,8 @@ public class InteractionFuseBox : TouchPuzzleCanvas
 
     [SerializeField] private Outline[] emptyFuses;
 
+    [SerializeField] private InteractionSpinPuzzle spin;
+
     private int[] result = new int[] { 0, 2, 1, 0, 1, 2 };
 
     private void Awake()
@@ -117,10 +119,6 @@ public class InteractionFuseBox : TouchPuzzleCanvas
         if (!isClear)
         {
             mask.enabled = true;
-            if (UI_InvenManager.Instance.isOpenQuick)
-            {
-                UI_InvenManager.Instance.CloseQuickSlot();
-            }
             
             if (PlayerManager.Instance != null)
             {
@@ -138,7 +136,7 @@ public class InteractionFuseBox : TouchPuzzleCanvas
         {
             clearObj.SetActive(false);
             
-            Invoke("ClearEvent", 2f);
+            Invoke("ClearEvent", 1f);
         }
     }
 
@@ -180,16 +178,13 @@ public class InteractionFuseBox : TouchPuzzleCanvas
 
     protected override void ClearEvent()
     {
-        if (UI_InvenManager.Instance.isOpenQuick)
-        {
-            UI_InvenManager.Instance.CloseQuickSlot();
-        }
 
         if (PlayerManager.Instance != null)
         {
             PlayerManager.Instance.SetBtn(true);
         }
         TouchManager.Instance.EnableMoveHandler(true);
+        spin.InteractionObject(objectIndex);
         missionStart.SetActive(false);
         if (anim != null)
         {

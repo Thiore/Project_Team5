@@ -116,6 +116,8 @@ public class LoadingManager : MonoBehaviour
                     // 추가 딜레이를 주고 allowSceneActivation 설정
                     yield return new WaitForSeconds(0.1f); // 최소 대기 시간
                     delayTime += UnityEngine.Random.Range(0, 3);
+                    if (delayTime > 30)
+                        delayTime = 30;
                     loadingProgressText.text = $"{70 + delayTime}%";
                     loadingProgressSlide.value = 70f + delayTime;
 

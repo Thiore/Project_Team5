@@ -11,7 +11,6 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
     [SerializeField] protected GameObject btnExit;
 
-    [Header("SaveManager 참고")]
     [SerializeField] protected int floorIndex;
     public int getFloorIndex { get => floorIndex; }
     [SerializeField] protected int objectIndex;
@@ -79,8 +78,9 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
                 else
                 {
                     interactionIndex.RemoveAt(i);
+                    isInteracted = true;
                 }
-                isInteracted = true;
+                
             }
         }
        
@@ -112,10 +112,11 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             if (UI_InvenManager.Instance.HaveItem(removeClueId))
             {
                 UI_InvenManager.Instance.SortInvenSlot(removeClueId);
+                
                 isRemoveClue = false;
 
             }
-
+            UI_InvenManager.Instance.removeIndex.Add(removeClueId);
         }
        
     }

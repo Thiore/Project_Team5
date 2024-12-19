@@ -72,7 +72,6 @@ public class Item3D : MonoBehaviour, ITouchable
                 case 1:
                     combineObj.TryGetComponent(out FlashLight light);
                     light.SetUseFlashLight();
-
                     break;
             }
 

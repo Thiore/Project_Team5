@@ -5,11 +5,13 @@ using UnityEngine;
 public class HideBattery : MonoBehaviour
 {
     private Material material;
+    private Outline outline;
 
-    private int floorIndex;
-    private int objectIndex;
+    [SerializeField] private int floorIndex;
+    [SerializeField] private int objectIndex;
 
-    private bool isInteracted;
+
+    [SerializeField] private InteractionBattery batteryManager;
 
     private readonly Color fillColor = Color.white;
     private readonly Color halfColor = new Color(1f, 1f, 1f, 0.5f);
@@ -19,6 +21,8 @@ public class HideBattery : MonoBehaviour
     {
         TryGetComponent(out MeshRenderer renderer);
         material = renderer.material;
+        TryGetComponent(out outline);
+        outline.enabled = false;
     }
     private void Start()
     {
@@ -36,15 +40,21 @@ public class HideBattery : MonoBehaviour
     {
         if(!touchEnd)
         {
+            if (!outline.enabled)
+                outline.enabled = true;
             material.color = halfColor;
         }
         else
         {
+            if (outline.enabled)
+                outline.enabled = false;
             material.color = fillColor;
+            batteryManager.InteractionObject(objectIndex);
         }
     }
     public void HideMaterial()
     {
+        outline.enabled = false;
         material.color = clearColor;
     }
 }

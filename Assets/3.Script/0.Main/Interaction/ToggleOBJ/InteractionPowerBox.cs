@@ -30,6 +30,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
         if (!isClear)
         {
             mask.enabled = true;
+            outline.enabled = true;
             if (UI_InvenManager.Instance.isOpenQuick)
             {
                 UI_InvenManager.Instance.CloseQuickSlot();
@@ -48,7 +49,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
         }
         else
         {
-
+            
             missionStart.SetActive(false);
             if (anim != null)
             {
@@ -117,7 +118,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
                         missionStart.SetActive(true);
                         missionExit.SetActive(true);
                         btnExit.SetActive(true);
-
+                        outline.enabled = false;
                         if (PlayerManager.Instance != null)
                         {
                             PlayerManager.Instance.SetBtn(false);
@@ -138,6 +139,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
                             PlayerManager.Instance.SetBtn(false);
                         }
                         mask.enabled = false;
+                        outline.enabled = false;
                     }
                     if (UI_InvenManager.Instance.isOpenQuick)
                     {
@@ -157,37 +159,12 @@ public class InteractionPowerBox : TouchPuzzleCanvas
     {
         if (isClear) return;
 
-        if (interactionCam != null)
+
+        if (other.CompareTag("MainCamera") && outline != null)
         {
-            if (!interactionCam.activeInHierarchy)
-            {
-                if (other.CompareTag("MainCamera") && outline != null)
-                {
-                    outline.enabled = true;
-                }
-            }
+            outline.enabled = true;
         }
 
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        if (isClear)
-        {
-            outline.enabled = false;
-            return;
-        }
-
-        if (interactionCam != null)
-        {
-            if (interactionCam.activeInHierarchy && outline.enabled)
-            {
-                outline.enabled = false;
-            }
-            else
-            {
-                outline.enabled = true;
-            }
-        }
     }
 
     private void ShuffleArray<T>(T[] array)

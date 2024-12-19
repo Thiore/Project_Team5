@@ -5,11 +5,13 @@ public class SpinGame : MonoBehaviour
 {
     public List<GameObject> tileList;
     private RayCheck rayCheck;
-    [SerializeField] private Material lampMaterial;
+    [SerializeField] private MeshRenderer[] lamps;
+    private Material[] lampMaterials;
 
     private void Awake()
     {
         TryGetComponent(out rayCheck);
+        lampMaterials = new Material[lamps.Length];
     }
 
     private void Start()
@@ -23,7 +25,12 @@ public class SpinGame : MonoBehaviour
                 gridSpin.OnRotationComplete += CheckRay; // 회전 완료 시 CheckRay 호출
             }
         }
-        lampMaterial.DisableKeyword("_EMISSION");
+        for(int i = 0; i < lamps.Length;++i)
+        {
+            lampMaterials[i] = lamps[i].material;
+            lampMaterials[i].DisableKeyword("_EMISSION");
+        }
+            
     }
 
 
@@ -35,7 +42,9 @@ public class SpinGame : MonoBehaviour
 
         if (rayCheck.isComplete)
         {
-            lampMaterial.EnableKeyword("_EMISSION");
+            foreach (Material lamp in lampMaterials)
+                lamp.EnableKeyword("_EMISSION");
+           
             //gamecomplete
         }
 

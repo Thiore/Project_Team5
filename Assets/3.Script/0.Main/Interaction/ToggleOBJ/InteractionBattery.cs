@@ -12,13 +12,17 @@ public class InteractionBattery : TouchPuzzleCanvas
 
     protected override void Start()
     {
-        if(!isClear)
+        if (!isClear)
         {
-            foreach(var battery in batterys)
+            base.Start();
+
+            foreach (var battery in batterys)
             {
                 battery.CheckBattery += CheckConnecting;
                 battery.isStart = false;
             }
+
+
         }
         else
         {
@@ -29,7 +33,12 @@ public class InteractionBattery : TouchPuzzleCanvas
     {
         base.OffInteraction();
 
-        mask.enabled = true;
+        if(!isClear)
+        {
+            mask.enabled = true;
+            outline.enabled = true;
+        }
+        
         missionStart.SetActive(false);
         if (PlayerManager.Instance != null)
         {
@@ -49,6 +58,23 @@ public class InteractionBattery : TouchPuzzleCanvas
         {
             if(hit.collider.gameObject.Equals(gameObject))
             {
+                if (!isInteracted)
+                {
+                    if (UI_InvenManager.Instance.HaveItem(interactionIndex))
+                        UI_InvenManager.Instance.OpenQuickSlot();
+                    else
+                    {
+                        //필요한 아이템이 있을것같아
+                        return;
+                    }
+                }
+                else
+                {
+                    foreach (var battery in batterys)
+                    {
+                        battery.isStart = true;
+                    }
+                }
                 if (!missionStart.activeInHierarchy)
                 {
                     missionStart.SetActive(true);
@@ -59,22 +85,25 @@ public class InteractionBattery : TouchPuzzleCanvas
                         PlayerManager.Instance.SetBtn(false);
                     }
                     mask.enabled = false;
+                    outline.enabled = false;
                     
                 }
-
-                if(!isInteracted)
-                    UI_InvenManager.Instance.OpenQuickSlot();
             }
         }
     }
-    private void GameStart()
+    
+    public override void InteractionObject(int id)
     {
-        foreach (var battery in batterys)
+        base.InteractionObject(id);
+        if(isInteracted)
         {
-            battery.isStart = true;
+            foreach (var battery in batterys)
+            {
+                battery.isStart = true;
+            }
         }
+        
     }
-
     protected override void ClearEvent()
     {
         

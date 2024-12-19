@@ -508,6 +508,8 @@ public class TouchManager : MonoBehaviour
         else
         {
             falseMoveCount -= 1;
+            if (falseMoveCount < 0)
+                falseMoveCount = 0;
             if(falseMoveCount.Equals(0))
             {
                 isMoving = true;
@@ -543,6 +545,8 @@ public class TouchManager : MonoBehaviour
         else
         {
             falseTouchCount -= 1;
+            if (falseTouchCount < 0)
+                falseTouchCount = 0;
             EnableMoveHandler(true);
             if (falseTouchCount.Equals(0))
             {

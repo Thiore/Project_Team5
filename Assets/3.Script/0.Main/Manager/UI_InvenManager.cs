@@ -32,9 +32,6 @@ public class UI_InvenManager : MonoBehaviour
     [SerializeField] private TriggerButton triggerButton;
     private List<UI_TriggerSlot> triggerSlots = null;
 
-    
-
-
     [SerializeField] public UI_ItemInformation iteminfo;
 
     [SerializeField] public Image dragImage;
@@ -52,6 +49,7 @@ public class UI_InvenManager : MonoBehaviour
     [SerializeField] private FlashLight flashLight;
     [SerializeField] private List<Item3D> items;
 
+    public List<int> removeIndex = new List<int>();
 
     private void Awake()
     {
@@ -124,6 +122,12 @@ public class UI_InvenManager : MonoBehaviour
     /// <param name="isGetItemImage">처음 로딩할 때와 조합아이템은 true값을 입력하시면 획득 이미지가 나타나지 않습니다.</param>
     public void GetItemByID(Item item, bool isGetItemImage = false, Item3D obj = null)
     {
+        if(removeIndex.Contains(item.id))
+        {
+            //더 이상 필요 없을것같아
+            DataSaveManager.Instance.UpdateItemState(item.id);
+            return;
+        }
         if(!isGetItemImage)
         {
             GetItemByImage(item);
@@ -241,14 +245,17 @@ public class UI_InvenManager : MonoBehaviour
                 case 10:
                     items[2].GetItem();
                     DataSaveManager.Instance.UpdateItemState(2);
-                    SortInvenSlot(slot.item.id);
-                    SortInvenSlot(id);
+                    break;
+                case 20:
+                    items[16].GetItem();
+                    DataSaveManager.Instance.UpdateItemState(16);
                     break;
 
             }
-            
+            SortInvenSlot(slot.item.id);
+            SortInvenSlot(id);
 
-            
+
             //OpenInventory();
         }
     }

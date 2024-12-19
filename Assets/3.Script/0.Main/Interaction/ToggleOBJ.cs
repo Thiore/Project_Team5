@@ -172,7 +172,9 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
         {
             yield return null;
         }
-        normalCamera.SetActive(false);
+        if(normalCamera != null)
+            normalCamera.SetActive(false);
+
         if (PlayerManager.Instance != null)
         {
             PlayerManager.Instance.SetBtn(true);
@@ -196,6 +198,10 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
         if (UI_InvenManager.Instance.isOpenQuick)
         {
             UI_InvenManager.Instance.CloseQuickSlot();
+        }
+        if (anim != null)
+        {
+            anim.SetBool(openAnim, true);
         }
     }
     
