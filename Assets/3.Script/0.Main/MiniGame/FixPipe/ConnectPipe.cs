@@ -24,18 +24,17 @@ public class ConnectPipe : Pipe, ITouchable
         {
             if (hit.collider.gameObject.Equals(gameObject))
             {
-                TogglePipeConnection();
+                pipegameManager.ConnectPipeSet(this);
             }
         }
     }
 
 
-    private void TogglePipeConnection()
+    public void TogglePipeConnection()
     {
         render.enabled = !render.enabled;
         isconnect = !isconnect;
         monitorImage.enabled = !monitorImage.enabled;
-
     }
 
     public override void PipeImageSet()

@@ -52,52 +52,6 @@ public class Valve : MonoBehaviour, ITouchable
         }
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.TryGetComponent(out Pipe pipe))
-    //    {
-    //        directionPipe = pipe;
-    //        pipes.Add(pipe);
-
-    //        float Maxdistance = Mathf.Infinity;
-    //        if (pipes.Count > 1)
-    //        {
-    //            foreach (Pipe pipeindex in pipes)
-    //            {
-    //                float sqrDistance = (transform.position - pipeindex.transform.position).sqrMagnitude;
-    //                if (sqrDistance < Maxdistance)
-    //                {
-    //                    Maxdistance = sqrDistance;
-    //                    directionPipe = pipeindex;
-
-    //                }
-    //            }
-    //            pipes.Clear();
-    //        }
-    //    }
-
-    //    if (other.gameObject.TryGetComponent(out Valve valve))
-    //    {
-    //        nextValve = valve;
-    //        valves.Add(valve);
-
-    //        float Maxdistance = Mathf.Infinity;
-    //        if (valves.Count > 1)
-    //        {
-    //            foreach (Valve valvesindex in valves)
-    //            {
-    //                float sqrDistance = (transform.position - valvesindex.transform.position).sqrMagnitude;
-    //                if (sqrDistance < Maxdistance)
-    //                {
-    //                    Maxdistance = sqrDistance;
-    //                    nextValve = valvesindex;                       
-    //                }
-    //            }
-    //            valves.Clear();
-    //        }
-    //    }
-    //}
-
     public void RotateValve()
     {
         StartCoroutine(RotataAndRay());
