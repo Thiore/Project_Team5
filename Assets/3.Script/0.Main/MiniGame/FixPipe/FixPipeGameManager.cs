@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class FixPipeGameManager : MonoBehaviour
 {
@@ -9,21 +10,27 @@ public class FixPipeGameManager : MonoBehaviour
     [SerializeField] private Valve endvalve;
     [SerializeField] private GameObject imageobj;
     [SerializeField] private PipeImportantPoint[] pipepoints;
-    
 
+    [SerializeField] private TMP_Text limittimeText;
+    private bool iscomplete;
     private List<ConnectPipe> connectpipes;
 
     //제한시간 4분 48초 >> 288초
-    private float setTime = 288f;
+    private float limittime = 288f;
     private int min;
-    private int sec;
-   
+    private float sec;
+
 
     private void Awake()
     {
         visitedValves = new HashSet<Valve>();
         connectpipes = new List<ConnectPipe>();
+        iscomplete = false;
     }
+    //private void Start()
+    //{
+    //    StartCoroutine(StartFixFipeGameTimeLimit());
+    //}
 
     public void FindPath()
     {
@@ -43,18 +50,19 @@ public class FixPipeGameManager : MonoBehaviour
         {
             // 최종 종료 조건 
             Debug.Log("마지막 종료");
-            int count = 0;            
-            foreach(PipeImportantPoint p in pipepoints)
+            int count = 0;
+            foreach (PipeImportantPoint p in pipepoints)
             {
-                if (p.CheckisPass()) 
+                if (p.CheckisPass())
                 {
                     count++;
-                }                
+                }
             }
 
             if (count.Equals(5))
             {
                 Debug.Log("여기서 승리 판정 넣기");
+                iscomplete = true;
             }
         }
 
@@ -107,7 +115,7 @@ public class FixPipeGameManager : MonoBehaviour
         }
         else // 파이프가 지워지지 않았다면? 전혀 다른거 들어온거 
         {
-            if(connectpipes.Count > 1)
+            if (connectpipes.Count > 1)
             {
                 connectpipes[0].TogglePipeConnection();
                 connectpipes.RemoveAt(0);
@@ -125,7 +133,27 @@ public class FixPipeGameManager : MonoBehaviour
 
     public IEnumerator StartFixFipeGameTimeLimit()
     {
-        yield return null;
+
+        while(limittime > 0)
+        {
+            if (iscomplete)
+            {
+                //여기 게임 끝났을때 메소드 
+                Debug.Log("승리");
+                yield break;
+            }
+
+            limittime -= 1;
+            min = (int)limittime / 60;
+            sec = Mathf.FloorToInt(limittime % 60f);
+            limittimeText.text = $" {min:00} : {sec:00}";
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        // 여기다가 실패한 메소드
+        Debug.Log("실패");
+
     }
 
 }
