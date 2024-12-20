@@ -14,15 +14,18 @@ public class Valve : MonoBehaviour, ITouchable
     private float angle = 90f; // 90도 회전
     private bool isRotating;
 
-    [SerializeField] private Valve nextValve;
-    [SerializeField] private Pipe directionPipe;
+    // 이거 두개는 레이쏘고 가져오는것들 
+    private Valve nextValve;
+    private Pipe directionPipe;
     public Pipe DirectionPipe { get => directionPipe; }
 
     // Ray 관련 변수
     [SerializeField] private float rayDistance = 2.5f; // Ray 거리
-    [SerializeField] LayerMask targetLayer;
+    [SerializeField] LayerMask targetLayer; // 레이에 걸릴 타켓  레이어 설정 해야함 
 
-    [SerializeField] private GameObject parentpipe;
+    //이건 벨브가 아닌 부모 파이프에서 레이 쏴서 파이프 찾으려고 찾아놈 
+    private GameObject parentpipe;
+
     private Outline outline;
     private void Awake()
     {
