@@ -132,7 +132,8 @@ public class TouchManager : MonoBehaviour
     {
         eventSystem = EventSystem.current;
         eventSystem.enabled = true;
-        
+        if (isTouchSupportEnabled)
+            OnDisableTouchAction();
 
         OnEnableTouchAction();
     }

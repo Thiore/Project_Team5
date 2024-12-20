@@ -118,7 +118,6 @@ public class InteractionFuseBox : TouchPuzzleCanvas
         }
         if (!isClear)
         {
-            mask.enabled = true;
             
             if (PlayerManager.Instance != null)
             {
@@ -131,6 +130,7 @@ public class InteractionFuseBox : TouchPuzzleCanvas
             }
             missionStart.SetActive(false);
 
+            mask.enabled = true;
         }
         else
         {
@@ -154,9 +154,10 @@ public class InteractionFuseBox : TouchPuzzleCanvas
             {
                 if (hit.collider.gameObject.Equals(gameObject))
                 {
-                    TouchManager.Instance.EnableMoveHandler(false);
+                    mask.enabled = false;
                     missionStart.SetActive(true);
                     btnExit.SetActive(true);
+                    TouchManager.Instance.EnableMoveHandler(false);
                     if (PlayerManager.Instance != null)
                     {
                         PlayerManager.Instance.SetBtn(false);
@@ -166,12 +167,16 @@ public class InteractionFuseBox : TouchPuzzleCanvas
                         anim.SetBool(openAnim, true);
 
                     }
-                    mask.enabled = false;
-                    outline.enabled = false;
                     resetBtnOutline.enabled = true;
+                    
+                    outline.enabled = false;
                 }
 
             }
+        }
+        else
+        {
+            DialogueManager.Instance.SetDialogue("Table_StoryB1", 27);
         }
 
     }
@@ -190,6 +195,7 @@ public class InteractionFuseBox : TouchPuzzleCanvas
         {
             anim.SetBool(openAnim, false);
         }
+        DialogueManager.Instance.SetDialogue("Table_StoryB1", 29);
     }
 
     protected override void ResetCamera()

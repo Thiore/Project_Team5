@@ -69,8 +69,8 @@ public class OBJ_Rotation : MonoBehaviour
             
                 oneFingerValue = context.ReadValue<Vector2>();
                 Vector2 delta = oneFingerValue - startOneFingerValue;
-                obj.Rotate(transform.up, delta.x * 0.3f);
-                obj.Rotate(transform.right, -delta.y*0.3f);
+                obj.Rotate(Vector3.up, delta.x * 0.3f);
+               
                 startOneFingerValue = oneFingerValue;
              
         }
@@ -109,7 +109,7 @@ public class OBJ_Rotation : MonoBehaviour
             float scaleChange = (fingerDistance - startFingersDistance) * 0.02f;
             obj.localScale += Vector3.one * scaleChange;
             obj.localScale = Vector3.Max(obj.localScale, Vector3.one * 1f); // 최소 크기 제한
-            obj.localScale = Vector3.Min(obj.localScale, Vector3.one * 3f);   // 최대 크기 제한
+            obj.localScale = Vector3.Min(obj.localScale, Vector3.one * 5f);   // 최대 크기 제한
 
             startFingersDistance = fingerDistance;
         }

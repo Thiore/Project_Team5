@@ -5,6 +5,8 @@ using TMPro;
 
 public class FixPipeGameManager : MonoBehaviour
 {
+    [SerializeField] private TMP_Text tobecontinue;
+
     [SerializeField] HashSet<Valve> visitedValves;
     [SerializeField] private Valve startvalve;
     [SerializeField] private Valve endvalve;
@@ -14,6 +16,8 @@ public class FixPipeGameManager : MonoBehaviour
     [SerializeField] private TMP_Text limittimeText;
     private bool iscomplete;
     private List<ConnectPipe> connectpipes;
+
+    
 
     //제한시간 4분 48초 >> 288초
     private float limittime = 360f;
@@ -159,8 +163,8 @@ public class FixPipeGameManager : MonoBehaviour
             {
                 DataSaveManager.Instance.UpdateGameState(floorIndex,objectIndex);
 
-                MonitorCam.SetActive(true);
-                Invoke("CargoRoomCamOn", 3f);
+
+                MonitorCamOn();
                 yield break;
             }
 
@@ -177,17 +181,30 @@ public class FixPipeGameManager : MonoBehaviour
         
 
     }
+
+    private void MonitorCamOn()
+    {
+        MonitorCam.SetActive(true);
+        Invoke("ResetLobby", 6f);
+    }
     private void CargoRoomCamOn()
     {
         PlayerManager.Instance.resetCam.SetActive(true);
         CargoRoomCam.SetActive(true);
-        interactionAnim.SetBool("Open", true);
-        Invoke("CargoRoomCamOff", 3f);
+        
+        Invoke("CargoRoomCamOff", 2f);
     }
     private void CargoRoomCamOff()
     {
-        CargoRoomCam.SetActive(false);
-        PlayerManager.Instance.ResetCamOff();
+        interactionAnim.SetBool("Open", true);
+        //CargoRoomCam.SetActive(false);
+        //PlayerManager.Instance.ResetCamOff();
+        tobecontinue.gameObject.SetActive(true);
+        string x = "To Be NextWeek......";
+        DialogueManager.Instance.ReavealText(tobecontinue, x);
     }
-
+    private void ResetLobby()
+    {
+        SettingsManager.Instance.LoadLobby();
+    }
 }

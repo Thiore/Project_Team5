@@ -15,7 +15,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private HideSlide tempSlide = null;
     private HideBattery tempBattery = null;
     private HideTile tempTile = null;
-    private readonly int donInteractionIndex = 37; // '이 아이템이 아닌것같아'
+    private readonly int donInteractionIndex = 1; // '이 아이템이 아닌것같아'
     
 
     public void SetinvenByID(int id, bool isInteraction = false)
@@ -223,7 +223,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         else
                         {
                             tempSlide = null;
-                            return false;
+                            
                         }
 
                     }
@@ -236,7 +236,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                             tempSlide.IsInteracted(id, touchEnd);
                         }
                     }
-                    return false;
+                    
                 }
                 else
                 {
@@ -246,6 +246,7 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                         tempSlide.IsInteracted(id, touchEnd);
                     }
                 }
+                
             }
             else
             {
@@ -255,7 +256,14 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     tempSlide = null;
                 }
             }
-           
+        }
+        else
+        {
+            if (tempSlide != null)
+            {
+                tempSlide.HideMaterial();
+                tempSlide = null;
+            }
         }
         return false;
     }

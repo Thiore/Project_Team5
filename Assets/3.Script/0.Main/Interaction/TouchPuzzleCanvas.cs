@@ -111,11 +111,11 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
         {
             foreach(int removeId in removeClueId)
             {
+                UI_InvenManager.Instance.removeIndex.Add(removeId);
                 if (UI_InvenManager.Instance.HaveItem(removeId))
                 {
                     UI_InvenManager.Instance.SortInvenSlot(removeId);
                 }
-                UI_InvenManager.Instance.removeIndex.Add(removeId);
             }
             isRemoveClue = false;
         }

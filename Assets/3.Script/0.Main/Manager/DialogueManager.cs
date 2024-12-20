@@ -134,7 +134,7 @@ public class DialogueManager : MonoBehaviour
         currentIndex = startIndex;
         endDialogueIndex = endIndex;
         dialogueTableName = tableName;
-
+        speaker.gameObject.SetActive(true);
         //첫 번째 대사 출력
         ShowNextDialogue();
     }
@@ -163,7 +163,7 @@ public class DialogueManager : MonoBehaviour
         // 버튼 및 움직임 비활성화
         if (PlayerManager.Instance != null)
         {
-            PlayerManager.Instance.SetBtn(true); // 플레이어 버튼 상태 설정
+            PlayerManager.Instance.SetBtn(false); // 플레이어 버튼 상태 설정
             TouchManager.Instance.EnableMoveHandler(false); // 움직임 비활성화
         }
 
@@ -208,10 +208,10 @@ public class DialogueManager : MonoBehaviour
         // 대화 종료 처리
         if (PlayerManager.Instance != null)
         {
-            PlayerManager.Instance.SetBtn(false); // 플레이어 버튼 상태 초기화
+            PlayerManager.Instance.SetBtn(true); // 플레이어 버튼 상태 초기화
             TouchManager.Instance.EnableMoveHandler(true); // 움직임 다시 활성화
         }
-
+        speaker.gameObject.SetActive(false);
         dialogueButton.gameObject.SetActive(false); // 버튼 비활성화
         dialogueButton.onClick.RemoveAllListeners();
     }
@@ -374,5 +374,6 @@ public class DialogueManager : MonoBehaviour
             tmp.text += text[i];
             yield return wait;
         }
+      
     }
 }

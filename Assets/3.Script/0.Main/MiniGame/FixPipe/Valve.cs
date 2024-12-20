@@ -38,13 +38,13 @@ public class Valve : MonoBehaviour, ITouchable
         TryGetComponent(out outline);
         outline.enabled = false;
     }
-
+#if UNITY_EDITOR
     private void Update()
     {
         Vector3 direction = transform.right;
         Debug.DrawRay(parentpipe.transform.position, direction * rayDistance, Color.red); // 중심선
     }
-
+#endif
     public void OnTouchEnd(Vector2 position)
     {
         Ray ray = Camera.main.ScreenPointToRay(position);

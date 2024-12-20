@@ -141,7 +141,7 @@ public class InteractionPadLock : TouchPuzzleCanvas
         base.OffInteraction();
         if (!isClear)
         {
-            mask.enabled = true;
+            
             missionStart.SetActive(false);
             missionExit.SetActive(false);
             if (PlayerManager.Instance != null)
@@ -149,6 +149,7 @@ public class InteractionPadLock : TouchPuzzleCanvas
                 PlayerManager.Instance.SetBtn(true);
             }
             TouchManager.Instance.EnableMoveHandler(true);
+            mask.enabled = true;
         }
         else
         {
@@ -170,10 +171,15 @@ public class InteractionPadLock : TouchPuzzleCanvas
 
     protected override void ResetCamera()
     {
-        mask.enabled = true;
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(true);
+        }
+        TouchManager.Instance.EnableMoveHandler(true);
         outline.enabled = true;
         interactionCam.SetActive(true);
         missionExit.SetActive(false);
+        mask.enabled = true;
         
     }
     public override void OnTouchEnd(Vector2 position)
@@ -186,6 +192,7 @@ public class InteractionPadLock : TouchPuzzleCanvas
             {
                 if (hit.collider.gameObject.Equals(gameObject))
                 {
+                    mask.enabled = false;
                     missionStart.SetActive(true);
                     missionExit.SetActive(true);
                     if (PlayerManager.Instance != null)
@@ -194,7 +201,6 @@ public class InteractionPadLock : TouchPuzzleCanvas
                     }
                     TouchManager.Instance.EnableMoveHandler(false);
                     btnExit.SetActive(true);
-                    mask.enabled = false;
                     outline.enabled = false;
                 }
             }

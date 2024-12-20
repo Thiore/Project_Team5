@@ -138,9 +138,9 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
 
     protected override void ResetCamera()
     {
-        mask.enabled = true;
         missionExit.SetActive(false);
         isTouching = true;
+        mask.enabled = true;
         interactionCam.SetActive(true);
     }
 
@@ -166,13 +166,13 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
                     {
                         if (!UI_InvenManager.Instance.HaveItem(interactionIndex))
                         {
-                            DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", 0);
                             //Dialogue - 퍼즐이 필요합니다?
                             return;
                         }
                         if (missionStart.activeInHierarchy)
                         {
-                            DialogueManager.Instance.SetDialogue("Table_StoryB1", 1);
+                            DialogueManager.Instance.SetDialogue("Table_StoryB1", 0);
                             //Dialogue - 퍼즐을 다 넣어야한다는거?
                         }
                         else
@@ -241,12 +241,4 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
         }
     }
 #endif
-    private void GameEnd()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-    Application.Quit();
-#endif
-    }
 }

@@ -33,12 +33,6 @@ public class InteractionBattery : TouchPuzzleCanvas
     {
         base.OffInteraction();
 
-        if(!isClear)
-        {
-            mask.enabled = true;
-            outline.enabled = true;
-        }
-        
         missionStart.SetActive(false);
         if (PlayerManager.Instance != null)
         {
@@ -48,6 +42,11 @@ public class InteractionBattery : TouchPuzzleCanvas
         foreach (var battery in batterys)
         {
             battery.isStart = false;
+        }
+        if (!isClear)
+        {
+            mask.enabled = true;
+            outline.enabled = true;
         }
     }
     public override void OnTouchEnd(Vector2 position)
@@ -64,7 +63,7 @@ public class InteractionBattery : TouchPuzzleCanvas
                         UI_InvenManager.Instance.OpenQuickSlot();
                     else
                     {
-                        //필요한 아이템이 있을것같아
+                        DialogueManager.Instance.SetDialogue("Table_StoryB1", 24);
                         return;
                     }
                 }
@@ -77,6 +76,7 @@ public class InteractionBattery : TouchPuzzleCanvas
                 }
                 if (!missionStart.activeInHierarchy)
                 {
+                    mask.enabled = false;
                     missionStart.SetActive(true);
                     btnExit.SetActive(true);
                     TouchManager.Instance.EnableMoveHandler(false);
@@ -84,7 +84,6 @@ public class InteractionBattery : TouchPuzzleCanvas
                     {
                         PlayerManager.Instance.SetBtn(false);
                     }
-                    mask.enabled = false;
                     outline.enabled = false;
                     
                 }
@@ -101,6 +100,7 @@ public class InteractionBattery : TouchPuzzleCanvas
             {
                 battery.isStart = true;
             }
+            DialogueManager.Instance.SetDialogue("Table_StoryB1", 25);
         }
         
     }

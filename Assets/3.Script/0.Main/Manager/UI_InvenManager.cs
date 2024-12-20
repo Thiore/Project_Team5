@@ -49,7 +49,7 @@ public class UI_InvenManager : MonoBehaviour
     [SerializeField] private FlashLight flashLight;
     [SerializeField] private List<Item3D> items;
 
-    public List<int> removeIndex = new List<int>();
+    public List<int> removeIndex;
 
     private void Awake()
     {
@@ -59,7 +59,7 @@ public class UI_InvenManager : MonoBehaviour
         InitSlots();
         quickSlotList.TryGetComponent(out quickSlotRect);
         isOpenQuick = false;
-
+        removeIndex = new List<int>();
     }
     private void Start()
     {
@@ -127,6 +127,8 @@ public class UI_InvenManager : MonoBehaviour
             //더 이상 필요 없을것같아
             DataSaveManager.Instance.UpdateItemState(item.id);
             ClueItem.Instance.UseItem(item.id);
+            items[item.id].gameObject.SetActive(false);
+            DialogueManager.Instance.SetDialogue("Table_StoryB1", 40);
             return;
         }
         if(!isGetItemImage)
@@ -281,9 +283,17 @@ public class UI_InvenManager : MonoBehaviour
         slot.gameObject.SetActive(false);
         invenSlots.Remove(slot);
         invenSlots_Queue.Enqueue(slot);
-        if (iteminfo.ID.Equals(id))
+        if (iteminfo.id.Equals(id))
         {
-            iteminfo.SetInfoByItem(invenSlots[0].item);
+            if(invenSlots.Count>0)
+            {
+                iteminfo.SetInfoByItem(invenSlots[0].item);
+            }
+            else
+            {
+                iteminfo.gameObject.SetActive(false);
+            }
+            
         }
         DataSaveManager.Instance.UpdateItemState(id);
         ClueItem.Instance.UseItem(id);

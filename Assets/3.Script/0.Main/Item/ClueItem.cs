@@ -23,11 +23,16 @@ public class ClueItem : MonoBehaviour
     }
     public void UseItem(int id)
     {
-        if(keyClueId.Equals(id))
+        if(childItem.TryGetValue(id,out Item3D itemObj))
         {
-            clueUI.SetActive(false);
+            itemObj.gameObject.SetActive(false);
+            if (keyClueId.Equals(id))
+            {
+                clueUI.SetActive(false);
+            }
+            childItem.Remove(id);
         }
-        childItem.Remove(id);
+        
     }
     public void SetPin(int id)
     {

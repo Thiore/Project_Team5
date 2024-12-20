@@ -6,15 +6,13 @@ using UnityEngine.UI;
 
 public class UI_ItemInformation : MonoBehaviour, IDropHandler
 {
-    private int id = -1;
-    public int ID { get; private set; }
-
+    public int id { get; private set; }
     private Image image;
 
 
     public void SetInfoByItem(Item item)
     {
-        if (id.Equals(-1))
+        if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
 

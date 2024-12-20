@@ -154,16 +154,21 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     public override void OffInteraction()
     {
         base.OffInteraction();
-
+        missionStart.SetActive(false);
         if (!isClear)
         {
             if (UI_InvenManager.Instance.isOpenQuick)
             {
                 UI_InvenManager.Instance.CloseQuickSlot();
             }
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance.SetBtn(true);
+            }
+            TouchManager.Instance.EnableMoveHandler(true);
             mask.enabled = true;
         }
-        missionStart.SetActive(false);
+        
         
         if (anim != null)
         {
@@ -171,6 +176,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         }
         if(isClear)
         {
+            mask.enabled = false;
             Invoke("ClosePanel", 1f);
         }
 
@@ -180,7 +186,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         if (!interactionAnim[1].GetBool(openAnim))
             interactionAnim[1].SetBool(openAnim, true);
 
-        mask.enabled = false;
+        
         clearCam.SetActive(true);
         engineRoomCam.SetActive(true);
 
@@ -218,6 +224,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         }
         TouchManager.Instance.EnableMoveHandler(true);
         PlayerManager.Instance.ResetCamOff();
+        DialogueManager.Instance.SetDialogue("Table_StoryB1", 108);
     }
     public override void OnTouchEnd(Vector2 position)
     {
@@ -255,6 +262,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
                 }
                 if (!missionStart.activeInHierarchy)
                 {
+                    mask.enabled = false;
                     missionStart.SetActive(true);
                     btnExit.SetActive(true);
                     TouchManager.Instance.EnableMoveHandler(false);
@@ -262,7 +270,6 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
                     {
                         PlayerManager.Instance.SetBtn(false);
                     }
-                    mask.enabled = false;
 
                 }
 

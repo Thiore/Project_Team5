@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-
+#if UNITY_EDITOR
 public class LayerTagFinder : EditorWindow
 {
     private string searchTag = "Untagged";
@@ -55,3 +55,4 @@ public class LayerTagFinder : EditorWindow
         Debug.Log("Search Complete!");
     }
 }
+#endif

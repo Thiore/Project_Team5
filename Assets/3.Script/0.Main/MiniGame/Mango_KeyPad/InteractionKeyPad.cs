@@ -10,13 +10,13 @@ public class InteractionKeyPad : TouchPuzzleCanvas
     {
         base.OffInteraction();
 
-        mask.enabled = true;
         missionStart.SetActive(false);
-        TouchManager.Instance.EnableMoveHandler(false);
+        TouchManager.Instance.EnableMoveHandler(true);
         if (PlayerManager.Instance != null)
         {
-            PlayerManager.Instance.SetBtn(false);
+            PlayerManager.Instance.SetBtn(true);
         }
+        mask.enabled = true;
     }
     public override void OnTouchEnd(Vector2 position)
     {
