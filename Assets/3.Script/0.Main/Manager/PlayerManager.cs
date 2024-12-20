@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private UI_ItemInformation itemInfo;
     public UI_ItemInformation ui_iteminfo {  get => itemInfo; }
 
-
+    public GameObject resetCam;
 
     [SerializeField] private GameObject btnList;
     public GameObject getBtnList { get => btnList; }
@@ -54,6 +54,16 @@ public class PlayerManager : MonoBehaviour
             }
         }
         
+    }
+    
+    public void ResetCamOff()
+    {
+        StartCoroutine(ResetCamOff_co());
+    }
+    private IEnumerator ResetCamOff_co()
+    {
+        yield return null;
+        resetCam.SetActive(false);
     }
 
 }

@@ -63,6 +63,7 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
                     {
                         if (isClear)
                         {
+                            isTouching = anim.GetBool(openAnim);
                             isTouching = !isTouching;
                             if (normalCamera != null)
                             {

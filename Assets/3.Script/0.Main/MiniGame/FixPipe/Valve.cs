@@ -23,7 +23,7 @@ public class Valve : MonoBehaviour, ITouchable
     [SerializeField] LayerMask targetLayer;
 
     [SerializeField] private GameObject parentpipe;
-
+    private Outline outline;
     private void Awake()
     {
         parentpipe = gameObject.transform.parent.parent.gameObject;
@@ -32,6 +32,7 @@ public class Valve : MonoBehaviour, ITouchable
     private void Start()
     {
         ShootRay();
+        TryGetComponent(out outline);
     }
 
     private void Update()
@@ -55,7 +56,7 @@ public class Valve : MonoBehaviour, ITouchable
     public void RotateValve()
     {
         StartCoroutine(RotataAndRay());
-        pipegameManager.FindPath();
+        //pipegameManager.FindPath();
     }
 
     private IEnumerator RotataAndRay()
@@ -158,5 +159,20 @@ public class Valve : MonoBehaviour, ITouchable
     {
         return nextValve;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("MainCamera") && outline != null)
+        {
+            outline.enabled = true;
+        }
 
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("MainCamera") && outline != null)
+        {
+            outline.enabled = true;
+        }
+    }
 }

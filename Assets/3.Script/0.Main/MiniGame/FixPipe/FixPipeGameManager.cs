@@ -16,21 +16,35 @@ public class FixPipeGameManager : MonoBehaviour
     private List<ConnectPipe> connectpipes;
 
     //제한시간 4분 48초 >> 288초
-    private float limittime = 288f;
+    private float limittime = 360f;
     private int min;
     private float sec;
+
+    [SerializeField] private GameObject CargoRoomCam;
+
+    [SerializeField] private int floorIndex;
+    [SerializeField] private int objectIndex;
+    public int getObjectIndex { get => objectIndex; }
+
+    [SerializeField] private Animator interactionAnim;
+
 
 
     private void Awake()
     {
+        if (DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
+        {
+            iscomplete = true;
+            interactionAnim.SetBool("Open", true);
+        }
+        else
+        {
+            iscomplete = false;
+        }
         visitedValves = new HashSet<Valve>();
         connectpipes = new List<ConnectPipe>();
-        iscomplete = false;
     }
-    //private void Start()
-    //{
-    //    StartCoroutine(StartFixFipeGameTimeLimit());
-    //}
+    
 
     public void FindPath()
     {
@@ -130,16 +144,23 @@ public class FixPipeGameManager : MonoBehaviour
         pipe.TogglePipeConnection();
         FindPath();
     }
+    public void GameStart()
+    {
+        StartCoroutine(StartFixFipeGameTimeLimit_co());
+    }
 
-    public IEnumerator StartFixFipeGameTimeLimit()
+    private IEnumerator StartFixFipeGameTimeLimit_co()
     {
 
         while(limittime > 0)
         {
             if (iscomplete)
             {
-                //여기 게임 끝났을때 메소드 
-                Debug.Log("승리");
+                DataSaveManager.Instance.UpdateGameState(floorIndex,objectIndex);
+                PlayerManager.Instance.resetCam.SetActive(true);
+                CargoRoomCam.SetActive(true);
+                interactionAnim.SetBool("Open",true);
+                Invoke("CargoRoomCamOff", 2f);
                 yield break;
             }
 
@@ -151,9 +172,16 @@ public class FixPipeGameManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        // 여기다가 실패한 메소드
-        Debug.Log("실패");
+        SettingsManager.Instance.LoadLobby();
+        yield break;
+        
 
+    }
+    private void CargoRoomCamOff()
+    {
+        
+        CargoRoomCam.SetActive(false);
+        PlayerManager.Instance.ResetCamOff();
     }
 
 }

@@ -14,6 +14,12 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     
     private List<SpinTile> connectedObjects;
 
+    [SerializeField] private GameObject clearCam;
+    [SerializeField] private GameObject engineRoomCam;
+    [SerializeField] private GameObject monitorCam;
+    [SerializeField] private FixPipeGameManager pipeManager;
+    
+
     private void Awake()
     {
         lampMaterials = new Material[lamps.Length];
@@ -21,9 +27,31 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         connectedObjects = new List<SpinTile>();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        
+    }
+
     protected override void Start()
     {
-        if (isClear) return;
+        if (isClear)
+        {
+            if (DataSaveManager.Instance.GetGameState(floorIndex, pipeManager.getObjectIndex))
+            {
+                return;
+            }
+            else
+            {
+                TouchManager.Instance.EnableMoveHandler(false);
+                if (PlayerManager.Instance != null)
+                {
+                    PlayerManager.Instance.SetBtn(false);
+                }
+                Invoke("OffInteraction", 2f);
+                return;
+            }
+        }
         base.Start();
 
         
@@ -136,16 +164,55 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
             mask.enabled = true;
         }
         missionStart.SetActive(false);
+        
+        if (anim != null)
+        {
+            anim.SetBool(openAnim, false);
+        }
+        if(isClear)
+        {
+            if (!interactionAnim[1].GetBool(openAnim))
+                interactionAnim[1].SetBool(openAnim, true);
+
+            mask.enabled = false;
+            clearCam.SetActive(true);
+            engineRoomCam.SetActive(true);
+            monitorCam.SetActive(true);
+
+            Invoke("ClearEvent", 2f);
+        }
+
+    }
+    protected override void ClearEvent()
+    {
+        interactionAnim[0].SetBool(openAnim, true);
+        pipeManager.GameStart();
+        Invoke("NextCamMove", 2f);
+    }
+    private void NextCamMove()
+    {
+        clearCam.SetActive(false);
+        
+        Invoke("EngineRoomMove", 2f);
+    }
+    private void EngineRoomMove()
+    {
+        interactionAnim[2].SetBool(openAnim, true);
+        engineRoomCam.SetActive(false);
+        
+        Invoke("ResetCamera", 5f);
+    }
+
+    protected override void ResetCamera()
+    {
+        PlayerManager.Instance.resetCam.SetActive(true);
+        monitorCam.SetActive(false);
         if (PlayerManager.Instance != null)
         {
             PlayerManager.Instance.SetBtn(true);
         }
         TouchManager.Instance.EnableMoveHandler(true);
-        if (anim != null)
-        {
-            anim.SetBool(openAnim, false);
-        }
-
+        PlayerManager.Instance.ResetCamOff();
     }
     public override void OnTouchEnd(Vector2 position)
     {
@@ -207,15 +274,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         
     }
 
-    protected override void ClearEvent()
-    {
-        
-    }
-
-    protected override void ResetCamera()
-    {
-        
-    }
+    
 
     protected void OnTriggerEnter(Collider other)
     {
