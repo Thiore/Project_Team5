@@ -9,12 +9,17 @@ public class ConnectPipe : Pipe, ITouchable
     public bool IsConnect { get => isconnect; }
     [SerializeField] private Image monitorImage;
     [SerializeField] private Image shortpipeimage;
+    private Color fillColor;
+    private Outline outline;
 
     private void Awake()
     {
         TryGetComponent(out render);
-        render.enabled = false;
+        fillColor = new Color(render.material.color.r, render.material.color.g, render.material.color.b,1f);
+        render.material.color = Color.clear;
         monitorImage.enabled = false;
+        TryGetComponent(out outline);
+        outline.enabled = false;
     }
 
     public void OnTouchEnd(Vector2 position)
@@ -35,6 +40,14 @@ public class ConnectPipe : Pipe, ITouchable
         render.enabled = !render.enabled;
         isconnect = !isconnect;
         monitorImage.enabled = !monitorImage.enabled;
+        if(isconnect)
+        {
+            render.material.color = fillColor;
+        }
+        else
+        {
+            render.material.color = Color.clear;
+        }
     }
 
     public override void PipeImageSet()
@@ -74,5 +87,21 @@ public class ConnectPipe : Pipe, ITouchable
     public void OnTouchStarted(Vector2 position)
     {
 
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("MainCamera") && outline != null)
+        {
+            outline.enabled = true;
+        }
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("MainCamera") && outline != null)
+        {
+            outline.enabled = true;
+        }
     }
 }

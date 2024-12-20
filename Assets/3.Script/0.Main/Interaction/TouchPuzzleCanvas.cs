@@ -35,7 +35,7 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
     [Header("사라져야할 아이템이 있다면 체크해주세요")]
     [SerializeField] private bool isRemoveClue;
-    [SerializeField] private int removeClueId;
+    [SerializeField] private int[] removeClueId;
 
 
     protected Outline outline;
@@ -109,14 +109,15 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
         if (isClear && isRemoveClue)
         {
-            if (UI_InvenManager.Instance.HaveItem(removeClueId))
+            foreach(int removeId in removeClueId)
             {
-                UI_InvenManager.Instance.SortInvenSlot(removeClueId);
-                
-                isRemoveClue = false;
-
+                if (UI_InvenManager.Instance.HaveItem(removeId))
+                {
+                    UI_InvenManager.Instance.SortInvenSlot(removeId);
+                }
+                UI_InvenManager.Instance.removeIndex.Add(removeId);
             }
-            UI_InvenManager.Instance.removeIndex.Add(removeClueId);
+            isRemoveClue = false;
         }
        
     }

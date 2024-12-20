@@ -66,7 +66,7 @@ public class ReadTouchData : MonoBehaviour,ITouchable
     {
         if (other.CompareTag("MainCamera") && outline != null)
         {
-            outline.enabled = true;
+            outline.enabled = false;
         }
     }
 }

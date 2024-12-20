@@ -8,6 +8,8 @@ public class Keypad_Btn : MonoBehaviour
     [SerializeField] private InputField input;
     [SerializeField] private int answer;
 
+    [SerializeField] private int floorIndex;
+    [SerializeField] private int objectIndex;
 
     
     
@@ -21,7 +23,7 @@ public class Keypad_Btn : MonoBehaviour
 
         if (int.TryParse(btnText.text, out int result))
         {
-            if (input.text.Length >= 3)
+            if (input.text.Length >= 4)
             {
                 Debug.Log("Too many input");
                 return;

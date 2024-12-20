@@ -10,7 +10,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     private Material[] lampMaterials;
 
     [SerializeField] private List<SpinTile> targetObjects; // 모든 타겟 오브젝트 리스트
-    public bool isComplete { get; private set; }
+ 
     
     private List<SpinTile> connectedObjects;
 
@@ -171,17 +171,21 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         }
         if(isClear)
         {
-            if (!interactionAnim[1].GetBool(openAnim))
-                interactionAnim[1].SetBool(openAnim, true);
-
-            mask.enabled = false;
-            clearCam.SetActive(true);
-            engineRoomCam.SetActive(true);
-            monitorCam.SetActive(true);
-
-            Invoke("ClearEvent", 2f);
+            Invoke("ClosePanel", 1f);
         }
 
+    }
+    private void ClosePanel()
+    {
+        if (!interactionAnim[1].GetBool(openAnim))
+            interactionAnim[1].SetBool(openAnim, true);
+
+        mask.enabled = false;
+        clearCam.SetActive(true);
+        engineRoomCam.SetActive(true);
+
+
+        Invoke("ClearEvent", 3f);
     }
     protected override void ClearEvent()
     {
@@ -193,14 +197,15 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     {
         clearCam.SetActive(false);
         
-        Invoke("EngineRoomMove", 2f);
+        Invoke("EngineRoomMove", 3f);
     }
     private void EngineRoomMove()
     {
+        monitorCam.SetActive(true);
         interactionAnim[2].SetBool(openAnim, true);
         engineRoomCam.SetActive(false);
         
-        Invoke("ResetCamera", 5f);
+        Invoke("ResetCamera", 6f);
     }
 
     protected override void ResetCamera()
@@ -237,7 +242,6 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
                             //퓨즈퍼즐을 먼저 풀어야한다.
                         }
                     }
-                        
                     else
                     {
                         //필요한 아이템이 있을것같아

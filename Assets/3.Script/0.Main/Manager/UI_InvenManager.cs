@@ -126,6 +126,7 @@ public class UI_InvenManager : MonoBehaviour
         {
             //더 이상 필요 없을것같아
             DataSaveManager.Instance.UpdateItemState(item.id);
+            ClueItem.Instance.UseItem(item.id);
             return;
         }
         if(!isGetItemImage)
@@ -282,7 +283,7 @@ public class UI_InvenManager : MonoBehaviour
         invenSlots_Queue.Enqueue(slot);
         if (iteminfo.ID.Equals(id))
         {
-            iteminfo.SetInfoByItem(invenSlots[invenSlots.Count - 1].item);
+            iteminfo.SetInfoByItem(invenSlots[0].item);
         }
         DataSaveManager.Instance.UpdateItemState(id);
         ClueItem.Instance.UseItem(id);

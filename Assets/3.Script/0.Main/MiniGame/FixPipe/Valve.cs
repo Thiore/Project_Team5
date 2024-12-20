@@ -36,6 +36,7 @@ public class Valve : MonoBehaviour, ITouchable
     {
         ShootRay();
         TryGetComponent(out outline);
+        outline.enabled = false;
     }
 
     private void Update()
@@ -164,6 +165,7 @@ public class Valve : MonoBehaviour, ITouchable
     }
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.CompareTag("MainCamera") && outline != null)
         {
             outline.enabled = true;
@@ -175,7 +177,7 @@ public class Valve : MonoBehaviour, ITouchable
     {
         if (other.CompareTag("MainCamera") && outline != null)
         {
-            outline.enabled = true;
+            outline.enabled = false;
         }
     }
 }

@@ -9,6 +9,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     //private int id = -1;
     //public int SlotID { get => id; }
     public Item item { get; private set; }
+    private int id;
     [SerializeField] private Image image;
     private bool isDragging = false;
     public void FragIsDrag()
@@ -19,7 +20,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     public void SetinvenByItem(Item item)
     {
         this.item = item;
-            
+        id = item.id;
         image.sprite = item.sprite;
     }
 

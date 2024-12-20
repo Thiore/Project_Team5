@@ -14,10 +14,36 @@ public class OpeningManager : MonoBehaviour
         if (GameManager.Instance.gameType.Equals(eGameType.LoadGame))
         {
             gameObject.SetActive(false);
+            return;
         }
+        else
+        {
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance.SetBtn(false);
+            }
+            if (TouchManager.Instance != null)
+            {
+                TouchManager.Instance.EnableMoveHandler(false);
+            }
+        }
+        
+
     }
     private void OnDisable()
     {
         globalVolume.profile = mainGameVolume;
+        if(GameManager.Instance.gameType.Equals(eGameType.NewGame))
+        {
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance.SetBtn(true);
+            }
+            if (TouchManager.Instance != null)
+            {
+                TouchManager.Instance.EnableMoveHandler(true);
+            }
+        }
+        
     }
 }

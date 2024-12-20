@@ -21,6 +21,7 @@ public class FixPipeGameManager : MonoBehaviour
     private float sec;
 
     [SerializeField] private GameObject CargoRoomCam;
+    [SerializeField] private GameObject MonitorCam;
 
     [SerializeField] private int floorIndex;
     [SerializeField] private int objectIndex;
@@ -157,10 +158,9 @@ public class FixPipeGameManager : MonoBehaviour
             if (iscomplete)
             {
                 DataSaveManager.Instance.UpdateGameState(floorIndex,objectIndex);
-                PlayerManager.Instance.resetCam.SetActive(true);
-                CargoRoomCam.SetActive(true);
-                interactionAnim.SetBool("Open",true);
-                Invoke("CargoRoomCamOff", 2f);
+
+                MonitorCam.SetActive(true);
+                Invoke("CargoRoomCamOn", 3f);
                 yield break;
             }
 
@@ -177,9 +177,15 @@ public class FixPipeGameManager : MonoBehaviour
         
 
     }
+    private void CargoRoomCamOn()
+    {
+        PlayerManager.Instance.resetCam.SetActive(true);
+        CargoRoomCam.SetActive(true);
+        interactionAnim.SetBool("Open", true);
+        Invoke("CargoRoomCamOff", 3f);
+    }
     private void CargoRoomCamOff()
     {
-        
         CargoRoomCam.SetActive(false);
         PlayerManager.Instance.ResetCamOff();
     }
