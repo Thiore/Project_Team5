@@ -8,10 +8,14 @@ public class InteractionPowerBox : TouchPuzzleCanvas
     public EndPoint[] endArray;
     private WireColor[] colors = { WireColor.Red, WireColor.Orange, WireColor.Green, WireColor.Yellow };
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     protected override void OnEnable()
     {
         base.OnEnable();
-        if(!isClear)
+        if (!isClear)
         {
             foreach (var start in startArray)
             {
@@ -20,6 +24,10 @@ public class InteractionPowerBox : TouchPuzzleCanvas
             ShuffleArray(startArray);
             ShuffleArray(endArray);
             AssignRandomColors(startArray, endArray);
+        }
+        else
+        {
+            interactionAnim[0].SetBool(openAnim, true);
         }
         
     }

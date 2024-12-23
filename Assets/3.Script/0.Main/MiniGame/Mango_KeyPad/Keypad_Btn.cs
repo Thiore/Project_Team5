@@ -1,52 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
-public class Keypad_Btn : MonoBehaviour
+using TMPro;
+public class Keypad_Btn : MonoBehaviour, IUITouchable
 {
-    [SerializeField] private InputField input;
-    [SerializeField] private int answer;
-
-    [SerializeField] private int floorIndex;
-    [SerializeField] private int objectIndex;
-
-    
-    
-
-    
-
-    public void BtnClick(Button clickedBtn)
+    [SerializeField] private InteractionKeyPad keyPad;
+    private TMP_Text text;
+    private void Awake()
     {
-        string btnName = clickedBtn.name;
-        Text btnText = clickedBtn.GetComponentInChildren<Text>();
+        transform.GetChild(0).TryGetComponent(out text);
+    }
+    public void OnUIEnd(PointerEventData data)
+    {
+        keyPad.BtnClick(text);
+    }
 
-        if (int.TryParse(btnText.text, out int result))
-        {
-            if (input.text.Length >= 4)
-            {
-                Debug.Log("Too many input");
-                return;
-            }
-            input.text += btnText.text;
-        }
-        else
-        {
-            if (btnText.text.Equals("Enter"))
-            {
-                Debug.Log($"Answer is {input.text}");
-                if (input.text.Equals(answer.ToString()))
-                {
-                    //SaveManager.Instance.UpdateObjectState(floorIndex, objectIndex[0], true);
-                    //puzzle.isClear = true;
-                }
-                input.text = "";
-                //puzzle.OffInteraction();
-            }
-            else
-            {
-                input.text = input.text.Substring(0, input.text.Length - 1);
-            }
-        }
+    public void OnUIHold(PointerEventData data)
+    {
+        
+    }
+
+    public void OnUIStarted(PointerEventData data)
+    {
+        
     }
 }

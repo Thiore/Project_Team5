@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class InteractionKeyPad : TouchPuzzleCanvas
 {
-    [SerializeField] private InputField input;
+    [SerializeField] private TMP_InputField input;
     [SerializeField] private int answer;
     public override void OffInteraction()
     {
@@ -37,32 +38,35 @@ public class InteractionKeyPad : TouchPuzzleCanvas
             }
         }
     }
-    public void BtnClick(Button clickedBtn)
+    public void BtnClick(TMP_Text clickedBtn)
     {
-        string btnName = clickedBtn.name;
-        Text btnText = clickedBtn.GetComponentInChildren<Text>();
-
-        if (int.TryParse(btnText.text, out int result))
+        if (int.TryParse(clickedBtn.text, out int result))
         {
             if (input.text.Length >= 4)
             {
                 Debug.Log("Too many input");
                 return;
             }
-            input.text += btnText.text;
+            input.text += clickedBtn.text;
         }
         else
         {
-            if (btnText.text.Equals("Enter"))
+            if (clickedBtn.text.Equals("ENTER"))
             {
                 Debug.Log($"Answer is {input.text}");
                 if (input.text.Equals(answer.ToString()))
                 {
                     DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
                     isClear = true;
+                    input.text = "Clear";
                     OffInteraction();
+                    return;
                 }
-                input.text = "";
+                else
+                {
+                    input.text = string.Empty;
+                }
+                
                 
             }
             else

@@ -10,11 +10,19 @@ public class InteractionBattery : TouchPuzzleCanvas
     [SerializeField] private Connection[] clearRedConnect;
     [SerializeField] private Connection[] clearBlackConnect;
 
-    protected override void Start()
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
+    private void Start()
     {
         if (!isClear)
         {
-            base.Start();
+            
 
             foreach (var battery in batterys)
             {
@@ -33,20 +41,26 @@ public class InteractionBattery : TouchPuzzleCanvas
     {
         base.OffInteraction();
 
-        missionStart.SetActive(false);
-        if (PlayerManager.Instance != null)
-        {
-            PlayerManager.Instance.SetBtn(true);
-        }
-        TouchManager.Instance.EnableMoveHandler(true);
         foreach (var battery in batterys)
         {
             battery.isStart = false;
         }
         if (!isClear)
         {
+            missionStart.SetActive(false);
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance.SetBtn(true);
+            }
+            TouchManager.Instance.EnableMoveHandler(true);
             mask.enabled = true;
             outline.enabled = true;
+        }
+        else
+        {
+            missionExit.SetActive(true);
+            missionStart.SetActive(false);
+            Invoke("ClearEvent", 0.5f);
         }
     }
     public override void OnTouchEnd(Vector2 position)
@@ -106,12 +120,24 @@ public class InteractionBattery : TouchPuzzleCanvas
     }
     protected override void ClearEvent()
     {
-        
+        interactionCam.SetActive(true);
+        missionExit.SetActive(false);
+        Invoke("StartInteractionAnim", 3f);
+    }
+    private void StartInteractionAnim()
+    {
+        interactionAnim[0].SetTrigger("Battery");
+        Invoke("ResetCamera", 3f);
     }
 
     protected override void ResetCamera()
     {
-        
+        interactionCam.SetActive(false);
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(true);
+        }
+        TouchManager.Instance.EnableMoveHandler(true);
     }
 
     private void CheckConnecting()
@@ -149,5 +175,7 @@ public class InteractionBattery : TouchPuzzleCanvas
             clearRedConnect[i].line.SetPosition(0, clearRedConnect[i].transform.position);
             clearRedConnect[i].line.SetPosition(1, clearBlackConnect[i].transform.position);
         }
+        mask.enabled = false;
+        outline.enabled = false;
     }
 }

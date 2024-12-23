@@ -20,12 +20,17 @@ public class InteractionFuseBox : TouchPuzzleCanvas
 
     private int[] result = new int[] { 0, 2, 1, 0, 1, 2 };
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         foreach (Outline outline in emptyFuses)
         {
             outline.enabled = false;
         }
+    }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
     }
 
     public void CheckResult()
@@ -184,23 +189,34 @@ public class InteractionFuseBox : TouchPuzzleCanvas
     protected override void ClearEvent()
     {
 
+       
+        spin.InteractionObject(objectIndex);
+        if (anim != null)
+        {
+            anim.SetBool(openAnim, false);
+        }
+        interactionCam.SetActive(true);
+        missionStart.SetActive(false);
+
+        
+        Invoke("InteractionVolt", 3f);
+    }
+    private void InteractionVolt()
+    {
+        interactionAnim[0].SetTrigger("Fuse");
+        Invoke("ResetCamera", 2f);
+    }
+
+    protected override void ResetCamera()
+    {
+        interactionCam.SetActive(false);
+        DialogueManager.Instance.SetDialogue("Table_StoryB1", 29);
         if (PlayerManager.Instance != null)
         {
             PlayerManager.Instance.SetBtn(true);
         }
         TouchManager.Instance.EnableMoveHandler(true);
-        spin.InteractionObject(objectIndex);
-        missionStart.SetActive(false);
-        if (anim != null)
-        {
-            anim.SetBool(openAnim, false);
-        }
-        DialogueManager.Instance.SetDialogue("Table_StoryB1", 29);
-    }
 
-    protected override void ResetCamera()
-    {
-        
     }
     private void OnTriggerEnter(Collider other)
     {

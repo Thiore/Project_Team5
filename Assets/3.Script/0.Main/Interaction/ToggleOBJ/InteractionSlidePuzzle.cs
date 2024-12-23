@@ -17,8 +17,9 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
     private float rayOffset;// Ray 시작 위치의 오프셋 배열을 인스펙터에서 설정 가능하게 함
     private Vector3[] rayOffsets = new Vector3[4];
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         for (int i = 0; i < 4; ++i)
         {
             switch (i)

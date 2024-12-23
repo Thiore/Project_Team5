@@ -127,21 +127,17 @@ public class FixPipeGameManager : MonoBehaviour
     public void ConnectPipeSet(ConnectPipe pipe)
     {
         //연결된 파이프가 2개가 되게끔 유지 
-        //파이프가 지워졌다면 
-        if (connectpipes.Remove(pipe))
-        {
-            //지워 진거면 해당 파이프 설정만 바꾸기 메서드 마지막으로 뺌
-        }
-        else // 파이프가 지워지지 않았다면? 전혀 다른거 들어온거 
-        {
-            if (connectpipes.Count > 1)
+        //파이프가 지워졌다면 파이프 설정만 바꾸기
+        if (!connectpipes.Remove(pipe))
+        {// 파이프가 지워지지 않았다면? 다른 파이프입니다.
+            if (connectpipes.Count < 2)
             {
-                connectpipes[0].TogglePipeConnection();
-                connectpipes.RemoveAt(0);
                 connectpipes.Add(pipe);
             }
             else
             {
+                connectpipes[0].TogglePipeConnection();
+                connectpipes.RemoveAt(0);
                 connectpipes.Add(pipe);
             }
         }
@@ -185,23 +181,28 @@ public class FixPipeGameManager : MonoBehaviour
     private void MonitorCamOn()
     {
         MonitorCam.SetActive(true);
-        Invoke("ResetLobby", 6f);
+        Invoke("CargoRoomCamOn", 6f);
     }
     private void CargoRoomCamOn()
     {
         PlayerManager.Instance.resetCam.SetActive(true);
         CargoRoomCam.SetActive(true);
-        
+        MonitorCam.SetActive(false);
         Invoke("CargoRoomCamOff", 2f);
     }
     private void CargoRoomCamOff()
     {
         interactionAnim.SetBool("Open", true);
-        //CargoRoomCam.SetActive(false);
-        //PlayerManager.Instance.ResetCamOff();
-        tobecontinue.gameObject.SetActive(true);
-        string x = "To Be NextWeek......";
-        DialogueManager.Instance.ReavealText(tobecontinue, x);
+
+        //tobecontinue.gameObject.SetActive(true);
+        //string x = "To Be NextWeek......";
+        //StartCoroutine(DialogueManager.Instance.ReavealText(tobecontinue, x));
+        Invoke("ResetCamera", 2f);
+    }
+    private void ResetCamera()
+    {
+        CargoRoomCam.SetActive(false);
+        PlayerManager.Instance.ResetCamOff();
     }
     private void ResetLobby()
     {

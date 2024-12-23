@@ -40,6 +40,16 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
     protected Outline outline;
 
+    protected virtual void Awake()
+    {
+        if (TryGetComponent(out outline))
+            outline.enabled = false;
+        if (mask == null)
+            TryGetComponent(out mask);
+        if (anim == null)
+            TryGetComponent(out anim);
+    }
+
     protected virtual void OnEnable()
     {
         if (!DataSaveManager.Instance.GetGameState(floorIndex, objectIndex))
@@ -52,14 +62,7 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
             isClear = true;
             isStarted = false;
             isInteracted = true;
-            if (interactionAnim.Length > 0)
-            {
-                for (int i = 0; i < interactionAnim.Length; i++)
-                {
-                    interactionAnim[i].SetBool(openAnim, true);
-                    
-                }
-            }
+            
             return;
         }
         if (interactionIndex.Count.Equals(0))
@@ -86,15 +89,6 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
        
     }
 
-    protected virtual void Start()
-    {
-        if (TryGetComponent(out outline))
-            outline.enabled = false;
-        if(mask == null)
-            TryGetComponent(out mask);
-        if(anim == null)
-            TryGetComponent(out anim);
-    }
 
     
     public virtual void OffInteraction()

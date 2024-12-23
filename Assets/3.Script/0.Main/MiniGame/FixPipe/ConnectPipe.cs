@@ -37,16 +37,17 @@ public class ConnectPipe : Pipe, ITouchable
 
     public void TogglePipeConnection()
     {
-        render.enabled = !render.enabled;
         isconnect = !isconnect;
         monitorImage.enabled = !monitorImage.enabled;
         if(isconnect)
         {
             render.material.color = fillColor;
+            outline.enabled = false;
         }
         else
         {
             render.material.color = Color.clear;
+            outline.enabled = true;
         }
     }
 
@@ -90,7 +91,7 @@ public class ConnectPipe : Pipe, ITouchable
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainCamera") && outline != null)
+        if (other.CompareTag("MainCamera") && outline != null&& !isconnect)
         {
             outline.enabled = true;
         }
@@ -101,7 +102,7 @@ public class ConnectPipe : Pipe, ITouchable
     {
         if (other.CompareTag("MainCamera") && outline != null)
         {
-            outline.enabled = true;
+            outline.enabled = false;
         }
     }
 }

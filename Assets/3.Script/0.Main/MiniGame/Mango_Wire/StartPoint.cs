@@ -47,64 +47,74 @@ public class StartPoint : MonoBehaviour, ITouchable,ISetColor
         line.startWidth=lineWidth;
         line.endWidth = lineWidth;
         line.enabled = false;
+        isTouching = false;
     }
 
     public void OnTouchEnd(Vector2 position)
     {
-
-        if (this.isConnected.Equals(true))
+        if(isTouching)
         {
-            connectedObject.GetComponent<EndPoint>().isconnected = true;
-            isTouching = false;
-            isConnect = true;
-            CheckConnecting?.Invoke();
+            if (isConnected)
+            {
+                connectedObject.GetComponent<EndPoint>().isconnected = true;
+                isConnect = true;
+                CheckConnecting?.Invoke();
+            }
+            else
+            {
+                wire.SetActive(true);
+                line.enabled = false;
+                isConnect = false;
+            }
         }
-        else
-        {
-            wire.SetActive(true);
-            line.enabled = false;
-            isTouching = false;
-            isConnect = false;
-        }
+        isTouching = false;
 
        
     }
 
     public void OnTouchHold(Vector2 position)
     {
-        Ray ray = Camera.main.ScreenPointToRay(position);
-        RaycastHit hit;
-        // 레이캐스트를 통해 월드 좌표 계산
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, lineTouchLayer))
+        if(isTouching)
         {
-            worldPosition = hit.point; // 충돌한 지점의 좌표를 사용
-
-            if(hit.collider.TryGetComponent(out EndPoint end))
+            Ray ray = Camera.main.ScreenPointToRay(position);
+            RaycastHit hit;
+            // 레이캐스트를 통해 월드 좌표 계산
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, lineTouchLayer))
             {
-                if(end.color.Equals(color))
+                worldPosition = hit.point; // 충돌한 지점의 좌표를 사용
+
+                if (hit.collider.TryGetComponent(out EndPoint end))
                 {
-                    line.SetPosition(1, hit.collider.GetComponent<EndPoint>().lineEndPostion.position);
-                    this.isConnected = true;
-                    connectedObject = hit.collider.gameObject;
+                    if (end.color.Equals(color))
+                    {
+                        line.SetPosition(1, hit.collider.GetComponent<EndPoint>().lineEndPostion.position);
+                        this.isConnected = true;
+                        connectedObject = hit.collider.gameObject;
+                    }
+                }
+                else
+                {
+                    line.SetPosition(1, worldPosition);
+                    this.isConnected = false;
+                    connectedObject = null;
                 }
             }
-            else
-            {
-                line.SetPosition(1, worldPosition);
-                this.isConnected = false;
-                connectedObject = null;
-            }
         }
+        
 
     }
 
     public void OnTouchStarted(Vector2 position)
     {
-        wire.SetActive(false);
-        line.enabled = true;
-        line.SetPosition(0, lineStartPoint.position);
-        line.SetPosition(1, lineStartPoint.position);
-        isTouching = true;
+        if(!isTouching)
+        {
+            wire.SetActive(false);
+            line.enabled = true;
+            line.SetPosition(0, lineStartPoint.position);
+            line.SetPosition(1, lineStartPoint.position);
+            isTouching = true;
+        }
+       
     }
 
     public void setColor(WireColor color)

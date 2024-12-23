@@ -112,25 +112,12 @@ public class DataSaveManager : MonoBehaviour
     /// </summary>
     public void SaveGame()
     {
-        if (gameStateData.Count > 0)
+        if (gameStateData.Count > 0|| itemStateData.Count > 0)
         {
-            foreach (KeyValuePair<int, Dictionary<int, bool>> floor in gameStateData)//층에 대한 데이터만 추가되고 오브젝트가 추가안된 경우를 대비
-            {
-                if (floor.Value.Count.Equals(0))
-                {
-                    continue;
-                }
-                else
-                {
-                    string stateJson = JsonConvert.SerializeObject(gameStateData, Formatting.Indented);
-                    File.WriteAllText(stateSavePath, stateJson);
-                    tempGameStateData = gameStateData;
-                    break;
-                }
-            }
-        }
-        if(itemStateData.Count>0)
-        {
+            string stateJson = JsonConvert.SerializeObject(gameStateData, Formatting.Indented);
+            File.WriteAllText(stateSavePath, stateJson);
+            tempGameStateData = gameStateData;
+
             string itemJson = JsonConvert.SerializeObject(itemStateData, Formatting.Indented);
             File.WriteAllText(itemSavePath, itemJson);
             tempItemStateData = itemStateData;

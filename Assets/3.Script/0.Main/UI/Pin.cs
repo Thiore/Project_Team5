@@ -62,11 +62,9 @@ public class Pin : MonoBehaviour, IUITouchable
             dontClue.SetActive(false);
             pinImage.color = emptyColor;
             exitImage.color = emptyColor;
-            //backGroundImage.color = emptyColor;
             UICam_3D.targetTexture = renderTexture; // 3D UI카메라의 Output Texture 추가
             UICam_3D.Render(); // OutputTexture에 UICam 장면 출력
             UICam_3D.targetTexture = null; // OutputTexture 제거
-            //backGroundImage.color = fillColor;
             pinImage.color = fillColor;
             exitImage.color = fillColor;
             keyClue.SetActive(true);

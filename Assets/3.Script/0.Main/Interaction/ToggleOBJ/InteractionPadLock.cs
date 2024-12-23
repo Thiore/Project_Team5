@@ -24,16 +24,14 @@ public class InteractionPadLock : TouchPuzzleCanvas
 
     private bool isOpen;
 
-    private void Awake()
-    {
-        isOpen = false;
-    }
+    
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        if(!isClear)
+        if (!isClear)
         {
+            isOpen = false;
             //초기 목표 회전 각도
             targetRotations = new Quaternion[numberWheels.Length];
             for (int i = 0; i < numberWheels.Length; i++)
@@ -43,9 +41,15 @@ public class InteractionPadLock : TouchPuzzleCanvas
 
             //회전코루틴 초기화
             rotation_co = new Coroutine[numberWheels.Length];
-            
+
             //번호 리셋
             ResetLock();
+        }
+        else
+        {
+            isOpen = true;
+            interactionAnim[0].SetBool(openAnim, true);
+
         }
     }
 

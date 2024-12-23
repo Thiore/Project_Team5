@@ -20,8 +20,9 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     [SerializeField] private FixPipeGameManager pipeManager;
     
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         lampMaterials = new Material[lamps.Length];
         tileList = new List<SpinTile>();
         connectedObjects = new List<SpinTile>();
@@ -33,12 +34,17 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         
     }
 
-    protected override void Start()
+    private void Start()
     {
         if (isClear)
         {
             if (DataSaveManager.Instance.GetGameState(floorIndex, pipeManager.getObjectIndex))
             {
+                mask.enabled = false;
+                for(int i = 0; i < interactionAnim.Length;++i)
+                {
+                    interactionAnim[i].SetBool(openAnim, true);
+                }
                 return;
             }
             else
@@ -52,7 +58,6 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
                 return;
             }
         }
-        base.Start();
 
         
         // 모든 타일에 있는 SpinTile의 회전 완료 이벤트 구독
@@ -154,9 +159,10 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     public override void OffInteraction()
     {
         base.OffInteraction();
-        missionStart.SetActive(false);
+        
         if (!isClear)
         {
+            missionStart.SetActive(false);
             if (UI_InvenManager.Instance.isOpenQuick)
             {
                 UI_InvenManager.Instance.CloseQuickSlot();
@@ -177,22 +183,29 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         if(isClear)
         {
             mask.enabled = false;
-            Invoke("ClosePanel", 1f);
+            interactionCam.SetActive(true);
+            missionStart.SetActive(false);
+            if (!interactionAnim[1].GetBool(openAnim))
+                interactionAnim[1].SetBool(openAnim, true);
+            Invoke("ClosePanel", 3f);
         }
 
     }
     private void ClosePanel()
     {
-        if (!interactionAnim[1].GetBool(openAnim))
-            interactionAnim[1].SetBool(openAnim, true);
+        interactionAnim[3].SetTrigger("Panel");
 
-        
+        Invoke("InteractionVolt1", 2f);
+    }
+    private void InteractionVolt1()
+    {
+        interactionCam.SetActive(false);
         clearCam.SetActive(true);
         engineRoomCam.SetActive(true);
-
-
         Invoke("ClearEvent", 3f);
+       
     }
+   
     protected override void ClearEvent()
     {
         interactionAnim[0].SetBool(openAnim, true);
