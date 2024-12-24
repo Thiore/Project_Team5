@@ -194,15 +194,15 @@ public class FixPipeGameManager : MonoBehaviour
     {
         interactionAnim.SetBool("Open", true);
 
-        //tobecontinue.gameObject.SetActive(true);
-        //string x = "To Be NextWeek......";
-        //StartCoroutine(DialogueManager.Instance.ReavealText(tobecontinue, x));
-        Invoke("ResetCamera", 2f);
+        tobecontinue.gameObject.SetActive(true);
+        string x = "To Be NextWeek......";
+        StartCoroutine(DialogueManager.Instance.ReavealText(tobecontinue, x));
+        //Invoke("ResetCamera", 4f);
     }
     private void ResetCamera()
     {
-        CargoRoomCam.SetActive(false);
-        PlayerManager.Instance.ResetCamOff();
+        //CargoRoomCam.SetActive(false);
+        //PlayerManager.Instance.ResetCamOff();
     }
     private void ResetLobby()
     {
