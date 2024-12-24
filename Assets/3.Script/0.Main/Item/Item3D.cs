@@ -33,9 +33,10 @@ public class Item3D : MonoBehaviour, ITouchable
     }
     private void Start()
     {
-        if(combineItem>0)
+        if(combineItem>0 || id.Equals(19) || id.Equals(20))
         {
             gameObject.SetActive(false);
+            return;
         }
     }
 
@@ -71,8 +72,14 @@ public class Item3D : MonoBehaviour, ITouchable
             }
 
         }
+        else if(id.Equals(19)||id.Equals(20))
+        {
+            if (!isLoading)
+                DataSaveManager.Instance.UpdateItemState(id);
+        }
         else
         {
+            
             transform.SetParent(ClueItem.Instance.transform);
             transform.localPosition = Vector3.zero;
             transform.localEulerAngles = new Vector3(rotX, rotY, rotZ);

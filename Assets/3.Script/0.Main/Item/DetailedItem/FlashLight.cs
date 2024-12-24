@@ -7,15 +7,18 @@ public class FlashLight : MonoBehaviour, IUseTrigger
     [SerializeField] private int id;
     public Item item { get; private set; }
     private Light flashLight;
+    private bool isGet;
     private void Awake()
     {
         TryGetComponent(out flashLight);
+        isGet = false;
     }
     
 
     private void OnDestroy()
     {
-        TriggerButton.OnUseTrigger -= OnUseTrigger;
+        if(isGet)
+            TriggerButton.OnUseTrigger -= OnUseTrigger;
     }
     public void OnUseTrigger(Item item)
     {
@@ -27,6 +30,7 @@ public class FlashLight : MonoBehaviour, IUseTrigger
 
     public void SetUseFlashLight()
     {
+        isGet = true;
         TriggerButton.OnUseTrigger += OnUseTrigger;
     }    
 }
