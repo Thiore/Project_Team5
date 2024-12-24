@@ -172,7 +172,7 @@ public class FixPipeGameManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        SettingsManager.Instance.LoadLobby();
+        GameManager.Instance.LoadLobby();
         yield break;
         
 
@@ -194,18 +194,14 @@ public class FixPipeGameManager : MonoBehaviour
     {
         interactionAnim.SetBool("Open", true);
 
-        tobecontinue.gameObject.SetActive(true);
-        string x = "To Be NextWeek......";
-        StartCoroutine(DialogueManager.Instance.ReavealText(tobecontinue, x));
-        //Invoke("ResetCamera", 4f);
+        //tobecontinue.gameObject.SetActive(true);
+        //string x = "To Be NextWeek......";
+        //StartCoroutine(DialogueManager.Instance.ReavealText(tobecontinue, x));
+        Invoke("ResetCamera", 4f);
     }
     private void ResetCamera()
     {
-        //CargoRoomCam.SetActive(false);
-        //PlayerManager.Instance.ResetCamOff();
-    }
-    private void ResetLobby()
-    {
-        SettingsManager.Instance.LoadLobby();
+        CargoRoomCam.SetActive(false);
+        PlayerManager.Instance.ResetCamOff();
     }
 }

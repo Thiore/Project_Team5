@@ -126,13 +126,6 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
 
     public abstract void OnTouchEnd(Vector2 position);
 
-    protected void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("MainCamera") && outline != null)
-        {
-            outline.enabled = false;
-        }
-    }
 
 
 
@@ -153,4 +146,11 @@ public abstract class TouchPuzzleCanvas : MonoBehaviour,ITouchable
     protected abstract void ClearEvent();
 
     protected abstract void ResetCamera();
+    protected void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("MainCamera") && outline != null)
+        {
+            outline.enabled = false;
+        }
+    }
 }

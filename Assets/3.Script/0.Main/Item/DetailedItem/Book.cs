@@ -25,6 +25,10 @@ public class Book : MonoBehaviour, ITouchable
         TryGetComponent(out col);
         TryGetComponent(out outline);
         outline.enabled = false;
+    }
+
+    private void Start()
+    {
         this.playerCam = PlayerManager.Instance.playerCam;
         rotTime = 1f;
         isOn = true;
@@ -40,11 +44,6 @@ public class Book : MonoBehaviour, ITouchable
         {
             isGet = false;
         }
-
-    }
-
-    private void Start()
-    {
         if (isGet)
         {
             transform.SetParent(pivot);

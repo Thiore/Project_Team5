@@ -8,7 +8,17 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
     [SerializeField] private BoxCollider myCol;
     [SerializeField] private int myIndex; // 개별 인덱스
     private Vector3 myPosition; // 자신의 초기 위치
-    
+
+    //[SerializeField] private 
+    private BoxCollider palletCol;
+
+
+    private void Awake()
+    {
+        TryGetComponent(out palletCol);
+        palletCol.enabled = false;
+    }
+
 
     private void Start()
     {

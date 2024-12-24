@@ -5,12 +5,13 @@ public class ForkLiftCollect : MonoBehaviour
 {
     [SerializeField] private int[] myCollect; // 각 구역 정답 인덱스
     public bool isCollect = false; // 각 구역의 정답 여부
-    private ForkLiftAnswer answer; //정답 관리자
+    private InteractionForkLift answer; //정답 관리자
 
 
     private void Start()
     {
-        answer = gameObject.GetComponentInParent<ForkLiftAnswer>();
+        transform.parent.TryGetComponent(out answer);
+        
     }
 
     // 전달받은 인덱스들과 정답 비교
