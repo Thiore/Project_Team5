@@ -14,7 +14,7 @@ public class InteractionOBJ : MonoBehaviour
 
     protected readonly int openAnim = Animator.StringToHash("Open");
 
-    protected Animator anim;
+    [SerializeField] protected Animator anim;
 
     protected virtual void Start()
     {

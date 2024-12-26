@@ -7,6 +7,7 @@ public class InteractionKeyPad : TouchPuzzleCanvas
 {
     [SerializeField] private TMP_InputField input;
     [SerializeField] private int answer;
+    [SerializeField] private int limitLength;
     public override void OffInteraction()
     {
         base.OffInteraction();
@@ -42,7 +43,7 @@ public class InteractionKeyPad : TouchPuzzleCanvas
     {
         if (int.TryParse(clickedBtn.text, out int result))
         {
-            if (input.text.Length >= 4)
+            if (input.text.Length >= limitLength)
             {
                 Debug.Log("Too many input");
                 return;

@@ -9,12 +9,13 @@ public class DoorBasic : InteractionOBJ, ITouchable
     {
         base.Start();
         isTouching = false;
-        
-        if (!TryGetComponent(out anim))
+        if(anim == null)
         {
-            transform.parent.TryGetComponent(out anim);
+            if (!TryGetComponent(out anim))
+            {
+                transform.parent.TryGetComponent(out anim);
+            }
         }
-        Debug.Log(anim.name);
     }
     public void OnTouchEnd(Vector2 position)
     {
@@ -22,7 +23,7 @@ public class DoorBasic : InteractionOBJ, ITouchable
         Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            if(hit.collider.gameObject.layer.Equals(gameObject.layer))
+            if(hit.collider.gameObject.Equals(gameObject))
             {
                 
                 isTouching = !isTouching;
