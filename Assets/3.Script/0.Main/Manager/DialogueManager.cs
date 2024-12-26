@@ -25,6 +25,7 @@ public class DialogueManager : MonoBehaviour
     private int currentIndex; // 현재 대화 인덱스
     private int endDialogueIndex; // 마지막 대화 인덱스
     private string dialogueTableName; // 대화 테이블 이름
+    private string tempString;//넘겨줄 text
 
     //인벤토리 관련 Text
     private TMP_Text itemName; //인벤토리 아이템 이름 띄울 TextMeshPro
@@ -107,8 +108,8 @@ public class DialogueManager : MonoBehaviour
         {
             isDialogue = true;
             if(PlayerManager.Instance !=null)
-                PlayerManager.Instance.SetBtn(isDialogue);
-            TouchManager.Instance.EnableMoveHandler(false);
+                PlayerManager.Instance.SetBtn(false);
+            TouchManager.Instance.EnableTouchHandle(false);
             //2초 동안 버튼 비활성화
             dialogueButton.interactable = false;
             dialogueButton.gameObject.SetActive(true); //버튼 활성화
@@ -128,13 +129,19 @@ public class DialogueManager : MonoBehaviour
 
     #region 플레이어 AI 대화
     //플레이어와 AI간 대화
-    public void TalkStoryStart(int startIndex, int endIndex, string tableName)
+    public void TalkStoryStart(int startIndex, int endIndex, string tableName, bool isSpeaker = true)
     {
+        if (PlayerManager.Instance != null)
+            PlayerManager.Instance.SetBtn(false);
+        TouchManager.Instance.EnableTouchHandle(false);
+        isDialogue = true;
         //초기화
         currentIndex = startIndex;
         endDialogueIndex = endIndex;
         dialogueTableName = tableName;
-        speaker.gameObject.SetActive(true);
+        
+        if(isSpeaker)
+            speaker.gameObject.SetActive(true);
         //첫 번째 대사 출력
         ShowNextDialogue();
     }
@@ -164,7 +171,7 @@ public class DialogueManager : MonoBehaviour
         if (PlayerManager.Instance != null)
         {
             PlayerManager.Instance.SetBtn(false); // 플레이어 버튼 상태 설정
-            TouchManager.Instance.EnableMoveHandler(false); // 움직임 비활성화
+            TouchManager.Instance.EnableTouchHandle(false); // 움직임 비활성화
         }
 
         dialogueButton.interactable = false;
@@ -209,8 +216,9 @@ public class DialogueManager : MonoBehaviour
         if (PlayerManager.Instance != null)
         {
             PlayerManager.Instance.SetBtn(true); // 플레이어 버튼 상태 초기화
-            TouchManager.Instance.EnableMoveHandler(true); // 움직임 다시 활성화
+            TouchManager.Instance.EnableTouchHandle(true); // 움직임 다시 활성화
         }
+        isDialogue = false;
         speaker.gameObject.SetActive(false);
         dialogueButton.gameObject.SetActive(false); // 버튼 비활성화
         dialogueButton.onClick.RemoveAllListeners();
@@ -220,10 +228,10 @@ public class DialogueManager : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        isDialogue = false;
         if (PlayerManager.Instance != null)
             PlayerManager.Instance.SetBtn(isDialogue);
-        TouchManager.Instance.EnableMoveHandler(true);
+        TouchManager.Instance.EnableTouchHandle(true);
+        isDialogue = false;
         //버튼 터치 시 즉시 비활성화
         dialogueButton.gameObject.SetActive(false);
 
@@ -349,31 +357,21 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// 한글자씩 출력되는 메서드
-    /// </summary>
-    /// <param name="tmp">사용할 TextMeshPro를 넣어주세요</param>
-    /// <param name="text">text를 입력해주세요</param>
-    /// <param name="waitSecond">시간초를 입력해주세요
-    /// <para>기본값 : 0.1f, 0 : null</para></param>
-    /// <returns></returns>
-    public IEnumerator ReavealText(TMP_Text tmp, string text, float waitSecond = 0.1f)
+    //text 업데이트
+    public string UpdateText(string table, int index)
     {
-        WaitForSeconds wait;
-        if (waitSecond.Equals(0f))
-        {
-            wait = null;
-        }
-        else
-        {
-            wait = new WaitForSeconds(waitSecond);
-        }
-        tmp.text = string.Empty;
-        for(int i = 0; i < text.Length;++i)
-        {
-            tmp.text += text[i];
-            yield return wait;
-        }
-      
+        // LocalizedString 설정
+        localizedString.TableReference = table; // UI 테이블 사용
+        localizedString.TableEntryReference = index.ToString();
+        localizedString.StringChanged += UpdateText;
+        localizedString.RefreshString();
+        localizedString.StringChanged -= UpdateText;
+        return tempString;
+    }
+    // text 업데이트
+    private void UpdateText(string text)
+    {
+        //텍스트 변경
+        tempString = text;
     }
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public class StoryTrigger : MonoBehaviour, ITouchable
 {
     // 자신의 인덱스를 가지게
-    [SerializeField] private int storyIndex;
+    [SerializeField] private int startIndex;
+    [SerializeField] private int endIndex;
 
 
 
@@ -17,7 +18,7 @@ public class StoryTrigger : MonoBehaviour, ITouchable
         //대사 출력
         if (DialogueManager.Instance != null)
         {
-            DialogueManager.Instance.SetDialogue("Table_StoryB1", storyIndex);
+            DialogueManager.Instance.TalkStoryStart(startIndex,endIndex,"Table_StoryB1",false);
         }
 
 

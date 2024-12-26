@@ -45,18 +45,18 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
                 {
                     interactionAnim[i].SetBool(openAnim, true);
                 }
-                return;
+                
             }
-            else
-            {
-                TouchManager.Instance.EnableMoveHandler(false);
-                if (PlayerManager.Instance != null)
-                {
-                    PlayerManager.Instance.SetBtn(false);
-                }
-                Invoke("OffInteraction", 2f);
-                return;
-            }
+            //else
+            //{
+            //    TouchManager.Instance.EnableMoveHandler(false);
+            //    if (PlayerManager.Instance != null)
+            //    {
+            //        PlayerManager.Instance.SetBtn(false);
+            //    }
+            //    Invoke("OffInteraction", 2f);
+            //}
+            return;
         }
 
         
@@ -185,8 +185,8 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
             mask.enabled = false;
             interactionCam.SetActive(true);
             missionStart.SetActive(false);
-            if (!interactionAnim[1].GetBool(openAnim))
-                interactionAnim[1].SetBool(openAnim, true);
+            //if (!interactionAnim[1].GetBool(openAnim))
+            //    interactionAnim[1].SetBool(openAnim, true);
             Invoke("ClosePanel", 3f);
         }
 
@@ -200,10 +200,18 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     private void InteractionVolt1()
     {
         interactionCam.SetActive(false);
-        clearCam.SetActive(true);
-        engineRoomCam.SetActive(true);
-        Invoke("ClearEvent", 3f);
-       
+        //clearCam.SetActive(true);
+        //engineRoomCam.SetActive(true);
+        //Invoke("ClearEvent", 3f);
+
+
+
+
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(true);
+        }
+        TouchManager.Instance.EnableMoveHandler(true);
     }
    
     protected override void ClearEvent()

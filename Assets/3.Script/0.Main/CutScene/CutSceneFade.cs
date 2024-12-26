@@ -7,6 +7,7 @@ public class CutSceneFade : MonoBehaviour
     public void Fade_In()
     {
         LoadingManager.Instance.FadeIn();
+        gameObject.SetActive(false);
     }
 
     public void Fade_Out()

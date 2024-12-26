@@ -20,7 +20,7 @@ public class FixPipeGameManager : MonoBehaviour
     
 
     //제한시간 4분 48초 >> 288초
-    private float limittime = 360f;
+    private float limittime = 300f;
     private int min;
     private float sec;
 

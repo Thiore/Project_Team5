@@ -23,12 +23,15 @@ public class Item3D : MonoBehaviour, ITouchable
 
     protected bool isGet;
 
+    private Collider mask;
+
     
 
     private void Awake()
     {
         isGet = false;
         item = DataSaveManager.Instance.itemData[id];
+        TryGetComponent(out mask);
         
     }
     private void Start()
@@ -54,6 +57,7 @@ public class Item3D : MonoBehaviour, ITouchable
                 if (hit.collider.gameObject.Equals(gameObject))
                 {
                     GetItem(false);
+                    
                 }
             }
         }
@@ -84,6 +88,7 @@ public class Item3D : MonoBehaviour, ITouchable
             transform.localPosition = Vector3.zero;
             transform.localEulerAngles = new Vector3(rotX, rotY, rotZ);
             transform.localScale *= scaling;
+            mask.enabled = false;
             if (!isLoading)
                 DataSaveManager.Instance.UpdateItemState(id);
         }

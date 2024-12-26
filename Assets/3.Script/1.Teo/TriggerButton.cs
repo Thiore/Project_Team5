@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public interface IUseTrigger
 {
-    public void OnUseTrigger(Item item);
+    public void OnUseTrigger(int id);
 }
 
 public class TriggerButton : MonoBehaviour, IUITouchable
@@ -25,7 +25,7 @@ public class TriggerButton : MonoBehaviour, IUITouchable
     private float touchTime;// touchLength까지 도달할 시간
 
     //트리거버튼을 눌렀을때 트리거가능한 오브젝트가 있다면 메서드 실행
-    public static event Action<Item> OnUseTrigger; 
+    public static event Action<int> OnUseTrigger; 
 
     private void InitButton()
     {
@@ -69,7 +69,7 @@ public class TriggerButton : MonoBehaviour, IUITouchable
             else
             {
                 if (!triggerList.activeSelf)
-                    OnUseTrigger?.Invoke(item);
+                    OnUseTrigger?.Invoke(item.id);
             }
             touchTime = 0f;
         }

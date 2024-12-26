@@ -20,9 +20,9 @@ public class FlashLight : MonoBehaviour, IUseTrigger
         if(isGet)
             TriggerButton.OnUseTrigger -= OnUseTrigger;
     }
-    public void OnUseTrigger(Item item)
+    public void OnUseTrigger(int id)
     {
-        if(item.id.Equals(id))
+        if(id.Equals(this.id))
         {
             flashLight.enabled = !flashLight.enabled;
         }

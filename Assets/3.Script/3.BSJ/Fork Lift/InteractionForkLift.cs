@@ -52,8 +52,7 @@ public class InteractionForkLift : TouchPuzzleCanvas
         }
         //모든 구역이 정답 상태일 때
         Debug.Log("Finish All");
-        cutScene.SetActive(true);
-        Invoke("ReadyCutScene", 2f);
+        
     }
 
     private void ReadyCutScene()
@@ -65,14 +64,18 @@ public class InteractionForkLift : TouchPuzzleCanvas
     public void SwitchCam()
     {
         //Blend 시간 설정 (시네머신 변환 간 딜레이 없애기 위해 사용)
-        cinemachineBrain.m_DefaultBlend.m_Time = 0;
-
+        
+        if(!cam_2D.gameObject.activeInHierarchy&&!cam_3D.gameObject.activeInHierarchy)
+        {
+            PlayerManager.Instance.resetCam.SetActive(true);
+            cam_2D.gameObject.SetActive(true);
+        }
         //2D가 켜져 있고 3D가 꺼져 있을 때 (정답 구역 앞 카메라로 전환 시)
         if (cam_2D.Priority > cam_3D.Priority)
         {
 
             // 3D 버추얼 카메라 활성화 (Perspective 모드)
-            cam_3D.Priority = 10;
+            cam_3D.Priority = 20;
             cam_2D.Priority = 0;
 
             // 3D 카메라를 Perspective로 설정
@@ -83,7 +86,7 @@ public class InteractionForkLift : TouchPuzzleCanvas
         else
         {
             // 2D 버추얼 카메라 활성화 (Orthographic 모드)
-            cam_2D.Priority = 10;
+            cam_2D.Priority = 20;
             cam_3D.Priority = 0;
 
             // 2D 카메라를 Orthographic으로 설정
@@ -111,10 +114,21 @@ public class InteractionForkLift : TouchPuzzleCanvas
             {
                 if(!UI_InvenManager.Instance.HaveItem(interactionIndex[0]))
                 {
-
+                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 31);
                 }
                 else
                 {
+                    if(!interactionIndex.Count.Equals(0))
+                        InteractionObject(interactionIndex[0]);
+
+                    mask.enabled = false;
+                    if (PlayerManager.Instance != null)
+                    {
+                        PlayerManager.Instance.SetBtn(false);
+                    }
+                    TouchManager.Instance.EnableMoveHandler(false);
+                    outline.enabled = false;
+                    SwitchCam();
 
                 }
             }
@@ -124,6 +138,21 @@ public class InteractionForkLift : TouchPuzzleCanvas
     public override void OffInteraction()
     {
         base.OffInteraction();
+        PlayerManager.Instance.ResetCamOff();
+        if(!isClear)
+        {
+            mask.enabled = true;
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance.SetBtn(true);
+            }
+            TouchManager.Instance.EnableMoveHandler(true);
+        }
+        else
+        {
+            cutScene.SetActive(true);
+            //Invoke("ReadyCutScene", 2f);
+        }
     }
     public override void InteractionObject(int id)
     {

@@ -16,10 +16,16 @@ public class playerToggleFlash : MonoBehaviour
     {
         if (playerFlash.enabled)
             cutSceneLight.enabled = true;
+        else
+            cutSceneLight.enabled = false;
+    }
+    private void Update()
+    {
+        transform.position = Camera.main.transform.position;
+        transform.rotation = Camera.main.transform.rotation;
     }
     private void OnDisable()
     {
-        if (cutSceneLight.enabled)
-            cutSceneLight.enabled = false;
+        cutSceneLight.enabled = false;
     }
 }

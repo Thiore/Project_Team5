@@ -11,6 +11,8 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
     public int getObjectIndex { get => objectIndex; }
 
     [SerializeField] private int lockIndex;
+    [SerializeField] private int startIndex;
+    [SerializeField] private int endIndex;
 
 
     private bool isClear;
@@ -87,7 +89,7 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
                         {
 
                             //"잠겨있어"라는 독백 대사 출력
-                            DialogueManager.Instance.SetDialogue("Table_StoryB1", lockIndex);
+                            DialogueManager.Instance.TalkStoryStart(startIndex,endIndex,"Table_StoryB1", false);
                             closeCam_co = StartCoroutine(CloseInteractionCam_co());
                         }
                     }
@@ -176,14 +178,6 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
         if(normalCamera != null)
             normalCamera.SetActive(false);
 
-        if (PlayerManager.Instance != null)
-        {
-            PlayerManager.Instance.SetBtn(true);
-        }
-        if (TouchManager.Instance != null)
-        {
-            TouchManager.Instance.EnableMoveHandler(true);
-        }
 
         if (UI_InvenManager.Instance.isOpenQuick)
         {

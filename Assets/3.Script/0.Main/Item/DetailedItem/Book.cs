@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Book : MonoBehaviour, ITouchable
+public class Book : MonoBehaviour, ITouchable, IUseTrigger
 {
+    public static Book Instance { get; private set; }
     [SerializeField] private Transform pivot;
     private Transform playerCam;
-    private MeshRenderer render;
+    //private MeshRenderer render;
     [SerializeField] private Item3D clueBook;
     [Range(10f, 50f)]
     [SerializeField] private float enabledSpeed;
+    [SerializeField] private GameObject[] pages;
+
+    public bool isBook { get; private set; }
 
     private bool isGet;
     private bool isOn;
@@ -21,7 +25,7 @@ public class Book : MonoBehaviour, ITouchable
     private Outline outline;
     private void Awake()
     {
-        TryGetComponent(out render);
+        Instance = this;
         TryGetComponent(out col);
         TryGetComponent(out outline);
         outline.enabled = false;
@@ -36,23 +40,31 @@ public class Book : MonoBehaviour, ITouchable
         if (DataSaveManager.Instance.GetItemState(clueBook.ID))
         {
             col.enabled = false;
-            render.enabled = false;
+            outline.enabled = false;
+            foreach(GameObject page in pages)
+            {
+                page.SetActive(false);
+            }
 
             isGet = true;
+           
         }
         else
         {
             isGet = false;
+           
+
         }
         if (isGet)
         {
             transform.SetParent(pivot);
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
-            transform.localScale = Vector3.one * 2f;
-            OnUseTrigger(clueBook.item);
+            transform.localScale = Vector3.one;
+            OnUseTrigger(clueBook.ID);
             SetUseBook();
         }
+        isBook = false;
     }
 
     private void OnDestroy()
@@ -73,10 +85,11 @@ public class Book : MonoBehaviour, ITouchable
             delayTime += Time.fixedDeltaTime;
             transform.localPosition = Vector3.LerpUnclamped(transform.localPosition, Vector3.zero, delayTime);
             transform.localRotation = Quaternion.SlerpUnclamped(transform.localRotation, Quaternion.identity, delayTime);
-            transform.localScale = Vector3.LerpUnclamped(transform.localScale, Vector3.one * 2f, delayTime);
+            transform.localScale = Vector3.LerpUnclamped(transform.localScale, Vector3.one, delayTime);
             if (delayTime >= 1f)
             {
                 SetUseBook();
+                isBook = true;
                 yield break;
             }
             yield return null;
@@ -84,7 +97,7 @@ public class Book : MonoBehaviour, ITouchable
 
     }
 
-    private IEnumerator RotateTablet_co(float dir)
+    private IEnumerator Rotatebook_co(float dir)
     {
 
         while (true)
@@ -92,14 +105,16 @@ public class Book : MonoBehaviour, ITouchable
             rotTime += dir * Time.fixedDeltaTime * 0.5f;
             if (rotTime <= 0f)
             {
-                render.enabled = false;
+                foreach (GameObject page in pages)
+                {
+                    page.SetActive(false);
+                }
                 isOn = false;
                 rotBook_co = null;
                 yield break;
             }
             if (rotTime >= 1f)
             {
-
                 isOn = true;
                 rotBook_co = null;
                 yield break;
@@ -111,23 +126,28 @@ public class Book : MonoBehaviour, ITouchable
         }
     }
 
-    public void OnUseTrigger(Item item)
+    public void OnUseTrigger(int id)
     {
-        if (item.id.Equals(clueBook.ID))
+        if (id.Equals(clueBook.ID))
         {
             if (isOn)
             {
+                isBook = false;
                 if (rotBook_co != null)
                     StopCoroutine(rotBook_co);
 
-                rotBook_co = StartCoroutine(RotateTablet_co(-1f));
+                rotBook_co = StartCoroutine(Rotatebook_co(-1f));
             }
             else
             {
+                isBook = true;
                 if (rotBook_co != null)
                     StopCoroutine(rotBook_co);
-                render.enabled = true;
-                StartCoroutine(RotateTablet_co(1f));
+                foreach (GameObject page in pages)
+                {
+                    page.SetActive(true);
+                }
+                StartCoroutine(Rotatebook_co(1f));
             }
         }
     }
@@ -166,10 +186,14 @@ public class Book : MonoBehaviour, ITouchable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainCamera") && outline != null)
+        if(!isGet)
         {
-            outline.enabled = true;
+            if (other.CompareTag("MainCamera") && outline != null)
+            {
+                outline.enabled = true;
+            }
         }
+        
 
     }
 

@@ -482,6 +482,20 @@ public class TouchManager : MonoBehaviour
     {
         if(dontTouch.Equals(false))
         {
+            if (Tablet.Instance != null)
+            {
+                if(Tablet.Instance.isTablet)
+                {
+                    Tablet.Instance.OnUseTrigger(19);
+                }
+            }
+            if(Book.Instance != null)
+            {
+                if(Book.Instance.isBook)
+                {
+                    Book.Instance.OnUseTrigger(20);
+                }
+            }
             if (falseMoveCount.Equals(0))
             {
                 isMoving = false;

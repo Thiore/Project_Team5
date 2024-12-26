@@ -2,14 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tablet : MonoBehaviour, ITouchable
+public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
 {
+    public static Tablet Instance { get; private set; }
     [SerializeField] private Transform pivot;
     private Transform playerCam;
     private MeshRenderer render;
     [SerializeField] private Item3D clueTablet;
     [Range(10f,50f)]
     [SerializeField] private float enabledSpeed;
+
+    
+    [SerializeField] private int floorIndex;
+    [SerializeField] private int spinIndex;
+    [SerializeField] private int pipeIndex;
+    [SerializeField] private GameObject monitor;
+    [SerializeField] private GameObject Logo;
+
+    
+    public bool isTablet { get; private set; }
+
 
     private bool isGet;
     private bool isOn;
@@ -22,10 +34,10 @@ public class Tablet : MonoBehaviour, ITouchable
     
     private void Awake()
     {
+        Instance = this;
         TryGetComponent(out render);
         TryGetComponent(out col);
         TryGetComponent(out outline);
-        outline.enabled = false;
         this.playerCam = PlayerManager.Instance.playerCam;
         rotTime = 1f;
         isOn = true;
@@ -33,14 +45,15 @@ public class Tablet : MonoBehaviour, ITouchable
         if (DataSaveManager.Instance.GetItemState(clueTablet.ID))
         {
             col.enabled = false;
-            render.enabled = false;
-            
+            monitor.SetActive(true);
             isGet = true;
         } 
         else
         {
             isGet = false;
+            isTablet = false;
         }
+        outline.enabled = false;
         
     }
 
@@ -52,8 +65,20 @@ public class Tablet : MonoBehaviour, ITouchable
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one * 2f;
-            OnUseTrigger(clueTablet.item);
+            
             SetUseTablet();
+            if (!DataSaveManager.Instance.GetGameState(floorIndex, pipeIndex))
+            {
+                isTablet = true;
+                Logo.SetActive(true);
+            }
+            else
+            {
+                OnUseTrigger(clueTablet.ID);
+                Logo.SetActive(true);
+                monitor.SetActive(false);
+                render.enabled = false;
+            }
         }
     }
 
@@ -79,6 +104,7 @@ public class Tablet : MonoBehaviour, ITouchable
             if (delayTime>=1f)
             {
                 SetUseTablet();
+                Logo.SetActive(true);
                 yield break;
             }
             yield return null;
@@ -94,14 +120,16 @@ public class Tablet : MonoBehaviour, ITouchable
             rotTime += dir * Time.fixedDeltaTime*0.5f;
             if (rotTime<= 0f)
             {
+                isTablet = false;
                 render.enabled = false;
+                monitor.SetActive(false);
                 isOn = false;
                 rotTablet_co = null;
                 yield break;
             }
             if(rotTime >= 1f)
             {
-                
+                isTablet = true;
                 isOn = true;
                 rotTablet_co = null;
                 yield break;
@@ -113,9 +141,9 @@ public class Tablet : MonoBehaviour, ITouchable
         }
     }
 
-    public void OnUseTrigger(Item item)
+    public void OnUseTrigger(int id)
     {
-        if (item.id.Equals(clueTablet.ID))
+        if (id.Equals(clueTablet.ID))
         {
             if (isOn)
             {
@@ -129,10 +157,12 @@ public class Tablet : MonoBehaviour, ITouchable
                 if (rotTablet_co != null)
                     StopCoroutine(rotTablet_co);
                 render.enabled = true;
+                monitor.SetActive(true);
                 StartCoroutine(RotateTablet_co(1f));
             }
         }
     }
+    
     public void SetUseTablet()
     {
         TriggerButton.OnUseTrigger += OnUseTrigger;
@@ -148,22 +178,25 @@ public class Tablet : MonoBehaviour, ITouchable
 
     public void OnTouchEnd(Vector2 position)
     {
-        if(!isGet)
+        if(DataSaveManager.Instance.GetGameState(floorIndex,spinIndex))
         {
-            Ray ray = Camera.main.ScreenPointToRay(position);
-            if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+            if (!isGet)
             {
-                if (hit.collider.gameObject.Equals(gameObject))
+                Ray ray = Camera.main.ScreenPointToRay(position);
+                if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
                 {
-                    clueTablet.GetItem(false);
-                    StartCoroutine(SetTablet_co());
-                    isGet = true;
-                    col.enabled = false;
-                    outline.enabled = false;
+                    if (hit.collider.gameObject.Equals(gameObject))
+                    {
+                        clueTablet.GetItem(false);
+                        StartCoroutine(SetTablet_co());
+                        isGet = true;
+                        col.enabled = false;
+                        outline.enabled = false;
+                        monitor.SetActive(true);
+                    }
                 }
             }
         }
-        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -183,5 +216,10 @@ public class Tablet : MonoBehaviour, ITouchable
         }
     }
 
+    #region CutScene
+    private void StartCutScene()
+    {
 
+    }
+    #endregion
 }
