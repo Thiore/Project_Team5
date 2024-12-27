@@ -16,8 +16,9 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
     [SerializeField] private int floorIndex;
     [SerializeField] private int spinIndex;
     [SerializeField] private int pipeIndex;
-    [SerializeField] private TabletMonitor monitor;
+    [SerializeField] private TabletMonitor monitorCanvas;
     [SerializeField] private GameObject Logo;
+    private GameObject monitor;
 
     
     public bool isTablet { get; private set; }
@@ -35,6 +36,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
     private void Awake()
     {
         Instance = this;
+        monitor = transform.GetChild(0).gameObject;
         TryGetComponent(out render);
         TryGetComponent(out col);
         TryGetComponent(out outline);
@@ -64,22 +66,25 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one * 2f;
-            
+            monitor.gameObject.SetActive(true);
             SetUseTablet();
             
             if (!DataSaveManager.Instance.GetGameState(floorIndex, pipeIndex))
             {
-                monitor.gameObject.SetActive(true);
+                monitorCanvas.gameObject.SetActive(true);
+
+                monitorCanvas.SetDialogueIndex(100, 117, true);
                 Logo.SetActive(true);
                 isTablet = true;                
             }
             else
             {
                 Logo.SetActive(false);
+                
                 OnUseTrigger(clueTablet.ID);
-                monitor.gameObject.SetActive(true);
-                monitor.SetDialogueIndex(100, 117, true);
+                monitorCanvas.gameObject.SetActive(true);
                 render.enabled = false;
+                monitor.gameObject.SetActive(false);
             }
         }
     }
@@ -107,6 +112,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
             {
                 SetUseTablet();
                 monitor.gameObject.SetActive(true);
+                monitorCanvas.gameObject.SetActive(true);
                 Logo.SetActive(true);
                 yield break;
             }
@@ -125,6 +131,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
                 isTablet = false;
                 render.enabled = false;
                 monitor.gameObject.SetActive(false);
+                monitorCanvas.gameObject.SetActive(false);
                 isOn = false;
                 rotTablet_co = null;
                 yield break;
@@ -160,6 +167,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
                     StopCoroutine(rotTablet_co);
                 render.enabled = true;
                 monitor.gameObject.SetActive(true);
+                monitorCanvas.gameObject.SetActive(true);
                 StartCoroutine(RotateTablet_co(1f));
             }
         }

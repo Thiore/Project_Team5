@@ -111,7 +111,7 @@ public class TabletMonitor : MonoBehaviour
         dialogue.TryGetComponent(out TMP_Text contentText);
         contentText.text = string.Empty;
         tempText = DialogueManager.Instance.UpdateText(tableDialogue, curIndex, false);
-        Debug.Log(tempText);
+        
         for (int i = 0; i < tempText.Length; ++i)
         {
             if(isCut)
