@@ -123,12 +123,11 @@ public class UI_InvenManager : MonoBehaviour
     public void GetItemByID(Item item, bool isGetItemImage = false, Item3D obj = null)
     {
         if(removeIndex.Contains(item.id))
-        {
-            //더 이상 필요 없을것같아
+        {//단서고정아이템 중 게임을 이미 완료했다면 사용한아이템으로 변경     
             DataSaveManager.Instance.UpdateItemState(item.id);
             ClueItem.Instance.UseItem(item.id);
             items[item.id].gameObject.SetActive(false);
-            DialogueManager.Instance.SetDialogue("Table_StoryB1", 40);
+            DialogueManager.Instance.SetDialogue("Table_StoryB1", 39);
             return;
         }
         if(!isGetItemImage)

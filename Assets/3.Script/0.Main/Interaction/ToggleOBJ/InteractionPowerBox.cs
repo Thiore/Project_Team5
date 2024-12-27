@@ -112,7 +112,7 @@ public class InteractionPowerBox : TouchPuzzleCanvas
             {
                 if (!isInteracted && !UI_InvenManager.Instance.HaveItem(interactionIndex))
                 {
-                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 12);
+                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 11);
                 }
                 else if (!isInteracted)
                 {

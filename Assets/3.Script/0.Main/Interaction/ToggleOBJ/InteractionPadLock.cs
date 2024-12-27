@@ -23,7 +23,7 @@ public class InteractionPadLock : TouchPuzzleCanvas
     private Quaternion[] targetRotations;
 
     private bool isOpen;
-
+    private bool isDialogue;
     
 
     protected override void OnEnable()
@@ -31,7 +31,7 @@ public class InteractionPadLock : TouchPuzzleCanvas
         base.OnEnable();
         if (!isClear)
         {
-            isOpen = false;
+            isDialogue = false;
             //초기 목표 회전 각도
             targetRotations = new Quaternion[numberWheels.Length];
             for (int i = 0; i < numberWheels.Length; i++)
@@ -47,10 +47,10 @@ public class InteractionPadLock : TouchPuzzleCanvas
         }
         else
         {
-            isOpen = true;
+            isDialogue = true;
             interactionAnim[0].SetBool(openAnim, true);
-
         }
+        isOpen = false;
     }
 
     public void ResetLock()
@@ -154,6 +154,7 @@ public class InteractionPadLock : TouchPuzzleCanvas
             }
             TouchManager.Instance.EnableMoveHandler(true);
             mask.enabled = true;
+            outline.enabled = true;
         }
         else
         {
@@ -175,16 +176,11 @@ public class InteractionPadLock : TouchPuzzleCanvas
 
     protected override void ResetCamera()
     {
-        if (PlayerManager.Instance != null)
-        {
-            PlayerManager.Instance.SetBtn(true);
-        }
-        TouchManager.Instance.EnableMoveHandler(true);
-        outline.enabled = true;
+        
         interactionCam.SetActive(true);
         missionExit.SetActive(false);
         mask.enabled = true;
-        
+        outline.enabled = true;
     }
     public override void OnTouchEnd(Vector2 position)
     {
@@ -197,15 +193,21 @@ public class InteractionPadLock : TouchPuzzleCanvas
                 if (hit.collider.gameObject.Equals(gameObject))
                 {
                     mask.enabled = false;
+                    outline.enabled = false;
                     missionStart.SetActive(true);
                     missionExit.SetActive(true);
+                    if(!isDialogue)
+                    {
+                        DialogueManager.Instance.SetDialogue("Table_StoryB1", 15);
+                        isDialogue = true;
+                    }
                     if (PlayerManager.Instance != null)
                     {
                         PlayerManager.Instance.SetBtn(false);
                     }
                     TouchManager.Instance.EnableMoveHandler(false);
                     btnExit.SetActive(true);
-                    outline.enabled = false;
+                    
                 }
             }
         }
@@ -223,9 +225,12 @@ public class InteractionPadLock : TouchPuzzleCanvas
                         {
                             PlayerManager.Instance.SetBtn(!isOpen);
                         }
+                        if(TouchManager.Instance != null)
+                        {
+                            TouchManager.Instance.EnableMoveHandler(!isOpen);
+                        }
                         interactionCam.SetActive(isOpen);
                         anim.SetBool(openAnim, isOpen);
-                        TouchManager.Instance.EnableMoveHandler(!isOpen);
                     }
                 }
             }

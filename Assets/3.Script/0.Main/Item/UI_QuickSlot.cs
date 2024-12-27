@@ -112,11 +112,11 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 Ray ray = Camera.main.ScreenPointToRay(eventData.position);
                 if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
                 {
-                    if (hit.collider.TryGetComponent(out ToggleOBJ toggle))
+                    if (hit.collider.TryGetComponent(out NeedItemOBJ needItem))
                     {
-                        if (id.Equals(toggle.getObjectIndex))
+                        if (id.Equals(needItem.getObjectIndex))
                         {
-                            toggle.InteractionObject();
+                            needItem.InteractionObject();
                             SetinvenByID(id, true);
                             return;
                         }

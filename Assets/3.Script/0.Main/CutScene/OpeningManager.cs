@@ -35,7 +35,7 @@ public class OpeningManager : MonoBehaviour
         globalVolume.profile = mainGameVolume;
         if(GameManager.Instance.gameType.Equals(eGameType.NewGame))
         {
-            DialogueManager.Instance.SetDialogue("Table_StoryB1", 2);
+            DialogueManager.Instance.TalkStoryStart(2,2,"Table_StoryB1", false);
             if (PlayerManager.Instance != null)
             {
                 PlayerManager.Instance.SetBtn(true);

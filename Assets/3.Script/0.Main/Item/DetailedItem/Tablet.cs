@@ -16,7 +16,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
     [SerializeField] private int floorIndex;
     [SerializeField] private int spinIndex;
     [SerializeField] private int pipeIndex;
-    [SerializeField] private GameObject monitor;
+    [SerializeField] private TabletMonitor monitor;
     [SerializeField] private GameObject Logo;
 
     
@@ -45,7 +45,6 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
         if (DataSaveManager.Instance.GetItemState(clueTablet.ID))
         {
             col.enabled = false;
-            monitor.SetActive(true);
             isGet = true;
         } 
         else
@@ -67,16 +66,19 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
             transform.localScale = Vector3.one * 2f;
             
             SetUseTablet();
+            
             if (!DataSaveManager.Instance.GetGameState(floorIndex, pipeIndex))
             {
-                isTablet = true;
+                monitor.gameObject.SetActive(true);
                 Logo.SetActive(true);
+                isTablet = true;                
             }
             else
             {
+                Logo.SetActive(false);
                 OnUseTrigger(clueTablet.ID);
-                Logo.SetActive(true);
-                monitor.SetActive(false);
+                monitor.gameObject.SetActive(true);
+                monitor.SetDialogueIndex(100, 117, true);
                 render.enabled = false;
             }
         }
@@ -104,6 +106,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
             if (delayTime>=1f)
             {
                 SetUseTablet();
+                monitor.gameObject.SetActive(true);
                 Logo.SetActive(true);
                 yield break;
             }
@@ -114,7 +117,6 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
 
     private IEnumerator RotateTablet_co(float dir)
     {
-        
         while(true)
         {
             rotTime += dir * Time.fixedDeltaTime*0.5f;
@@ -122,7 +124,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
             {
                 isTablet = false;
                 render.enabled = false;
-                monitor.SetActive(false);
+                monitor.gameObject.SetActive(false);
                 isOn = false;
                 rotTablet_co = null;
                 yield break;
@@ -157,7 +159,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
                 if (rotTablet_co != null)
                     StopCoroutine(rotTablet_co);
                 render.enabled = true;
-                monitor.SetActive(true);
+                monitor.gameObject.SetActive(true);
                 StartCoroutine(RotateTablet_co(1f));
             }
         }
@@ -192,7 +194,6 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
                         isGet = true;
                         col.enabled = false;
                         outline.enabled = false;
-                        monitor.SetActive(true);
                     }
                 }
             }

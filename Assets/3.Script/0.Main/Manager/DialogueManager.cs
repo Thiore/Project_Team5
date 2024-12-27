@@ -37,6 +37,8 @@ public class DialogueManager : MonoBehaviour
     private LocalizedString itemNameLocalizedString = new LocalizedString();
     private LocalizedString itemExplanationLocalizedString = new LocalizedString();
     private LocalizedString speakerLocalizedString = new LocalizedString(); // 스피커 로컬라이즈 문자열
+    private LocalizedString tabletSpeakerLocalizedString = new LocalizedString();
+    private LocalizedString tabletDialogueLocalizedString = new LocalizedString();
 
     public bool isDialogue { get; private set; } //현재 Dialogue가 활성화 중인지 여부
 
@@ -64,12 +66,16 @@ public class DialogueManager : MonoBehaviour
     {
         // 씬 로드 이벤트 등록
         SceneManager.sceneLoaded += OnSceneLoaded;
+        //tabletSpeakerLocalizedString.StringChanged += UpdateDialogueText;
+        //tabletDialogueLocalizedString.StringChanged += UpdateDialogueText;
     }
 
     private void OnDisable()
     {
         // 씬 로드 이벤트 등록
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        //tabletSpeakerLocalizedString.StringChanged -= UpdateDialogueText;
+        //tabletDialogueLocalizedString.StringChanged -= UpdateDialogueText;
     }
 
     //새 씬이 로드될 때 호출
@@ -87,6 +93,16 @@ public class DialogueManager : MonoBehaviour
     //Story 테이블 이름과 키값을 통해 대사 출력
     public void SetDialogue(string tableName, int key)
     {
+        isDialogue = true;
+        // 버튼 및 움직임 비활성화
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(false); // 플레이어 버튼 상태 설정
+        }
+        if (TouchManager.Instance != null)
+        {
+            TouchManager.Instance.EnableTouchHandle(false); // 움직임 비활성화
+        }
         localizedString.TableReference = tableName; //테이블 이름 가져오기
         localizedString.TableEntryReference = key.ToString();
         localizedString.StringChanged += UpdateDialogueText;
@@ -104,21 +120,16 @@ public class DialogueManager : MonoBehaviour
     //대화창 활성/비활성화
     private IEnumerator StoryBottonState_co()
     {
-        if (PlayerManager.Instance != null)
-        {
-            isDialogue = true;
-            if(PlayerManager.Instance !=null)
-                PlayerManager.Instance.SetBtn(false);
-            TouchManager.Instance.EnableTouchHandle(false);
-            //2초 동안 버튼 비활성화
-            dialogueButton.interactable = false;
-            dialogueButton.gameObject.SetActive(true); //버튼 활성화
-            yield return new WaitForSeconds(2f);
 
-            //2초 후 버튼 활성화 및 터치 이벤트
-            dialogueButton.interactable = true;
-            dialogueButton.onClick.AddListener(OnButtonClicked);
-        }
+        //2초 동안 버튼 비활성화
+        dialogueButton.interactable = false;
+        dialogueButton.gameObject.SetActive(true); //버튼 활성화
+        yield return new WaitForSeconds(2f);
+
+        //2초 후 버튼 활성화 및 터치 이벤트
+        dialogueButton.interactable = true;
+        dialogueButton.onClick.AddListener(OnButtonClicked);
+
 
 
         //7초 후 자동 비활성화(터치로 비활성화되지 않았을 경우)
@@ -131,10 +142,17 @@ public class DialogueManager : MonoBehaviour
     //플레이어와 AI간 대화
     public void TalkStoryStart(int startIndex, int endIndex, string tableName, bool isSpeaker = true)
     {
-        if (PlayerManager.Instance != null)
-            PlayerManager.Instance.SetBtn(false);
-        TouchManager.Instance.EnableTouchHandle(false);
         isDialogue = true;
+        // 버튼 및 움직임 비활성화
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(false); // 플레이어 버튼 상태 설정
+        }
+        if(TouchManager.Instance != null)
+        {
+            TouchManager.Instance.EnableTouchHandle(false); // 움직임 비활성화
+        }
+        
         //초기화
         currentIndex = startIndex;
         endDialogueIndex = endIndex;
@@ -143,9 +161,9 @@ public class DialogueManager : MonoBehaviour
         if(isSpeaker)
             speaker.gameObject.SetActive(true);
         //첫 번째 대사 출력
-        ShowNextDialogue();
+        ShowNextDialogue(isSpeaker);
     }
-    private void ShowNextDialogue()
+    private void ShowNextDialogue(bool isSpeaker = true)
     {
         if (currentIndex > endDialogueIndex) // 마지막 대사 이후라면 종료
         {
@@ -159,21 +177,17 @@ public class DialogueManager : MonoBehaviour
         localizedString.StringChanged += UpdateDialogueText;
         localizedString.RefreshString(); // 번역된 문자열 업데이트
 
-        //스피커 업데이트
-        UpdateSpeaker();
-
+        if(isSpeaker)
+        {
+            //스피커 업데이트
+            UpdateSpeaker();
+        }
+        
         // 버튼 상태를 처리
         StartCoroutine(HandleDialogueButton_co());
     }
     private IEnumerator HandleDialogueButton_co()
     {
-        // 버튼 및 움직임 비활성화
-        if (PlayerManager.Instance != null)
-        {
-            PlayerManager.Instance.SetBtn(false); // 플레이어 버튼 상태 설정
-            TouchManager.Instance.EnableTouchHandle(false); // 움직임 비활성화
-        }
-
         dialogueButton.interactable = false;
         dialogueButton.gameObject.SetActive(true);
 
@@ -212,32 +226,45 @@ public class DialogueManager : MonoBehaviour
     }
     private void EndDialogue()
     {
-        // 대화 종료 처리
-        if (PlayerManager.Instance != null)
-        {
-            PlayerManager.Instance.SetBtn(true); // 플레이어 버튼 상태 초기화
-            TouchManager.Instance.EnableTouchHandle(true); // 움직임 다시 활성화
-        }
-        isDialogue = false;
-        speaker.gameObject.SetActive(false);
+        
+        if(speaker.gameObject.activeInHierarchy)
+            speaker.gameObject.SetActive(false);
+
         dialogueButton.gameObject.SetActive(false); // 버튼 비활성화
         dialogueButton.onClick.RemoveAllListeners();
+        // 버튼 및 움직임 비활성화
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.SetBtn(true); // 플레이어 버튼 상태 설정
+        }
+        if (TouchManager.Instance != null)
+        {
+            TouchManager.Instance.EnableTouchHandle(true); // 움직임 비활성화
+        }
+        isDialogue = false;
     }
     #endregion //
 
 
     private void OnButtonClicked()
     {
+        // 버튼 및 움직임 비활성화
         if (PlayerManager.Instance != null)
-            PlayerManager.Instance.SetBtn(isDialogue);
-        TouchManager.Instance.EnableTouchHandle(true);
-        isDialogue = false;
+        {
+            PlayerManager.Instance.SetBtn(true); // 플레이어 버튼 상태 설정
+        }
+        if (TouchManager.Instance != null)
+        {
+            TouchManager.Instance.EnableTouchHandle(true); // 움직임 비활성화
+        }
+        
         //버튼 터치 시 즉시 비활성화
         dialogueButton.gameObject.SetActive(false);
 
         //터치 이벤트 제거
         dialogueButton.onClick.RemoveListener(OnButtonClicked);
         //btnList.SetActive(true);//인벤토리버튼 활성화
+        isDialogue = false;
     }
 
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -358,20 +385,37 @@ public class DialogueManager : MonoBehaviour
 
 
     //text 업데이트
-    public string UpdateText(string table, int index)
+    public string UpdateText(string table, int index, bool isSpeaker)
     {
-        // LocalizedString 설정
-        localizedString.TableReference = table; // UI 테이블 사용
-        localizedString.TableEntryReference = index.ToString();
-        localizedString.StringChanged += UpdateText;
-        localizedString.RefreshString();
-        localizedString.StringChanged -= UpdateText;
-        return tempString;
+        if(isSpeaker)
+        {
+            tabletSpeakerLocalizedString.TableReference = table; // UI 테이블 사용
+            tabletSpeakerLocalizedString.TableEntryReference = index.ToString();
+            tabletSpeakerLocalizedString.RefreshString();
+
+            return tabletSpeakerLocalizedString.GetLocalizedString();
+        }
+        else
+        {
+            tabletDialogueLocalizedString.TableReference = table; // UI 테이블 사용
+            tabletDialogueLocalizedString.TableEntryReference = index.ToString();
+            tabletDialogueLocalizedString.RefreshString();
+
+            return tabletDialogueLocalizedString.GetLocalizedString(); ;
+        }
     }
-    // text 업데이트
-    private void UpdateText(string text)
-    {
-        //텍스트 변경
-        tempString = text;
-    }
+    //// text 업데이트
+    //private void UpdateText(string text)
+    //{
+    //    if(text != null)
+    //    {
+    //        //텍스트 변경
+    //        tempString = text;
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("temp는 널");
+    //    }    
+        
+    //}
 }
