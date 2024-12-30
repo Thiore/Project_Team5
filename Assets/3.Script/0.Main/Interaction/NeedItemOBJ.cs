@@ -59,6 +59,7 @@ public class NeedItemOBJ : InteractionOBJ, ITouchable
                         case eNeedItem.have:
                             if(UI_InvenManager.Instance.HaveItem(objectIndex))
                             {
+                                DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
                                 UI_InvenManager.Instance.SortInvenSlot(objectIndex);
                                 isClear = true;
                             }
