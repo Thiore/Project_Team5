@@ -35,8 +35,8 @@ public class InteractionFuseBox : TouchPuzzleCanvas
 
     public void CheckResult()
     {
-        Debug.Log(resultfuselist.Length);
-        Debug.Log(result.Length);
+        //Debug.Log(resultfuselist.Length);
+        //Debug.Log(result.Length);
         int samecount = 0;
 
 
@@ -181,7 +181,7 @@ public class InteractionFuseBox : TouchPuzzleCanvas
         }
         else
         {
-            DialogueManager.Instance.SetDialogue("Table_StoryB1", 27);
+            DialogueManager.Instance.SetDialogue("Table_StoryB1", 26);
         }
 
     }
@@ -210,7 +210,7 @@ public class InteractionFuseBox : TouchPuzzleCanvas
     protected override void ResetCamera()
     {
         interactionCam.SetActive(false);
-        DialogueManager.Instance.SetDialogue("Table_StoryB1", 29);
+        DialogueManager.Instance.SetDialogue("Table_StoryB1", 28);
         if (PlayerManager.Instance != null)
         {
             PlayerManager.Instance.SetBtn(true);

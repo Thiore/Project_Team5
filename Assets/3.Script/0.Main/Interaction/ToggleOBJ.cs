@@ -40,14 +40,18 @@ public class ToggleOBJ : InteractionOBJ, ITouchable
             {
                 if (isClear)
                 {
-                    isTouching = anim.GetBool(openAnim);
-                    isTouching = !isTouching;
-                    anim.SetBool(openAnim, isTouching);
+                    if(anim!= null)
+                    {
+                        isTouching = anim.GetBool(openAnim);
+                        isTouching = !isTouching;
+                        anim.SetBool(openAnim, isTouching);
+                    }
+                    
                 }
                 else
                 {
                     //"잠겨있어"라는 독백 대사 출력
-                    DialogueManager.Instance.TalkStoryStart(startIndex, endIndex, "Table_StoryB1", false);
+                    DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
 
                 }
 

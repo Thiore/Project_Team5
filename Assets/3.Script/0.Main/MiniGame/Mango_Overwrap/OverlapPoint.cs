@@ -30,7 +30,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
     public void OnTouchEnd(Vector2 position)
     {
         if (overlapObj.isConnected)
-        {//¿¬°áÀÌ µÈ °æ¿ì
+        {//ì—°ê²°ì´ ëœ ê²½ìš°
             foreach(var obj in connectedObject)
             {
                 obj.isConnected = true;
@@ -52,7 +52,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
     {
         Ray ray = Camera.main.ScreenPointToRay(position);
         RaycastHit hit;
-        // ·¹ÀÌÄ³½ºÆ®¸¦ ÅëÇØ ¿ùµå ÁÂÇ¥ °è»ê
+        // ë ˆì´ìºìŠ¤íŠ¸ë¥¼ í†µí•´ ì›”ë“œ ì¢Œí‘œ ê³„ì‚°
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, lineTouchLayer))
         {
             OverlapObj hitObject = hit.collider.GetComponent<OverlapObj>();
@@ -69,7 +69,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
             }
             
             if(!hitObject.isPoint&& !hitObject.isConnected&&isAdjacent(x,y))
-            {//Æ÷ÀÎÆ®µµ ¾Æ´Ï°í ¿¬°áµµ ¾ÈµÈ °æ¿ì (ºó Å¸ÀÏ)
+            {//í¬ì¸íŠ¸ë„ ì•„ë‹ˆê³  ì—°ê²°ë„ ì•ˆëœ ê²½ìš° (ë¹ˆ íƒ€ì¼)
                 if (connectedObject.Count >= 2)
                 {
                     connectedObject[connectedObject.Count - 1].line.SetPosition(1, hitObject.linePos);
@@ -87,7 +87,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
                 connectedObject.Add(hitObject);
             }
             else if (hitObject.isPoint && hitObject.connectColor.Equals(overlapObj.connectColor)&&!hitObject.Equals(overlapObj))
-            {//°°Àº Æ÷ÀÎÆ®ÀÎ °æ¿ì (½ÃÀÛ/³¡Á¡)
+            {//ê°™ì€ í¬ì¸íŠ¸ì¸ ê²½ìš° (ì‹œì‘/ëì )
                 connectedObject[connectedObject.Count - 1].line.SetPosition(1, hitObject.linePos);
                 overlapObj.isConnected = true;
                 hitObject.isConnected = true;
@@ -99,8 +99,8 @@ public class OverlapPoint : MonoBehaviour, ITouchable
                 }
 
             }else if((hitObject.isPoint || hitObject.isConnected)&&!hitObject.connectColor.Equals(overlapObj.connectColor))
-            {//´Ù¸¥ Æ÷ÀÎÆ®ÀÌ°Å³ª ´Ù¸¥ ÄÃ·¯¿Í ¿¬°áµÈ °æ¿ì
-                //Áøµ¿µÇ¸é¼­ line disable
+            {//ë‹¤ë¥¸ í¬ì¸íŠ¸ì´ê±°ë‚˜ ë‹¤ë¥¸ ì»¬ëŸ¬ì™€ ì—°ê²°ëœ ê²½ìš°
+                //ì§„ë™ë˜ë©´ì„œ line disable
                 foreach(var obj in connectedObject)
                 {
                     obj.isConnected = false;
@@ -112,7 +112,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
             }
             else if (hitObject.isConnected&&hitObject.connectColor.Equals(startColor)&&
                 !connectedObject[connectedObject.Count-1].Equals(hitObject))
-            {//ÇöÀç ³ª¿Í ¿¬°áµÇ¾îÀÖ´Â ÀÏ¹İÅ¸ÀÏ
+            {//í˜„ì¬ ë‚˜ì™€ ì—°ê²°ë˜ì–´ìˆëŠ” ì¼ë°˜íƒ€ì¼
                 int index = connectedObject.IndexOf(hitObject);
 
                 for (int i = connectedObject.Count - 1; i >= index; i--)
@@ -157,7 +157,7 @@ public class OverlapPoint : MonoBehaviour, ITouchable
         }
         else
         {
-        Debug.Log($"{gameObject.name} ÅÍÄ¡µÊ");
+        //Debug.Log($"{gameObject.name} í„°ì¹˜ë¨");
         overlapObj.line.enabled = true;
         overlapObj.line.SetPosition(0, overlapObj.linePos);
         overlapObj.line.SetPosition(1, overlapObj.linePos);
@@ -167,16 +167,16 @@ public class OverlapPoint : MonoBehaviour, ITouchable
     }
     private bool isAdjacent(int x, int y)
     {
-        // ¿ÀºêÁ§Æ®ÀÇ ÀÌ¸§¿¡¼­ ÁÂÇ¥¸¦ ÃßÃâ
+        // ì˜¤ë¸Œì íŠ¸ì˜ ì´ë¦„ì—ì„œ ì¢Œí‘œë¥¼ ì¶”ì¶œ
         string[] coordinate = connectedObject[connectedObject.Count-1].name.Split(',');
         int myX = int.Parse(coordinate[0]);
         int myY = int.Parse(coordinate[1]);
 
-        // ÀÎÁ¢ ¿©ºÎ¸¦ ÆÇ´ÜÇÏ´Â Á¶°Ç
-        bool isAdjacentX = (myX == x && (myY == y + 1 || myY == y - 1)); // y ÁÂÇ¥°¡ ¡¾1 Â÷ÀÌ
-        bool isAdjacentY = (myY == y && (myX == x + 1 || myX == x - 1)); // x ÁÂÇ¥°¡ ¡¾1 Â÷ÀÌ
+        // ì¸ì ‘ ì—¬ë¶€ë¥¼ íŒë‹¨í•˜ëŠ” ì¡°ê±´
+        bool isAdjacentX = (myX == x && (myY == y + 1 || myY == y - 1)); // y ì¢Œí‘œê°€ Â±1 ì°¨ì´
+        bool isAdjacentY = (myY == y && (myX == x + 1 || myX == x - 1)); // x ì¢Œí‘œê°€ Â±1 ì°¨ì´
 
-        return isAdjacentX || isAdjacentY; // µÑ Áß ÇÏ³ªÀÇ Á¶°ÇÀÌ¶óµµ ÃæÁ·ÇÏ¸é true ¹İÈ¯
+        return isAdjacentX || isAdjacentY; // ë‘˜ ì¤‘ í•˜ë‚˜ì˜ ì¡°ê±´ì´ë¼ë„ ì¶©ì¡±í•˜ë©´ true ë°˜í™˜
     }
 }
 

@@ -127,7 +127,7 @@ public class LockGame : MonoBehaviour
 
         while(rotationTime/rotationSpeed<1f)
         {
-            Debug.Log(rotationTime);
+            //Debug.Log(rotationTime);
             rotationTime += Time.deltaTime;
             //목표 회전 각도까지 부드럽게
             numberWheels[wheelIndex].localRotation =

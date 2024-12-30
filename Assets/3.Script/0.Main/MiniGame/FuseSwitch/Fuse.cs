@@ -30,7 +30,7 @@ public class Fuse : MonoBehaviour
 
     public int GetFuseColor()
     {
-        Debug.Log((int)color);
+        //Debug.Log((int)color);
       
         return (int)color;
     }

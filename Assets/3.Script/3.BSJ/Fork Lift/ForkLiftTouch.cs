@@ -16,7 +16,7 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
     private void Awake()
     {
         TryGetComponent(out palletCol);
-        palletCol.enabled = false;
+        
     }
 
 
@@ -39,7 +39,7 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
         Ray ray = Camera.main.ScreenPointToRay(position);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out hit, TouchManager.Instance.getTouchDistance, raycastLayerMask, QueryTriggerInteraction.Collide))
         {
             GameObject hitObj = hit.collider.gameObject;
             if (hitObj.layer == LayerMask.NameToLayer("Build"))
@@ -50,10 +50,6 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
             {
                 transform.position = hit.point;
             }
-        }
-        else
-        {
-            Debug.Log("레이가 아무것도 맞추지 않았습니다.");
         }
     }
 
@@ -67,7 +63,7 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
         Ray ray = Camera.main.ScreenPointToRay(position);
         RaycastHit[] hits = Physics.RaycastAll(ray, 10f, raycastLayerMask);
 
-        Debug.DrawRay(ray.origin, ray.direction * 20f, Color.red, 0.5f);
+        //Debug.DrawRay(ray.origin, ray.direction * 20f, Color.red, 0.5f);
 
         if (hits.Length > 0)
         {
@@ -86,7 +82,7 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
                 if (hitForkLift != null)
                 {
                     detectedIndices.Add(hitForkLift.myIndex);
-                    Debug.Log($"충돌한 오브젝트의 myIndex: {hitForkLift.myIndex}");
+                    //Debug.Log($"충돌한 오브젝트의 myIndex: {hitForkLift.myIndex}");
                 }
 
                 // ForkLiftCollect 검색
@@ -104,7 +100,7 @@ public class ForkLiftTouch : MonoBehaviour, ITouchable
         }
         else
         {
-            Debug.Log("아무것도 충돌하지 않음");
+            //Debug.Log("아무것도 충돌하지 않음");
         }
     }
 

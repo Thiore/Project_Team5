@@ -68,17 +68,17 @@ public class MazeWall : MonoBehaviour
                 exitDirection = WallNode.Bottom;
         }
 
-        Debug.Log("나간 방향: " + exitDirection);
+        //Debug.Log("나간 방향: " + exitDirection);
 
         // 들어온 방향과 나간 방향 비교
         if (exitDirection == enterDirection)
         {
-            Debug.Log("같은 방향으로 나감");
+            //Debug.Log("같은 방향으로 나감");
             return true;
         }
         else
         {
-            Debug.Log("다른 방향으로 나감");
+            //Debug.Log("다른 방향으로 나감");
             return false;
         }
 

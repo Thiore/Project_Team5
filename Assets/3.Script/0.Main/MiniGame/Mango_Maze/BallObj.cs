@@ -28,7 +28,7 @@ public class BallObj : MonoBehaviour
     {
         if(other.CompareTag("GameController"))
         {
-            Debug.Log("클리어");
+            //Debug.Log("클리어");
         }
     }
     private void OnTriggerExit(Collider col)

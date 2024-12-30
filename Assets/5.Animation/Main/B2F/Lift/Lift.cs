@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Lift : MonoBehaviour,ITouchable
 {
-    [SerializeField] private bool is1F; // 애니메이터의 B1F가 False라면 위로 올라감
+    
     [SerializeField] private Animator liftAnim;
+
+    private bool islift;
 
     private readonly int animParams = Animator.StringToHash("B1F");
 
@@ -24,7 +26,8 @@ public class Lift : MonoBehaviour,ITouchable
         {
             if (hit.collider.gameObject.Equals(gameObject))
             {
-                liftAnim.SetBool(animParams, is1F);
+                islift = liftAnim.GetBool(animParams);
+                liftAnim.SetBool(animParams, !islift);
             }
         }
     }

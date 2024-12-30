@@ -78,7 +78,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     {
         if (targetObjects[0] == null)
         {
-            Debug.LogError("Starting SpinTile is not assigned!");
+            //Debug.LogError("Starting SpinTile is not assigned!");
             return false;
         }
 
@@ -98,7 +98,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
 
         foreach (var hitObject in hitObjects)
         {
-            Debug.Log($"hit object : {hitObject.name}");
+            //Debug.Log($"hit object : {hitObject.name}");
             // 현재 hitObject가 이전 오브젝트와의 양방향 연결을 확인
             SpinTile hitSpinTile = hitObject.GetComponent<SpinTile>();
 
@@ -132,7 +132,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
             }
         }
 
-        Debug.Log("All target objects are successfully connected!");
+        //Debug.Log("All target objects are successfully connected!");
         this.connectedObjects = connectedObjects;
         return true; // 모든 타겟 오브젝트가 연결됨
     }
@@ -164,6 +164,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
         if(isClear)
         {
             mask.enabled = false;
+            outline.enabled = false;
             interactionCam.SetActive(true);
             missionStart.SetActive(false);
             Invoke("ClearEvent", 3f);

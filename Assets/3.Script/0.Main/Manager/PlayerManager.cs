@@ -62,7 +62,7 @@ public class PlayerManager : MonoBehaviour
     }
     private IEnumerator ResetCamOff_co()
     {
-        yield return null;
+        yield return new WaitForSeconds(0.1f);
         resetCam.SetActive(false);
     }
 

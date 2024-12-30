@@ -15,7 +15,7 @@ public class RayCheck : MonoBehaviour
     {
         if (startingSpinTile == null)
         {
-            Debug.LogError("Starting SpinTile is not assigned!");
+            //Debug.LogError("Starting SpinTile is not assigned!");
             return false;
         }
 
@@ -36,7 +36,7 @@ public class RayCheck : MonoBehaviour
 
         foreach (var hitObject in hitObjects)
         {
-            Debug.Log($"hit object : {hitObject.name}");
+            //Debug.Log($"hit object : {hitObject.name}");
             // 현재 hitObject가 이전 오브젝트와의 양방향 연결을 확인
             SpinTile hitSpinTile = hitObject.GetComponent<SpinTile>();
 
@@ -71,7 +71,7 @@ public class RayCheck : MonoBehaviour
             }
         }
 
-        Debug.Log("All target objects are successfully connected!");
+        //Debug.Log("All target objects are successfully connected!");
         this.connectedObjects = connectedObjects;
         isComplete = true;
         return true; // 모든 타겟 오브젝트가 연결됨

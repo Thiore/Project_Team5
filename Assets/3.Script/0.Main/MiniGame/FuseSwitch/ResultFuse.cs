@@ -17,7 +17,7 @@ public class ResultFuse : Fuse, ITouchable
         Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            Debug.Log(hit.collider.gameObject.name);
+            //Debug.Log(hit.collider.gameObject.name);
             if (hit.collider.gameObject.Equals(gameObject) && gameObject.activeSelf)
             {
                 SetFuseColor(3);

@@ -10,7 +10,7 @@ public class Valve : MonoBehaviour, ITouchable
     [SerializeField] private bool ispipecheck; // 파이프 연결 확인해야하는경우 true
 
     private Vector3 rotationAxis = Vector3.forward; // 회전 축
-    private float duration = 0.6f; // N초 동안 회전
+    private float duration = 0.3f; // N초 동안 회전
     private float angle = 90f; // 90도 회전
     private bool isRotating;
 
@@ -38,13 +38,7 @@ public class Valve : MonoBehaviour, ITouchable
         TryGetComponent(out outline);
         outline.enabled = false;
     }
-#if UNITY_EDITOR
-    private void Update()
-    {
-        Vector3 direction = transform.right;
-        Debug.DrawRay(parentpipe.transform.position, direction * rayDistance, Color.red); // 중심선
-    }
-#endif
+
     public void OnTouchEnd(Vector2 position)
     {
         Ray ray = Camera.main.ScreenPointToRay(position);
@@ -132,7 +126,7 @@ public class Valve : MonoBehaviour, ITouchable
                     if (newvaledistran < nextdistran)
                     {
                         nextValve = valve;
-                        Debug.Log("바뀌었고");
+                        //Debug.Log("바뀌었고");
                     }
                 }
                 else
@@ -142,9 +136,7 @@ public class Valve : MonoBehaviour, ITouchable
             }
         }
 
-        // 디버그용 SphereCast 시각화
-        Debug.DrawRay(parentpipe.transform.position, direction * 2f, Color.red); // 중심선
-
+        
     }
 
 

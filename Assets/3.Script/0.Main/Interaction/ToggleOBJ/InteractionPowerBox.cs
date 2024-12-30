@@ -90,16 +90,13 @@ public class InteractionPowerBox : TouchPuzzleCanvas
         {
             if (!start.isConnect)
             {
-                Debug.Log("아직 성공아님");
                 return;
             }
         }
 
-        Debug.Log("게임성공");
         DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
         isClear = true;
         OffInteraction();
-        Debug.Log("나와라");
     }
 
     public override void OnTouchEnd(Vector2 position)

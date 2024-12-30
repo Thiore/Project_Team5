@@ -13,17 +13,17 @@ public class Press_Btn : MonoBehaviour
         string value = clickedBtn.GetComponentInChildren<Text>().text;
 
         playerAnswer= playerAnswer+value;
-        Debug.Log($"Player Answer : {playerAnswer}");
+        //Debug.Log($"Player Answer : {playerAnswer}");
 
         if (playerAnswer.Length >= correctAnswer.Length)
         {
             if (playerAnswer.Equals(correctAnswer))
             {
-                Debug.Log("°ÔÀÓ ¼º°ø");
+                //Debug.Log("ê²Œìž„ ì„±ê³µ");
             }
             else
             {
-                Debug.Log("°ÔÀÓ ½ÇÆÐ");
+               // Debug.Log("ê²Œìž„ ì‹¤íŒ¨");
                 playerAnswer = "";
             }
         }

@@ -57,8 +57,21 @@ public class NeedItemOBJ : InteractionOBJ, ITouchable
                     switch (needItem)
                     {
                         case eNeedItem.have:
-                            isTouching = !isTouching;
-                            anim.SetBool(openAnim, isTouching);
+                            if(UI_InvenManager.Instance.HaveItem(objectIndex))
+                            {
+                                UI_InvenManager.Instance.SortInvenSlot(objectIndex);
+                                isClear = true;
+                            }
+                            else
+                            {
+                                DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
+                            }
+                            if(isClear)
+                            {
+                                isTouching = !isTouching;
+                                anim.SetBool(openAnim, isTouching);
+                            }
+                            
                             break;
                         case eNeedItem.trigger:
                             if (trigger.item.id.Equals(objectIndex))

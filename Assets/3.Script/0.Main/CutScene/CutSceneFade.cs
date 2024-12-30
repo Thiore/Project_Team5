@@ -20,6 +20,6 @@ public class CutSceneFade : MonoBehaviour
 
         Vector3 setPosition = new Vector3(-7.271f, -2.147f, -8.468f);
         PlayerManager.Instance.mainPlayer.localPosition = setPosition;
-        Debug.Log("여기");
+        
     }
 }

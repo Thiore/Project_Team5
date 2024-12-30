@@ -37,7 +37,7 @@ public class Voltmeter : MonoBehaviour
             if (Mathf.Abs(cylinder.transform.eulerAngles.z - cylinder.correctValue) > tolerance)
             {
                 Wrong?.Invoke();
-                return; // `Wrong`ÀÌ È£ÃâµÇ¸é `Correct`¸¦ È£ÃâÇÏÁö ¾ÊÀ½
+                return; // `Wrong`ì´ í˜¸ì¶œë˜ë©´ `Correct`ë¥¼ í˜¸ì¶œí•˜ì§€ ì•ŠìŒ
             }
         }
 
@@ -57,7 +57,7 @@ public class Voltmeter : MonoBehaviour
 
     private void CompleteGame()
     {
-        Debug.Log("°ÔÀÓ Á¾·á");
+        //Debug.Log("ê²Œì„ ì¢…ë£Œ");
         foreach(var btn in btnArray)
         {
             btn.canTouch = false;

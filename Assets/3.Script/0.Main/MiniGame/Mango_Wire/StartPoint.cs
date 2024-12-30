@@ -124,7 +124,7 @@ public class StartPoint : MonoBehaviour, ITouchable,ISetColor
 
     public void setMaterial()
     {
-        if (render == null) Debug.Log("render가 null");
+        if (render == null) return;// Debug.Log("render가 null");
         switch (color)
         {
             case WireColor.Yellow:

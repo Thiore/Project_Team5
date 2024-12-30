@@ -45,7 +45,7 @@ public class InteractionKeyPad : TouchPuzzleCanvas
         {
             if (input.text.Length >= limitLength)
             {
-                Debug.Log("Too many input");
+                //Debug.Log("Too many input");
                 return;
             }
             input.text += clickedBtn.text;
@@ -54,7 +54,7 @@ public class InteractionKeyPad : TouchPuzzleCanvas
         {
             if (clickedBtn.text.Equals("ENTER"))
             {
-                Debug.Log($"Answer is {input.text}");
+                //Debug.Log($"Answer is {input.text}");
                 if (input.text.Equals(answer.ToString()))
                 {
                     DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);

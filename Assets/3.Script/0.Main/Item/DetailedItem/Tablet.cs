@@ -66,25 +66,20 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one * 2f;
-            monitor.gameObject.SetActive(true);
+            monitor.SetActive(true);
             SetUseTablet();
             
             if (!DataSaveManager.Instance.GetGameState(floorIndex, pipeIndex))
             {
-                monitorCanvas.gameObject.SetActive(true);
-
-                monitorCanvas.SetDialogueIndex(100, 117, true);
                 Logo.SetActive(true);
                 isTablet = true;                
             }
             else
             {
-                Logo.SetActive(false);
-                
                 OnUseTrigger(clueTablet.ID);
                 monitorCanvas.gameObject.SetActive(true);
+                //monitorCanvas.SetDialogueIndex(100, 117, true);
                 render.enabled = false;
-                monitor.gameObject.SetActive(false);
             }
         }
     }
@@ -112,7 +107,7 @@ public class Tablet : MonoBehaviour, ITouchable, IUseTrigger
             {
                 SetUseTablet();
                 monitor.gameObject.SetActive(true);
-                monitorCanvas.gameObject.SetActive(true);
+                
                 Logo.SetActive(true);
                 yield break;
             }

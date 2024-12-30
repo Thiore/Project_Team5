@@ -44,7 +44,6 @@ public class UI_QuickSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         if(!isDragging)
         {
-            Debug.Log("비긴시작");
             isDragging = true;
             UI_InvenManager.Instance.dragImage.sprite = image.sprite;
             UI_InvenManager.Instance.dragImage.transform.position = eventData.position;

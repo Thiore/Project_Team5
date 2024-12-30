@@ -77,7 +77,7 @@ public class InteractionBattery : TouchPuzzleCanvas
                         UI_InvenManager.Instance.OpenQuickSlot();
                     else
                     {
-                        DialogueManager.Instance.SetDialogue("Table_StoryB1", 24);
+                        DialogueManager.Instance.SetDialogue("Table_StoryB1", 23);
                         return;
                     }
                 }
@@ -114,7 +114,7 @@ public class InteractionBattery : TouchPuzzleCanvas
             {
                 battery.isStart = true;
             }
-            DialogueManager.Instance.SetDialogue("Table_StoryB1", 25);
+            DialogueManager.Instance.SetDialogue("Table_StoryB1", 24);
         }
         
     }

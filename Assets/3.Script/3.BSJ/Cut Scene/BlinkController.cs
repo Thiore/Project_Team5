@@ -20,7 +20,7 @@ public class BlinkController : MonoBehaviour
 
         if (uiImage != null)
         {
-            Debug.Log("dd");
+            //Debug.Log("dd");
             blinkMaterial = uiImage.material;  // Image의 Material을 가져옴
             //StartCoroutine(Blink_co());
             //if (blinkMaterial != null && blinkMaterial.HasProperty(propertyName))

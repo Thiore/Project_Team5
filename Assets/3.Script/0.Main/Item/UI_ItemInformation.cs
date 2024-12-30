@@ -33,8 +33,8 @@ public class UI_ItemInformation : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log(eventData.pointerDrag.gameObject.name);
-        Debug.Log(eventData.pointerEnter.gameObject.name);
+       // Debug.Log(eventData.pointerDrag.gameObject.name);
+        //Debug.Log(eventData.pointerEnter.gameObject.name);
         if (eventData.pointerDrag.gameObject.TryGetComponent(out UI_InventorySlot item))
         {
             UI_InvenManager.Instance.dragImage.gameObject.SetActive(false);

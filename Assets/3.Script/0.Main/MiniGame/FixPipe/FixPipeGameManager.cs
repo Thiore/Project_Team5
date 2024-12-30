@@ -68,7 +68,6 @@ public class FixPipeGameManager : MonoBehaviour
         if (valve.Equals(endvalve)) // && 필수 경로 추가 
         {
             // 최종 종료 조건 
-            Debug.Log("마지막 종료");
             int count = 0;
             foreach (PipeImportantPoint p in pipepoints)
             {
@@ -80,7 +79,6 @@ public class FixPipeGameManager : MonoBehaviour
 
             if (count.Equals(5))
             {
-                Debug.Log("여기서 승리 판정 넣기");
                 iscomplete = true;
             }
         }
@@ -101,7 +99,6 @@ public class FixPipeGameManager : MonoBehaviour
             valve.DirectionPipe.PipeImageSet();
         }
 
-        Debug.Log("호출");
         FindPath(nextvalve);
     }
 

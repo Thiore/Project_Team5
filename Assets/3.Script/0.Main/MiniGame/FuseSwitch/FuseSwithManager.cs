@@ -15,8 +15,8 @@ public class FuseSwithManager : MonoBehaviour
 
     public void CheckResult()
     {
-        Debug.Log(resultfuselist.Length);
-        Debug.Log(result.Length);
+        //Debug.Log(resultfuselist.Length);
+        //Debug.Log(result.Length);
         int samecount = 0;
 
 
@@ -63,11 +63,11 @@ public class FuseSwithManager : MonoBehaviour
 
         if (samecount.Equals(5))
         {
-            Debug.Log("성공");
+            //Debug.Log("성공");
         }
         else
         {
-            Debug.Log("다시");
+            //Debug.Log("다시");
             FuseReset();
         }
     }

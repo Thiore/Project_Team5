@@ -88,7 +88,7 @@ public class OBJ_Rotation : MonoBehaviour
         {
             isTwoFinger = true;
             var touches = Touchscreen.current.touches;
-            Debug.Log(Touchscreen.current.touches.Count);
+            //Debug.Log(Touchscreen.current.touches.Count);
 
             firstFingerStartValue = touches[0].position.ReadValue();
             secondFingerStartValue = touches[1].position.ReadValue();

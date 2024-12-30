@@ -23,16 +23,10 @@ public class PlaneTiltController : MonoBehaviour
         InputSystem.EnableDevice(Accelerometer.current);
         planeAction.started += ctx => OnTiltStarted(ctx);
         planeAction.performed += ctx => OnTiltPerformed(ctx);
-        Debug.Log("Awake");
     }
     private void OnEnable()
     {
         startTilt = Vector3.zero;
-        Debug.Log("enable" + startTilt);
-        
-       
-        
-
     }
     private void OnDisable()
     {
@@ -42,20 +36,6 @@ public class PlaneTiltController : MonoBehaviour
         planeAction.performed -= ctx => OnTiltPerformed(ctx);
         //ball.SetActive(false);
     }
-
-    //private void Start()
-    //{
-    //    if (Accelerometer.current != null)
-    //    {
-    //        // 시작 시점의 기울기 값을 저장하여 기준점으로 사용
-    //        startTilt = Accelerometer.current.acceleration.ReadValue();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("Accelerometer not available on this device. Please run on an actual device.");
-    //    }
-    //}
-
     private void OnTiltStarted(InputAction.CallbackContext context)
     {
         startTilt = context.ReadValue<Vector3>();

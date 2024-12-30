@@ -52,7 +52,7 @@ public class LoadingManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("호출");
+        //Debug.Log("호출");
         //SceneManager.sceneLoaded += LoadedScene;
         nextScene += LoadScene;
     }
@@ -76,7 +76,6 @@ public class LoadingManager : MonoBehaviour
     private void LoadScene(string nextScene)
     {
         nextSceneName = nextScene;
-        Debug.Log(nextSceneName);
         isLoadingScene = true;
         FadeOut(true);
 
@@ -157,7 +156,7 @@ public class LoadingManager : MonoBehaviour
 
 
 
-        Debug.Log("씬 전환 완료");
+        //Debug.Log("씬 전환 완료");
     }
 
     public void FadeIn(bool isLoading = false)

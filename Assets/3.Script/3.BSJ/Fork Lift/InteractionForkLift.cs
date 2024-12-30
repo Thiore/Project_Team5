@@ -13,7 +13,7 @@ public class InteractionForkLift : TouchPuzzleCanvas
     [SerializeField] private GameObject palletPuzzle; //파레트퍼즐 최상위 오브젝트
     [SerializeField] private GameObject originalobj; //퍼즐 완료 후, 미리 배치 해놨던 탑
     [SerializeField] private GameObject lastPallet; //퍼즐 완료 후, 컷신으로 가져다놓을 마지막 파레트
-
+    [SerializeField] private GameObject[] buildPoints;
     protected override void Awake()
     {
         base.Awake();
@@ -21,12 +21,17 @@ public class InteractionForkLift : TouchPuzzleCanvas
     protected override void OnEnable()
     {
         base.OnEnable();
-        if(isClear)
+        foreach (GameObject build in buildPoints)
+        {
+            build.SetActive(false);
+        }
+        if (isClear)
         {
             mask.enabled = false;
             outline.enabled = false;
             palletPuzzle.SetActive(false);
             originalobj.SetActive(true);
+            
         }
     }
 
@@ -46,18 +51,12 @@ public class InteractionForkLift : TouchPuzzleCanvas
             //하나라도 정답이 아니라면 종료
             if (!zone.isCollect)
             {
-                Debug.Log("아직 모든 구역이 정답 상태가 아님");
                 return;
             }
         }
-        //모든 구역이 정답 상태일 때
-        Debug.Log("Finish All");
+        DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
         
-    }
-
-    private void ReadyCutScene()
-    {
-
+        OffInteraction();
     }
 
     //퍼즐 카메라 바꾸기
@@ -69,6 +68,7 @@ public class InteractionForkLift : TouchPuzzleCanvas
         {
             PlayerManager.Instance.resetCam.SetActive(true);
             cam_2D.gameObject.SetActive(true);
+            cam_3D.gameObject.SetActive(true);
         }
         //2D가 켜져 있고 3D가 꺼져 있을 때 (정답 구역 앞 카메라로 전환 시)
         if (cam_2D.Priority > cam_3D.Priority)
@@ -92,7 +92,6 @@ public class InteractionForkLift : TouchPuzzleCanvas
             // 2D 카메라를 Orthographic으로 설정
             //cam_2D.m_Lens.Orthographic = true;
 
-            Debug.Log("2D 카메라로 전환됨 (Orthographic 모드)");
         }
     }
 
@@ -112,23 +111,35 @@ public class InteractionForkLift : TouchPuzzleCanvas
         {
             if (hit.collider.gameObject.Equals(gameObject))
             {
-                if(!UI_InvenManager.Instance.HaveItem(interactionIndex[0]))
+                if(!isInteracted)
                 {
-                    DialogueManager.Instance.SetDialogue("Table_StoryB1", 31);
+                    if (!UI_InvenManager.Instance.HaveItem(interactionIndex[0]))
+                    {
+                        DialogueManager.Instance.SetDialogue("Table_StoryB1", 30);
+                    }
+                    else
+                    {
+                        if (!interactionIndex.Count.Equals(0))
+                            InteractionObject(interactionIndex[0]);
+                        DialogueManager.Instance.SetDialogue("Table_StoryB1", 31);
+                    }
                 }
                 else
                 {
-                    if(!interactionIndex.Count.Equals(0))
-                        InteractionObject(interactionIndex[0]);
-
                     mask.enabled = false;
                     if (PlayerManager.Instance != null)
                     {
                         PlayerManager.Instance.SetBtn(false);
                     }
                     TouchManager.Instance.EnableMoveHandler(false);
+                    btnExit.SetActive(true);
+                    TouchManager.Instance.SetTouchDistance(20f);
                     outline.enabled = false;
                     SwitchCam();
+                    foreach (GameObject build in buildPoints)
+                    {
+                        build.SetActive(true);
+                    }
 
                 }
             }
@@ -138,8 +149,14 @@ public class InteractionForkLift : TouchPuzzleCanvas
     public override void OffInteraction()
     {
         base.OffInteraction();
-        PlayerManager.Instance.ResetCamOff();
-        if(!isClear)
+        TouchManager.Instance.ResetTouchDistance();
+        cam_2D.gameObject.SetActive(false);
+        cam_3D.gameObject.SetActive(false);
+        foreach (GameObject build in buildPoints)
+        {
+            build.SetActive(false);
+        }
+        if (!isClear)
         {
             mask.enabled = true;
             if (PlayerManager.Instance != null)
@@ -147,11 +164,12 @@ public class InteractionForkLift : TouchPuzzleCanvas
                 PlayerManager.Instance.SetBtn(true);
             }
             TouchManager.Instance.EnableMoveHandler(true);
+            PlayerManager.Instance.ResetCamOff();
         }
         else
         {
             cutScene.SetActive(true);
-            //Invoke("ReadyCutScene", 2f);
+            Invoke("ClearEvent", 2f);
         }
     }
     public override void InteractionObject(int id)
@@ -161,6 +179,8 @@ public class InteractionForkLift : TouchPuzzleCanvas
 
     protected override void ClearEvent()
     {
+        lastPallet.SetActive(false);
+        
     }
 
     protected override void ResetCamera()

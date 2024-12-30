@@ -31,5 +31,7 @@ public class CargoRoomCutSceneController : MonoBehaviour
         TouchManager.Instance.EnableMoveHandler(true);
         palletPuzzle.SetActive(false);
         settingStair.SetActive(true);
+        PlayerManager.Instance.ResetCamOff();
+        gameObject.SetActive(false);
     }
 }

@@ -75,6 +75,7 @@ public class TouchManager : MonoBehaviour
 
     [SerializeReference] private float touchDistance;
     public float getTouchDistance { get => touchDistance; }
+    private float saveTouchDistance;
 
     public bool isMoving { get; private set; } // 미니게임 등 이동을 막아야할때 사용
 
@@ -94,6 +95,8 @@ public class TouchManager : MonoBehaviour
         {
             Instance = this;
             isTouchSupportEnabled = false;
+            float x = touchDistance;
+            saveTouchDistance = x;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -116,7 +119,7 @@ public class TouchManager : MonoBehaviour
     {
         if (pause)
         {
-            Debug.Log("sk");
+            //Debug.Log("sk");
             OnDisableTouchAction();
         }
         else
@@ -146,7 +149,7 @@ public class TouchManager : MonoBehaviour
 
         isTouchSupportEnabled = true;
 
-        Debug.Log("추가됨");
+        //Debug.Log("추가됨");
         touchState = etouchState.Normal;
 
 
@@ -482,20 +485,20 @@ public class TouchManager : MonoBehaviour
     {
         if(dontTouch.Equals(false))
         {
-            if (Tablet.Instance != null)
-            {
-                if(Tablet.Instance.isTablet)
-                {
-                    Tablet.Instance.OnUseTrigger(19);
-                }
-            }
-            if(Book.Instance != null)
-            {
-                if(Book.Instance.isBook)
-                {
-                    Book.Instance.OnUseTrigger(20);
-                }
-            }
+            //if (Tablet.Instance != null)
+            //{
+            //    if(Tablet.Instance.isTablet)
+            //    {
+            //        Tablet.Instance.OnUseTrigger(19);
+            //    }
+            //}
+            //if(Book.Instance != null)
+            //{
+            //    if(Book.Instance.isBook)
+            //    {
+            //        Book.Instance.OnUseTrigger(20);
+            //    }
+            //}
             if (falseMoveCount.Equals(0))
             {
                 isMoving = false;
@@ -569,6 +572,15 @@ public class TouchManager : MonoBehaviour
             }
         }
 
+    }
+
+    public void SetTouchDistance(float distance)
+    {
+        touchDistance = distance;
+    }
+    public void ResetTouchDistance()
+    {
+        touchDistance = saveTouchDistance;
     }
 }
 

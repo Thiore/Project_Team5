@@ -77,14 +77,14 @@ public class InteractionSlidePuzzle : TouchPuzzleCanvas
                 // 충돌한 오브젝트와 일치하지 않으면 false 반환
                 if (!hit.collider.gameObject.Equals(checkObj))
                 {
-                    Debug.Log($"Ray from {offset} did not hit target tag.");
+                    //Debug.Log($"Ray from {offset} did not hit target tag.");
                     return;
                 }
             }
             else
             {
                 // Ray가 아무 오브젝트와도 충돌하지 않으면 false 반환
-                Debug.Log($"Ray from {offset} did not hit anything.");
+                //Debug.Log($"Ray from {offset} did not hit anything.");
                 return;
             }
         }

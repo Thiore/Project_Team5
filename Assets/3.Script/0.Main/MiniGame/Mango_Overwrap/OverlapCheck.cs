@@ -34,11 +34,11 @@ public class OverlapCheck : MonoBehaviour,ITouchable
         {
             if (!point.GetComponent<OverlapObj>().isConnected)
             {
-                Debug.Log("아직 게임 안끝남");
+                //Debug.Log("아직 게임 안끝남");
                 return;
             }
         }
-        Debug.Log("게임끝남");
+        //Debug.Log("게임끝남");
     }
 
     public void OnTouchStarted(Vector2 position)

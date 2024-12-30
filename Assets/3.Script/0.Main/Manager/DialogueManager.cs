@@ -343,14 +343,14 @@ public class DialogueManager : MonoBehaviour
 
         if (operation.IsDone && !operation.Status.Equals(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Failed))
         {
-            Debug.Log("Localization 초기화 완료!");
+            //Debug.Log("Localization 초기화 완료!");
             InitLocale();
 
             
         }
         else
         {
-            Debug.LogError("Localization 초기화 실패!");
+            //Debug.LogError("Localization 초기화 실패!");
         }
     }
 
