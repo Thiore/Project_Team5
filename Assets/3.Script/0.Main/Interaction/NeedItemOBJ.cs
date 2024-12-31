@@ -31,7 +31,6 @@ public class NeedItemOBJ : InteractionOBJ, ITouchable
 
     private bool isClear;
 
-    private Coroutine normalCam_co = null;
 
     protected override void Start()
     {
@@ -47,79 +46,60 @@ public class NeedItemOBJ : InteractionOBJ, ITouchable
         if (!isClear)
             isClear = DataSaveManager.Instance.GetGameState(floorIndex, objectIndex);
 
-        if (normalCam_co == null)
+        Ray ray = Camera.main.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
         {
-            Ray ray = Camera.main.ScreenPointToRay(position);
-            if (Physics.Raycast(ray, out RaycastHit hit, TouchManager.Instance.getTouchDistance, TouchManager.Instance.getTouchableLayer))
+            if (hit.collider.gameObject.Equals(gameObject))
             {
-                if (hit.collider.gameObject.Equals(gameObject))
+                switch (needItem)
                 {
-                    switch (needItem)
-                    {
-                        case eNeedItem.have:
-                            if(UI_InvenManager.Instance.HaveItem(objectIndex))
+                    case eNeedItem.have:
+                        if (UI_InvenManager.Instance.HaveItem(objectIndex))
+                        {
+                            DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
+                            UI_InvenManager.Instance.SortInvenSlot(objectIndex);
+                            isClear = true;
+                        }
+                        else
+                        {
+                            DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
+                        }
+                        if (isClear)
+                        {
+                            isTouching = !isTouching;
+                            anim.SetBool(openAnim, isTouching);
+                        }
+
+                        break;
+                    case eNeedItem.trigger:
+                        if (trigger.item.id.Equals(objectIndex))
+                        {
+                            DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
+                            foreach (GameObject obj in enableObj)
                             {
-                                DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
-                                UI_InvenManager.Instance.SortInvenSlot(objectIndex);
-                                isClear = true;
+                                obj.SetActive(true);
                             }
-                            else
-                            {
-                                DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
-                            }
-                            if(isClear)
+                        }
+                        else
+                        {
+                            DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
+                        }
+                        break;
+                    case eNeedItem.quick:
+                        if (!isClear)
+                        {
+                            if (UI_InvenManager.Instance.HaveItem(objectIndex))
                             {
                                 isTouching = !isTouching;
-                                anim.SetBool(openAnim, isTouching);
-                            }
-                            
-                            break;
-                        case eNeedItem.trigger:
-                            if (trigger.item.id.Equals(objectIndex))
-                            {
-                                DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
-                                foreach (GameObject obj in enableObj)
+                                normalCamera.SetActive(isTouching);
+                                if (isTouching)
                                 {
-                                    obj.SetActive(true);
-                                }
-                            }
-                            else
-                            {
-                                DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
-                            }
-                            break;
-                        case eNeedItem.quick:
-                            if (!isClear)
-                            {
-                                if (UI_InvenManager.Instance.HaveItem(objectIndex))
-                                {
-                                    isTouching = !isTouching;
-                                    normalCamera.SetActive(isTouching);
-                                    if (isTouching)
-                                    {
-                                        UI_InvenManager.Instance.OpenQuickSlot();
-                                    }
-                                    else
-                                    {
-                                        UI_InvenManager.Instance.CloseQuickSlot();
-                                    }
-                                    if (PlayerManager.Instance != null)
-                                    {
-                                        PlayerManager.Instance.SetBtn(!isTouching);
-                                    }
-                                    if (TouchManager.Instance != null)
-                                    {
-                                        TouchManager.Instance.EnableMoveHandler(!isTouching);
-                                    }
+                                    UI_InvenManager.Instance.OpenQuickSlot();
                                 }
                                 else
                                 {
-                                    DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
+                                    UI_InvenManager.Instance.CloseQuickSlot();
                                 }
-                            }
-                            else
-                            {
-                                isTouching = !isTouching;
                                 if (PlayerManager.Instance != null)
                                 {
                                     PlayerManager.Instance.SetBtn(!isTouching);
@@ -128,13 +108,34 @@ public class NeedItemOBJ : InteractionOBJ, ITouchable
                                 {
                                     TouchManager.Instance.EnableMoveHandler(!isTouching);
                                 }
-                                normalCamera.SetActive(isTouching);
                             }
-                            break;
-                    }
+                            else
+                            {
+                                DialogueManager.Instance.TalkStoryStart(lockStartIndex, lockEndIndex, "Table_StoryB1", false);
+                            }
+                        }
+                        else
+                        {
+                            isTouching = !isTouching;
+                            if (PlayerManager.Instance != null)
+                            {
+                                PlayerManager.Instance.SetBtn(!isTouching);
+                            }
+                            if (TouchManager.Instance != null)
+                            {
+                                TouchManager.Instance.EnableMoveHandler(!isTouching);
+                            }
+                            normalCamera.SetActive(isTouching);
+                            if (anim != null)
+                            {
+                                anim.SetBool(openAnim, isTouching);
+                            }
+                        }
+                        break;
                 }
             }
         }
+
     }
     public void InteractionObject()
     {

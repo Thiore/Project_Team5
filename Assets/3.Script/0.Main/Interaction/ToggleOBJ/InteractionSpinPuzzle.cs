@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +16,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
     private List<SpinTile> connectedObjects;
 
     [SerializeField] private FixPipeGameManager pipeManager;
-    
-
+    public event Action<bool> OnLamp;
     protected override void Awake()
     {
         base.Awake();
@@ -68,6 +68,7 @@ public class InteractionSpinPuzzle : TouchPuzzleCanvas
                 lamp.EnableKeyword("_EMISSION");
             DataSaveManager.Instance.UpdateGameState(floorIndex, objectIndex);
             isClear = true;
+            OnLamp?.Invoke(true);
             OffInteraction();
         }
 

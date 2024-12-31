@@ -6,10 +6,14 @@ public class Lift : MonoBehaviour,ITouchable
 {
     
     [SerializeField] private Animator liftAnim;
+    [SerializeField] private bool isOpenButton;
 
+    private bool isOpen;
     private bool islift;
 
+
     private readonly int animParams = Animator.StringToHash("B1F");
+    private readonly int openParams = Animator.StringToHash("Open");
 
     private Outline outline;
 
@@ -26,8 +30,17 @@ public class Lift : MonoBehaviour,ITouchable
         {
             if (hit.collider.gameObject.Equals(gameObject))
             {
-                islift = liftAnim.GetBool(animParams);
-                liftAnim.SetBool(animParams, !islift);
+                if(isOpenButton)
+                {
+                    isOpen = liftAnim.GetBool(openParams);
+                    liftAnim.SetBool(openParams, !isOpen);
+                }
+                else
+                {
+                    islift = liftAnim.GetBool(animParams);
+                    liftAnim.SetBool(animParams, !islift);
+                }
+               
             }
         }
     }
